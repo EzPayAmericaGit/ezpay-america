@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 const navigationItems = [
   { title: "Home", url: createPageUrl("Home") },
   { title: "Services", url: createPageUrl("Services") },
+  { title: "Quiz", url: createPageUrl("Quiz") },
   { title: "Apply Online", url: "https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true", external: true },
   { title: "Contact Us", url: createPageUrl("Contact") },
   { title: "Support", url: createPageUrl("Support") },
