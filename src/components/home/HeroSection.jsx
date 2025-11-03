@@ -80,7 +80,7 @@ export default function HeroSection() {
               <img
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/f9e2bc49c_BUSINESS.jpg"
                 alt="Payment Processing"
-                className="w-full h-auto"
+                className="w-full h-auto transform scale-[2]"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
             </div>
