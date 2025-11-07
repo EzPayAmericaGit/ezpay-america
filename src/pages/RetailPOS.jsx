@@ -1,6 +1,9 @@
+
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
 import { 
   Package, 
   BarChart3, 
@@ -70,10 +73,12 @@ export default function RetailPOS() {
               Complete point-of-sale solution designed specifically for retail businesses. Manage inventory, track sales, and grow your business with EzPay POS.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button className="bg-gray-900 hover:bg-gray-800 text-white px-8 py-6 text-lg shadow-xl">
-                Get a Free Demo
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
+              <Link to={createPageUrl("FreeDemo")}>
+                <Button className="bg-gray-900 hover:bg-gray-800 text-white px-8 py-6 text-lg shadow-xl">
+                  Get a Free Demo
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </Link>
               <a
                 href="https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true"
                 target="_blank"
