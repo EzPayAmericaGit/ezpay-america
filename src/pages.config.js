@@ -12,6 +12,7 @@ import EzPayPOS from './pages/EzPayPOS';
 import EzPayPOSHome from './pages/EzPayPOSHome';
 import RetailPOS from './pages/RetailPOS';
 import RestaurantPOS from './pages/RestaurantPOS';
+import FreeDemo from './pages/FreeDemo';
 import Layout from './Layout.jsx';
 
 
@@ -30,6 +31,7 @@ export const PAGES = {
     "EzPayPOSHome": EzPayPOSHome,
     "RetailPOS": RetailPOS,
     "RestaurantPOS": RestaurantPOS,
+    "FreeDemo": FreeDemo,
 }
 
 export const pagesConfig = {

@@ -1,8 +1,21 @@
+
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Monitor, ShoppingCart, Heart, Calendar, ArrowRight, CheckCircle2 } from "lucide-react";
 import { motion } from "framer-motion";
+import { Link } from 'react-router-dom'; // Assuming react-router-dom is used for routing
+
+// Placeholder for createPageUrl function. In a real app, this would likely come from a routing utility.
+const createPageUrl = (pageName) => {
+  switch (pageName) {
+    case "FreeDemo":
+      return "/freedemo"; // Example path for the free demo page
+    // Add other cases for different page names if needed
+    default:
+      return "/";
+  }
+};
 
 const features = [
   {
@@ -81,10 +94,12 @@ export default function EzPayPOSHome() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="flex flex-col sm:flex-row gap-4 justify-center mt-12"
           >
-            <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg shadow-xl">
-              Get a Free Demo
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
+            <Link to={createPageUrl("FreeDemo")}>
+              <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg shadow-xl">
+                Get a Free Demo
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
             <a
               href="https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true"
               target="_blank"
@@ -115,10 +130,12 @@ export default function EzPayPOSHome() {
             <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
               Managing a restaurant in the fast-paced U.S. market of today entails managing orders, payments, staff management, kitchen workflows, and customer satisfaction, frequently all at once. All of these components are combined in the EzPay POS System. A robust cloud-based platform designed for eateries of all sizes. EzPay POS helps you streamline operations, cut down on errors, and serve customers more quickly, whether you're running a franchise in Texas, a food truck in Oregon, or a bistro in New York. It's the clever way to run your restaurant from a single location thanks to its user-friendly interface, smooth integration's, and real-time reporting.
             </p>
-            <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg shadow-xl mt-8">
-              Get a Free Demo
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
+            <Link to={createPageUrl("FreeDemo")}>
+              <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg shadow-xl mt-8">
+                Get a Free Demo
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
           </motion.div>
 
           <motion.div
@@ -235,10 +252,12 @@ export default function EzPayPOSHome() {
               Get started with EzPay POS today. No credit card required for your free trial.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg shadow-xl">
-                Get a Free Demo
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
+              <Link to={createPageUrl("FreeDemo")}>
+                <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg shadow-xl">
+                  Get a Free Demo
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </Link>
               <a
                 href="https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true"
                 target="_blank"
