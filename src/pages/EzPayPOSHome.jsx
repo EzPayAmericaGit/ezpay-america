@@ -4,18 +4,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Monitor, ShoppingCart, Heart, Calendar, ArrowRight, CheckCircle2 } from "lucide-react";
 import { motion } from "framer-motion";
-import { Link } from 'react-router-dom'; // Assuming react-router-dom is used for routing
-
-// Placeholder for createPageUrl function. In a real app, this would likely come from a routing utility.
-const createPageUrl = (pageName) => {
-  switch (pageName) {
-    case "FreeDemo":
-      return "/freedemo"; // Example path for the free demo page
-    // Add other cases for different page names if needed
-    default:
-      return "/";
-  }
-};
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils"; // Changed: Imported createPageUrl from utils
 
 const features = [
   {
