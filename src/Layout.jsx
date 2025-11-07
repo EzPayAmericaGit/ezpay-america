@@ -61,15 +61,7 @@ export default function Layout({ children }) {
                 item.submenu ? (
                   <div 
                     key={item.title}
-                    className="relative"
-                    onMouseEnter={() => {
-                      if (item.title === "Services") setServicesDropdownOpen(true);
-                      if (item.title === "EzPay POS") setEzpayPOSDropdownOpen(true);
-                    }}
-                    onMouseLeave={() => {
-                      if (item.title === "Services") setServicesDropdownOpen(false);
-                      if (item.title === "EzPay POS") setEzpayPOSDropdownOpen(false);
-                    }}
+                    className="relative group"
                   >
                     <Link
                       to={item.url}
@@ -80,8 +72,8 @@ export default function Layout({ children }) {
                       {item.title}
                       <ChevronDown className="w-4 h-4" />
                     </Link>
-                    {((item.title === "Services" && servicesDropdownOpen) || (item.title === "EzPay POS" && ezpayPOSDropdownOpen)) && (
-                      <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-2">
+                    <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                      <div className="w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-2">
                         {item.submenu.map((subItem) => (
                           <Link
                             key={subItem.title}
@@ -92,7 +84,7 @@ export default function Layout({ children }) {
                           </Link>
                         ))}
                       </div>
-                    )}
+                    </div>
                   </div>
                 ) : item.external ? (
                   <a
