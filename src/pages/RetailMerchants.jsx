@@ -150,8 +150,8 @@ export default function RetailMerchants() {
             >
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                 <img
-                  src="https://images.unsplash.com/photo-1556742111-a301076d9d18?w=800&h=600&fit=crop"
-                  alt="Retail Payment Solutions"
+                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/3887a616c_AGoldEZPayPOS.png"
+                  alt="EzPay POS System"
                   className="w-full h-auto"
                 />
               </div>
