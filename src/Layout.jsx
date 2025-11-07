@@ -10,6 +10,11 @@ const navigationItems = [
     title: "Services", 
     url: createPageUrl("Services"),
     submenu: [
+      { title: "Retail Merchants", url: createPageUrl("RetailMerchants") },
+      { title: "Restaurant Merchants", url: createPageUrl("RestaurantMerchants") },
+      { title: "Web Payment Pages", url: createPageUrl("WebPaymentPages") },
+      { title: "Get A Merchant Cash Advance", url: createPageUrl("MerchantCashAdvance") },
+      { title: "EzPay POS", url: createPageUrl("EzPayPOS") },
       { title: "Retail Payment Solutions", url: createPageUrl("RetailPaymentSolutions") }
     ]
   },

@@ -4,6 +4,11 @@ import Contact from './pages/Contact';
 import Support from './pages/Support';
 import Quiz from './pages/Quiz';
 import RetailPaymentSolutions from './pages/RetailPaymentSolutions';
+import RetailMerchants from './pages/RetailMerchants';
+import RestaurantMerchants from './pages/RestaurantMerchants';
+import WebPaymentPages from './pages/WebPaymentPages';
+import MerchantCashAdvance from './pages/MerchantCashAdvance';
+import EzPayPOS from './pages/EzPayPOS';
 import Layout from './Layout.jsx';
 
 
@@ -14,6 +19,11 @@ export const PAGES = {
     "Support": Support,
     "Quiz": Quiz,
     "RetailPaymentSolutions": RetailPaymentSolutions,
+    "RetailMerchants": RetailMerchants,
+    "RestaurantMerchants": RestaurantMerchants,
+    "WebPaymentPages": WebPaymentPages,
+    "MerchantCashAdvance": MerchantCashAdvance,
+    "EzPayPOS": EzPayPOS,
 }
 
 export const pagesConfig = {
