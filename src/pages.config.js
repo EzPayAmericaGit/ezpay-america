@@ -9,6 +9,9 @@ import RestaurantMerchants from './pages/RestaurantMerchants';
 import WebPaymentPages from './pages/WebPaymentPages';
 import MerchantCashAdvance from './pages/MerchantCashAdvance';
 import EzPayPOS from './pages/EzPayPOS';
+import EzPayPOSHome from './pages/EzPayPOSHome';
+import RetailPOS from './pages/RetailPOS';
+import RestaurantPOS from './pages/RestaurantPOS';
 import Layout from './Layout.jsx';
 
 
@@ -24,6 +27,9 @@ export const PAGES = {
     "WebPaymentPages": WebPaymentPages,
     "MerchantCashAdvance": MerchantCashAdvance,
     "EzPayPOS": EzPayPOS,
+    "EzPayPOSHome": EzPayPOSHome,
+    "RetailPOS": RetailPOS,
+    "RestaurantPOS": RestaurantPOS,
 }
 
 export const pagesConfig = {

@@ -14,8 +14,15 @@ const navigationItems = [
       { title: "Restaurant Merchants", url: createPageUrl("RestaurantMerchants") },
       { title: "Web Payment Pages", url: createPageUrl("WebPaymentPages") },
       { title: "Get A Merchant Cash Advance", url: createPageUrl("MerchantCashAdvance") },
-      { title: "EzPay POS", url: createPageUrl("EzPayPOS") },
       { title: "Retail Payment Solutions", url: createPageUrl("RetailPaymentSolutions") }
+    ]
+  },
+  { 
+    title: "EzPay POS", 
+    url: createPageUrl("EzPayPOSHome"),
+    submenu: [
+      { title: "Retail POS", url: createPageUrl("RetailPOS") },
+      { title: "Restaurant POS", url: createPageUrl("RestaurantPOS") }
     ]
   },
   { title: "Quiz", url: createPageUrl("Quiz") },
@@ -28,6 +35,7 @@ export default function Layout({ children }) {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
+  const [ezpayPOSDropdownOpen, setEzpayPOSDropdownOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-white">
@@ -54,8 +62,14 @@ export default function Layout({ children }) {
                   <div 
                     key={item.title}
                     className="relative"
-                    onMouseEnter={() => setServicesDropdownOpen(true)}
-                    onMouseLeave={() => setServicesDropdownOpen(false)}
+                    onMouseEnter={() => {
+                      if (item.title === "Services") setServicesDropdownOpen(true);
+                      if (item.title === "EzPay POS") setEzpayPOSDropdownOpen(true);
+                    }}
+                    onMouseLeave={() => {
+                      if (item.title === "Services") setServicesDropdownOpen(false);
+                      if (item.title === "EzPay POS") setEzpayPOSDropdownOpen(false);
+                    }}
                   >
                     <Link
                       to={item.url}
@@ -66,7 +80,7 @@ export default function Layout({ children }) {
                       {item.title}
                       <ChevronDown className="w-4 h-4" />
                     </Link>
-                    {servicesDropdownOpen && (
+                    {((item.title === "Services" && servicesDropdownOpen) || (item.title === "EzPay POS" && ezpayPOSDropdownOpen)) && (
                       <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-2">
                         {item.submenu.map((subItem) => (
                           <Link
