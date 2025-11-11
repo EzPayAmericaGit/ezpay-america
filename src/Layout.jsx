@@ -26,7 +26,7 @@ const navigationItems = [
     ]
   },
   { title: "Quiz", url: createPageUrl("Quiz") },
-  { title: "Apply Online", url: "https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true", external: true },
+  { title: "Apply Online", url: createPageUrl("ApplyOnline") },
   { title: "Contact Us", url: createPageUrl("Contact") },
   { title: "Support", url: createPageUrl("Support") },
 ];
@@ -34,8 +34,6 @@ const navigationItems = [
 export default function Layout({ children }) {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
-  const [ezpayPOSDropdownOpen, setEzpayPOSDropdownOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-white">
@@ -86,16 +84,6 @@ export default function Layout({ children }) {
                       </div>
                     </div>
                   </div>
-                ) : item.external ? (
-                  <a
-                    key={item.title}
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-gray-700 hover:text-amber-600 font-medium transition-colors"
-                  >
-                    {item.title}
-                  </a>
                 ) : (
                   <Link
                     key={item.title}
@@ -158,16 +146,6 @@ export default function Layout({ children }) {
                         </Link>
                       ))}
                     </>
-                  ) : item.external ? (
-                    <a
-                      href={item.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block px-4 py-2 text-gray-700 hover:bg-amber-50 hover:text-amber-600 rounded-lg transition-colors"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {item.title}
-                    </a>
                   ) : (
                     <Link
                       to={item.url}
