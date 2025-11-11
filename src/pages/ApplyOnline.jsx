@@ -188,6 +188,9 @@ export default function ApplyOnline() {
     }
   };
 
+  const currentStepData = steps[currentStep - 1];
+  const StepIcon = currentStepData.icon;
+
   if (submitted) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center py-20">
@@ -245,33 +248,36 @@ export default function ApplyOnline() {
           {/* Progress Steps */}
           <div className="mb-12">
             <div className="flex items-center justify-between">
-              {steps.map((step, index) => (
-                <div key={step.id} className="flex items-center flex-1">
-                  <div className="flex flex-col items-center flex-1">
-                    <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${
-                      currentStep >= step.id 
-                        ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white scale-110' 
-                        : 'bg-gray-300 text-gray-600'
-                    }`}>
-                      {currentStep > step.id ? (
-                        <CheckCircle2 className="w-6 h-6" />
-                      ) : (
-                        <step.icon className="w-6 h-6" />
-                      )}
+              {steps.map((step, index) => {
+                const Icon = step.icon;
+                return (
+                  <div key={step.id} className="flex items-center flex-1">
+                    <div className="flex flex-col items-center flex-1">
+                      <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${
+                        currentStep >= step.id 
+                          ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white scale-110' 
+                          : 'bg-gray-300 text-gray-600'
+                      }`}>
+                        {currentStep > step.id ? (
+                          <CheckCircle2 className="w-6 h-6" />
+                        ) : (
+                          <Icon className="w-6 h-6" />
+                        )}
+                      </div>
+                      <p className={`mt-2 text-sm font-medium text-center hidden md:block ${
+                        currentStep >= step.id ? 'text-amber-600' : 'text-gray-500'
+                      }`}>
+                        {step.name}
+                      </p>
                     </div>
-                    <p className={`mt-2 text-sm font-medium text-center hidden md:block ${
-                      currentStep >= step.id ? 'text-amber-600' : 'text-gray-500'
-                    }`}>
-                      {step.name}
-                    </p>
+                    {index < steps.length - 1 && (
+                      <div className={`h-1 flex-1 mx-2 transition-all ${
+                        currentStep > step.id ? 'bg-gradient-to-r from-amber-500 to-orange-600' : 'bg-gray-300'
+                      }`} />
+                    )}
                   </div>
-                  {index < steps.length - 1 && (
-                    <div className={`h-1 flex-1 mx-2 transition-all ${
-                      currentStep > step.id ? 'bg-gradient-to-r from-amber-500 to-orange-600' : 'bg-gray-300'
-                    }`} />
-                  )}
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -287,8 +293,8 @@ export default function ApplyOnline() {
               <Card className="border-none shadow-2xl">
                 <CardHeader className="bg-gradient-to-r from-amber-500 to-orange-600 text-white">
                   <CardTitle className="text-2xl flex items-center gap-3">
-                    {steps[currentStep - 1].icon && <steps[currentStep - 1].icon className="w-8 h-8" />}
-                    {steps[currentStep - 1].name}
+                    <StepIcon className="w-8 h-8" />
+                    {currentStepData.name}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-8">
