@@ -11,6 +11,7 @@ import {
   ArrowRight
 } from "lucide-react";
 import { motion } from "framer-motion";
+import ChatBot from "../components/support/ChatBot";
 
 const supportOptions = [
   {
@@ -26,16 +27,16 @@ const supportOptions = [
     title: "Email Support",
     description: "Send us your questions and we'll respond within 24 hours.",
     action: "Send Email",
-    href: "mailto:support@ezpayamerica.com",
+    href: "mailto:contact@ezpayamerica.com",
     color: "from-green-500 to-green-600"
   },
   {
     icon: MessageCircle,
     title: "Live Chat",
-    description: "Chat with our support team in real-time during business hours.",
-    action: "Start Chat",
-    href: "#",
-    color: "from-purple-500 to-purple-600"
+    description: "Chat with our AI support assistant in real-time, 24/7.",
+    action: "Open Chat",
+    color: "from-purple-500 to-purple-600",
+    isChat: true
   }
 ];
 
@@ -124,12 +125,18 @@ export default function Support() {
                     <p className="text-gray-600 leading-relaxed">
                       {option.description}
                     </p>
-                    <a href={option.href}>
-                      <Button className="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white">
-                        {option.action}
-                        <ArrowRight className="w-4 h-4 ml-2" />
-                      </Button>
-                    </a>
+                    {option.isChat ? (
+                      <p className="text-sm text-gray-500 italic">
+                        Click the chat icon in the bottom-right corner
+                      </p>
+                    ) : (
+                      <a href={option.href}>
+                        <Button className="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white">
+                          {option.action}
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </Button>
+                      </a>
+                    )}
                   </CardContent>
                 </Card>
               </motion.div>
@@ -210,6 +217,9 @@ export default function Support() {
           </div>
         </div>
       </section>
+
+      {/* Chat Bot */}
+      <ChatBot />
     </div>
   );
 }
