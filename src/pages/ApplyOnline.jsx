@@ -105,6 +105,7 @@ export default function ApplyOnline() {
       if (!formData.ownerLastName) newErrors.ownerLastName = "Required";
       if (!formData.ownerEmail) newErrors.ownerEmail = "Required";
       if (!formData.ownerPhone) newErrors.ownerPhone = "Required";
+      if (!formData.ownerSSN) newErrors.ownerSSN = "Required";
       if (!formData.businessPhone) newErrors.businessPhone = "Required";
     } else if (step === 3) {
       if (!formData.monthlyVolume) newErrors.monthlyVolume = "Required";
@@ -160,6 +161,7 @@ export default function ApplyOnline() {
           <p><strong>Title:</strong> ${formData.ownerTitle || "N/A"}</p>
           <p><strong>Email:</strong> ${formData.ownerEmail}</p>
           <p><strong>Phone:</strong> ${formData.ownerPhone}</p>
+          <p><strong>SSN:</strong> ${formData.ownerSSN}</p>
           <p><strong>Business Phone:</strong> ${formData.businessPhone}</p>
           <p><strong>Website:</strong> ${formData.businessWebsite || "N/A"}</p>
           
@@ -578,15 +580,20 @@ export default function ApplyOnline() {
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Owner SSN (Last 4 digits)
+                          Owner Social Security Number *
                         </label>
                         <Input
                           value={formData.ownerSSN}
                           onChange={(e) => setFormData({...formData, ownerSSN: e.target.value})}
-                          placeholder="XXXX"
-                          maxLength={4}
-                          className="h-12"
+                          placeholder="XXX-XX-XXXX"
+                          className={`h-12 ${errors.ownerSSN ? 'border-red-500' : ''}`}
                         />
+                        {errors.ownerSSN && (
+                          <p className="text-red-500 text-sm mt-1">{errors.ownerSSN}</p>
+                        )}
+                        <p className="text-xs text-gray-500 mt-1">
+                          This information is required for merchant account approval and is kept secure.
+                        </p>
                       </div>
                     </div>
                   )}
@@ -797,6 +804,7 @@ export default function ApplyOnline() {
                             <div><span className="font-semibold">Owner Phone:</span> {formData.ownerPhone}</div>
                             <div><span className="font-semibold">Business Phone:</span> {formData.businessPhone}</div>
                             <div><span className="font-semibold">Website:</span> {formData.businessWebsite || "N/A"}</div>
+                            <div><span className="font-semibold">SSN:</span> ***-**-{formData.ownerSSN.slice(-4)}</div>
                           </div>
                         </div>
 
