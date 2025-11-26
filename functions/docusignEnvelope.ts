@@ -284,23 +284,30 @@ async function createEnvelope(accessToken, applicationData, signerEmail, signerN
 
                         // Page 3 - Signature tabs
                         signHereTabs: [
-                            // Section 10: Merchant Acceptance signature
-                            { documentId: '1', pageNumber: '3', xPosition: '270', yPosition: '168', scaleValue: 0.8 },
-                            // Section 11: Guarantor signature  
-                            { documentId: '1', pageNumber: '3', xPosition: '50', yPosition: '340', scaleValue: 0.8 },
+                            // Section 10: Merchant Acceptance - Signature of Principal/Owner #1
+                            { documentId: '1', pageNumber: '3', xPosition: '270', yPosition: '168', scaleValue: 0.7 },
+                            // Section 10: Signature of Principal/Owner #2 (optional)
+                            { documentId: '1', pageNumber: '3', xPosition: '270', yPosition: '195', scaleValue: 0.7, optional: 'true' },
+                            // Section 11: Guarantor #1 signature  
+                            { documentId: '1', pageNumber: '3', xPosition: '50', yPosition: '340', scaleValue: 0.7 },
                             // Section 12: Final merchant signature
-                            { documentId: '1', pageNumber: '3', xPosition: '100', yPosition: '545', scaleValue: 0.8 },
+                            { documentId: '1', pageNumber: '3', xPosition: '100', yPosition: '545', scaleValue: 0.7 },
                         ],
-                        
+
                         dateSignedTabs: [
+                            // Section 10 dates
                             { documentId: '1', pageNumber: '3', xPosition: '170', yPosition: '175', fontSize: 'Size9' },
+                            // Section 11 Guarantor date
                             { documentId: '1', pageNumber: '3', xPosition: '170', yPosition: '345', fontSize: 'Size9' },
+                            // Section 12 final dates
                             { documentId: '1', pageNumber: '3', xPosition: '480', yPosition: '545', fontSize: 'Size9' },
+                            { documentId: '1', pageNumber: '3', xPosition: '480', yPosition: '565', fontSize: 'Size9' },
                         ],
 
                         // Title tabs
                         titleTabs: [
                             { documentId: '1', pageNumber: '3', xPosition: '460', yPosition: '168', fontSize: 'Size9' },
+                            { documentId: '1', pageNumber: '3', xPosition: '460', yPosition: '195', fontSize: 'Size9', optional: 'true' },
                         ],
 
                         // Printed name
@@ -308,7 +315,7 @@ async function createEnvelope(accessToken, applicationData, signerEmail, signerN
                             { documentId: '1', pageNumber: '3', xPosition: '100', yPosition: '565', fontSize: 'Size9' },
                         ],
 
-                        // Initial tabs for each page
+                        // Initial tabs for each page (bottom right corner)
                         initialHereTabs: [
                             { documentId: '1', pageNumber: '1', xPosition: '520', yPosition: '740', scaleValue: 0.5 },
                             { documentId: '1', pageNumber: '2', xPosition: '520', yPosition: '740', scaleValue: 0.5 },
