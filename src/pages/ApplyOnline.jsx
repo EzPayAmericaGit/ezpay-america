@@ -183,6 +183,19 @@ export default function ApplyOnline() {
         applicationData: formData
       });
 
+      // Save application to database for tracking
+      await base44.entities.MerchantApplication.create({
+        legalBusinessName: formData.legalBusinessName,
+        dbaName: formData.dbaName,
+        businessEmail: formData.businessEmail.toLowerCase(),
+        businessPhone: formData.businessPhone,
+        ownerFullName: formData.ownerFullName,
+        status: "submitted",
+        docusignEnvelopeId: docusignResponse.data?.envelopeId || null,
+        docusignStatus: docusignResponse.data?.success ? "sent" : null,
+        applicationData: formData
+      });
+
       if (docusignResponse.data?.success) {
         setDocusignStatus({
           success: true,
