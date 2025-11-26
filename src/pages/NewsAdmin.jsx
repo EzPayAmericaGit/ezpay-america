@@ -145,7 +145,26 @@ export default function NewsAdmin() {
                   </Select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Excerpt *</label>
+                  <div className="flex justify-between items-center mb-1">
+                    <label className="block text-sm font-medium">Excerpt *</label>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      disabled={uploading || !formData.title}
+                      onClick={async () => {
+                        if (!formData.title) return;
+                        setUploading(true);
+                        const result = await base44.integrations.Core.InvokeLLM({
+                          prompt: `Write a short 2-sentence excerpt/summary for a news article titled: "${formData.title}". Category: ${formData.category || "business"}. Keep it engaging and professional for a payment processing company blog.`,
+                        });
+                        setFormData({...formData, excerpt: result});
+                        setUploading(false);
+                      }}
+                    >
+                      <Sparkles className="w-3 h-3 mr-1" /> Generate
+                    </Button>
+                  </div>
                   <Textarea
                     value={formData.excerpt}
                     onChange={(e) => setFormData({...formData, excerpt: e.target.value})}
@@ -154,7 +173,26 @@ export default function NewsAdmin() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Full Content</label>
+                  <div className="flex justify-between items-center mb-1">
+                    <label className="block text-sm font-medium">Full Content</label>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      disabled={uploading || !formData.title}
+                      onClick={async () => {
+                        if (!formData.title) return;
+                        setUploading(true);
+                        const result = await base44.integrations.Core.InvokeLLM({
+                          prompt: `Write a full blog article for: "${formData.title}". Category: ${formData.category || "business"}. Write for a payment processing company (EzPay America). Make it informative, professional, and around 400-500 words. Include practical tips where relevant.`,
+                        });
+                        setFormData({...formData, content: result});
+                        setUploading(false);
+                      }}
+                    >
+                      <Sparkles className="w-3 h-3 mr-1" /> Generate
+                    </Button>
+                  </div>
                   <Textarea
                     value={formData.content}
                     onChange={(e) => setFormData({...formData, content: e.target.value})}
