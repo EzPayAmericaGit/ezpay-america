@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Plus, Pencil, Trash2, Eye, EyeOff, Upload, Loader2, Sparkles, RefreshCw } from "lucide-react";
+import { Plus, Pencil, Trash2, Eye, EyeOff, Upload, Loader2, Sparkles, RefreshCw, Tags, BarChart3 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 const categories = [
   "Mobile Payments",
@@ -34,11 +35,16 @@ export default function NewsAdmin() {
     content: "",
     image: "",
     category: "",
+    tags: [],
+    content_score: null,
+    sentiment: "",
+    reading_time: null,
     published: false,
     meta_title: "",
     meta_description: "",
     meta_keywords: ""
   });
+  const [analyzing, setAnalyzing] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -69,7 +75,7 @@ export default function NewsAdmin() {
   });
 
   const resetForm = () => {
-    setFormData({ title: "", slug: "", excerpt: "", content: "", image: "", category: "", published: false, meta_title: "", meta_description: "", meta_keywords: "" });
+    setFormData({ title: "", slug: "", excerpt: "", content: "", image: "", category: "", tags: [], content_score: null, sentiment: "", reading_time: null, published: false, meta_title: "", meta_description: "", meta_keywords: "" });
     setIsEditing(false);
     setEditingArticle(null);
   };
@@ -82,6 +88,10 @@ export default function NewsAdmin() {
       content: article.content || "",
       image: article.image || "",
       category: article.category || "",
+      tags: article.tags || [],
+      content_score: article.content_score || null,
+      sentiment: article.sentiment || "",
+      reading_time: article.reading_time || null,
       published: article.published || false,
       meta_title: article.meta_title || "",
       meta_description: article.meta_description || "",
@@ -89,6 +99,48 @@ export default function NewsAdmin() {
     });
     setEditingArticle(article);
     setIsEditing(true);
+  };
+
+  const analyzeContent = async () => {
+    if (!formData.title || !formData.excerpt) return;
+    setAnalyzing(true);
+    
+    const contentToAnalyze = formData.content || formData.excerpt;
+    const wordCount = contentToAnalyze.split(/\s+/).length;
+    const readingTime = Math.max(1, Math.ceil(wordCount / 200));
+
+    const result = await base44.integrations.Core.InvokeLLM({
+      prompt: `Analyze this article for a payment processing company blog:
+
+Title: "${formData.title}"
+Category: ${formData.category || "not set"}
+Content: "${contentToAnalyze}"
+
+Provide:
+1. 5-8 relevant tags for categorization and SEO
+2. A content quality score (1-100) based on clarity, relevance, engagement
+3. Sentiment analysis
+4. Suggest the best category if current doesn't fit`,
+      response_json_schema: {
+        type: "object",
+        properties: {
+          tags: { type: "array", items: { type: "string" }, description: "5-8 relevant content tags" },
+          content_score: { type: "number", description: "Quality score 1-100" },
+          sentiment: { type: "string", enum: ["positive", "neutral", "negative"] },
+          suggested_category: { type: "string", description: "Best fitting category" }
+        }
+      }
+    });
+
+    setFormData({
+      ...formData,
+      tags: result.tags || [],
+      content_score: result.content_score || null,
+      sentiment: result.sentiment || "",
+      reading_time: readingTime,
+      category: formData.category || result.suggested_category || ""
+    });
+    setAnalyzing(false);
   };
 
   const handleSubmit = (e) => {
@@ -209,22 +261,75 @@ Optimize for:
                     required
                   />
                 </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">Category *</label>
-                  <Select 
-                    value={formData.category} 
-                    onValueChange={(v) => setFormData({...formData, category: v})}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categories.map(cat => (
-                        <SelectItem key={cat} value={cat}>{cat}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                <div className="flex gap-4">
+                  <div className="flex-1">
+                    <label className="block text-sm font-medium mb-1">Category *</label>
+                    <Select 
+                      value={formData.category} 
+                      onValueChange={(v) => setFormData({...formData, category: v})}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {categories.map(cat => (
+                          <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="flex items-end">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      disabled={analyzing || (!formData.title && !formData.excerpt)}
+                      onClick={analyzeContent}
+                      className="border-purple-500 text-purple-600 hover:bg-purple-50"
+                    >
+                      {analyzing ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <BarChart3 className="w-4 h-4 mr-2" />}
+                      Analyze Content
+                    </Button>
+                  </div>
                 </div>
+
+                {/* AI Analysis Results */}
+                {(formData.tags?.length > 0 || formData.content_score) && (
+                  <div className="bg-purple-50 rounded-lg p-4 space-y-3">
+                    <div className="flex items-center gap-2 text-purple-700 font-medium">
+                      <Tags className="w-4 h-4" />
+                      AI Content Analysis
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {formData.tags?.map((tag, i) => (
+                        <Badge key={i} variant="secondary" className="bg-purple-100 text-purple-700">
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                    <div className="flex gap-6 text-sm">
+                      {formData.content_score && (
+                        <div>
+                          <span className="text-gray-500">Quality Score:</span>{" "}
+                          <span className={`font-semibold ${formData.content_score >= 70 ? 'text-green-600' : formData.content_score >= 40 ? 'text-amber-600' : 'text-red-600'}`}>
+                            {formData.content_score}/100
+                          </span>
+                        </div>
+                      )}
+                      {formData.sentiment && (
+                        <div>
+                          <span className="text-gray-500">Sentiment:</span>{" "}
+                          <span className="font-semibold capitalize">{formData.sentiment}</span>
+                        </div>
+                      )}
+                      {formData.reading_time && (
+                        <div>
+                          <span className="text-gray-500">Reading Time:</span>{" "}
+                          <span className="font-semibold">{formData.reading_time} min</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
                 <div>
                   <div className="flex justify-between items-center mb-1">
                     <label className="block text-sm font-medium">Excerpt *</label>
@@ -443,7 +548,29 @@ Optimize for:
                   )}
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold truncate">{article.title}</h3>
-                    <p className="text-sm text-gray-500">{article.category}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-sm text-gray-500">{article.category}</span>
+                      {article.content_score && (
+                        <Badge variant="outline" className={`text-xs ${article.content_score >= 70 ? 'border-green-500 text-green-600' : article.content_score >= 40 ? 'border-amber-500 text-amber-600' : 'border-red-500 text-red-600'}`}>
+                          Score: {article.content_score}
+                        </Badge>
+                      )}
+                      {article.reading_time && (
+                        <span className="text-xs text-gray-400">{article.reading_time} min read</span>
+                      )}
+                    </div>
+                    {article.tags?.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {article.tags.slice(0, 3).map((tag, i) => (
+                          <Badge key={i} variant="secondary" className="text-xs bg-gray-100">
+                            {tag}
+                          </Badge>
+                        ))}
+                        {article.tags.length > 3 && (
+                          <span className="text-xs text-gray-400">+{article.tags.length - 3}</span>
+                        )}
+                      </div>
+                    )}
                   </div>
                   <div className="flex items-center gap-2">
                     <Button
