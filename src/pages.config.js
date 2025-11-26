@@ -14,6 +14,7 @@ import RetailPOS from './pages/RetailPOS';
 import RestaurantPOS from './pages/RestaurantPOS';
 import FreeDemo from './pages/FreeDemo';
 import ApplyOnline from './pages/ApplyOnline';
+import News from './pages/News';
 import __Layout from './Layout.jsx';
 
 
@@ -34,6 +35,7 @@ export const PAGES = {
     "RestaurantPOS": RestaurantPOS,
     "FreeDemo": FreeDemo,
     "ApplyOnline": ApplyOnline,
+    "News": News,
 }
 
 export const pagesConfig = {

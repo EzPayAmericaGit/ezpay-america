@@ -29,6 +29,7 @@ const navigationItems = [
   { title: "Apply Online", url: createPageUrl("ApplyOnline") },
   { title: "Contact Us", url: createPageUrl("Contact") },
   { title: "Support", url: createPageUrl("Support") },
+    { title: "News", url: createPageUrl("News") },
 ];
 
 export default function Layout({ children }) {
