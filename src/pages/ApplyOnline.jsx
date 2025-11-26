@@ -1305,33 +1305,65 @@ export default function ApplyOnline() {
                             <div><span className="font-semibold">DBA:</span> {formData.dbaName}</div>
                             <div><span className="font-semibold">Market Type:</span> {formData.businessMarketType}</div>
                             <div><span className="font-semibold">Formation:</span> {formData.businessFormationType}</div>
-                            <div><span className="font-semibold">Owner:</span> {formData.ownerFullName}</div>
-                            <div><span className="font-semibold">Title:</span> {formData.ownerTitle}</div>
-                            <div><span className="font-semibold">Ownership:</span> {formData.ownerOwnershipPercent}%</div>
-                            <div><span className="font-semibold">Personal Phone:</span> {formData.ownerPersonalPhone}</div>
-                            <div><span className="font-semibold">DOB:</span> {formData.ownerDOB}</div>
-                            <div><span className="font-semibold">SSN:</span> ***-**-{formData.ownerSSN?.slice(-4)}</div>
-                            <div className="md:col-span-2"><span className="font-semibold">Home Address:</span> {formData.ownerHomeAddress}</div>
+                            <div><span className="font-semibold">Tax ID:</span> {formData.taxId}</div>
+                            <div><span className="font-semibold">Started:</span> {formData.dateBusinessStarted}</div>
                             <div><span className="font-semibold">Phone:</span> {formData.businessPhone}</div>
                             <div><span className="font-semibold">Email:</span> {formData.businessEmail}</div>
                             <div><span className="font-semibold">Locations:</span> {formData.numberOfLocations}</div>
+                            <div><span className="font-semibold">Location Type:</span> {formData.businessLocationType}</div>
                             <div className="md:col-span-2"><span className="font-semibold">Address:</span> {formData.businessPhysicalAddress}</div>
                           </div>
                         </div>
 
                         <div className="bg-white p-6 rounded-lg border-2 border-gray-200">
                           <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                            <User className="w-5 h-5 text-amber-600" />
+                            Owner Information
+                          </h3>
+                          <div className="grid md:grid-cols-2 gap-3 text-sm">
+                            <div><span className="font-semibold">Name:</span> {formData.ownerFullName}</div>
+                            <div><span className="font-semibold">Title:</span> {formData.ownerTitle}</div>
+                            <div><span className="font-semibold">Ownership:</span> {formData.ownerOwnershipPercent}%</div>
+                            <div><span className="font-semibold">DOB:</span> {formData.ownerDOB}</div>
+                            <div><span className="font-semibold">SSN:</span> ***-**-{formData.ownerSSN?.slice(-4)}</div>
+                            <div><span className="font-semibold">Personal Phone:</span> {formData.ownerPersonalPhone}</div>
+                            <div><span className="font-semibold">Personal Email:</span> {formData.ownerPersonalEmail}</div>
+                            <div><span className="font-semibold">DL #:</span> {formData.ownerDriversLicense} ({formData.ownerDLState})</div>
+                            <div className="md:col-span-2"><span className="font-semibold">Home Address:</span> {formData.ownerHomeAddress}</div>
+                          </div>
+                        </div>
+
+                        <div className="bg-white p-6 rounded-lg border-2 border-gray-200">
+                          <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                             <DollarSign className="w-5 h-5 text-amber-600" />
-                            Sales & Delivery
+                            Sales & Processing
                           </h3>
                           <div className="grid md:grid-cols-2 gap-3 text-sm">
                             <div className="md:col-span-2"><span className="font-semibold">Products:</span> {formData.productsDescription}</div>
                             <div><span className="font-semibold">Order Methods:</span> {formData.orderMethod.join(", ")}</div>
                             <div><span className="font-semibold">Delivery:</span> {formData.deliveryTimeframe}</div>
-                            <div><span className="font-semibold">Geographic Areas:</span> {formData.geographicAreas}</div>
-                            <div><span className="font-semibold">International %:</span> {formData.internationalCardPercentage}%</div>
-                            <div><span className="font-semibold">Seasonal:</span> {formData.isSeasonal === "yes" ? `Yes (${formData.seasonalMonths})` : "No"}</div>
-                            <div><span className="font-semibold">Payment Timing:</span> {formData.paymentTiming === "at_service" ? "At time of service" : "Paid in advance"}</div>
+                            <div><span className="font-semibold">Swiped:</span> {formData.percentageSwiped}%</div>
+                            <div><span className="font-semibold">Keyed:</span> {formData.percentageKeyed}%</div>
+                            <div><span className="font-semibold">Internet:</span> {formData.percentageInternet}%</div>
+                            <div><span className="font-semibold">Avg Ticket:</span> ${formData.averageTicket}</div>
+                            <div><span className="font-semibold">Max Ticket:</span> ${formData.largestTicket}</div>
+                            <div><span className="font-semibold">Monthly Volume:</span> ${formData.monthlyVolume}</div>
+                            <div><span className="font-semibold">Annual Volume:</span> ${formData.annualVolume}</div>
+                          </div>
+                        </div>
+
+                        <div className="bg-white p-6 rounded-lg border-2 border-gray-200">
+                          <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                            <Landmark className="w-5 h-5 text-amber-600" />
+                            Banking Information
+                          </h3>
+                          <div className="grid md:grid-cols-2 gap-3 text-sm">
+                            <div><span className="font-semibold">Bank:</span> {formData.bankName}</div>
+                            <div><span className="font-semibold">Account Type:</span> {formData.accountType?.replace('_', ' ')}</div>
+                            <div><span className="font-semibold">Routing #:</span> {formData.routingNumber}</div>
+                            <div><span className="font-semibold">Account #:</span> ****{formData.accountNumber?.slice(-4)}</div>
+                            <div><span className="font-semibold">Driver's License:</span> {formData.driversLicenseUrl ? "✓ Uploaded" : "Not uploaded"}</div>
+                            <div><span className="font-semibold">Voided Check:</span> {formData.voidedCheckUrl ? "✓ Uploaded" : "Not uploaded"}</div>
                           </div>
                         </div>
                       </div>
@@ -1358,7 +1390,7 @@ export default function ApplyOnline() {
                       <ArrowLeft className="w-5 h-5 mr-2" />
                       Previous
                     </Button>
-                    {currentStep < 3 ? (
+                    {currentStep < 6 ? (
                       <Button
                         onClick={handleNext}
                         className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg"
