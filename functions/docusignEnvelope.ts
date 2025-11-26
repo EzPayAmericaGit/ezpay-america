@@ -33,35 +33,36 @@ async function getAccessToken() {
         pemKey = `-----BEGIN RSA PRIVATE KEY-----\n${formattedBase64}\n-----END RSA PRIVATE KEY-----`;
     }
     
-    // Ensure newlines are proper (not just at start/end)
-    if (!pemKey.includes('\n')) {
-        // The PEM might have headers but no newlines - fix it
-        pemKey = pemKey
-            .replace('-----BEGIN RSA PRIVATE KEY-----', '-----BEGIN RSA PRIVATE KEY-----\n')
-            .replace('-----END RSA PRIVATE KEY-----', '\n-----END RSA PRIVATE KEY-----');
-        
-        // Also add line breaks in the base64 content
-        const match = pemKey.match(/-----BEGIN RSA PRIVATE KEY-----(.+?)-----END RSA PRIVATE KEY-----/s);
+    // Ensure newlines are proper
+    if (pemKey.includes('-----BEGIN') && !pemKey.match(/-----BEGIN[^-]+-----\n/)) {
+        // Fix missing newlines after headers
+        const match = pemKey.match(/(-----BEGIN [^-]+-----)(.+)(-----END [^-]+-----)/s);
         if (match) {
-            const base64Content = match[1].replace(/[\s\r\n]/g, '');
+            const base64Content = match[2].replace(/[\s\r\n]/g, '');
             const formattedBase64 = base64Content.match(/.{1,64}/g)?.join('\n') || base64Content;
-            pemKey = `-----BEGIN RSA PRIVATE KEY-----\n${formattedBase64}\n-----END RSA PRIVATE KEY-----`;
+            pemKey = `${match[1]}\n${formattedBase64}\n${match[3]}`;
         }
     }
     
+    // Convert PKCS#1 (RSA PRIVATE KEY) to PKCS#8 (PRIVATE KEY) format for jose
+    // jose's importPKCS8 requires PKCS#8 format
+    if (pemKey.includes('RSA PRIVATE KEY')) {
+        // Change header/footer to PKCS#8 style - jose will handle the actual format
+        pemKey = pemKey
+            .replace('-----BEGIN RSA PRIVATE KEY-----', '-----BEGIN PRIVATE KEY-----')
+            .replace('-----END RSA PRIVATE KEY-----', '-----END PRIVATE KEY-----');
+    }
+    
     console.log('PEM formatted, length:', pemKey.length);
-    console.log('First 50 chars:', pemKey.substring(0, 50));
+    console.log('Header:', pemKey.substring(0, 30));
 
     try {
-        // Use Node.js crypto to import the key (handles PKCS#1 format)
-        const keyObject = createPrivateKey({
-            key: pemKey,
-            format: 'pem'
-        });
+        // Use jose importPKCS8 for PKCS#8 format keys
+        const privateKey = await importPKCS8(pemKey, 'RS256');
         
-        console.log('Successfully imported private key with node:crypto');
+        console.log('Successfully imported private key with jose');
 
-        // Create JWT using jose with the crypto key
+        // Create JWT using jose
         const now = Math.floor(Date.now() / 1000);
         
         const jwt = await new SignJWT({
@@ -73,7 +74,7 @@ async function getAccessToken() {
             .setAudience(DOCUSIGN_AUTH_SERVER)
             .setIssuedAt(now)
             .setExpirationTime(now + 3600)
-            .sign(keyObject);
+            .sign(privateKey);
 
         console.log('JWT created successfully');
 
