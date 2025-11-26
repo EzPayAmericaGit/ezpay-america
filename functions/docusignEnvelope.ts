@@ -79,15 +79,69 @@ async function createEnvelope(accessToken, applicationData, signerEmail, signerN
     const pdfBuffer = await pdfResponse.arrayBuffer();
     const documentBase64 = btoa(String.fromCharCode(...new Uint8Array(pdfBuffer)));
 
+    // Prepare additional documents array
+    const documents = [
+        {
+            documentBase64: documentBase64,
+            name: 'Merchant Application and Agreement',
+            fileExtension: 'pdf',
+            documentId: '1'
+        }
+    ];
+
+    // Add driver's license if uploaded
+    if (applicationData.driversLicenseUrl) {
+        try {
+            const dlResponse = await fetch(applicationData.driversLicenseUrl);
+            const dlBuffer = await dlResponse.arrayBuffer();
+            const dlBase64 = btoa(String.fromCharCode(...new Uint8Array(dlBuffer)));
+            const dlExt = applicationData.driversLicenseUrl.split('.').pop().toLowerCase();
+            documents.push({
+                documentBase64: dlBase64,
+                name: 'Drivers License',
+                fileExtension: dlExt === 'pdf' ? 'pdf' : 'jpg',
+                documentId: '2'
+            });
+        } catch (e) {
+            console.error('Error fetching drivers license:', e);
+        }
+    }
+
+    // Add voided check if uploaded
+    if (applicationData.voidedCheckUrl) {
+        try {
+            const checkResponse = await fetch(applicationData.voidedCheckUrl);
+            const checkBuffer = await checkResponse.arrayBuffer();
+            const checkBase64 = btoa(String.fromCharCode(...new Uint8Array(checkBuffer)));
+            const checkExt = applicationData.voidedCheckUrl.split('.').pop().toLowerCase();
+            documents.push({
+                documentBase64: checkBase64,
+                name: 'Voided Business Check',
+                fileExtension: checkExt === 'pdf' ? 'pdf' : 'jpg',
+                documentId: '3'
+            });
+        } catch (e) {
+            console.error('Error fetching voided check:', e);
+        }
+    }
+
     // Parse address components
     const parseAddress = (address) => {
-        if (!address) return { city: '', state: '', zip: '' };
+        if (!address) return { street: '', city: '', state: '', zip: '' };
         const parts = address.split(',').map(p => p.trim());
         if (parts.length >= 3) {
-            const stateZip = parts[parts.length - 1].split(' ');
+            const stateZip = parts[parts.length - 1].split(' ').filter(s => s);
             return {
                 street: parts.slice(0, -2).join(', '),
                 city: parts[parts.length - 2] || '',
+                state: stateZip[0] || '',
+                zip: stateZip[1] || ''
+            };
+        } else if (parts.length === 2) {
+            const stateZip = parts[1].split(' ').filter(s => s);
+            return {
+                street: parts[0],
+                city: '',
                 state: stateZip[0] || '',
                 zip: stateZip[1] || ''
             };
@@ -97,6 +151,7 @@ async function createEnvelope(accessToken, applicationData, signerEmail, signerN
 
     const businessAddress = parseAddress(applicationData.businessPhysicalAddress);
     const corpAddress = parseAddress(applicationData.corporateAddress || applicationData.businessPhysicalAddress);
+    const ownerHomeAddress = parseAddress(applicationData.ownerHomeAddress);
 
     // Calculate years in business
     const yearsInBusiness = applicationData.dateBusinessStarted 
@@ -126,17 +181,18 @@ async function createEnvelope(accessToken, applicationData, signerEmail, signerN
         'Non-Profit': 'non_profit'
     };
 
+    // Map account type
+    const accountTypeDisplay = {
+        'business_checking': 'Business Checking',
+        'business_savings': 'Business Savings',
+        'personal_checking': 'Personal Checking',
+        'personal_savings': 'Personal Savings'
+    };
+
     const envelopeDefinition = {
         emailSubject: 'EzPay America - Merchant Application for Signature',
-        emailBlurb: `Dear ${signerName}, please review and sign your merchant application for ${applicationData.legalBusinessName || 'your business'}.`,
-        documents: [
-            {
-                documentBase64: documentBase64,
-                name: 'Merchant Application and Agreement',
-                fileExtension: 'pdf',
-                documentId: '1'
-            }
-        ],
+        emailBlurb: `Dear ${signerName}, please review and sign your merchant application for ${applicationData.legalBusinessName || 'your business'}. Please also attach a copy of your valid Driver's License and a Voided Business Check.`,
+        documents: documents,
         recipients: {
             signers: [
                 {
@@ -167,22 +223,39 @@ async function createEnvelope(accessToken, applicationData, signerEmail, signerN
 
                             // Section 2: Owner Information
                             { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '205', value: applicationData.ownerFullName || '', width: 180, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '225', value: 'Owner', width: 80, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '170', yPosition: '225', value: '100', width: 40, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '255', value: businessAddress.street || '', width: 180, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '275', value: businessAddress.city || '', width: 80, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '145', yPosition: '275', value: businessAddress.state || '', width: 30, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '200', yPosition: '275', value: businessAddress.zip || '', width: 50, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '295', value: applicationData.businessPhone || '', width: 120, height: 12, fontSize: 'Size9' },
+                            { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '225', value: applicationData.ownerTitle || 'Owner', width: 80, height: 12, fontSize: 'Size9' },
+                            { documentId: '1', pageNumber: '1', xPosition: '170', yPosition: '225', value: applicationData.ownerOwnershipPercent || '100', width: 40, height: 12, fontSize: 'Size9' },
+                            { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '255', value: ownerHomeAddress.street || '', width: 180, height: 12, fontSize: 'Size9' },
+                            { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '275', value: ownerHomeAddress.city || '', width: 80, height: 12, fontSize: 'Size9' },
+                            { documentId: '1', pageNumber: '1', xPosition: '145', yPosition: '275', value: ownerHomeAddress.state || '', width: 30, height: 12, fontSize: 'Size9' },
+                            { documentId: '1', pageNumber: '1', xPosition: '200', yPosition: '275', value: ownerHomeAddress.zip || '', width: 50, height: 12, fontSize: 'Size9' },
+                            { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '295', value: applicationData.ownerPersonalPhone || '', width: 120, height: 12, fontSize: 'Size9' },
                             { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '315', value: applicationData.ownerSSN || '', width: 120, height: 12, fontSize: 'Size9' },
                             { documentId: '1', pageNumber: '1', xPosition: '180', yPosition: '315', value: applicationData.ownerDOB || '', width: 100, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '335', value: applicationData.businessEmail || '', width: 180, height: 12, fontSize: 'Size9' },
+                            { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '335', value: applicationData.ownerPersonalEmail || applicationData.businessEmail || '', width: 180, height: 12, fontSize: 'Size9' },
 
-                            // Section 3: Sales Profile
-                            { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '435', value: applicationData.productsDescription || '', width: 200, height: 12, fontSize: 'Size9' },
+                            // Section 3: Sales Profile - Ticket amounts and volumes
+                            { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '395', value: applicationData.averageTicket || '', width: 60, height: 12, fontSize: 'Size9' },
+                            { documentId: '1', pageNumber: '1', xPosition: '120', yPosition: '395', value: applicationData.largestTicket || '', width: 60, height: 12, fontSize: 'Size9' },
+                            { documentId: '1', pageNumber: '1', xPosition: '200', yPosition: '395', value: applicationData.monthlyVolume || '', width: 80, height: 12, fontSize: 'Size9' },
+                            // Sales percentages
+                            { documentId: '1', pageNumber: '1', xPosition: '520', yPosition: '370', value: applicationData.percentageSwiped || '0', width: 30, height: 12, fontSize: 'Size9' },
+                            { documentId: '1', pageNumber: '1', xPosition: '520', yPosition: '385', value: applicationData.percentageKeyed || '0', width: 30, height: 12, fontSize: 'Size9' },
+                            { documentId: '1', pageNumber: '1', xPosition: '520', yPosition: '415', value: applicationData.percentageInternet || '0', width: 30, height: 12, fontSize: 'Size9' },
 
-                            // Section 4: Business Profile - Return Policy
+                            // Section 4: Business Profile - MCC and goods/services
+                            { documentId: '1', pageNumber: '1', xPosition: '120', yPosition: '510', value: applicationData.productsDescription || '', width: 400, height: 12, fontSize: 'Size9' },
+
+                            // Banking Information
+                            { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '535', value: applicationData.bankName || '', width: 150, height: 12, fontSize: 'Size9' },
+                            { documentId: '1', pageNumber: '1', xPosition: '250', yPosition: '535', value: applicationData.routingNumber || '', width: 100, height: 12, fontSize: 'Size9' },
+                            { documentId: '1', pageNumber: '1', xPosition: '420', yPosition: '535', value: applicationData.accountNumber || '', width: 120, height: 12, fontSize: 'Size9' },
+
+                            // Return Policy
                             { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '560', value: applicationData.cancellationPolicy || '', width: 500, height: 12, fontSize: 'Size9' },
+
+                            // Section 5: Site Inspection - Zoning
+                            { documentId: '1', pageNumber: '1', xPosition: '200', yPosition: '620', value: applicationData.businessLocationType || '', width: 150, height: 12, fontSize: 'Size9' },
                         ],
                         
                         // Checkboxes for business type
