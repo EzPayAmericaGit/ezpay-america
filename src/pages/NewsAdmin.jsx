@@ -27,11 +27,15 @@ export default function NewsAdmin() {
   const [uploading, setUploading] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
+    slug: "",
     excerpt: "",
     content: "",
     image: "",
     category: "",
-    published: false
+    published: false,
+    meta_title: "",
+    meta_description: "",
+    meta_keywords: ""
   });
 
   const queryClient = useQueryClient();
@@ -63,7 +67,7 @@ export default function NewsAdmin() {
   });
 
   const resetForm = () => {
-    setFormData({ title: "", excerpt: "", content: "", image: "", category: "", published: false });
+    setFormData({ title: "", slug: "", excerpt: "", content: "", image: "", category: "", published: false, meta_title: "", meta_description: "", meta_keywords: "" });
     setIsEditing(false);
     setEditingArticle(null);
   };
@@ -71,11 +75,15 @@ export default function NewsAdmin() {
   const handleEdit = (article) => {
     setFormData({
       title: article.title || "",
+      slug: article.slug || "",
       excerpt: article.excerpt || "",
       content: article.content || "",
       image: article.image || "",
       category: article.category || "",
-      published: article.published || false
+      published: article.published || false,
+      meta_title: article.meta_title || "",
+      meta_description: article.meta_description || "",
+      meta_keywords: article.meta_keywords || ""
     });
     setEditingArticle(article);
     setIsEditing(true);
@@ -225,7 +233,7 @@ export default function NewsAdmin() {
                       onClick={async () => {
                         if (!formData.title) return;
                         setUploading(true);
-                        const prompt = `Professional blog header image for an article about: "${formData.title}". Category: ${formData.category || "business"}. Style: modern, clean, corporate, related to payment processing and business technology. No text in the image.`;
+                        const prompt = `High-quality professional photograph for a business blog article about: "${formData.title}". Theme: ${formData.category || "business technology"}. Style: photorealistic, well-lit, corporate, modern office or business environment. Focus on payment processing, credit cards, POS terminals, or business technology. Clean composition, professional lighting, shallow depth of field. No text, no logos, no watermarks.`;
                         const { url } = await base44.integrations.Core.GenerateImage({ prompt });
                         setFormData({...formData, image: url});
                         setUploading(false);
@@ -252,7 +260,83 @@ export default function NewsAdmin() {
                     <img src={formData.image} alt="Preview" className="mt-2 h-32 object-cover rounded" />
                   )}
                 </div>
-                <div className="flex items-center gap-2">
+                {/* SEO Section */}
+                <div className="border-t pt-4 mt-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="font-semibold text-gray-900">SEO Settings</h3>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      disabled={uploading || !formData.title}
+                      onClick={async () => {
+                        if (!formData.title) return;
+                        setUploading(true);
+                        const result = await base44.integrations.Core.InvokeLLM({
+                          prompt: `Generate SEO metadata for a blog article titled: "${formData.title}". Category: ${formData.category || "business"}. For a payment processing company (EzPay America).`,
+                          response_json_schema: {
+                            type: "object",
+                            properties: {
+                              slug: { type: "string", description: "URL-friendly slug, lowercase with hyphens" },
+                              meta_title: { type: "string", description: "SEO title, max 60 chars" },
+                              meta_description: { type: "string", description: "SEO description, max 160 chars" },
+                              meta_keywords: { type: "string", description: "5-8 relevant keywords, comma separated" }
+                            }
+                          }
+                        });
+                        setFormData({
+                          ...formData,
+                          slug: result.slug || "",
+                          meta_title: result.meta_title || "",
+                          meta_description: result.meta_description || "",
+                          meta_keywords: result.meta_keywords || ""
+                        });
+                        setUploading(false);
+                      }}
+                    >
+                      <Sparkles className="w-3 h-3 mr-1" /> Auto-Generate SEO
+                    </Button>
+                  </div>
+                  <div className="grid gap-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-1">URL Slug</label>
+                      <Input
+                        value={formData.slug}
+                        onChange={(e) => setFormData({...formData, slug: e.target.value})}
+                        placeholder="article-url-slug"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Meta Title</label>
+                      <Input
+                        value={formData.meta_title}
+                        onChange={(e) => setFormData({...formData, meta_title: e.target.value})}
+                        placeholder="SEO title (max 60 chars)"
+                        maxLength={60}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Meta Description</label>
+                      <Textarea
+                        value={formData.meta_description}
+                        onChange={(e) => setFormData({...formData, meta_description: e.target.value})}
+                        placeholder="SEO description (max 160 chars)"
+                        rows={2}
+                        maxLength={160}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Meta Keywords</label>
+                      <Input
+                        value={formData.meta_keywords}
+                        onChange={(e) => setFormData({...formData, meta_keywords: e.target.value})}
+                        placeholder="keyword1, keyword2, keyword3"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 pt-4">
                   <Switch
                     checked={formData.published}
                     onCheckedChange={(v) => setFormData({...formData, published: v})}

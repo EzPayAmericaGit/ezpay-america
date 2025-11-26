@@ -3,7 +3,10 @@ import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Calendar } from "lucide-react";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
+import { format } from "date-fns";
 import { motion } from "framer-motion";
 import SEOHead from "../components/SEOHead";
 
@@ -138,37 +141,45 @@ export default function News() {
                 transition={{ duration: 0.5, delay: index * 0.05 }}
                 viewport={{ once: true }}
               >
-                <Card className="h-full border-none shadow-lg hover:shadow-2xl transition-all duration-300 group overflow-hidden">
-                  <div className="relative overflow-hidden">
-                    <img
-                      src={article.image}
-                      alt={article.title}
-                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute top-4 left-4">
-                      <span className="bg-amber-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
-                        {article.category}
-                      </span>
+                <Link 
+                  to={article.id ? `${createPageUrl("NewsArticle")}?id=${article.id}` : "#"}
+                  className="block h-full"
+                >
+                  <Card className="h-full border-none shadow-lg hover:shadow-2xl transition-all duration-300 group overflow-hidden">
+                    <div className="relative overflow-hidden">
+                      <img
+                        src={article.image || "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop"}
+                        alt={article.title}
+                        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute top-4 left-4">
+                        <span className="bg-amber-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                          {article.category}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                  <CardContent className="p-6 space-y-3">
-                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-amber-600 transition-colors line-clamp-2">
-                      {article.title}
-                    </h3>
-                    <p className="text-gray-600 leading-relaxed line-clamp-3">
-                      {article.excerpt}
-                    </p>
-                    <div className="pt-2">
-                      <Button 
-                        variant="ghost" 
-                        className="text-amber-600 hover:text-amber-700 hover:bg-amber-50 p-0 h-auto font-semibold"
-                      >
-                        Read More
-                        <ArrowRight className="w-4 h-4 ml-1" />
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
+                    <CardContent className="p-6 space-y-3">
+                      {article.created_date && (
+                        <div className="flex items-center gap-1 text-xs text-gray-400">
+                          <Calendar className="w-3 h-3" />
+                          {format(new Date(article.created_date), 'MMM d, yyyy')}
+                        </div>
+                      )}
+                      <h3 className="text-xl font-bold text-gray-900 group-hover:text-amber-600 transition-colors line-clamp-2">
+                        {article.title}
+                      </h3>
+                      <p className="text-gray-600 leading-relaxed line-clamp-3">
+                        {article.excerpt}
+                      </p>
+                      <div className="pt-2">
+                        <span className="text-amber-600 hover:text-amber-700 font-semibold inline-flex items-center">
+                          Read More
+                          <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                        </span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
               </motion.div>
             ))}
           </div>

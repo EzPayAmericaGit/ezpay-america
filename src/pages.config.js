@@ -16,6 +16,7 @@ import FreeDemo from './pages/FreeDemo';
 import ApplyOnline from './pages/ApplyOnline';
 import News from './pages/News';
 import NewsAdmin from './pages/NewsAdmin';
+import NewsArticle from './pages/NewsArticle';
 import __Layout from './Layout.jsx';
 
 
@@ -38,6 +39,7 @@ export const PAGES = {
     "ApplyOnline": ApplyOnline,
     "News": News,
     "NewsAdmin": NewsAdmin,
+    "NewsArticle": NewsArticle,
 }
 
 export const pagesConfig = {
