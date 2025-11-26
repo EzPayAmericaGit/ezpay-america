@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Plus, Pencil, Trash2, Eye, EyeOff, Upload, Loader2, Sparkles } from "lucide-react";
+import { Plus, Pencil, Trash2, Eye, EyeOff, Upload, Loader2, Sparkles, RefreshCw } from "lucide-react";
 
 const categories = [
   "Mobile Payments",
@@ -25,6 +25,8 @@ export default function NewsAdmin() {
   const [isEditing, setIsEditing] = useState(false);
   const [editingArticle, setEditingArticle] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [bulkOptimizing, setBulkOptimizing] = useState(false);
+  const [optimizeProgress, setOptimizeProgress] = useState({ current: 0, total: 0 });
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
@@ -105,20 +107,91 @@ export default function NewsAdmin() {
     });
   };
 
+  const bulkOptimizeSEO = async () => {
+    if (articles.length === 0) return;
+    setBulkOptimizing(true);
+    setOptimizeProgress({ current: 0, total: articles.length });
+
+    for (let i = 0; i < articles.length; i++) {
+      const article = articles[i];
+      setOptimizeProgress({ current: i + 1, total: articles.length });
+
+      const result = await base44.integrations.Core.InvokeLLM({
+        prompt: `You are an SEO expert. Optimize metadata for this blog article based on Google's latest search algorithm best practices (E-E-A-T, helpful content, semantic search).
+
+Article Title: "${article.title}"
+Category: ${article.category}
+Current Excerpt: "${article.excerpt}"
+Company: EzPay America (payment processing)
+
+Optimize for:
+- Search intent matching
+- Featured snippet eligibility
+- Long-tail keywords
+- Natural language patterns
+- Mobile-first indexing considerations`,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            slug: { type: "string", description: "SEO-optimized URL slug, lowercase with hyphens, max 50 chars" },
+            meta_title: { type: "string", description: "Compelling title with primary keyword near start, max 60 chars" },
+            meta_description: { type: "string", description: "Action-oriented description with keywords, max 155 chars" },
+            meta_keywords: { type: "string", description: "8-10 relevant long-tail keywords, comma separated" },
+            optimized_excerpt: { type: "string", description: "SEO-friendly excerpt, 2-3 sentences, includes keywords naturally" }
+          }
+        }
+      });
+
+      await base44.entities.NewsArticle.update(article.id, {
+        slug: result.slug || article.slug,
+        meta_title: result.meta_title || article.meta_title,
+        meta_description: result.meta_description || article.meta_description,
+        meta_keywords: result.meta_keywords || article.meta_keywords,
+        excerpt: result.optimized_excerpt || article.excerpt
+      });
+    }
+
+    queryClient.invalidateQueries({ queryKey: ['newsArticles'] });
+    setBulkOptimizing(false);
+    setOptimizeProgress({ current: 0, total: 0 });
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 py-24 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">News Admin</h1>
-          {!isEditing && (
-            <Button 
-              onClick={() => setIsEditing(true)}
-              className="bg-amber-500 hover:bg-amber-600"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              New Article
-            </Button>
-          )}
+          <div className="flex gap-2">
+            {!isEditing && articles.length > 0 && (
+              <Button 
+                onClick={bulkOptimizeSEO}
+                disabled={bulkOptimizing}
+                variant="outline"
+                className="border-amber-500 text-amber-600 hover:bg-amber-50"
+              >
+                {bulkOptimizing ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Optimizing {optimizeProgress.current}/{optimizeProgress.total}
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Bulk Optimize SEO
+                  </>
+                )}
+              </Button>
+            )}
+            {!isEditing && (
+              <Button 
+                onClick={() => setIsEditing(true)}
+                className="bg-amber-500 hover:bg-amber-600"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                New Article
+              </Button>
+            )}
+          </div>
         </div>
 
         {isEditing && (
