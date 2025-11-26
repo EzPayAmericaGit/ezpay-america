@@ -367,8 +367,13 @@ Deno.serve(async (req) => {
         const signerEmail = applicationData.businessEmail || user.email;
         const signerName = applicationData.ownerFullName || user.full_name;
 
+        console.log('Starting DocuSign process for:', signerEmail);
+        
         const accessToken = await getAccessToken();
+        console.log('Got access token successfully');
+        
         const envelope = await createEnvelope(accessToken, applicationData, signerEmail, signerName);
+        console.log('Envelope created:', envelope.envelopeId);
 
         return Response.json({
             success: true,
@@ -379,6 +384,6 @@ Deno.serve(async (req) => {
 
     } catch (error) {
         console.error('DocuSign error:', error);
-        return Response.json({ error: error.message }, { status: 500 });
+        return Response.json({ error: error.message, stack: error.stack }, { status: 500 });
     }
 });
