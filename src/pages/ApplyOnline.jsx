@@ -5,43 +5,36 @@ import SEOHead from "../components/SEOHead";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { base44 } from "@/api/base44Client";
-import { CheckCircle2, ArrowRight, ArrowLeft, Building2, User, DollarSign, CreditCard, FileCheck } from "lucide-react";
+import { CheckCircle2, ArrowRight, ArrowLeft, Building2, User, DollarSign, FileCheck, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const steps = [
   { id: 1, name: "Business Information", icon: Building2 },
-  { id: 2, name: "Contact Information", icon: User },
-  { id: 3, name: "Processing Details", icon: DollarSign },
-  { id: 4, name: "Banking Information", icon: CreditCard },
-  { id: 5, name: "Review & Submit", icon: FileCheck }
+  { id: 2, name: "Sales & Delivery", icon: DollarSign },
+  { id: 3, name: "Review & Submit", icon: FileCheck }
 ];
 
-const businessTypes = [
-  "Retail Store",
-  "Restaurant/Bar",
+const marketTypes = [
+  "Retail",
+  "Restaurant",
   "E-commerce",
   "Professional Services",
   "Healthcare",
   "Hospitality",
   "Food Truck",
+  "Salon/Spa",
+  "Auto Services",
   "Other"
 ];
 
-const merchantTypes = [
+const formationTypes = [
   "Sole Proprietorship",
   "Partnership",
   "LLC",
   "Corporation",
   "Non-Profit"
-];
-
-const states = [
-  "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
-  "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
-  "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
-  "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
-  "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"
 ];
 
 export default function ApplyOnline() {
@@ -52,71 +45,66 @@ export default function ApplyOnline() {
 
   const [formData, setFormData] = useState({
     // Business Information
-    businessLegalName: "",
+    dateBusinessStarted: "",
+    businessMarketType: "",
+    legalBusinessName: "",
     dbaName: "",
-    businessType: "",
-    merchantType: "",
     taxId: "",
-    businessAddress: "",
-    businessCity: "",
-    businessState: "",
-    businessZip: "",
-    yearsInBusiness: "",
-    
-    // Contact Information
-    ownerFirstName: "",
-    ownerLastName: "",
-    ownerTitle: "",
-    ownerEmail: "",
-    ownerPhone: "",
-    ownerSSN: "",
+    businessNameOnTaxReturn: "",
     businessPhone: "",
-    businessWebsite: "",
+    businessEmail: "",
+    ownerFullName: "",
+    businessFormationType: "",
+    businessPhysicalAddress: "",
+    corporateAddress: "",
     
-    // Processing Details
-    monthlyVolume: "",
-    averageTicket: "",
-    highTicket: "",
-    productsServices: "",
-    currentProcessor: "",
-    reasonForSwitch: "",
+    // Current Processing
+    currentlyAcceptCards: "no",
+    currentProcessorName: "",
+    currentMerchantId: "",
+    numberOfLocations: "1",
     
-    // Banking Information
-    bankName: "",
-    routingNumber: "",
-    accountNumber: "",
-    accountType: "checking"
+    // Products & Sales
+    productsDescription: "",
+    orderMethod: [],
+    deliveryTimeframe: "",
+    cancellationPolicy: "",
+    geographicAreas: "",
+    internationalCardPercentage: "",
+    warrantyGuaranty: "",
+    isSeasonal: "no",
+    seasonalMonths: "",
+    paymentTiming: ""
   });
 
   const validateStep = (step) => {
     const newErrors = {};
     
     if (step === 1) {
-      if (!formData.businessLegalName) newErrors.businessLegalName = "Required";
-      if (!formData.businessType) newErrors.businessType = "Required";
-      if (!formData.merchantType) newErrors.merchantType = "Required";
+      if (!formData.dateBusinessStarted) newErrors.dateBusinessStarted = "Required";
+      if (!formData.businessMarketType) newErrors.businessMarketType = "Required";
+      if (!formData.legalBusinessName) newErrors.legalBusinessName = "Required";
+      if (!formData.dbaName) newErrors.dbaName = "Required";
       if (!formData.taxId) newErrors.taxId = "Required";
-      if (!formData.businessAddress) newErrors.businessAddress = "Required";
-      if (!formData.businessCity) newErrors.businessCity = "Required";
-      if (!formData.businessState) newErrors.businessState = "Required";
-      if (!formData.businessZip) newErrors.businessZip = "Required";
-      if (!formData.yearsInBusiness) newErrors.yearsInBusiness = "Required";
-    } else if (step === 2) {
-      if (!formData.ownerFirstName) newErrors.ownerFirstName = "Required";
-      if (!formData.ownerLastName) newErrors.ownerLastName = "Required";
-      if (!formData.ownerEmail) newErrors.ownerEmail = "Required";
-      if (!formData.ownerPhone) newErrors.ownerPhone = "Required";
-      if (!formData.ownerSSN) newErrors.ownerSSN = "Required";
+      if (!formData.businessNameOnTaxReturn) newErrors.businessNameOnTaxReturn = "Required";
       if (!formData.businessPhone) newErrors.businessPhone = "Required";
-    } else if (step === 3) {
-      if (!formData.monthlyVolume) newErrors.monthlyVolume = "Required";
-      if (!formData.averageTicket) newErrors.averageTicket = "Required";
-      if (!formData.highTicket) newErrors.highTicket = "Required";
-      if (!formData.productsServices) newErrors.productsServices = "Required";
-    } else if (step === 4) {
-      if (!formData.bankName) newErrors.bankName = "Required";
-      if (!formData.routingNumber) newErrors.routingNumber = "Required";
-      if (!formData.accountNumber) newErrors.accountNumber = "Required";
+      if (!formData.businessEmail) newErrors.businessEmail = "Required";
+      if (!formData.ownerFullName) newErrors.ownerFullName = "Required";
+      if (!formData.businessFormationType) newErrors.businessFormationType = "Required";
+      if (!formData.businessPhysicalAddress) newErrors.businessPhysicalAddress = "Required";
+      if (formData.currentlyAcceptCards === "yes") {
+        if (!formData.currentProcessorName) newErrors.currentProcessorName = "Required";
+        if (!formData.currentMerchantId) newErrors.currentMerchantId = "Required";
+      }
+    } else if (step === 2) {
+      if (!formData.productsDescription) newErrors.productsDescription = "Required";
+      if (formData.orderMethod.length === 0) newErrors.orderMethod = "Required";
+      if (!formData.deliveryTimeframe) newErrors.deliveryTimeframe = "Required";
+      if (!formData.cancellationPolicy) newErrors.cancellationPolicy = "Required";
+      if (!formData.geographicAreas) newErrors.geographicAreas = "Required";
+      if (!formData.internationalCardPercentage) newErrors.internationalCardPercentage = "Required";
+      if (!formData.warrantyGuaranty) newErrors.warrantyGuaranty = "Required";
+      if (!formData.paymentTiming) newErrors.paymentTiming = "Required";
     }
     
     setErrors(newErrors);
@@ -134,51 +122,57 @@ export default function ApplyOnline() {
     setErrors({});
   };
 
+  const toggleOrderMethod = (method) => {
+    const current = formData.orderMethod;
+    if (current.includes(method)) {
+      setFormData({...formData, orderMethod: current.filter(m => m !== method)});
+    } else {
+      setFormData({...formData, orderMethod: [...current, method]});
+    }
+  };
+
   const handleSubmit = async () => {
-    if (!validateStep(4)) return;
-    
     setIsSubmitting(true);
     
     try {
-      // Send application via email
       await base44.integrations.Core.SendEmail({
         to: "contact@ezpayamerica.com",
         from_name: "EzPay Online Application",
-        subject: `New Merchant Application - ${formData.businessLegalName}`,
+        subject: `New Merchant Application - ${formData.legalBusinessName}`,
         body: `
           <h2>New Merchant Application</h2>
           
           <h3>Business Information</h3>
-          <p><strong>Legal Name:</strong> ${formData.businessLegalName}</p>
-          <p><strong>DBA Name:</strong> ${formData.dbaName || "N/A"}</p>
-          <p><strong>Business Type:</strong> ${formData.businessType}</p>
-          <p><strong>Merchant Type:</strong> ${formData.merchantType}</p>
-          <p><strong>Tax ID:</strong> ${formData.taxId}</p>
-          <p><strong>Address:</strong> ${formData.businessAddress}, ${formData.businessCity}, ${formData.businessState} ${formData.businessZip}</p>
-          <p><strong>Years in Business:</strong> ${formData.yearsInBusiness}</p>
-          
-          <h3>Contact Information</h3>
-          <p><strong>Owner Name:</strong> ${formData.ownerFirstName} ${formData.ownerLastName}</p>
-          <p><strong>Title:</strong> ${formData.ownerTitle || "N/A"}</p>
-          <p><strong>Email:</strong> ${formData.ownerEmail}</p>
-          <p><strong>Phone:</strong> ${formData.ownerPhone}</p>
-          <p><strong>SSN:</strong> ${formData.ownerSSN}</p>
+          <p><strong>Date Business Started:</strong> ${formData.dateBusinessStarted}</p>
+          <p><strong>Business Market Type:</strong> ${formData.businessMarketType}</p>
+          <p><strong>Legal Business Name:</strong> ${formData.legalBusinessName}</p>
+          <p><strong>DBA Name:</strong> ${formData.dbaName}</p>
+          <p><strong>Tax ID/EIN/SSN:</strong> ${formData.taxId}</p>
+          <p><strong>Business Name on Tax Return:</strong> ${formData.businessNameOnTaxReturn}</p>
           <p><strong>Business Phone:</strong> ${formData.businessPhone}</p>
-          <p><strong>Website:</strong> ${formData.businessWebsite || "N/A"}</p>
+          <p><strong>Business Email:</strong> ${formData.businessEmail}</p>
+          <p><strong>Owner Full Name:</strong> ${formData.ownerFullName}</p>
+          <p><strong>Business Formation Type:</strong> ${formData.businessFormationType}</p>
+          <p><strong>Physical Address:</strong> ${formData.businessPhysicalAddress}</p>
+          <p><strong>Corporate Address:</strong> ${formData.corporateAddress || "Same as physical"}</p>
           
-          <h3>Processing Details</h3>
-          <p><strong>Monthly Volume:</strong> $${formData.monthlyVolume}</p>
-          <p><strong>Average Ticket:</strong> $${formData.averageTicket}</p>
-          <p><strong>High Ticket:</strong> $${formData.highTicket}</p>
-          <p><strong>Products/Services:</strong> ${formData.productsServices}</p>
-          <p><strong>Current Processor:</strong> ${formData.currentProcessor || "N/A"}</p>
-          <p><strong>Reason for Switch:</strong> ${formData.reasonForSwitch || "N/A"}</p>
+          <h3>Current Processing</h3>
+          <p><strong>Currently Accept Cards:</strong> ${formData.currentlyAcceptCards}</p>
+          <p><strong>Current Processor:</strong> ${formData.currentProcessorName || "N/A"}</p>
+          <p><strong>Current Merchant ID:</strong> ${formData.currentMerchantId || "N/A"}</p>
+          <p><strong>Number of Locations:</strong> ${formData.numberOfLocations}</p>
           
-          <h3>Banking Information</h3>
-          <p><strong>Bank Name:</strong> ${formData.bankName}</p>
-          <p><strong>Account Type:</strong> ${formData.accountType}</p>
-          <p><strong>Routing Number:</strong> ${formData.routingNumber}</p>
-          <p><strong>Account Number:</strong> ${formData.accountNumber}</p>
+          <h3>Products & Sales</h3>
+          <p><strong>Products Description:</strong> ${formData.productsDescription}</p>
+          <p><strong>Order Methods:</strong> ${formData.orderMethod.join(", ")}</p>
+          <p><strong>Delivery Timeframe:</strong> ${formData.deliveryTimeframe}</p>
+          <p><strong>Cancellation/Return Policy:</strong> ${formData.cancellationPolicy}</p>
+          <p><strong>Geographic Areas:</strong> ${formData.geographicAreas}</p>
+          <p><strong>International Card %:</strong> ${formData.internationalCardPercentage}%</p>
+          <p><strong>Warranty/Guaranty:</strong> ${formData.warrantyGuaranty}</p>
+          <p><strong>Seasonal Business:</strong> ${formData.isSeasonal}</p>
+          <p><strong>Seasonal Months:</strong> ${formData.seasonalMonths || "N/A"}</p>
+          <p><strong>Payment Timing:</strong> ${formData.paymentTiming}</p>
         `
       });
       
@@ -231,6 +225,7 @@ export default function ApplyOnline() {
         description="Apply for a merchant account with EzPay America. Fast approval, zero transaction fees, free equipment. Complete your application in minutes."
         keywords="merchant account application, apply for credit card processing, merchant services application, payment processing signup"
       />
+      
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -241,10 +236,10 @@ export default function ApplyOnline() {
             className="text-center"
           >
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-              Apply Online
+              Online Merchant Application
             </h1>
             <p className="text-xl text-gray-800">
-              Complete your merchant application in just a few minutes
+              Please complete the form below to get started
             </p>
           </motion.div>
         </div>
@@ -312,468 +307,399 @@ export default function ApplyOnline() {
                       <div className="grid md:grid-cols-2 gap-6">
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Business Legal Name *
+                            Date Business Started *
                           </label>
                           <Input
-                            value={formData.businessLegalName}
-                            onChange={(e) => setFormData({...formData, businessLegalName: e.target.value})}
-                            className={`h-12 ${errors.businessLegalName ? 'border-red-500' : ''}`}
+                            type="date"
+                            value={formData.dateBusinessStarted}
+                            onChange={(e) => setFormData({...formData, dateBusinessStarted: e.target.value})}
+                            className={`h-12 ${errors.dateBusinessStarted ? 'border-red-500' : ''}`}
                           />
-                          {errors.businessLegalName && (
-                            <p className="text-red-500 text-sm mt-1">{errors.businessLegalName}</p>
-                          )}
+                          {errors.dateBusinessStarted && <p className="text-red-500 text-sm mt-1">{errors.dateBusinessStarted}</p>}
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">
-                            DBA Name (if different)
+                            Business Market Type *
+                          </label>
+                          <Select 
+                            value={formData.businessMarketType}
+                            onValueChange={(value) => setFormData({...formData, businessMarketType: value})}
+                          >
+                            <SelectTrigger className={`h-12 ${errors.businessMarketType ? 'border-red-500' : ''}`}>
+                              <SelectValue placeholder="Select market type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {marketTypes.map((type) => (
+                                <SelectItem key={type} value={type}>{type}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          {errors.businessMarketType && <p className="text-red-500 text-sm mt-1">{errors.businessMarketType}</p>}
+                        </div>
+                      </div>
+
+                      <div className="grid md:grid-cols-2 gap-6">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Legal Business Name *
+                          </label>
+                          <Input
+                            value={formData.legalBusinessName}
+                            onChange={(e) => setFormData({...formData, legalBusinessName: e.target.value})}
+                            className={`h-12 ${errors.legalBusinessName ? 'border-red-500' : ''}`}
+                          />
+                          {errors.legalBusinessName && <p className="text-red-500 text-sm mt-1">{errors.legalBusinessName}</p>}
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Doing Business As (DBA) *
                           </label>
                           <Input
                             value={formData.dbaName}
                             onChange={(e) => setFormData({...formData, dbaName: e.target.value})}
-                            className="h-12"
+                            className={`h-12 ${errors.dbaName ? 'border-red-500' : ''}`}
                           />
+                          {errors.dbaName && <p className="text-red-500 text-sm mt-1">{errors.dbaName}</p>}
                         </div>
                       </div>
 
                       <div className="grid md:grid-cols-2 gap-6">
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Business Type *
-                          </label>
-                          <Select 
-                            value={formData.businessType}
-                            onValueChange={(value) => setFormData({...formData, businessType: value})}
-                          >
-                            <SelectTrigger className={`h-12 ${errors.businessType ? 'border-red-500' : ''}`}>
-                              <SelectValue placeholder="Select business type" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {businessTypes.map((type) => (
-                                <SelectItem key={type} value={type}>{type}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          {errors.businessType && (
-                            <p className="text-red-500 text-sm mt-1">{errors.businessType}</p>
-                          )}
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Merchant Type *
-                          </label>
-                          <Select 
-                            value={formData.merchantType}
-                            onValueChange={(value) => setFormData({...formData, merchantType: value})}
-                          >
-                            <SelectTrigger className={`h-12 ${errors.merchantType ? 'border-red-500' : ''}`}>
-                              <SelectValue placeholder="Select merchant type" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {merchantTypes.map((type) => (
-                                <SelectItem key={type} value={type}>{type}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          {errors.merchantType && (
-                            <p className="text-red-500 text-sm mt-1">{errors.merchantType}</p>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="grid md:grid-cols-2 gap-6">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Tax ID / EIN *
+                            Taxpayer ID # (EIN) or SSN# *
                           </label>
                           <Input
                             value={formData.taxId}
                             onChange={(e) => setFormData({...formData, taxId: e.target.value})}
-                            placeholder="XX-XXXXXXX"
+                            placeholder="Use SSN if you don't have an EIN"
                             className={`h-12 ${errors.taxId ? 'border-red-500' : ''}`}
                           />
-                          {errors.taxId && (
-                            <p className="text-red-500 text-sm mt-1">{errors.taxId}</p>
-                          )}
+                          {errors.taxId && <p className="text-red-500 text-sm mt-1">{errors.taxId}</p>}
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Years in Business *
+                            Business Name On Tax Return *
                           </label>
                           <Input
-                            type="number"
-                            value={formData.yearsInBusiness}
-                            onChange={(e) => setFormData({...formData, yearsInBusiness: e.target.value})}
-                            className={`h-12 ${errors.yearsInBusiness ? 'border-red-500' : ''}`}
+                            value={formData.businessNameOnTaxReturn}
+                            onChange={(e) => setFormData({...formData, businessNameOnTaxReturn: e.target.value})}
+                            className={`h-12 ${errors.businessNameOnTaxReturn ? 'border-red-500' : ''}`}
                           />
-                          {errors.yearsInBusiness && (
-                            <p className="text-red-500 text-sm mt-1">{errors.yearsInBusiness}</p>
-                          )}
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Business Address *
-                        </label>
-                        <Input
-                          value={formData.businessAddress}
-                          onChange={(e) => setFormData({...formData, businessAddress: e.target.value})}
-                          placeholder="Street Address"
-                          className={`h-12 ${errors.businessAddress ? 'border-red-500' : ''}`}
-                        />
-                        {errors.businessAddress && (
-                          <p className="text-red-500 text-sm mt-1">{errors.businessAddress}</p>
-                        )}
-                      </div>
-
-                      <div className="grid md:grid-cols-3 gap-6">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            City *
-                          </label>
-                          <Input
-                            value={formData.businessCity}
-                            onChange={(e) => setFormData({...formData, businessCity: e.target.value})}
-                            className={`h-12 ${errors.businessCity ? 'border-red-500' : ''}`}
-                          />
-                          {errors.businessCity && (
-                            <p className="text-red-500 text-sm mt-1">{errors.businessCity}</p>
-                          )}
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            State *
-                          </label>
-                          <Select 
-                            value={formData.businessState}
-                            onValueChange={(value) => setFormData({...formData, businessState: value})}
-                          >
-                            <SelectTrigger className={`h-12 ${errors.businessState ? 'border-red-500' : ''}`}>
-                              <SelectValue placeholder="State" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {states.map((state) => (
-                                <SelectItem key={state} value={state}>{state}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          {errors.businessState && (
-                            <p className="text-red-500 text-sm mt-1">{errors.businessState}</p>
-                          )}
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            ZIP Code *
-                          </label>
-                          <Input
-                            value={formData.businessZip}
-                            onChange={(e) => setFormData({...formData, businessZip: e.target.value})}
-                            className={`h-12 ${errors.businessZip ? 'border-red-500' : ''}`}
-                          />
-                          {errors.businessZip && (
-                            <p className="text-red-500 text-sm mt-1">{errors.businessZip}</p>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Step 2: Contact Information */}
-                  {currentStep === 2 && (
-                    <div className="space-y-6">
-                      <div className="grid md:grid-cols-2 gap-6">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Owner First Name *
-                          </label>
-                          <Input
-                            value={formData.ownerFirstName}
-                            onChange={(e) => setFormData({...formData, ownerFirstName: e.target.value})}
-                            className={`h-12 ${errors.ownerFirstName ? 'border-red-500' : ''}`}
-                          />
-                          {errors.ownerFirstName && (
-                            <p className="text-red-500 text-sm mt-1">{errors.ownerFirstName}</p>
-                          )}
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Owner Last Name *
-                          </label>
-                          <Input
-                            value={formData.ownerLastName}
-                            onChange={(e) => setFormData({...formData, ownerLastName: e.target.value})}
-                            className={`h-12 ${errors.ownerLastName ? 'border-red-500' : ''}`}
-                          />
-                          {errors.ownerLastName && (
-                            <p className="text-red-500 text-sm mt-1">{errors.ownerLastName}</p>
-                          )}
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Title / Position
-                        </label>
-                        <Input
-                          value={formData.ownerTitle}
-                          onChange={(e) => setFormData({...formData, ownerTitle: e.target.value})}
-                          placeholder="e.g., Owner, President, CEO"
-                          className="h-12"
-                        />
-                      </div>
-
-                      <div className="grid md:grid-cols-2 gap-6">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Email Address *
-                          </label>
-                          <Input
-                            type="email"
-                            value={formData.ownerEmail}
-                            onChange={(e) => setFormData({...formData, ownerEmail: e.target.value})}
-                            className={`h-12 ${errors.ownerEmail ? 'border-red-500' : ''}`}
-                          />
-                          {errors.ownerEmail && (
-                            <p className="text-red-500 text-sm mt-1">{errors.ownerEmail}</p>
-                          )}
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Owner Phone *
-                          </label>
-                          <Input
-                            type="tel"
-                            value={formData.ownerPhone}
-                            onChange={(e) => setFormData({...formData, ownerPhone: e.target.value})}
-                            placeholder="(555) 123-4567"
-                            className={`h-12 ${errors.ownerPhone ? 'border-red-500' : ''}`}
-                          />
-                          {errors.ownerPhone && (
-                            <p className="text-red-500 text-sm mt-1">{errors.ownerPhone}</p>
-                          )}
+                          {errors.businessNameOnTaxReturn && <p className="text-red-500 text-sm mt-1">{errors.businessNameOnTaxReturn}</p>}
                         </div>
                       </div>
 
                       <div className="grid md:grid-cols-2 gap-6">
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Business Phone *
+                            Business Phone Number *
                           </label>
                           <Input
                             type="tel"
                             value={formData.businessPhone}
                             onChange={(e) => setFormData({...formData, businessPhone: e.target.value})}
-                            placeholder="(555) 123-4567"
                             className={`h-12 ${errors.businessPhone ? 'border-red-500' : ''}`}
                           />
-                          {errors.businessPhone && (
-                            <p className="text-red-500 text-sm mt-1">{errors.businessPhone}</p>
-                          )}
+                          {errors.businessPhone && <p className="text-red-500 text-sm mt-1">{errors.businessPhone}</p>}
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Business Website
+                            Business Email *
                           </label>
                           <Input
-                            type="url"
-                            value={formData.businessWebsite}
-                            onChange={(e) => setFormData({...formData, businessWebsite: e.target.value})}
-                            placeholder="https://www.example.com"
-                            className="h-12"
+                            type="email"
+                            value={formData.businessEmail}
+                            onChange={(e) => setFormData({...formData, businessEmail: e.target.value})}
+                            className={`h-12 ${errors.businessEmail ? 'border-red-500' : ''}`}
                           />
+                          {errors.businessEmail && <p className="text-red-500 text-sm mt-1">{errors.businessEmail}</p>}
+                        </div>
+                      </div>
+
+                      <div className="grid md:grid-cols-2 gap-6">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Owner Full Name *
+                          </label>
+                          <Input
+                            value={formData.ownerFullName}
+                            onChange={(e) => setFormData({...formData, ownerFullName: e.target.value})}
+                            className={`h-12 ${errors.ownerFullName ? 'border-red-500' : ''}`}
+                          />
+                          {errors.ownerFullName && <p className="text-red-500 text-sm mt-1">{errors.ownerFullName}</p>}
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Business Formation Type *
+                          </label>
+                          <Select 
+                            value={formData.businessFormationType}
+                            onValueChange={(value) => setFormData({...formData, businessFormationType: value})}
+                          >
+                            <SelectTrigger className={`h-12 ${errors.businessFormationType ? 'border-red-500' : ''}`}>
+                              <SelectValue placeholder="Select formation type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {formationTypes.map((type) => (
+                                <SelectItem key={type} value={type}>{type}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          {errors.businessFormationType && <p className="text-red-500 text-sm mt-1">{errors.businessFormationType}</p>}
                         </div>
                       </div>
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Owner Social Security Number *
+                          Business Physical Address *
                         </label>
                         <Input
-                          value={formData.ownerSSN}
-                          onChange={(e) => setFormData({...formData, ownerSSN: e.target.value})}
-                          placeholder="XXX-XX-XXXX"
-                          className={`h-12 ${errors.ownerSSN ? 'border-red-500' : ''}`}
+                          value={formData.businessPhysicalAddress}
+                          onChange={(e) => setFormData({...formData, businessPhysicalAddress: e.target.value})}
+                          placeholder="Street, City, State, ZIP"
+                          className={`h-12 ${errors.businessPhysicalAddress ? 'border-red-500' : ''}`}
                         />
-                        {errors.ownerSSN && (
-                          <p className="text-red-500 text-sm mt-1">{errors.ownerSSN}</p>
+                        {errors.businessPhysicalAddress && <p className="text-red-500 text-sm mt-1">{errors.businessPhysicalAddress}</p>}
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Corporate Address (if different from physical)
+                        </label>
+                        <Input
+                          value={formData.corporateAddress}
+                          onChange={(e) => setFormData({...formData, corporateAddress: e.target.value})}
+                          className="h-12"
+                        />
+                      </div>
+
+                      <div className="border-t pt-6 mt-6">
+                        <h3 className="text-lg font-semibold mb-4">Current Payment Processing</h3>
+                        
+                        <div className="mb-4">
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Do you currently accept Visa/MC/Discover? *
+                          </label>
+                          <Select 
+                            value={formData.currentlyAcceptCards}
+                            onValueChange={(value) => setFormData({...formData, currentlyAcceptCards: value})}
+                          >
+                            <SelectTrigger className="h-12">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="yes">Yes</SelectItem>
+                              <SelectItem value="no">No</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        {formData.currentlyAcceptCards === "yes" && (
+                          <div className="grid md:grid-cols-2 gap-6">
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Current Payment Processor Name *
+                              </label>
+                              <Input
+                                value={formData.currentProcessorName}
+                                onChange={(e) => setFormData({...formData, currentProcessorName: e.target.value})}
+                                className={`h-12 ${errors.currentProcessorName ? 'border-red-500' : ''}`}
+                              />
+                              {errors.currentProcessorName && <p className="text-red-500 text-sm mt-1">{errors.currentProcessorName}</p>}
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Current Merchant ID Number *
+                              </label>
+                              <Input
+                                value={formData.currentMerchantId}
+                                onChange={(e) => setFormData({...formData, currentMerchantId: e.target.value})}
+                                className={`h-12 ${errors.currentMerchantId ? 'border-red-500' : ''}`}
+                              />
+                              {errors.currentMerchantId && <p className="text-red-500 text-sm mt-1">{errors.currentMerchantId}</p>}
+                            </div>
+                          </div>
                         )}
-                        <p className="text-xs text-gray-500 mt-1">
-                          This information is required for merchant account approval and is kept secure.
-                        </p>
+
+                        <div className="mt-4">
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Number of Locations *
+                          </label>
+                          <Select 
+                            value={formData.numberOfLocations}
+                            onValueChange={(value) => setFormData({...formData, numberOfLocations: value})}
+                          >
+                            <SelectTrigger className="h-12 w-48">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="1">1</SelectItem>
+                              <SelectItem value="2">2</SelectItem>
+                              <SelectItem value="3+">3 or More</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
                       </div>
                     </div>
                   )}
 
-                  {/* Step 3: Processing Details */}
-                  {currentStep === 3 && (
+                  {/* Step 2: Sales & Delivery */}
+                  {currentStep === 2 && (
                     <div className="space-y-6">
-                      <div className="grid md:grid-cols-3 gap-6">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Monthly Volume *
-                          </label>
-                          <Input
-                            type="number"
-                            value={formData.monthlyVolume}
-                            onChange={(e) => setFormData({...formData, monthlyVolume: e.target.value})}
-                            placeholder="50000"
-                            className={`h-12 ${errors.monthlyVolume ? 'border-red-500' : ''}`}
-                          />
-                          {errors.monthlyVolume && (
-                            <p className="text-red-500 text-sm mt-1">{errors.monthlyVolume}</p>
-                          )}
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Average Ticket *
-                          </label>
-                          <Input
-                            type="number"
-                            value={formData.averageTicket}
-                            onChange={(e) => setFormData({...formData, averageTicket: e.target.value})}
-                            placeholder="50"
-                            className={`h-12 ${errors.averageTicket ? 'border-red-500' : ''}`}
-                          />
-                          {errors.averageTicket && (
-                            <p className="text-red-500 text-sm mt-1">{errors.averageTicket}</p>
-                          )}
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            High Ticket *
-                          </label>
-                          <Input
-                            type="number"
-                            value={formData.highTicket}
-                            onChange={(e) => setFormData({...formData, highTicket: e.target.value})}
-                            placeholder="500"
-                            className={`h-12 ${errors.highTicket ? 'border-red-500' : ''}`}
-                          />
-                          {errors.highTicket && (
-                            <p className="text-red-500 text-sm mt-1">{errors.highTicket}</p>
-                          )}
-                        </div>
-                      </div>
-
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Products/Services Description *
+                          Description of Products Sold *
                         </label>
                         <Textarea
-                          value={formData.productsServices}
-                          onChange={(e) => setFormData({...formData, productsServices: e.target.value})}
-                          placeholder="Describe what you sell or the services you provide..."
-                          rows={4}
-                          className={errors.productsServices ? 'border-red-500' : ''}
+                          value={formData.productsDescription}
+                          onChange={(e) => setFormData({...formData, productsDescription: e.target.value})}
+                          rows={3}
+                          className={errors.productsDescription ? 'border-red-500' : ''}
                         />
-                        {errors.productsServices && (
-                          <p className="text-red-500 text-sm mt-1">{errors.productsServices}</p>
-                        )}
-                      </div>
-
-                      <div className="grid md:grid-cols-2 gap-6">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Current Processor (if any)
-                          </label>
-                          <Input
-                            value={formData.currentProcessor}
-                            onChange={(e) => setFormData({...formData, currentProcessor: e.target.value})}
-                            placeholder="e.g., Square, Clover, etc."
-                            className="h-12"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Reason for Switch
-                          </label>
-                          <Input
-                            value={formData.reasonForSwitch}
-                            onChange={(e) => setFormData({...formData, reasonForSwitch: e.target.value})}
-                            placeholder="e.g., High fees, poor service"
-                            className="h-12"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Step 4: Banking Information */}
-                  {currentStep === 4 && (
-                    <div className="space-y-6">
-                      <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
-                        <p className="text-sm text-blue-800">
-                          <strong>Secure Information:</strong> Your banking details are encrypted and will only be used to set up your merchant account.
-                        </p>
+                        {errors.productsDescription && <p className="text-red-500 text-sm mt-1">{errors.productsDescription}</p>}
                       </div>
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Bank Name *
+                          How Does The Customer Order Your Products Or Service? *
+                        </label>
+                        <div className="flex flex-wrap gap-4">
+                          {["In-Person", "By Phone", "By Mail", "Over The Internet"].map((method) => (
+                            <div key={method} className="flex items-center gap-2">
+                              <Checkbox
+                                checked={formData.orderMethod.includes(method)}
+                                onCheckedChange={() => toggleOrderMethod(method)}
+                              />
+                              <span className="text-sm">{method}</span>
+                            </div>
+                          ))}
+                        </div>
+                        {errors.orderMethod && <p className="text-red-500 text-sm mt-1">{errors.orderMethod}</p>}
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          What Is The Delivery Time Frame To The Customer? *
                         </label>
                         <Input
-                          value={formData.bankName}
-                          onChange={(e) => setFormData({...formData, bankName: e.target.value})}
-                          className={`h-12 ${errors.bankName ? 'border-red-500' : ''}`}
+                          value={formData.deliveryTimeframe}
+                          onChange={(e) => setFormData({...formData, deliveryTimeframe: e.target.value})}
+                          placeholder="e.g., Immediate, 1-3 days, 1-2 weeks"
+                          className={`h-12 ${errors.deliveryTimeframe ? 'border-red-500' : ''}`}
                         />
-                        {errors.bankName && (
-                          <p className="text-red-500 text-sm mt-1">{errors.bankName}</p>
-                        )}
+                        {errors.deliveryTimeframe && <p className="text-red-500 text-sm mt-1">{errors.deliveryTimeframe}</p>}
                       </div>
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Account Type *
+                          What is your cancellation or return policy? *
                         </label>
-                        <Select 
-                          value={formData.accountType}
-                          onValueChange={(value) => setFormData({...formData, accountType: value})}
-                        >
-                          <SelectTrigger className="h-12">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="checking">Checking</SelectItem>
-                            <SelectItem value="savings">Savings</SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <Textarea
+                          value={formData.cancellationPolicy}
+                          onChange={(e) => setFormData({...formData, cancellationPolicy: e.target.value})}
+                          rows={2}
+                          className={errors.cancellationPolicy ? 'border-red-500' : ''}
+                        />
+                        {errors.cancellationPolicy && <p className="text-red-500 text-sm mt-1">{errors.cancellationPolicy}</p>}
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          In what geographic areas will the product be marketed and sold? *
+                        </label>
+                        <Input
+                          value={formData.geographicAreas}
+                          onChange={(e) => setFormData({...formData, geographicAreas: e.target.value})}
+                          placeholder="e.g., Local, Statewide, National, International"
+                          className={`h-12 ${errors.geographicAreas ? 'border-red-500' : ''}`}
+                        />
+                        {errors.geographicAreas && <p className="text-red-500 text-sm mt-1">{errors.geographicAreas}</p>}
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          What percentage of sales transactions are with international cards? *
+                        </label>
+                        <Input
+                          type="number"
+                          value={formData.internationalCardPercentage}
+                          onChange={(e) => setFormData({...formData, internationalCardPercentage: e.target.value})}
+                          placeholder="0-100"
+                          min="0"
+                          max="100"
+                          className={`h-12 w-32 ${errors.internationalCardPercentage ? 'border-red-500' : ''}`}
+                        />
+                        {errors.internationalCardPercentage && <p className="text-red-500 text-sm mt-1">{errors.internationalCardPercentage}</p>}
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          What is your warranty/guaranty? *
+                        </label>
+                        <Input
+                          value={formData.warrantyGuaranty}
+                          onChange={(e) => setFormData({...formData, warrantyGuaranty: e.target.value})}
+                          className={`h-12 ${errors.warrantyGuaranty ? 'border-red-500' : ''}`}
+                        />
+                        {errors.warrantyGuaranty && <p className="text-red-500 text-sm mt-1">{errors.warrantyGuaranty}</p>}
                       </div>
 
                       <div className="grid md:grid-cols-2 gap-6">
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Routing Number *
+                            Is Your Business Seasonal? *
                           </label>
-                          <Input
-                            value={formData.routingNumber}
-                            onChange={(e) => setFormData({...formData, routingNumber: e.target.value})}
-                            placeholder="9 digits"
-                            maxLength={9}
-                            className={`h-12 ${errors.routingNumber ? 'border-red-500' : ''}`}
-                          />
-                          {errors.routingNumber && (
-                            <p className="text-red-500 text-sm mt-1">{errors.routingNumber}</p>
-                          )}
+                          <Select 
+                            value={formData.isSeasonal}
+                            onValueChange={(value) => setFormData({...formData, isSeasonal: value})}
+                          >
+                            <SelectTrigger className="h-12">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="yes">Yes</SelectItem>
+                              <SelectItem value="no">No</SelectItem>
+                            </SelectContent>
+                          </Select>
                         </div>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Account Number *
-                          </label>
-                          <Input
-                            value={formData.accountNumber}
-                            onChange={(e) => setFormData({...formData, accountNumber: e.target.value})}
-                            className={`h-12 ${errors.accountNumber ? 'border-red-500' : ''}`}
-                          />
-                          {errors.accountNumber && (
-                            <p className="text-red-500 text-sm mt-1">{errors.accountNumber}</p>
-                          )}
-                        </div>
+                        {formData.isSeasonal === "yes" && (
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              What Months Are You Active?
+                            </label>
+                            <Input
+                              value={formData.seasonalMonths}
+                              onChange={(e) => setFormData({...formData, seasonalMonths: e.target.value})}
+                              placeholder="e.g., May - September"
+                              className="h-12"
+                            />
+                          </div>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          At What Point Are You Paid In Full? *
+                        </label>
+                        <Select 
+                          value={formData.paymentTiming}
+                          onValueChange={(value) => setFormData({...formData, paymentTiming: value})}
+                        >
+                          <SelectTrigger className={`h-12 ${errors.paymentTiming ? 'border-red-500' : ''}`}>
+                            <SelectValue placeholder="Select payment timing" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="at_service">100% At time of service</SelectItem>
+                            <SelectItem value="in_advance">100% Paid In Advance For Future Delivery</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        {errors.paymentTiming && <p className="text-red-500 text-sm mt-1">{errors.paymentTiming}</p>}
                       </div>
                     </div>
                   )}
 
-                  {/* Step 5: Review & Submit */}
-                  {currentStep === 5 && (
+                  {/* Step 3: Review & Submit */}
+                  {currentStep === 3 && (
                     <div className="space-y-6">
                       <div className="bg-amber-50 border-l-4 border-amber-500 p-4 mb-6">
                         <p className="text-sm text-amber-800">
@@ -788,56 +714,31 @@ export default function ApplyOnline() {
                             Business Information
                           </h3>
                           <div className="grid md:grid-cols-2 gap-3 text-sm">
-                            <div><span className="font-semibold">Legal Name:</span> {formData.businessLegalName}</div>
-                            <div><span className="font-semibold">DBA:</span> {formData.dbaName || "N/A"}</div>
-                            <div><span className="font-semibold">Type:</span> {formData.businessType}</div>
-                            <div><span className="font-semibold">Merchant Type:</span> {formData.merchantType}</div>
-                            <div><span className="font-semibold">Tax ID:</span> {formData.taxId}</div>
-                            <div><span className="font-semibold">Years in Business:</span> {formData.yearsInBusiness}</div>
-                            <div className="md:col-span-2"><span className="font-semibold">Address:</span> {formData.businessAddress}, {formData.businessCity}, {formData.businessState} {formData.businessZip}</div>
-                          </div>
-                        </div>
-
-                        <div className="bg-white p-6 rounded-lg border-2 border-gray-200">
-                          <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                            <User className="w-5 h-5 text-amber-600" />
-                            Contact Information
-                          </h3>
-                          <div className="grid md:grid-cols-2 gap-3 text-sm">
-                            <div><span className="font-semibold">Owner:</span> {formData.ownerFirstName} {formData.ownerLastName}</div>
-                            <div><span className="font-semibold">Title:</span> {formData.ownerTitle || "N/A"}</div>
-                            <div><span className="font-semibold">Email:</span> {formData.ownerEmail}</div>
-                            <div><span className="font-semibold">Owner Phone:</span> {formData.ownerPhone}</div>
-                            <div><span className="font-semibold">Business Phone:</span> {formData.businessPhone}</div>
-                            <div><span className="font-semibold">Website:</span> {formData.businessWebsite || "N/A"}</div>
-                            <div><span className="font-semibold">SSN:</span> ***-**-{formData.ownerSSN.slice(-4)}</div>
+                            <div><span className="font-semibold">Legal Name:</span> {formData.legalBusinessName}</div>
+                            <div><span className="font-semibold">DBA:</span> {formData.dbaName}</div>
+                            <div><span className="font-semibold">Market Type:</span> {formData.businessMarketType}</div>
+                            <div><span className="font-semibold">Formation:</span> {formData.businessFormationType}</div>
+                            <div><span className="font-semibold">Owner:</span> {formData.ownerFullName}</div>
+                            <div><span className="font-semibold">Phone:</span> {formData.businessPhone}</div>
+                            <div><span className="font-semibold">Email:</span> {formData.businessEmail}</div>
+                            <div><span className="font-semibold">Locations:</span> {formData.numberOfLocations}</div>
+                            <div className="md:col-span-2"><span className="font-semibold">Address:</span> {formData.businessPhysicalAddress}</div>
                           </div>
                         </div>
 
                         <div className="bg-white p-6 rounded-lg border-2 border-gray-200">
                           <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                             <DollarSign className="w-5 h-5 text-amber-600" />
-                            Processing Details
+                            Sales & Delivery
                           </h3>
                           <div className="grid md:grid-cols-2 gap-3 text-sm">
-                            <div><span className="font-semibold">Monthly Volume:</span> ${formData.monthlyVolume}</div>
-                            <div><span className="font-semibold">Average Ticket:</span> ${formData.averageTicket}</div>
-                            <div><span className="font-semibold">High Ticket:</span> ${formData.highTicket}</div>
-                            <div><span className="font-semibold">Current Processor:</span> {formData.currentProcessor || "N/A"}</div>
-                            <div className="md:col-span-2"><span className="font-semibold">Products/Services:</span> {formData.productsServices}</div>
-                          </div>
-                        </div>
-
-                        <div className="bg-white p-6 rounded-lg border-2 border-gray-200">
-                          <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                            <CreditCard className="w-5 h-5 text-amber-600" />
-                            Banking Information
-                          </h3>
-                          <div className="grid md:grid-cols-2 gap-3 text-sm">
-                            <div><span className="font-semibold">Bank:</span> {formData.bankName}</div>
-                            <div><span className="font-semibold">Account Type:</span> {formData.accountType}</div>
-                            <div><span className="font-semibold">Routing:</span> {formData.routingNumber}</div>
-                            <div><span className="font-semibold">Account:</span> ****{formData.accountNumber.slice(-4)}</div>
+                            <div className="md:col-span-2"><span className="font-semibold">Products:</span> {formData.productsDescription}</div>
+                            <div><span className="font-semibold">Order Methods:</span> {formData.orderMethod.join(", ")}</div>
+                            <div><span className="font-semibold">Delivery:</span> {formData.deliveryTimeframe}</div>
+                            <div><span className="font-semibold">Geographic Areas:</span> {formData.geographicAreas}</div>
+                            <div><span className="font-semibold">International %:</span> {formData.internationalCardPercentage}%</div>
+                            <div><span className="font-semibold">Seasonal:</span> {formData.isSeasonal === "yes" ? `Yes (${formData.seasonalMonths})` : "No"}</div>
+                            <div><span className="font-semibold">Payment Timing:</span> {formData.paymentTiming === "at_service" ? "At time of service" : "Paid in advance"}</div>
                           </div>
                         </div>
                       </div>
@@ -864,7 +765,7 @@ export default function ApplyOnline() {
                       <ArrowLeft className="w-5 h-5 mr-2" />
                       Previous
                     </Button>
-                    {currentStep < 5 ? (
+                    {currentStep < 3 ? (
                       <Button
                         onClick={handleNext}
                         className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg"
@@ -878,8 +779,17 @@ export default function ApplyOnline() {
                         disabled={isSubmitting}
                         className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-8 py-6 text-lg"
                       >
-                        {isSubmitting ? "Submitting..." : "Submit Application"}
-                        {!isSubmitting && <CheckCircle2 className="w-5 h-5 ml-2" />}
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                            Submitting...
+                          </>
+                        ) : (
+                          <>
+                            Submit Application
+                            <CheckCircle2 className="w-5 h-5 ml-2" />
+                          </>
+                        )}
                       </Button>
                     )}
                   </div>
