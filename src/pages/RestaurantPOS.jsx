@@ -159,7 +159,7 @@ export default function RestaurantPOS() {
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                 <img
                   src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/3887a616c_AGoldEZPayPOS.png"
-                  alt="Restaurant POS System"
+                  alt="EzPay restaurant POS system with table management, kitchen display, and online ordering features"
                   className="w-full h-auto"
                 />
               </div>
