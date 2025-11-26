@@ -32,9 +32,13 @@ async function getAccessToken() {
     const payloadEncoded = base64UrlEncode(payload);
     const signingInput = `${headerEncoded}.${payloadEncoded}`;
 
-    const pemContents = privateKey
+    // Handle both RSA PRIVATE KEY and PRIVATE KEY formats
+    let pemContents = privateKey
         .replace('-----BEGIN RSA PRIVATE KEY-----', '')
         .replace('-----END RSA PRIVATE KEY-----', '')
+        .replace('-----BEGIN PRIVATE KEY-----', '')
+        .replace('-----END PRIVATE KEY-----', '')
+        .replace(/\\n/g, '')
         .replace(/\s/g, '');
     
     const binaryKey = Uint8Array.from(atob(pemContents), c => c.charCodeAt(0));
