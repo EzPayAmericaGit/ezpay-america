@@ -15,6 +15,7 @@ import RestaurantPOS from './pages/RestaurantPOS';
 import FreeDemo from './pages/FreeDemo';
 import ApplyOnline from './pages/ApplyOnline';
 import News from './pages/News';
+import NewsAdmin from './pages/NewsAdmin';
 import __Layout from './Layout.jsx';
 
 
@@ -36,6 +37,7 @@ export const PAGES = {
     "FreeDemo": FreeDemo,
     "ApplyOnline": ApplyOnline,
     "News": News,
+    "NewsAdmin": NewsAdmin,
 }
 
 export const pagesConfig = {

@@ -1,11 +1,13 @@
 import React from "react";
+import { base44 } from "@/api/base44Client";
+import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Newspaper } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import SEOHead from "../components/SEOHead";
 
-const newsArticles = [
+const defaultArticles = [
   {
     title: "Which Food Truck Mobile Solution Boosts Revenue by 30%?",
     excerpt: "The mobile payment revolution has fundamentally transformed how food service businesses operate and accept payments on the go.",
@@ -63,6 +65,15 @@ const newsArticles = [
 ];
 
 export default function News() {
+  const { data: dbArticles = [] } = useQuery({
+    queryKey: ['publishedNews'],
+    queryFn: () => base44.entities.NewsArticle.filter({ published: true }, '-created_date')
+  });
+
+  // Combine database articles with defaults, database articles first
+  const newsArticles = dbArticles.length > 0 
+    ? [...dbArticles, ...defaultArticles] 
+    : defaultArticles;
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
