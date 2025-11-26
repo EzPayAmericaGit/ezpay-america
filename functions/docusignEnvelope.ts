@@ -1,5 +1,7 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.4';
-import { SignJWT, importPKCS8 } from 'npm:jose@5.2.0';
+import { SignJWT } from 'npm:jose@5.2.0';
+import * as asn1js from 'npm:asn1js@3.0.5';
+import * as pvutils from 'npm:pvutils@1.1.3';
 
 const DOCUSIGN_AUTH_SERVER = 'account.docusign.com'; // Production
 const DOCUSIGN_BASE_URL = 'https://na4.docusign.net/restapi'; // Production
