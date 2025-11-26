@@ -9,6 +9,34 @@ const DOCUSIGN_BASE_URL = 'https://na4.docusign.net/restapi'; // Production
 // DocuSign Template Name
 const TEMPLATE_NAME = 'EzPay MPA';
 
+// Convert PKCS#1 to PKCS#8 format
+function pkcs1ToPkcs8(pkcs1Base64) {
+    const pkcs1Der = pvutils.stringToArrayBuffer(atob(pkcs1Base64));
+    
+    // PKCS#8 wraps PKCS#1 with algorithm identifier
+    // AlgorithmIdentifier for RSA: OID 1.2.840.113549.1.1.1 + NULL
+    const rsaOid = new asn1js.ObjectIdentifier({ value: '1.2.840.113549.1.1.1' });
+    const algorithmId = new asn1js.Sequence({
+        value: [rsaOid, new asn1js.Null()]
+    });
+    
+    // PKCS#8 structure: SEQUENCE { version INTEGER, algorithm AlgorithmIdentifier, privateKey OCTET STRING }
+    const pkcs8 = new asn1js.Sequence({
+        value: [
+            new asn1js.Integer({ value: 0 }), // version
+            algorithmId,
+            new asn1js.OctetString({ valueHex: pkcs1Der })
+        ]
+    });
+    
+    const pkcs8Der = pkcs8.toBER(false);
+    const pkcs8Base64 = btoa(String.fromCharCode(...new Uint8Array(pkcs8Der)));
+    
+    // Format with line breaks
+    const formatted = pkcs8Base64.match(/.{1,64}/g)?.join('\n') || pkcs8Base64;
+    return `-----BEGIN PRIVATE KEY-----\n${formatted}\n-----END PRIVATE KEY-----`;
+}
+
 async function getAccessToken() {
     const integrationKey = Deno.env.get('DOCUSIGN_INTEGRATION_KEY');
     const userId = Deno.env.get('DOCUSIGN_USER_ID');
@@ -18,53 +46,52 @@ async function getAccessToken() {
         throw new Error('Missing DocuSign credentials. Please set DOCUSIGN_INTEGRATION_KEY, DOCUSIGN_USER_ID, and DOCUSIGN_PRIVATE_KEY.');
     }
 
-    // Reconstruct PEM format from secret
     let pemKey = privateKeyEnv;
     
     console.log('=== PRIVATE KEY DEBUG ===');
     console.log('Raw key length:', pemKey.length);
     
-    // Handle literal \n sequences (convert to actual newlines)
+    // Handle literal \n sequences
     pemKey = pemKey.replace(/\\n/g, '\n');
     
-    // Ensure proper PEM format with headers
-    if (!pemKey.includes('-----BEGIN')) {
-        // Key is just base64 content, add headers
-        const cleanBase64 = pemKey.replace(/[\s\r\n]/g, '');
-        const formattedBase64 = cleanBase64.match(/.{1,64}/g)?.join('\n') || cleanBase64;
-        pemKey = `-----BEGIN RSA PRIVATE KEY-----\n${formattedBase64}\n-----END RSA PRIVATE KEY-----`;
-    }
-    
-    // Ensure newlines are proper
-    if (pemKey.includes('-----BEGIN') && !pemKey.match(/-----BEGIN[^-]+-----\n/)) {
-        // Fix missing newlines after headers
-        const match = pemKey.match(/(-----BEGIN [^-]+-----)(.+)(-----END [^-]+-----)/s);
+    // Extract base64 content
+    let base64Content;
+    if (pemKey.includes('-----BEGIN')) {
+        const match = pemKey.match(/-----BEGIN[^-]+-----(.+?)-----END[^-]+-----/s);
         if (match) {
-            const base64Content = match[2].replace(/[\s\r\n]/g, '');
-            const formattedBase64 = base64Content.match(/.{1,64}/g)?.join('\n') || base64Content;
-            pemKey = `${match[1]}\n${formattedBase64}\n${match[3]}`;
+            base64Content = match[1].replace(/[\s\r\n]/g, '');
         }
+    } else {
+        base64Content = pemKey.replace(/[\s\r\n]/g, '');
     }
     
-    // Convert PKCS#1 (RSA PRIVATE KEY) to PKCS#8 (PRIVATE KEY) format for jose
-    // jose's importPKCS8 requires PKCS#8 format
-    if (pemKey.includes('RSA PRIVATE KEY')) {
-        // Change header/footer to PKCS#8 style - jose will handle the actual format
-        pemKey = pemKey
-            .replace('-----BEGIN RSA PRIVATE KEY-----', '-----BEGIN PRIVATE KEY-----')
-            .replace('-----END RSA PRIVATE KEY-----', '-----END PRIVATE KEY-----');
-    }
-    
-    console.log('PEM formatted, length:', pemKey.length);
-    console.log('Header:', pemKey.substring(0, 30));
+    console.log('Base64 content length:', base64Content?.length);
 
     try {
-        // Use jose importPKCS8 for PKCS#8 format keys
-        const privateKey = await importPKCS8(pemKey, 'RS256');
+        // Convert PKCS#1 to PKCS#8 format
+        const pkcs8Pem = pkcs1ToPkcs8(base64Content);
+        console.log('Converted to PKCS#8 format');
         
-        console.log('Successfully imported private key with jose');
+        // Import using Web Crypto API
+        const pkcs8Der = pvutils.stringToArrayBuffer(
+            atob(pkcs8Pem
+                .replace('-----BEGIN PRIVATE KEY-----', '')
+                .replace('-----END PRIVATE KEY-----', '')
+                .replace(/[\s\r\n]/g, '')
+            )
+        );
+        
+        const privateKey = await crypto.subtle.importKey(
+            'pkcs8',
+            pkcs8Der,
+            { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
+            false,
+            ['sign']
+        );
+        
+        console.log('Successfully imported private key');
 
-        // Create JWT using jose
+        // Create JWT
         const now = Math.floor(Date.now() / 1000);
         
         const jwt = await new SignJWT({
