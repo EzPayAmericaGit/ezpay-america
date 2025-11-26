@@ -37,15 +37,25 @@ async function getAccessToken() {
     const signingInput = `${headerEncoded}.${payloadEncoded}`;
 
     // Handle both RSA PRIVATE KEY and PRIVATE KEY formats
+    // Also handle literal \n strings and actual newlines
     let pemContents = privateKey
-        .replace('-----BEGIN RSA PRIVATE KEY-----', '')
-        .replace('-----END RSA PRIVATE KEY-----', '')
-        .replace('-----BEGIN PRIVATE KEY-----', '')
-        .replace('-----END PRIVATE KEY-----', '')
+        .replace(/-----BEGIN (RSA )?PRIVATE KEY-----/g, '')
+        .replace(/-----END (RSA )?PRIVATE KEY-----/g, '')
         .replace(/\\n/g, '')
-        .replace(/\s/g, '');
+        .replace(/\n/g, '')
+        .replace(/\r/g, '')
+        .replace(/\s/g, '')
+        .trim();
     
-    const binaryKey = Uint8Array.from(atob(pemContents), c => c.charCodeAt(0));
+    // Validate base64 - remove any non-base64 characters
+    pemContents = pemContents.replace(/[^A-Za-z0-9+/=]/g, '');
+    
+    let binaryKey;
+    try {
+        binaryKey = Uint8Array.from(atob(pemContents), c => c.charCodeAt(0));
+    } catch (e) {
+        throw new Error(`Failed to decode private key: ${e.message}. Key length: ${pemContents.length}`);
+    }
     
     const cryptoKey = await crypto.subtle.importKey(
         'pkcs8',
