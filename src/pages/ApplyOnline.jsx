@@ -202,50 +202,8 @@ export default function ApplyOnline() {
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
-    
-    try {
-      // Send email notification
-      await base44.integrations.Core.SendEmail({
-        to: "contact@ezpayamerica.com",
-        from_name: "EzPay Online Application",
-        subject: `New Merchant Application - ${formData.legalBusinessName}`,
-        body: `
-          <h2>New Merchant Application</h2>
-          
-          <h3>Business Information</h3>
-          <p><strong>Date Business Started:</strong> ${formData.dateBusinessStarted}</p>
-          <p><strong>Business Market Type:</strong> ${formData.businessMarketType}</p>
-          <p><strong>Legal Business Name:</strong> ${formData.legalBusinessName}</p>
-          <p><strong>DBA Name:</strong> ${formData.dbaName}</p>
-          <p><strong>Tax ID/EIN/SSN:</strong> ${formData.taxId}</p>
-          <p><strong>Business Name on Tax Return:</strong> ${formData.businessNameOnTaxReturn}</p>
-          <p><strong>Business Phone:</strong> ${formData.businessPhone}</p>
-          <p><strong>Business Email:</strong> ${formData.businessEmail}</p>
-          <p><strong>Owner Full Name:</strong> ${formData.ownerFullName}</p>
-          <p><strong>Business Formation Type:</strong> ${formData.businessFormationType}</p>
-          <p><strong>Physical Address:</strong> ${formData.businessPhysicalAddress}</p>
-          <p><strong>Corporate Address:</strong> ${formData.corporateAddress || "Same as physical"}</p>
-          
-          <h3>Current Processing</h3>
-          <p><strong>Currently Accept Cards:</strong> ${formData.currentlyAcceptCards}</p>
-          <p><strong>Current Processor:</strong> ${formData.currentProcessorName || "N/A"}</p>
-          <p><strong>Current Merchant ID:</strong> ${formData.currentMerchantId || "N/A"}</p>
-          <p><strong>Number of Locations:</strong> ${formData.numberOfLocations}</p>
-          
-          <h3>Products & Sales</h3>
-          <p><strong>Products Description:</strong> ${formData.productsDescription}</p>
-          <p><strong>Order Methods:</strong> ${formData.orderMethod.join(", ")}</p>
-          <p><strong>Delivery Timeframe:</strong> ${formData.deliveryTimeframe}</p>
-          <p><strong>Cancellation/Return Policy:</strong> ${formData.cancellationPolicy}</p>
-          <p><strong>Geographic Areas:</strong> ${formData.geographicAreas}</p>
-          <p><strong>International Card %:</strong> ${formData.internationalCardPercentage}%</p>
-          <p><strong>Warranty/Guaranty:</strong> ${formData.warrantyGuaranty}</p>
-          <p><strong>Seasonal Business:</strong> ${formData.isSeasonal}</p>
-          <p><strong>Seasonal Months:</strong> ${formData.seasonalMonths || "N/A"}</p>
-          <p><strong>Payment Timing:</strong> ${formData.paymentTiming}</p>
-        `
-      });
 
+    try {
       // Send DocuSign envelope for e-signature
       const docusignResponse = await base44.functions.invoke('docusignEnvelope', {
         applicationData: formData
@@ -261,6 +219,8 @@ export default function ApplyOnline() {
         status: "submitted",
         docusignEnvelopeId: docusignResponse.data?.envelopeId || null,
         docusignStatus: docusignResponse.data?.success ? "sent" : null,
+        driversLicenseUrl: formData.driversLicenseUrl || null,
+        voidedCheckUrl: formData.voidedCheckUrl || null,
         applicationData: formData
       });
 
@@ -270,7 +230,7 @@ export default function ApplyOnline() {
           envelopeId: docusignResponse.data.envelopeId
         });
       }
-      
+
       setSubmitted(true);
     } catch (error) {
       console.error("Application submission error:", error);
