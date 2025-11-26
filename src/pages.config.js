@@ -14,7 +14,7 @@ import RetailPOS from './pages/RetailPOS';
 import RestaurantPOS from './pages/RestaurantPOS';
 import FreeDemo from './pages/FreeDemo';
 import ApplyOnline from './pages/ApplyOnline';
-import Layout from './Layout.jsx';
+import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
@@ -39,5 +39,5 @@ export const PAGES = {
 export const pagesConfig = {
     mainPage: "Home",
     Pages: PAGES,
-    Layout: Layout,
+    Layout: __Layout,
 };
