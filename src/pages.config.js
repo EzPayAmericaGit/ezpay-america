@@ -18,6 +18,7 @@ import News from './pages/News';
 import NewsAdmin from './pages/NewsAdmin';
 import NewsArticle from './pages/NewsArticle';
 import ApplicationTracker from './pages/ApplicationTracker';
+import AdminDashboard from './pages/AdminDashboard';
 import __Layout from './Layout.jsx';
 
 
@@ -42,6 +43,7 @@ export const PAGES = {
     "NewsAdmin": NewsAdmin,
     "NewsArticle": NewsArticle,
     "ApplicationTracker": ApplicationTracker,
+    "AdminDashboard": AdminDashboard,
 }
 
 export const pagesConfig = {
