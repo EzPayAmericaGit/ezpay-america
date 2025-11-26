@@ -4,8 +4,8 @@ import * as jose from 'npm:jose@5.2.0';
 const DOCUSIGN_AUTH_SERVER = 'account.docusign.com'; // Production
 const DOCUSIGN_BASE_URL = 'https://na4.docusign.net/restapi'; // Production
 
-// Your uploaded MPA PDF document URL
-const MPA_DOCUMENT_URL = 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/2ab6082af_EZPAYAMERICANEWMPA102825.pdf';
+// DocuSign Template Name
+const TEMPLATE_NAME = 'EzPay MPA';
 
 async function getAccessToken() {
     const integrationKey = Deno.env.get('DOCUSIGN_INTEGRATION_KEY');
