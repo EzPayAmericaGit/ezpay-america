@@ -22,12 +22,11 @@ async function getAccessToken() {
     
     console.log('=== PRIVATE KEY DEBUG ===');
     console.log('Raw key length:', pemKey.length);
-    console.log('First 80 chars:', pemKey.substring(0, 80));
     
     // Handle literal \n sequences (convert to actual newlines)
     pemKey = pemKey.replace(/\\n/g, '\n');
     
-    // Ensure proper PEM format
+    // Ensure proper PEM format with headers
     if (!pemKey.includes('-----BEGIN')) {
         // Key is just base64 content, add headers
         const cleanBase64 = pemKey.replace(/[\s\r\n]/g, '');
@@ -35,17 +34,38 @@ async function getAccessToken() {
         pemKey = `-----BEGIN RSA PRIVATE KEY-----\n${formattedBase64}\n-----END RSA PRIVATE KEY-----`;
     }
     
+    // Ensure newlines are proper (not just at start/end)
+    if (!pemKey.includes('\n')) {
+        // The PEM might have headers but no newlines - fix it
+        pemKey = pemKey
+            .replace('-----BEGIN RSA PRIVATE KEY-----', '-----BEGIN RSA PRIVATE KEY-----\n')
+            .replace('-----END RSA PRIVATE KEY-----', '\n-----END RSA PRIVATE KEY-----');
+        
+        // Also add line breaks in the base64 content
+        const match = pemKey.match(/-----BEGIN RSA PRIVATE KEY-----(.+?)-----END RSA PRIVATE KEY-----/s);
+        if (match) {
+            const base64Content = match[1].replace(/[\s\r\n]/g, '');
+            const formattedBase64 = base64Content.match(/.{1,64}/g)?.join('\n') || base64Content;
+            pemKey = `-----BEGIN RSA PRIVATE KEY-----\n${formattedBase64}\n-----END RSA PRIVATE KEY-----`;
+        }
+    }
+    
     console.log('PEM formatted, length:', pemKey.length);
+    console.log('First 50 chars:', pemKey.substring(0, 50));
 
     try {
-        // Use jose library - it handles PKCS#1 (RSA PRIVATE KEY) format natively
-        const privateKey = await jose.importPKCS8(pemKey, 'RS256');
-        console.log('Successfully imported private key with jose');
+        // Use Node.js crypto to import the key (handles PKCS#1 format)
+        const keyObject = createPrivateKey({
+            key: pemKey,
+            format: 'pem'
+        });
+        
+        console.log('Successfully imported private key with node:crypto');
 
-        // Create JWT using jose
+        // Create JWT using jose with the crypto key
         const now = Math.floor(Date.now() / 1000);
         
-        const jwt = await new jose.SignJWT({
+        const jwt = await new SignJWT({
             scope: 'signature impersonation'
         })
             .setProtectedHeader({ alg: 'RS256', typ: 'JWT' })
@@ -54,7 +74,7 @@ async function getAccessToken() {
             .setAudience(DOCUSIGN_AUTH_SERVER)
             .setIssuedAt(now)
             .setExpirationTime(now + 3600)
-            .sign(privateKey);
+            .sign(keyObject);
 
         console.log('JWT created successfully');
 
@@ -74,7 +94,7 @@ async function getAccessToken() {
         
     } catch (e) {
         console.error('Key import error:', e.message, e.stack);
-        throw new Error(`Failed to import private key:${e.message}`);
+        throw new Error(`Failed to import private key: ${e.message}`);
     }
 }
 
