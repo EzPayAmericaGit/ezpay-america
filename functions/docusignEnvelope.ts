@@ -39,18 +39,26 @@ async function getAccessToken() {
     // Handle various private key formats
     let pemContents = privateKey;
     
-    // Remove header/footer
-    pemContents = pemContents.replace(/-----BEGIN (RSA )?PRIVATE KEY-----/gi, '');
-    pemContents = pemContents.replace(/-----END (RSA )?PRIVATE KEY-----/gi, '');
+    // First, handle literal backslash-n sequences (\\n becomes nothing)
+    pemContents = pemContents.replace(/\\n/g, '\n');
     
-    // Handle literal \n strings (when pasted as text)
-    pemContents = pemContents.split('\\n').join('');
+    // Remove all variations of BEGIN/END headers
+    pemContents = pemContents.replace(/-----\s*BEGIN\s*(RSA\s*)?PRIVATE\s*KEY\s*-----/gi, '');
+    pemContents = pemContents.replace(/-----\s*END\s*(RSA\s*)?PRIVATE\s*KEY\s*-----/gi, '');
     
-    // Remove all whitespace
-    pemContents = pemContents.replace(/[\n\r\s]/g, '');
+    // Remove any dashes that might be left over
+    pemContents = pemContents.replace(/^-+|-+$/g, '');
     
-    // Log for debugging (first/last chars only)
+    // Remove all whitespace, newlines, carriage returns
+    pemContents = pemContents.replace(/[\n\r\s\t]/g, '');
+    
+    // Log for debugging
     console.log('Key after cleanup - length:', pemContents.length, 'first 10:', pemContents.substring(0, 10), 'last 10:', pemContents.substring(pemContents.length - 10));
+    
+    // Validate it looks like base64
+    if (!/^[A-Za-z0-9+/=]+$/.test(pemContents)) {
+        throw new Error(`Invalid base64 characters in key. First 30 chars: ${pemContents.substring(0, 30)}`);
+    }
     
     let binaryKey;
     try {
