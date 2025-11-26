@@ -36,25 +36,32 @@ async function getAccessToken() {
     const payloadEncoded = base64UrlEncode(payload);
     const signingInput = `${headerEncoded}.${payloadEncoded}`;
 
-    // Handle both RSA PRIVATE KEY and PRIVATE KEY formats
-    // Also handle literal \n strings and actual newlines
-    let pemContents = privateKey
-        .replace(/-----BEGIN (RSA )?PRIVATE KEY-----/g, '')
-        .replace(/-----END (RSA )?PRIVATE KEY-----/g, '')
-        .replace(/\\n/g, '')
-        .replace(/\n/g, '')
-        .replace(/\r/g, '')
-        .replace(/\s/g, '')
-        .trim();
+    // Handle various private key formats
+    let pemContents = privateKey;
     
-    // Validate base64 - remove any non-base64 characters
-    pemContents = pemContents.replace(/[^A-Za-z0-9+/=]/g, '');
+    // Remove header/footer
+    pemContents = pemContents.replace(/-----BEGIN (RSA )?PRIVATE KEY-----/gi, '');
+    pemContents = pemContents.replace(/-----END (RSA )?PRIVATE KEY-----/gi, '');
+    
+    // Handle literal \n strings (when pasted as text)
+    pemContents = pemContents.split('\\n').join('');
+    
+    // Remove all whitespace
+    pemContents = pemContents.replace(/[\n\r\s]/g, '');
+    
+    // Log for debugging (first/last chars only)
+    console.log('Key after cleanup - length:', pemContents.length, 'first 10:', pemContents.substring(0, 10), 'last 10:', pemContents.substring(pemContents.length - 10));
     
     let binaryKey;
     try {
-        binaryKey = Uint8Array.from(atob(pemContents), c => c.charCodeAt(0));
+        // Decode base64
+        const binaryString = atob(pemContents);
+        binaryKey = new Uint8Array(binaryString.length);
+        for (let i = 0; i < binaryString.length; i++) {
+            binaryKey[i] = binaryString.charCodeAt(i);
+        }
     } catch (e) {
-        throw new Error(`Failed to decode private key: ${e.message}. Key length: ${pemContents.length}`);
+        throw new Error(`Failed to decode base64. Key length: ${pemContents.length}. First 20 chars: ${pemContents.substring(0, 20)}. Error: ${e.message}`);
     }
     
     const cryptoKey = await crypto.subtle.importKey(
