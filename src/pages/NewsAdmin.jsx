@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Plus, Pencil, Trash2, Eye, EyeOff } from "lucide-react";
+import { Plus, Pencil, Trash2, Eye, EyeOff, Upload, Loader2 } from "lucide-react";
 
 const categories = [
   "Mobile Payments",
@@ -24,6 +24,7 @@ const categories = [
 export default function NewsAdmin() {
   const [isEditing, setIsEditing] = useState(false);
   const [editingArticle, setEditingArticle] = useState(null);
+  const [uploading, setUploading] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     excerpt: "",
@@ -161,12 +162,40 @@ export default function NewsAdmin() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Image URL</label>
-                  <Input
-                    value={formData.image}
-                    onChange={(e) => setFormData({...formData, image: e.target.value})}
-                    placeholder="https://..."
-                  />
+                  <label className="block text-sm font-medium mb-1">Article Image</label>
+                  <div className="flex gap-2">
+                    <Input
+                      value={formData.image}
+                      onChange={(e) => setFormData({...formData, image: e.target.value})}
+                      placeholder="https://... or upload"
+                      className="flex-1"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      disabled={uploading}
+                      onClick={() => document.getElementById('image-upload').click()}
+                    >
+                      {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                    </Button>
+                    <input
+                      id="image-upload"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        setUploading(true);
+                        const { file_url } = await base44.integrations.Core.UploadFile({ file });
+                        setFormData({...formData, image: file_url});
+                        setUploading(false);
+                      }}
+                    />
+                  </div>
+                  {formData.image && (
+                    <img src={formData.image} alt="Preview" className="mt-2 h-32 object-cover rounded" />
+                  )}
                 </div>
                 <div className="flex items-center gap-2">
                   <Switch
