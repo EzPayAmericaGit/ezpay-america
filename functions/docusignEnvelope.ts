@@ -39,35 +39,49 @@ async function getAccessToken() {
     // Handle various private key formats
     let pemContents = privateKey;
     
-    console.log('Raw key length:', pemContents.length, 'First 50 chars:', pemContents.substring(0, 50));
+    console.log('=== PRIVATE KEY DEBUG ===');
+    console.log('Raw key length:', pemContents.length);
+    console.log('First 100 chars:', JSON.stringify(pemContents.substring(0, 100)));
+    console.log('Last 50 chars:', JSON.stringify(pemContents.substring(pemContents.length - 50)));
+    
+    // Check if it starts with the PEM header
+    const hasPemHeader = pemContents.includes('BEGIN') || pemContents.includes('PRIVATE');
+    console.log('Has PEM header:', hasPemHeader);
     
     // Handle literal \n sequences (the actual characters backslash and n)
-    pemContents = pemContents.split('\\n').join('');
+    pemContents = pemContents.replace(/\\n/g, '');
     
-    // Handle actual newlines
-    pemContents = pemContents.split('\n').join('');
-    pemContents = pemContents.split('\r').join('');
+    // Handle actual newlines and carriage returns
+    pemContents = pemContents.replace(/[\n\r]/g, '');
     
-    // Remove BEGIN/END headers and any dashes
-    pemContents = pemContents.replace(/BEGIN[A-Z\s]*KEY/gi, '');
-    pemContents = pemContents.replace(/END[A-Z\s]*KEY/gi, '');
-    pemContents = pemContents.replace(/-/g, '');
+    // Remove BEGIN/END headers completely
+    pemContents = pemContents.replace(/-----BEGIN\s*(RSA\s*)?PRIVATE\s*KEY-----/gi, '');
+    pemContents = pemContents.replace(/-----END\s*(RSA\s*)?PRIVATE\s*KEY-----/gi, '');
     
-    // Remove all whitespace
-    pemContents = pemContents.replace(/\s/g, '');
+    // Remove any remaining dashes that might be part of malformed headers
+    pemContents = pemContents.replace(/^-+|-+$/g, '');
     
-    // Log for debugging
-    console.log('Key after cleanup - length:', pemContents.length, 'first 20:', pemContents.substring(0, 20), 'last 20:', pemContents.substring(pemContents.length - 20));
+    // Remove all whitespace and tabs
+    pemContents = pemContents.replace(/[\s\t]/g, '');
+    
+    console.log('After cleanup - length:', pemContents.length);
+    console.log('First 50 cleaned:', pemContents.substring(0, 50));
+    console.log('Last 50 cleaned:', pemContents.substring(pemContents.length - 50));
     
     // Validate it looks like base64
-    if (!/^[A-Za-z0-9+/=]+$/.test(pemContents)) {
-        const invalidChars = pemContents.match(/[^A-Za-z0-9+/=]/g);
-        throw new Error(`Invalid base64 characters in key: ${JSON.stringify([...new Set(invalidChars)]?.slice(0, 10))}. First 50 chars: ${pemContents.substring(0, 50)}`);
+    const invalidMatch = pemContents.match(/[^A-Za-z0-9+/=]/g);
+    if (invalidMatch) {
+        const uniqueInvalid = [...new Set(invalidMatch)];
+        throw new Error(`Invalid base64 characters found: ${JSON.stringify(uniqueInvalid)}. Key may still have headers or special characters.`);
+    }
+    
+    // Check reasonable key length (RSA 2048 is ~1700 chars, RSA 4096 is ~3200 chars)
+    if (pemContents.length < 1000) {
+        throw new Error(`Key too short (${pemContents.length} chars). Expected ~1700+ chars for RSA 2048. Make sure you copied the full key content.`);
     }
     
     let binaryKey;
     try {
-        // Decode base64
         const binaryString = atob(pemContents);
         binaryKey = new Uint8Array(binaryString.length);
         for (let i = 0; i < binaryString.length; i++) {
@@ -75,7 +89,7 @@ async function getAccessToken() {
         }
         console.log('Successfully decoded key, binary length:', binaryKey.length);
     } catch (e) {
-        throw new Error(`Failed to decode base64. Key length: ${pemContents.length}. First 30 chars: ${pemContents.substring(0, 30)}. Error: ${e.message}`);
+        throw new Error(`Base64 decode failed: ${e.message}. First 50 chars: ${pemContents.substring(0, 50)}`);
     }
     
     const cryptoKey = await crypto.subtle.importKey(
