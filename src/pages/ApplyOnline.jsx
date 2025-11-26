@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { base44 } from "@/api/base44Client";
-import { CheckCircle2, ArrowRight, ArrowLeft, Building2, User, DollarSign, FileCheck, Loader2 } from "lucide-react";
+import { CheckCircle2, ArrowRight, ArrowLeft, Building2, User, DollarSign, FileCheck, Loader2, FileSignature } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const steps = [
@@ -42,6 +42,7 @@ export default function ApplyOnline() {
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
+  const [docusignStatus, setDocusignStatus] = useState(null);
 
   const [formData, setFormData] = useState({
     // Business Information
@@ -135,6 +136,7 @@ export default function ApplyOnline() {
     setIsSubmitting(true);
     
     try {
+      // Send email notification
       await base44.integrations.Core.SendEmail({
         to: "contact@ezpayamerica.com",
         from_name: "EzPay Online Application",
@@ -175,6 +177,18 @@ export default function ApplyOnline() {
           <p><strong>Payment Timing:</strong> ${formData.paymentTiming}</p>
         `
       });
+
+      // Send DocuSign envelope for e-signature
+      const docusignResponse = await base44.functions.invoke('docusignEnvelope', {
+        applicationData: formData
+      });
+
+      if (docusignResponse.data?.success) {
+        setDocusignStatus({
+          success: true,
+          envelopeId: docusignResponse.data.envelopeId
+        });
+      }
       
       setSubmitted(true);
     } catch (error) {
@@ -204,9 +218,22 @@ export default function ApplyOnline() {
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
               Application Submitted Successfully!
             </h1>
-            <p className="text-xl text-gray-600 mb-8">
+            <p className="text-xl text-gray-600 mb-4">
               Thank you for applying to EzPay America. Our team will review your application and contact you within 24-48 hours.
             </p>
+            
+            {docusignStatus?.success && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
+                <div className="flex items-center justify-center gap-3 mb-2">
+                  <FileSignature className="w-6 h-6 text-blue-600" />
+                  <h3 className="text-lg font-semibold text-blue-900">E-Signature Required</h3>
+                </div>
+                <p className="text-blue-800">
+                  We've sent a DocuSign email to <strong>{formData.businessEmail}</strong> for your electronic signature. Please check your inbox and sign the merchant application to complete the process.
+                </p>
+              </div>
+            )}
+            
             <div className="space-y-4">
               <p className="text-gray-600">
                 Questions? Call us at <a href="tel:8653169625" className="text-amber-600 font-bold">(865) 316-9625</a>
