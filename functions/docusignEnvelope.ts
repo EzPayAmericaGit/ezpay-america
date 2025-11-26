@@ -118,262 +118,112 @@ async function getAccessToken() {
     }
 }
 
+async function getTemplateId(accessToken, accountId) {
+    // Search for the template by name
+    const response = await fetch(`${DOCUSIGN_BASE_URL}/v2.1/accounts/${accountId}/templates?search_text=${encodeURIComponent(TEMPLATE_NAME)}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+        }
+    });
+
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to search templates: ${errorText}`);
+    }
+
+    const data = await response.json();
+    
+    if (!data.envelopeTemplates || data.envelopeTemplates.length === 0) {
+        throw new Error(`Template "${TEMPLATE_NAME}" not found in DocuSign account`);
+    }
+
+    // Find exact match
+    const template = data.envelopeTemplates.find(t => t.name === TEMPLATE_NAME);
+    if (!template) {
+        throw new Error(`Template "${TEMPLATE_NAME}" not found. Available: ${data.envelopeTemplates.map(t => t.name).join(', ')}`);
+    }
+
+    return template.templateId;
+}
+
 async function createEnvelope(accessToken, applicationData, signerEmail, signerName) {
     const accountId = Deno.env.get('DOCUSIGN_ACCOUNT_ID');
 
-    // Fetch the PDF document
-    const pdfResponse = await fetch(MPA_DOCUMENT_URL);
-    const pdfBuffer = await pdfResponse.arrayBuffer();
-    const documentBase64 = btoa(String.fromCharCode(...new Uint8Array(pdfBuffer)));
+    // Get template ID
+    const templateId = await getTemplateId(accessToken, accountId);
+    console.log('Using template ID:', templateId);
 
-    // Prepare additional documents array
-    const documents = [
-        {
-            documentBase64: documentBase64,
-            name: 'Merchant Application and Agreement',
-            fileExtension: 'pdf',
-            documentId: '1'
-        }
-    ];
+    // Build pre-fill tabs from application data
+    const textTabs = [];
+    
+    // Map form fields to template tab labels (these should match your DocuSign template tabs)
+    const fieldMappings = {
+        'legalBusinessName': applicationData.legalBusinessName,
+        'dbaName': applicationData.dbaName,
+        'businessPhone': applicationData.businessPhone,
+        'businessEmail': applicationData.businessEmail,
+        'taxId': applicationData.taxId,
+        'businessAddress': applicationData.businessPhysicalAddress,
+        'corporateAddress': applicationData.corporateAddress || applicationData.businessPhysicalAddress,
+        'ownerFullName': applicationData.ownerFullName,
+        'ownerTitle': applicationData.ownerTitle,
+        'ownerOwnershipPercent': applicationData.ownerOwnershipPercent,
+        'ownerHomeAddress': applicationData.ownerHomeAddress,
+        'ownerPersonalPhone': applicationData.ownerPersonalPhone,
+        'ownerSSN': applicationData.ownerSSN,
+        'ownerDOB': applicationData.ownerDOB,
+        'ownerPersonalEmail': applicationData.ownerPersonalEmail,
+        'ownerDriversLicense': applicationData.ownerDriversLicense,
+        'ownerDLState': applicationData.ownerDLState,
+        'bankName': applicationData.bankName,
+        'routingNumber': applicationData.routingNumber,
+        'accountNumber': applicationData.accountNumber,
+        'averageTicket': applicationData.averageTicket,
+        'largestTicket': applicationData.largestTicket,
+        'monthlyVolume': applicationData.monthlyVolume,
+        'annualVolume': applicationData.annualVolume,
+        'percentageSwiped': applicationData.percentageSwiped,
+        'percentageKeyed': applicationData.percentageKeyed,
+        'percentageInternet': applicationData.percentageInternet,
+        'productsDescription': applicationData.productsDescription,
+        'deliveryTimeframe': applicationData.deliveryTimeframe,
+        'cancellationPolicy': applicationData.cancellationPolicy,
+        'businessMarketType': applicationData.businessMarketType,
+        'businessFormationType': applicationData.businessFormationType,
+        'businessLocationType': applicationData.businessLocationType,
+        'numberOfLocations': applicationData.numberOfLocations
+    };
 
-    // Add driver's license if uploaded
-    if (applicationData.driversLicenseUrl) {
-        try {
-            const dlResponse = await fetch(applicationData.driversLicenseUrl);
-            const dlBuffer = await dlResponse.arrayBuffer();
-            const dlBase64 = btoa(String.fromCharCode(...new Uint8Array(dlBuffer)));
-            const dlExt = applicationData.driversLicenseUrl.split('.').pop().toLowerCase();
-            documents.push({
-                documentBase64: dlBase64,
-                name: 'Drivers License',
-                fileExtension: dlExt === 'pdf' ? 'pdf' : 'jpg',
-                documentId: '2'
+    // Create text tabs for each field
+    for (const [tabLabel, value] of Object.entries(fieldMappings)) {
+        if (value) {
+            textTabs.push({
+                tabLabel: tabLabel,
+                value: String(value)
             });
-        } catch (e) {
-            console.error('Error fetching drivers license:', e);
         }
     }
-
-    // Add voided check if uploaded
-    if (applicationData.voidedCheckUrl) {
-        try {
-            const checkResponse = await fetch(applicationData.voidedCheckUrl);
-            const checkBuffer = await checkResponse.arrayBuffer();
-            const checkBase64 = btoa(String.fromCharCode(...new Uint8Array(checkBuffer)));
-            const checkExt = applicationData.voidedCheckUrl.split('.').pop().toLowerCase();
-            documents.push({
-                documentBase64: checkBase64,
-                name: 'Voided Business Check',
-                fileExtension: checkExt === 'pdf' ? 'pdf' : 'jpg',
-                documentId: '3'
-            });
-        } catch (e) {
-            console.error('Error fetching voided check:', e);
-        }
-    }
-
-    // Parse address components
-    const parseAddress = (address) => {
-        if (!address) return { street: '', city: '', state: '', zip: '' };
-        const parts = address.split(',').map(p => p.trim());
-        if (parts.length >= 3) {
-            const stateZip = parts[parts.length - 1].split(' ').filter(s => s);
-            return {
-                street: parts.slice(0, -2).join(', '),
-                city: parts[parts.length - 2] || '',
-                state: stateZip[0] || '',
-                zip: stateZip[1] || ''
-            };
-        } else if (parts.length === 2) {
-            const stateZip = parts[1].split(' ').filter(s => s);
-            return {
-                street: parts[0],
-                city: '',
-                state: stateZip[0] || '',
-                zip: stateZip[1] || ''
-            };
-        }
-        return { street: address, city: '', state: '', zip: '' };
-    };
-
-    const businessAddress = parseAddress(applicationData.businessPhysicalAddress);
-    const corpAddress = parseAddress(applicationData.corporateAddress || applicationData.businessPhysicalAddress);
-    const ownerHomeAddress = parseAddress(applicationData.ownerHomeAddress);
-
-    // Calculate years in business
-    const yearsInBusiness = applicationData.dateBusinessStarted 
-        ? Math.floor((Date.now() - new Date(applicationData.dateBusinessStarted).getTime()) / (365.25 * 24 * 60 * 60 * 1000))
-        : '';
-
-    // Map business type to checkbox
-    const businessTypeMap = {
-        'Retail': 'retail',
-        'Restaurant': 'restaurant',
-        'E-commerce': 'internet',
-        'Professional Services': 'service',
-        'Healthcare': 'service',
-        'Hospitality': 'lodging',
-        'Food Truck': 'restaurant',
-        'Salon/Spa': 'service',
-        'Auto Services': 'service',
-        'Other': 'other'
-    };
-
-    // Map ownership type
-    const ownershipTypeMap = {
-        'Sole Proprietorship': 'sole_proprietor',
-        'Partnership': 'partnership',
-        'LLC': 'llc',
-        'Corporation': 'corporation',
-        'Non-Profit': 'non_profit'
-    };
-
-    // Map account type
-    const accountTypeDisplay = {
-        'business_checking': 'Business Checking',
-        'business_savings': 'Business Savings',
-        'personal_checking': 'Personal Checking',
-        'personal_savings': 'Personal Savings'
-    };
 
     const envelopeDefinition = {
+        templateId: templateId,
         emailSubject: 'EzPay America - Merchant Application for Signature',
-        emailBlurb: `Dear ${signerName}, please review and sign your merchant application for ${applicationData.legalBusinessName || 'your business'}. Please also attach a copy of your valid Driver's License and a Voided Business Check.`,
-        documents: documents,
-        recipients: {
-            signers: [
-                {
-                    email: signerEmail,
-                    name: signerName,
-                    recipientId: '1',
-                    routingOrder: '1',
-                    tabs: {
-                        // Page 1 - Business Information Section
-                        textTabs: [
-                            // Section 1: Business Information
-                            { documentId: '1', pageNumber: '1', xPosition: '95', yPosition: '87', value: applicationData.legalBusinessName || '', width: 200, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '380', yPosition: '87', value: applicationData.dbaName || '', width: 200, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '95', yPosition: '103', value: corpAddress.street || '', width: 200, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '380', yPosition: '103', value: businessAddress.street || '', width: 200, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '119', value: corpAddress.city || '', width: 80, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '135', yPosition: '119', value: corpAddress.state || '', width: 30, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '200', yPosition: '119', value: corpAddress.zip || '', width: 50, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '330', yPosition: '119', value: businessAddress.city || '', width: 80, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '450', yPosition: '119', value: businessAddress.state || '', width: 30, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '520', yPosition: '119', value: businessAddress.zip || '', width: 50, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '95', yPosition: '135', value: applicationData.businessPhone || '', width: 100, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '210', yPosition: '135', value: applicationData.taxId || '', width: 100, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '380', yPosition: '135', value: applicationData.businessPhone || '', width: 100, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '480', yPosition: '135', value: applicationData.businessEmail || '', width: 120, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '80', yPosition: '151', value: yearsInBusiness.toString(), width: 30, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '160', yPosition: '151', value: applicationData.numberOfLocations || '1', width: 30, height: 12, fontSize: 'Size9' },
-
-                            // Section 2: Owner Information
-                            { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '205', value: applicationData.ownerFullName || '', width: 180, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '225', value: applicationData.ownerTitle || 'Owner', width: 80, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '170', yPosition: '225', value: applicationData.ownerOwnershipPercent || '100', width: 40, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '255', value: ownerHomeAddress.street || '', width: 180, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '275', value: ownerHomeAddress.city || '', width: 80, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '145', yPosition: '275', value: ownerHomeAddress.state || '', width: 30, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '200', yPosition: '275', value: ownerHomeAddress.zip || '', width: 50, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '295', value: applicationData.ownerPersonalPhone || '', width: 120, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '315', value: applicationData.ownerSSN || '', width: 120, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '180', yPosition: '315', value: applicationData.ownerDOB || '', width: 100, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '335', value: applicationData.ownerPersonalEmail || applicationData.businessEmail || '', width: 180, height: 12, fontSize: 'Size9' },
-
-                            // Section 3: Sales Profile - Ticket amounts and volumes
-                            { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '395', value: applicationData.averageTicket || '', width: 60, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '120', yPosition: '395', value: applicationData.largestTicket || '', width: 60, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '200', yPosition: '395', value: applicationData.monthlyVolume || '', width: 80, height: 12, fontSize: 'Size9' },
-                            // Sales percentages
-                            { documentId: '1', pageNumber: '1', xPosition: '520', yPosition: '370', value: applicationData.percentageSwiped || '0', width: 30, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '520', yPosition: '385', value: applicationData.percentageKeyed || '0', width: 30, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '520', yPosition: '415', value: applicationData.percentageInternet || '0', width: 30, height: 12, fontSize: 'Size9' },
-
-                            // Section 4: Business Profile - MCC and goods/services
-                            { documentId: '1', pageNumber: '1', xPosition: '120', yPosition: '510', value: applicationData.productsDescription || '', width: 400, height: 12, fontSize: 'Size9' },
-
-                            // Banking Information
-                            { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '535', value: applicationData.bankName || '', width: 150, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '250', yPosition: '535', value: applicationData.routingNumber || '', width: 100, height: 12, fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '1', xPosition: '420', yPosition: '535', value: applicationData.accountNumber || '', width: 120, height: 12, fontSize: 'Size9' },
-
-                            // Return Policy
-                            { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '560', value: applicationData.cancellationPolicy || '', width: 500, height: 12, fontSize: 'Size9' },
-
-                            // Section 5: Site Inspection - Zoning
-                            { documentId: '1', pageNumber: '1', xPosition: '200', yPosition: '620', value: applicationData.businessLocationType || '', width: 150, height: 12, fontSize: 'Size9' },
-                        ],
-                        
-                        // Checkboxes for business type
-                        checkboxTabs: [
-                            // Currently accept cards
-                            { documentId: '1', pageNumber: '1', xPosition: '370', yPosition: '395', selected: applicationData.currentlyAcceptCards === 'yes', tabLabel: 'acceptCardsYes' },
-                            { documentId: '1', pageNumber: '1', xPosition: '410', yPosition: '395', selected: applicationData.currentlyAcceptCards === 'no', tabLabel: 'acceptCardsNo' },
-                            
-                            // Business Type checkboxes
-                            { documentId: '1', pageNumber: '1', xPosition: '75', yPosition: '510', selected: businessTypeMap[applicationData.businessMarketType] === 'retail', tabLabel: 'typeRetail' },
-                            { documentId: '1', pageNumber: '1', xPosition: '120', yPosition: '510', selected: businessTypeMap[applicationData.businessMarketType] === 'restaurant', tabLabel: 'typeRestaurant' },
-                            { documentId: '1', pageNumber: '1', xPosition: '180', yPosition: '510', selected: businessTypeMap[applicationData.businessMarketType] === 'service', tabLabel: 'typeService' },
-                            { documentId: '1', pageNumber: '1', xPosition: '230', yPosition: '510', selected: businessTypeMap[applicationData.businessMarketType] === 'internet', tabLabel: 'typeInternet' },
-                            { documentId: '1', pageNumber: '1', xPosition: '285', yPosition: '510', selected: businessTypeMap[applicationData.businessMarketType] === 'lodging', tabLabel: 'typeLodging' },
-
-                            // Ownership Type checkboxes  
-                            { documentId: '1', pageNumber: '1', xPosition: '22', yPosition: '490', selected: ownershipTypeMap[applicationData.businessFormationType] === 'sole_proprietor', tabLabel: 'ownerSole' },
-                            { documentId: '1', pageNumber: '1', xPosition: '22', yPosition: '505', selected: ownershipTypeMap[applicationData.businessFormationType] === 'partnership', tabLabel: 'ownerPartnership' },
-                            { documentId: '1', pageNumber: '1', xPosition: '175', yPosition: '490', selected: ownershipTypeMap[applicationData.businessFormationType] === 'llc', tabLabel: 'ownerLLC' },
-                            { documentId: '1', pageNumber: '1', xPosition: '175', yPosition: '505', selected: ownershipTypeMap[applicationData.businessFormationType] === 'corporation', tabLabel: 'ownerCorp' },
-                            { documentId: '1', pageNumber: '1', xPosition: '330', yPosition: '505', selected: ownershipTypeMap[applicationData.businessFormationType] === 'non_profit', tabLabel: 'ownerNonProfit' },
-
-                            // Guarantor checkbox
-                            { documentId: '1', pageNumber: '1', xPosition: '180', yPosition: '235', selected: true, tabLabel: 'guarantorYes' },
-                        ],
-
-                        // Page 3 - Signature tabs
-                        signHereTabs: [
-                            // Section 10: Merchant Acceptance - Signature of Principal/Owner #1
-                            { documentId: '1', pageNumber: '3', xPosition: '270', yPosition: '168', scaleValue: 0.7 },
-                            // Section 10: Signature of Principal/Owner #2 (optional)
-                            { documentId: '1', pageNumber: '3', xPosition: '270', yPosition: '195', scaleValue: 0.7, optional: 'true' },
-                            // Section 11: Guarantor #1 signature  
-                            { documentId: '1', pageNumber: '3', xPosition: '50', yPosition: '340', scaleValue: 0.7 },
-                            // Section 12: Final merchant signature
-                            { documentId: '1', pageNumber: '3', xPosition: '100', yPosition: '545', scaleValue: 0.7 },
-                        ],
-
-                        dateSignedTabs: [
-                            // Section 10 dates
-                            { documentId: '1', pageNumber: '3', xPosition: '170', yPosition: '175', fontSize: 'Size9' },
-                            // Section 11 Guarantor date
-                            { documentId: '1', pageNumber: '3', xPosition: '170', yPosition: '345', fontSize: 'Size9' },
-                            // Section 12 final dates
-                            { documentId: '1', pageNumber: '3', xPosition: '480', yPosition: '545', fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '3', xPosition: '480', yPosition: '565', fontSize: 'Size9' },
-                        ],
-
-                        // Title tabs
-                        titleTabs: [
-                            { documentId: '1', pageNumber: '3', xPosition: '460', yPosition: '168', fontSize: 'Size9' },
-                            { documentId: '1', pageNumber: '3', xPosition: '460', yPosition: '195', fontSize: 'Size9', optional: 'true' },
-                        ],
-
-                        // Printed name
-                        fullNameTabs: [
-                            { documentId: '1', pageNumber: '3', xPosition: '100', yPosition: '565', fontSize: 'Size9' },
-                        ],
-
-                        // Initial tabs for each page (bottom right corner)
-                        initialHereTabs: [
-                            { documentId: '1', pageNumber: '1', xPosition: '520', yPosition: '740', scaleValue: 0.5 },
-                            { documentId: '1', pageNumber: '2', xPosition: '520', yPosition: '740', scaleValue: 0.5 },
-                            { documentId: '1', pageNumber: '3', xPosition: '520', yPosition: '740', scaleValue: 0.5 },
-                        ]
-                    }
+        emailBlurb: `Dear ${signerName}, please review and sign your merchant application for ${applicationData.legalBusinessName || 'your business'}.`,
+        templateRoles: [
+            {
+                email: signerEmail,
+                name: signerName,
+                roleName: 'Signer',  // This should match the role name in your template
+                tabs: {
+                    textTabs: textTabs
                 }
-            ]
-        },
+            }
+        ],
         status: 'sent'
     };
+
+    console.log('Creating envelope with template:', templateId);
 
     const response = await fetch(`${DOCUSIGN_BASE_URL}/v2.1/accounts/${accountId}/envelopes`, {
         method: 'POST',
