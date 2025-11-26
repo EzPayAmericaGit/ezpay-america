@@ -11,6 +11,10 @@ async function getAccessToken() {
     const userId = Deno.env.get('DOCUSIGN_USER_ID');
     const privateKey = Deno.env.get('DOCUSIGN_PRIVATE_KEY');
 
+    if (!integrationKey || !userId || !privateKey) {
+        throw new Error('Missing DocuSign credentials. Please set DOCUSIGN_INTEGRATION_KEY, DOCUSIGN_USER_ID, and DOCUSIGN_PRIVATE_KEY.');
+    }
+
     const header = { alg: 'RS256', typ: 'JWT' };
     const now = Math.floor(Date.now() / 1000);
     const payload = {
@@ -383,7 +387,16 @@ Deno.serve(async (req) => {
         });
 
     } catch (error) {
-        console.error('DocuSign error:', error);
-        return Response.json({ error: error.message, stack: error.stack }, { status: 500 });
+        console.error('DocuSign error:', error.message);
+        
+        // Check if it's a consent error
+        if (error.message && error.message.includes('consent_required')) {
+            return Response.json({ 
+                error: 'DocuSign consent required. Please visit the DocuSign admin console to grant consent.',
+                consentUrl: `https://account-d.docusign.com/oauth/auth?response_type=code&scope=signature%20impersonation&client_id=${Deno.env.get('DOCUSIGN_INTEGRATION_KEY')}&redirect_uri=https://www.docusign.com`
+            }, { status: 400 });
+        }
+        
+        return Response.json({ error: error.message }, { status: 500 });
     }
 });

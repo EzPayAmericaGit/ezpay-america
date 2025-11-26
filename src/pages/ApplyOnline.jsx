@@ -274,7 +274,8 @@ export default function ApplyOnline() {
       setSubmitted(true);
     } catch (error) {
       console.error("Application submission error:", error);
-      alert("There was an error submitting your application. Please try again or call (865) 316-9625.");
+      const errorMsg = error?.response?.data?.error || error?.message || "Unknown error";
+      alert(`There was an error submitting your application: ${errorMsg}\n\nPlease try again or call (865) 316-9625.`);
     } finally {
       setIsSubmitting(false);
     }
