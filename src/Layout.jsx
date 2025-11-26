@@ -28,6 +28,7 @@ const navigationItems = [
   { title: "Quiz", url: createPageUrl("Quiz") },
   { title: "Apply Online", url: createPageUrl("ApplyOnline") },
   { title: "Contact Us", url: createPageUrl("Contact") },
+  { title: "Track Application", url: createPageUrl("ApplicationTracker") },
   { title: "Support", url: createPageUrl("Support") },
     { title: "News", url: createPageUrl("News") },
 ];
