@@ -4,7 +4,7 @@ const DOCUSIGN_AUTH_SERVER = 'account-d.docusign.com'; // Use 'account.docusign.
 const DOCUSIGN_BASE_URL = 'https://demo.docusign.net/restapi'; // Use 'https://na4.docusign.net/restapi' for production
 
 // Your uploaded MPA PDF document URL
-const MPA_DOCUMENT_URL = 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/5a34c947e_EZPAYAMERICANEWMPA102825.pdf';
+const MPA_DOCUMENT_URL = 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/2ab6082af_EZPAYAMERICANEWMPA102825.pdf';
 
 async function getAccessToken() {
     const integrationKey = Deno.env.get('DOCUSIGN_INTEGRATION_KEY');
