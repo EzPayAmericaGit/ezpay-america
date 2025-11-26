@@ -1,4 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.4';
+import * as jose from 'npm:jose@5.2.0';
 
 const DOCUSIGN_AUTH_SERVER = 'account.docusign.com'; // Production
 const DOCUSIGN_BASE_URL = 'https://na4.docusign.net/restapi'; // Production
