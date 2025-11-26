@@ -39,25 +39,24 @@ async function getAccessToken() {
     // Handle various private key formats
     let pemContents = privateKey;
     
-    // First, handle literal backslash-n sequences (\\n becomes nothing)
-    pemContents = pemContents.replace(/\\n/g, '\n');
+    console.log('Raw key length:', pemContents.length, 'First 50 chars:', pemContents.substring(0, 50));
     
-    // Remove all variations of BEGIN/END headers
-    pemContents = pemContents.replace(/-----\s*BEGIN\s*(RSA\s*)?PRIVATE\s*KEY\s*-----/gi, '');
-    pemContents = pemContents.replace(/-----\s*END\s*(RSA\s*)?PRIVATE\s*KEY\s*-----/gi, '');
+    // First, handle literal backslash-n sequences
+    pemContents = pemContents.replace(/\\n/g, '');
     
-    // Remove any dashes that might be left over
-    pemContents = pemContents.replace(/^-+|-+$/g, '');
+    // Remove all variations of BEGIN/END headers (case insensitive, with possible spaces)
+    pemContents = pemContents.replace(/-----[^-]+-----/g, '');
     
-    // Remove all whitespace, newlines, carriage returns
-    pemContents = pemContents.replace(/[\n\r\s\t]/g, '');
+    // Remove all whitespace, newlines, carriage returns, dashes
+    pemContents = pemContents.replace(/[\n\r\s\t-]/g, '');
     
     // Log for debugging
-    console.log('Key after cleanup - length:', pemContents.length, 'first 10:', pemContents.substring(0, 10), 'last 10:', pemContents.substring(pemContents.length - 10));
+    console.log('Key after cleanup - length:', pemContents.length, 'first 20:', pemContents.substring(0, 20), 'last 20:', pemContents.substring(pemContents.length - 20));
     
     // Validate it looks like base64
     if (!/^[A-Za-z0-9+/=]+$/.test(pemContents)) {
-        throw new Error(`Invalid base64 characters in key. First 30 chars: ${pemContents.substring(0, 30)}`);
+        const invalidChars = pemContents.match(/[^A-Za-z0-9+/=]/g);
+        throw new Error(`Invalid base64 characters in key: ${JSON.stringify(invalidChars?.slice(0, 10))}. First 50 chars: ${pemContents.substring(0, 50)}`);
     }
     
     let binaryKey;
@@ -68,8 +67,9 @@ async function getAccessToken() {
         for (let i = 0; i < binaryString.length; i++) {
             binaryKey[i] = binaryString.charCodeAt(i);
         }
+        console.log('Successfully decoded key, binary length:', binaryKey.length);
     } catch (e) {
-        throw new Error(`Failed to decode base64. Key length: ${pemContents.length}. First 20 chars: ${pemContents.substring(0, 20)}. Error: ${e.message}`);
+        throw new Error(`Failed to decode base64. Key length: ${pemContents.length}. First 30 chars: ${pemContents.substring(0, 30)}. Error: ${e.message}`);
     }
     
     const cryptoKey = await crypto.subtle.importKey(
