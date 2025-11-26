@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Plus, Pencil, Trash2, Eye, EyeOff, Upload, Loader2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Eye, EyeOff, Upload, Loader2, Sparkles } from "lucide-react";
 
 const categories = [
   "Mobile Payments",
@@ -175,8 +175,25 @@ export default function NewsAdmin() {
                       variant="outline"
                       disabled={uploading}
                       onClick={() => document.getElementById('image-upload').click()}
+                      title="Upload image"
                     >
                       {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      disabled={uploading || !formData.title}
+                      title="Generate image with AI"
+                      onClick={async () => {
+                        if (!formData.title) return;
+                        setUploading(true);
+                        const prompt = `Professional blog header image for an article about: "${formData.title}". Category: ${formData.category || "business"}. Style: modern, clean, corporate, related to payment processing and business technology. No text in the image.`;
+                        const { url } = await base44.integrations.Core.GenerateImage({ prompt });
+                        setFormData({...formData, image: url});
+                        setUploading(false);
+                      }}
+                    >
+                      <Sparkles className="w-4 h-4" />
                     </Button>
                     <input
                       id="image-upload"
