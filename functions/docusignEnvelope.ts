@@ -1,7 +1,7 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.4';
 
-const DOCUSIGN_AUTH_SERVER = 'account-d.docusign.com'; // Use 'account.docusign.com' for production
-const DOCUSIGN_BASE_URL = 'https://demo.docusign.net/restapi'; // Use 'https://na4.docusign.net/restapi' for production
+const DOCUSIGN_AUTH_SERVER = 'account.docusign.com'; // Production
+const DOCUSIGN_BASE_URL = 'https://na4.docusign.net/restapi'; // Production
 
 // Your uploaded MPA PDF document URL
 const MPA_DOCUMENT_URL = 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/2ab6082af_EZPAYAMERICANEWMPA102825.pdf';
