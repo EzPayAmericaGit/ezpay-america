@@ -16,17 +16,16 @@ async function getAccessToken() {
         throw new Error('Missing DocuSign credentials. Please set DOCUSIGN_INTEGRATION_KEY, DOCUSIGN_USER_ID, and DOCUSIGN_PRIVATE_KEY.');
     }
 
-    // Reconstruct PEM format - the secret should be base64 content only
+    // Reconstruct PEM format from secret
     let pemKey = privateKeyEnv;
     
     console.log('=== PRIVATE KEY DEBUG ===');
     console.log('Raw key length:', pemKey.length);
-    console.log('First 50 chars:', pemKey.substring(0, 50));
     
-    // Handle literal \n sequences and normalize
+    // Handle literal \n sequences (convert to actual newlines)
     pemKey = pemKey.replace(/\\n/g, '\n');
     
-    // If key doesn't have PEM headers, add them
+    // If key doesn't have proper PEM headers, reconstruct them
     if (!pemKey.includes('-----BEGIN')) {
         // Clean up any whitespace/newlines in the base64 content
         const cleanBase64 = pemKey.replace(/[\s\r\n]/g, '');
@@ -35,16 +34,51 @@ async function getAccessToken() {
         pemKey = `-----BEGIN RSA PRIVATE KEY-----\n${formattedBase64}\n-----END RSA PRIVATE KEY-----`;
     }
     
-    console.log('Formatted PEM (first 100 chars):', pemKey.substring(0, 100));
+    console.log('PEM key starts with:', pemKey.substring(0, 50));
 
     try {
-        // Use jose library to import the private key - handles both PKCS#1 and PKCS#8 formats
-        const privateKey = await jose.importPKCS8(pemKey, 'RS256').catch(async () => {
-            // If PKCS8 fails, it might be PKCS1 (RSA PRIVATE KEY), try converting
-            // Replace RSA PRIVATE KEY with PRIVATE KEY format hint
-            const pkcs1Pem = pemKey.replace('RSA PRIVATE KEY', 'PRIVATE KEY');
-            return await jose.importPKCS8(pkcs1Pem, 'RS256');
-        });
+        // jose.importPKCS8 only works with PKCS#8 format (BEGIN PRIVATE KEY)
+        // For PKCS#1 format (BEGIN RSA PRIVATE KEY), use importSPKI alternative
+        let privateKey;
+        
+        if (pemKey.includes('BEGIN RSA PRIVATE KEY')) {
+            // PKCS#1 format - need to use a different import method
+            // Convert the key format or use crypto.subtle directly
+            const pemContents = pemKey
+                .replace('-----BEGIN RSA PRIVATE KEY-----', '')
+                .replace('-----END RSA PRIVATE KEY-----', '')
+                .replace(/[\n\r\s]/g, '');
+            
+            const binaryString = atob(pemContents);
+            const binaryKey = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+                binaryKey[i] = binaryString.charCodeAt(i);
+            }
+            
+            // Try importing as PKCS#8 first (some keys labeled RSA are actually PKCS#8)
+            try {
+                privateKey = await crypto.subtle.importKey(
+                    'pkcs8',
+                    binaryKey,
+                    { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
+                    false,
+                    ['sign']
+                );
+                console.log('Imported as PKCS#8');
+            } catch {
+                // If that fails, the key is true PKCS#1 - need jose to handle it
+                // Try with jose's more flexible import
+                privateKey = await jose.importPKCS8(
+                    pemKey.replace('RSA PRIVATE KEY', 'PRIVATE KEY'),
+                    'RS256'
+                );
+                console.log('Imported via jose PKCS#8 conversion');
+            }
+        } else {
+            // Standard PKCS#8 format
+            privateKey = await jose.importPKCS8(pemKey, 'RS256');
+            console.log('Imported as standard PKCS#8');
+        }
         
         console.log('Successfully imported private key');
 
@@ -79,8 +113,8 @@ async function getAccessToken() {
         return tokenData.access_token;
         
     } catch (e) {
-        console.error('Key import error:', e);
-        throw new Error(`Failed to import private key: ${e.message}. Make sure the key is in valid PEM format (with or without headers).`);
+        console.error('Key import error:', e.message, e.stack);
+        throw new Error(`Failed to import private key: ${e.message}`);
     }
 }
 
