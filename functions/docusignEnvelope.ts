@@ -21,66 +21,25 @@ async function getAccessToken() {
     
     console.log('=== PRIVATE KEY DEBUG ===');
     console.log('Raw key length:', pemKey.length);
+    console.log('First 80 chars:', pemKey.substring(0, 80));
     
     // Handle literal \n sequences (convert to actual newlines)
     pemKey = pemKey.replace(/\\n/g, '\n');
     
-    // If key doesn't have proper PEM headers, reconstruct them
+    // Ensure proper PEM format
     if (!pemKey.includes('-----BEGIN')) {
-        // Clean up any whitespace/newlines in the base64 content
+        // Key is just base64 content, add headers
         const cleanBase64 = pemKey.replace(/[\s\r\n]/g, '');
-        // Format as proper PEM with line breaks every 64 chars
         const formattedBase64 = cleanBase64.match(/.{1,64}/g)?.join('\n') || cleanBase64;
         pemKey = `-----BEGIN RSA PRIVATE KEY-----\n${formattedBase64}\n-----END RSA PRIVATE KEY-----`;
     }
     
-    console.log('PEM key starts with:', pemKey.substring(0, 50));
+    console.log('PEM formatted, length:', pemKey.length);
 
     try {
-        // jose.importPKCS8 only works with PKCS#8 format (BEGIN PRIVATE KEY)
-        // For PKCS#1 format (BEGIN RSA PRIVATE KEY), use importSPKI alternative
-        let privateKey;
-        
-        if (pemKey.includes('BEGIN RSA PRIVATE KEY')) {
-            // PKCS#1 format - need to use a different import method
-            // Convert the key format or use crypto.subtle directly
-            const pemContents = pemKey
-                .replace('-----BEGIN RSA PRIVATE KEY-----', '')
-                .replace('-----END RSA PRIVATE KEY-----', '')
-                .replace(/[\n\r\s]/g, '');
-            
-            const binaryString = atob(pemContents);
-            const binaryKey = new Uint8Array(binaryString.length);
-            for (let i = 0; i < binaryString.length; i++) {
-                binaryKey[i] = binaryString.charCodeAt(i);
-            }
-            
-            // Try importing as PKCS#8 first (some keys labeled RSA are actually PKCS#8)
-            try {
-                privateKey = await crypto.subtle.importKey(
-                    'pkcs8',
-                    binaryKey,
-                    { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
-                    false,
-                    ['sign']
-                );
-                console.log('Imported as PKCS#8');
-            } catch {
-                // If that fails, the key is true PKCS#1 - need jose to handle it
-                // Try with jose's more flexible import
-                privateKey = await jose.importPKCS8(
-                    pemKey.replace('RSA PRIVATE KEY', 'PRIVATE KEY'),
-                    'RS256'
-                );
-                console.log('Imported via jose PKCS#8 conversion');
-            }
-        } else {
-            // Standard PKCS#8 format
-            privateKey = await jose.importPKCS8(pemKey, 'RS256');
-            console.log('Imported as standard PKCS#8');
-        }
-        
-        console.log('Successfully imported private key');
+        // Use jose library - it handles PKCS#1 (RSA PRIVATE KEY) format natively
+        const privateKey = await jose.importPKCS8(pemKey, 'RS256');
+        console.log('Successfully imported private key with jose');
 
         // Create JWT using jose
         const now = Math.floor(Date.now() / 1000);
@@ -114,7 +73,7 @@ async function getAccessToken() {
         
     } catch (e) {
         console.error('Key import error:', e.message, e.stack);
-        throw new Error(`Failed to import private key: ${e.message}`);
+        throw new Error(`Failed to import private key:${e.message}`);
     }
 }
 
