@@ -10,119 +10,78 @@ const MPA_DOCUMENT_URL = 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/ob
 async function getAccessToken() {
     const integrationKey = Deno.env.get('DOCUSIGN_INTEGRATION_KEY');
     const userId = Deno.env.get('DOCUSIGN_USER_ID');
-    const privateKey = Deno.env.get('DOCUSIGN_PRIVATE_KEY');
+    const privateKeyEnv = Deno.env.get('DOCUSIGN_PRIVATE_KEY');
 
-    if (!integrationKey || !userId || !privateKey) {
+    if (!integrationKey || !userId || !privateKeyEnv) {
         throw new Error('Missing DocuSign credentials. Please set DOCUSIGN_INTEGRATION_KEY, DOCUSIGN_USER_ID, and DOCUSIGN_PRIVATE_KEY.');
     }
 
-    const header = { alg: 'RS256', typ: 'JWT' };
-    const now = Math.floor(Date.now() / 1000);
-    const payload = {
-        iss: integrationKey,
-        sub: userId,
-        aud: DOCUSIGN_AUTH_SERVER,
-        iat: now,
-        exp: now + 3600,
-        scope: 'signature impersonation'
-    };
-
-    const base64UrlEncode = (obj) => {
-        const str = typeof obj === 'string' ? obj : JSON.stringify(obj);
-        const base64 = btoa(str);
-        return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
-    };
-
-    const headerEncoded = base64UrlEncode(header);
-    const payloadEncoded = base64UrlEncode(payload);
-    const signingInput = `${headerEncoded}.${payloadEncoded}`;
-
-    // Handle various private key formats
-    let pemContents = privateKey;
+    // Reconstruct PEM format - the secret should be base64 content only
+    let pemKey = privateKeyEnv;
     
     console.log('=== PRIVATE KEY DEBUG ===');
-    console.log('Raw key length:', pemContents.length);
-    console.log('First 100 chars:', JSON.stringify(pemContents.substring(0, 100)));
-    console.log('Last 50 chars:', JSON.stringify(pemContents.substring(pemContents.length - 50)));
+    console.log('Raw key length:', pemKey.length);
+    console.log('First 50 chars:', pemKey.substring(0, 50));
     
-    // Check if it starts with the PEM header
-    const hasPemHeader = pemContents.includes('BEGIN') || pemContents.includes('PRIVATE');
-    console.log('Has PEM header:', hasPemHeader);
+    // Handle literal \n sequences and normalize
+    pemKey = pemKey.replace(/\\n/g, '\n');
     
-    // Handle literal \n sequences (the actual characters backslash and n)
-    pemContents = pemContents.replace(/\\n/g, '');
-    
-    // Handle actual newlines and carriage returns
-    pemContents = pemContents.replace(/[\n\r]/g, '');
-    
-    // Remove BEGIN/END headers completely
-    pemContents = pemContents.replace(/-----BEGIN\s*(RSA\s*)?PRIVATE\s*KEY-----/gi, '');
-    pemContents = pemContents.replace(/-----END\s*(RSA\s*)?PRIVATE\s*KEY-----/gi, '');
-    
-    // Remove any remaining dashes that might be part of malformed headers
-    pemContents = pemContents.replace(/^-+|-+$/g, '');
-    
-    // Remove all whitespace and tabs
-    pemContents = pemContents.replace(/[\s\t]/g, '');
-    
-    console.log('After cleanup - length:', pemContents.length);
-    console.log('First 50 cleaned:', pemContents.substring(0, 50));
-    console.log('Last 50 cleaned:', pemContents.substring(pemContents.length - 50));
-    
-    // Validate it looks like base64
-    const invalidMatch = pemContents.match(/[^A-Za-z0-9+/=]/g);
-    if (invalidMatch) {
-        const uniqueInvalid = [...new Set(invalidMatch)];
-        throw new Error(`Invalid base64 characters found: ${JSON.stringify(uniqueInvalid)}. Key may still have headers or special characters.`);
+    // If key doesn't have PEM headers, add them
+    if (!pemKey.includes('-----BEGIN')) {
+        // Clean up any whitespace/newlines in the base64 content
+        const cleanBase64 = pemKey.replace(/[\s\r\n]/g, '');
+        // Format as proper PEM with line breaks every 64 chars
+        const formattedBase64 = cleanBase64.match(/.{1,64}/g)?.join('\n') || cleanBase64;
+        pemKey = `-----BEGIN RSA PRIVATE KEY-----\n${formattedBase64}\n-----END RSA PRIVATE KEY-----`;
     }
     
-    // Check reasonable key length (RSA 2048 is ~1700 chars, RSA 4096 is ~3200 chars)
-    if (pemContents.length < 1000) {
-        throw new Error(`Key too short (${pemContents.length} chars). Expected ~1700+ chars for RSA 2048. Make sure you copied the full key content.`);
-    }
-    
-    let binaryKey;
+    console.log('Formatted PEM (first 100 chars):', pemKey.substring(0, 100));
+
     try {
-        const binaryString = atob(pemContents);
-        binaryKey = new Uint8Array(binaryString.length);
-        for (let i = 0; i < binaryString.length; i++) {
-            binaryKey[i] = binaryString.charCodeAt(i);
+        // Use jose library to import the private key - handles both PKCS#1 and PKCS#8 formats
+        const privateKey = await jose.importPKCS8(pemKey, 'RS256').catch(async () => {
+            // If PKCS8 fails, it might be PKCS1 (RSA PRIVATE KEY), try converting
+            // Replace RSA PRIVATE KEY with PRIVATE KEY format hint
+            const pkcs1Pem = pemKey.replace('RSA PRIVATE KEY', 'PRIVATE KEY');
+            return await jose.importPKCS8(pkcs1Pem, 'RS256');
+        });
+        
+        console.log('Successfully imported private key');
+
+        // Create JWT using jose
+        const now = Math.floor(Date.now() / 1000);
+        
+        const jwt = await new jose.SignJWT({
+            scope: 'signature impersonation'
+        })
+            .setProtectedHeader({ alg: 'RS256', typ: 'JWT' })
+            .setIssuer(integrationKey)
+            .setSubject(userId)
+            .setAudience(DOCUSIGN_AUTH_SERVER)
+            .setIssuedAt(now)
+            .setExpirationTime(now + 3600)
+            .sign(privateKey);
+
+        console.log('JWT created successfully');
+
+        const tokenResponse = await fetch(`https://${DOCUSIGN_AUTH_SERVER}/oauth/token`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt}`
+        });
+
+        if (!tokenResponse.ok) {
+            const errorText = await tokenResponse.text();
+            throw new Error(`Failed to get access token: ${errorText}`);
         }
-        console.log('Successfully decoded key, binary length:', binaryKey.length);
+
+        const tokenData = await tokenResponse.json();
+        return tokenData.access_token;
+        
     } catch (e) {
-        throw new Error(`Base64 decode failed: ${e.message}. First 50 chars: ${pemContents.substring(0, 50)}`);
+        console.error('Key import error:', e);
+        throw new Error(`Failed to import private key: ${e.message}. Make sure the key is in valid PEM format (with or without headers).`);
     }
-    
-    const cryptoKey = await crypto.subtle.importKey(
-        'pkcs8',
-        binaryKey,
-        { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
-        false,
-        ['sign']
-    );
-
-    const signature = await crypto.subtle.sign(
-        'RSASSA-PKCS1-v1_5',
-        cryptoKey,
-        new TextEncoder().encode(signingInput)
-    );
-
-    const signatureEncoded = base64UrlEncode(String.fromCharCode(...new Uint8Array(signature)));
-    const jwt = `${signingInput}.${signatureEncoded}`;
-
-    const tokenResponse = await fetch(`https://${DOCUSIGN_AUTH_SERVER}/oauth/token`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt}`
-    });
-
-    if (!tokenResponse.ok) {
-        const errorText = await tokenResponse.text();
-        throw new Error(`Failed to get access token: ${errorText}`);
-    }
-
-    const tokenData = await tokenResponse.json();
-    return tokenData.access_token;
 }
 
 async function createEnvelope(accessToken, applicationData, signerEmail, signerName) {
