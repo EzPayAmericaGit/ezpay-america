@@ -174,6 +174,8 @@ async function createEnvelope(accessToken, applicationData, signerEmail, signerN
                             { documentId: '1', pageNumber: '1', xPosition: '145', yPosition: '275', value: businessAddress.state || '', width: 30, height: 12, fontSize: 'Size9' },
                             { documentId: '1', pageNumber: '1', xPosition: '200', yPosition: '275', value: businessAddress.zip || '', width: 50, height: 12, fontSize: 'Size9' },
                             { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '295', value: applicationData.businessPhone || '', width: 120, height: 12, fontSize: 'Size9' },
+                            { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '315', value: applicationData.ownerSSN || '', width: 120, height: 12, fontSize: 'Size9' },
+                            { documentId: '1', pageNumber: '1', xPosition: '180', yPosition: '315', value: applicationData.ownerDOB || '', width: 100, height: 12, fontSize: 'Size9' },
                             { documentId: '1', pageNumber: '1', xPosition: '48', yPosition: '335', value: applicationData.businessEmail || '', width: 180, height: 12, fontSize: 'Size9' },
 
                             // Section 3: Sales Profile

@@ -55,6 +55,8 @@ export default function ApplyOnline() {
     businessPhone: "",
     businessEmail: "",
     ownerFullName: "",
+    ownerSSN: "",
+    ownerDOB: "",
     businessFormationType: "",
     businessPhysicalAddress: "",
     corporateAddress: "",
@@ -91,6 +93,8 @@ export default function ApplyOnline() {
       if (!formData.businessPhone) newErrors.businessPhone = "Required";
       if (!formData.businessEmail) newErrors.businessEmail = "Required";
       if (!formData.ownerFullName) newErrors.ownerFullName = "Required";
+      if (!formData.ownerSSN) newErrors.ownerSSN = "Required";
+      if (!formData.ownerDOB) newErrors.ownerDOB = "Required";
       if (!formData.businessFormationType) newErrors.businessFormationType = "Required";
       if (!formData.businessPhysicalAddress) newErrors.businessPhysicalAddress = "Required";
       if (formData.currentlyAcceptCards === "yes") {
@@ -457,37 +461,66 @@ export default function ApplyOnline() {
                       </div>
 
                       <div className="grid md:grid-cols-2 gap-6">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Owner Full Name *
-                          </label>
-                          <Input
-                            value={formData.ownerFullName}
-                            onChange={(e) => setFormData({...formData, ownerFullName: e.target.value})}
-                            className={`h-12 ${errors.ownerFullName ? 'border-red-500' : ''}`}
-                          />
-                          {errors.ownerFullName && <p className="text-red-500 text-sm mt-1">{errors.ownerFullName}</p>}
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Owner Full Name *
+                            </label>
+                            <Input
+                              value={formData.ownerFullName}
+                              onChange={(e) => setFormData({...formData, ownerFullName: e.target.value})}
+                              className={`h-12 ${errors.ownerFullName ? 'border-red-500' : ''}`}
+                            />
+                            {errors.ownerFullName && <p className="text-red-500 text-sm mt-1">{errors.ownerFullName}</p>}
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Business Formation Type *
+                            </label>
+                            <Select 
+                              value={formData.businessFormationType}
+                              onValueChange={(value) => setFormData({...formData, businessFormationType: value})}
+                            >
+                              <SelectTrigger className={`h-12 ${errors.businessFormationType ? 'border-red-500' : ''}`}>
+                                <SelectValue placeholder="Select formation type" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {formationTypes.map((type) => (
+                                  <SelectItem key={type} value={type}>{type}</SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            {errors.businessFormationType && <p className="text-red-500 text-sm mt-1">{errors.businessFormationType}</p>}
+                          </div>
                         </div>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Business Formation Type *
-                          </label>
-                          <Select 
-                            value={formData.businessFormationType}
-                            onValueChange={(value) => setFormData({...formData, businessFormationType: value})}
-                          >
-                            <SelectTrigger className={`h-12 ${errors.businessFormationType ? 'border-red-500' : ''}`}>
-                              <SelectValue placeholder="Select formation type" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {formationTypes.map((type) => (
-                                <SelectItem key={type} value={type}>{type}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          {errors.businessFormationType && <p className="text-red-500 text-sm mt-1">{errors.businessFormationType}</p>}
+
+                        <div className="grid md:grid-cols-2 gap-6">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Owner Social Security Number *
+                            </label>
+                            <Input
+                              type="password"
+                              value={formData.ownerSSN}
+                              onChange={(e) => setFormData({...formData, ownerSSN: e.target.value})}
+                              placeholder="XXX-XX-XXXX"
+                              className={`h-12 ${errors.ownerSSN ? 'border-red-500' : ''}`}
+                            />
+                            {errors.ownerSSN && <p className="text-red-500 text-sm mt-1">{errors.ownerSSN}</p>}
+                            <p className="text-xs text-gray-500 mt-1">Required for identity verification</p>
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Owner Date of Birth *
+                            </label>
+                            <Input
+                              type="date"
+                              value={formData.ownerDOB}
+                              onChange={(e) => setFormData({...formData, ownerDOB: e.target.value})}
+                              className={`h-12 ${errors.ownerDOB ? 'border-red-500' : ''}`}
+                            />
+                            {errors.ownerDOB && <p className="text-red-500 text-sm mt-1">{errors.ownerDOB}</p>}
+                          </div>
                         </div>
-                      </div>
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -759,6 +792,8 @@ export default function ApplyOnline() {
                             <div><span className="font-semibold">Market Type:</span> {formData.businessMarketType}</div>
                             <div><span className="font-semibold">Formation:</span> {formData.businessFormationType}</div>
                             <div><span className="font-semibold">Owner:</span> {formData.ownerFullName}</div>
+                            <div><span className="font-semibold">DOB:</span> {formData.ownerDOB}</div>
+                            <div><span className="font-semibold">SSN:</span> ***-**-{formData.ownerSSN?.slice(-4)}</div>
                             <div><span className="font-semibold">Phone:</span> {formData.businessPhone}</div>
                             <div><span className="font-semibold">Email:</span> {formData.businessEmail}</div>
                             <div><span className="font-semibold">Locations:</span> {formData.numberOfLocations}</div>
