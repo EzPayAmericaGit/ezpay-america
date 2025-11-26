@@ -41,14 +41,20 @@ async function getAccessToken() {
     
     console.log('Raw key length:', pemContents.length, 'First 50 chars:', pemContents.substring(0, 50));
     
-    // First, handle literal backslash-n sequences
-    pemContents = pemContents.replace(/\\n/g, '');
+    // Handle literal \n sequences (the actual characters backslash and n)
+    pemContents = pemContents.split('\\n').join('');
     
-    // Remove all variations of BEGIN/END headers (case insensitive, with possible spaces)
-    pemContents = pemContents.replace(/-----[^-]+-----/g, '');
+    // Handle actual newlines
+    pemContents = pemContents.split('\n').join('');
+    pemContents = pemContents.split('\r').join('');
     
-    // Remove all whitespace, newlines, carriage returns, dashes
-    pemContents = pemContents.replace(/[\n\r\s\t-]/g, '');
+    // Remove BEGIN/END headers and any dashes
+    pemContents = pemContents.replace(/BEGIN[A-Z\s]*KEY/gi, '');
+    pemContents = pemContents.replace(/END[A-Z\s]*KEY/gi, '');
+    pemContents = pemContents.replace(/-/g, '');
+    
+    // Remove all whitespace
+    pemContents = pemContents.replace(/\s/g, '');
     
     // Log for debugging
     console.log('Key after cleanup - length:', pemContents.length, 'first 20:', pemContents.substring(0, 20), 'last 20:', pemContents.substring(pemContents.length - 20));
@@ -56,7 +62,7 @@ async function getAccessToken() {
     // Validate it looks like base64
     if (!/^[A-Za-z0-9+/=]+$/.test(pemContents)) {
         const invalidChars = pemContents.match(/[^A-Za-z0-9+/=]/g);
-        throw new Error(`Invalid base64 characters in key: ${JSON.stringify(invalidChars?.slice(0, 10))}. First 50 chars: ${pemContents.substring(0, 50)}`);
+        throw new Error(`Invalid base64 characters in key: ${JSON.stringify([...new Set(invalidChars)]?.slice(0, 10))}. First 50 chars: ${pemContents.substring(0, 50)}`);
     }
     
     let binaryKey;
