@@ -57,6 +57,11 @@ const features = [
 export default function RetailPOS() {
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead 
+        title="Retail POS System"
+        description="Complete retail POS system with inventory management, customer tracking, integrated payments, and mobile apps. Free equipment program available."
+        keywords="retail POS, point of sale retail, inventory management, retail payment processing, barcode scanning, retail software"
+      />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -186,7 +191,7 @@ export default function RetailPOS() {
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                 <img
                   src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/3887a616c_AGoldEZPayPOS.png"
-                  alt="Retail POS System"
+                  alt="EzPay retail POS system with inventory management and customer loyalty features"
                   className="w-full h-auto"
                 />
               </div>

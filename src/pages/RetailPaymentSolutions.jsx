@@ -14,6 +14,7 @@ import {
   Monitor
 } from "lucide-react";
 import { motion } from "framer-motion";
+import SEOHead from "../components/SEOHead";
 
 const benefits = [
   {
@@ -58,6 +59,11 @@ export default function RetailPaymentSolutions() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead 
+        title="Retail Payment Solutions"
+        description="Affordable retail payment processing with zero transaction fees. Free equipment program, state-of-the-art POS systems, and no long-term contracts."
+        keywords="retail payment solutions, zero transaction fees, free POS equipment, retail credit card processing, affordable payment processing"
+      />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -116,7 +122,7 @@ export default function RetailPaymentSolutions() {
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                 <img
                   src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/3887a616c_AGoldEZPayPOS.png"
-                  alt="EzPay POS System"
+                  alt="EzPay POS system for retail businesses with zero transaction fees"
                   className="w-full h-auto"
                 />
               </div>
@@ -201,7 +207,7 @@ export default function RetailPaymentSolutions() {
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                 <img
                   src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/3887a616c_AGoldEZPayPOS.png"
-                  alt="EzPay POS Equipment"
+                  alt="Free EzPay payment processing equipment including terminals and card readers"
                   className="w-full h-auto"
                 />
               </div>

@@ -32,8 +32,13 @@ const features = [
 
 export default function EzPayPOSHome() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section */}
+        <div className="min-h-screen bg-white">
+          <SEOHead 
+            title="EzPay POS System"
+            description="Cloud-based POS system for retail and restaurant businesses. Free equipment, 24/7 support, e-commerce integration, and loyalty programs included."
+            keywords="POS system, point of sale, cloud POS, restaurant POS, retail POS, EzPay POS, free POS system"
+          />
+          {/* Hero Section */}
       <section className="relative py-32 bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-900/20 via-transparent to-transparent"></div>
         
@@ -65,14 +70,14 @@ export default function EzPayPOSHome() {
             <div className="relative">
               <img
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/3887a616c_AGoldEZPayPOS.png"
-                alt="EzPay POS iPad with Reader"
+                                      alt="EzPay POS iPad terminal with card reader for retail and restaurant businesses"
                 className="w-full h-auto rounded-2xl shadow-2xl"
               />
             </div>
             <div className="relative">
               <img
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/3887a616c_AGoldEZPayPOS.png"
-                alt="EzPay POS Main Device"
+                alt="EzPay cloud-based point of sale system with touchscreen display"
                 className="w-full h-auto rounded-2xl shadow-2xl"
               />
             </div>
@@ -137,7 +142,7 @@ export default function EzPayPOSHome() {
           >
             <img
               src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/3887a616c_AGoldEZPayPOS.png"
-              alt="EzPay POS Main Screen"
+              alt="EzPay POS software interface showing menu and order management features"
               className="w-full h-auto rounded-3xl shadow-2xl"
             />
           </motion.div>
@@ -186,7 +191,7 @@ export default function EzPayPOSHome() {
             >
               <img
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/3887a616c_AGoldEZPayPOS.png"
-                alt="EzPay POS Features"
+                alt="EzPay POS retail features including inventory management and loyalty programs"
                 className="w-full h-auto rounded-2xl shadow-xl"
               />
             </motion.div>

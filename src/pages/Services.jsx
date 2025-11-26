@@ -69,6 +69,11 @@ const services = [
 export default function Services() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <SEOHead 
+        title="Services"
+        description="EzPay America payment processing services including credit card processing, mobile payments, POS systems, e-commerce integration, and merchant cash advance."
+        keywords="credit card processing, mobile payments, POS systems, e-commerce payments, ACH processing, merchant cash advance, payment gateway"
+      />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-500 to-orange-600 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

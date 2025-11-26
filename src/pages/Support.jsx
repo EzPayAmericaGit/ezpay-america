@@ -71,6 +71,11 @@ const faqs = [
 export default function Support() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <SEOHead 
+        title="Support Center"
+        description="Get 24/7 support for your EzPay America merchant account. Phone, email, and live chat support available. Call (865) 316-9625 for immediate assistance."
+        keywords="EzPay support, merchant support, payment processing help, 24/7 customer service, credit card processing support"
+      />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-500 to-orange-600 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

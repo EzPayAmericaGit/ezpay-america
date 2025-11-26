@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Store, CreditCard, Shield, Clock, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
+import SEOHead from "../components/SEOHead";
 
 const features = [
   {
@@ -34,6 +35,11 @@ const features = [
 export default function RetailMerchants() {
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead 
+        title="Retail Merchant Solutions"
+        description="Payment processing solutions for retail businesses. Accept all payment types, PCI compliant, fast setup, and free equipment through our Free Equipment Program."
+        keywords="retail payment processing, retail merchant services, store credit card processing, retail POS, boutique payment solutions"
+      />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -151,7 +157,7 @@ export default function RetailMerchants() {
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                 <img
                   src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/3887a616c_AGoldEZPayPOS.png"
-                  alt="EzPay POS System"
+                  alt="EzPay POS system for retail stores with zero transaction fees and free equipment"
                   className="w-full h-auto"
                 />
               </div>

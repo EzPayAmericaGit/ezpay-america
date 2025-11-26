@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { UtensilsCrossed, Coffee, Truck, Clock, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
+import SEOHead from "../components/SEOHead";
 
 const restaurantTypes = [
   {
@@ -34,6 +35,11 @@ const restaurantTypes = [
 export default function RestaurantMerchants() {
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead 
+        title="Restaurant Merchant Solutions"
+        description="Payment processing for restaurants, cafes, food trucks, and delivery services. Tableside ordering, tip adjustment, split checks, and online ordering integration."
+        keywords="restaurant payment processing, cafe merchant services, food truck payments, restaurant POS, hospitality payment solutions"
+      />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -120,7 +126,7 @@ export default function RestaurantMerchants() {
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                 <img
                   src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=600&fit=crop"
-                  alt="Restaurant Payment Solutions"
+                  alt="Restaurant payment processing solutions with tableside ordering and kitchen integration"
                   className="w-full h-auto"
                 />
               </div>

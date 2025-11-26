@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, Phone, MapPin, Send, CreditCard, Package, FileText, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
+import SEOHead from "../components/SEOHead";
 
 const benefits = [
   {
@@ -40,6 +41,11 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead 
+        title="Contact Us"
+        description="Contact EzPay America for payment processing solutions. Call (865) 316-9625 or email contact@ezpayamerica.com. Located in Weaverville, NC."
+        keywords="contact EzPay America, payment processing support, merchant services contact, credit card processing help"
+      />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -270,7 +276,7 @@ export default function Contact() {
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                 <img
                   src="https://images.unsplash.com/photo-1553484771-371a605b060b?w=800&h=600&fit=crop"
-                  alt="Consultation"
+                  alt="Business consultation for payment processing solutions at EzPay America"
                   className="w-full h-auto"
                 />
               </div>

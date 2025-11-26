@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Globe, Lock, Zap, Code, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
+import SEOHead from "../components/SEOHead";
 
 const features = [
   {
@@ -34,6 +35,11 @@ const features = [
 export default function WebPaymentPages() {
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead 
+        title="Web Payment Pages"
+        description="Accept online payments with custom-branded payment pages. No coding required, PCI compliant, instant setup. Perfect for invoicing, donations, and service businesses."
+        keywords="online payment pages, web payments, payment links, online invoicing, donation pages, hosted payment page"
+      />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -205,7 +211,7 @@ export default function WebPaymentPages() {
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                 <img
                   src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop"
-                  alt="Web Payment Pages"
+                  alt="Web payment pages dashboard showing online payment collection and invoice management"
                   className="w-full h-auto"
                 />
               </div>

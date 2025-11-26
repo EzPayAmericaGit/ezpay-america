@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { DollarSign, Zap, FileText, TrendingUp, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
+import SEOHead from "../components/SEOHead";
 
 const benefits = [
   {
@@ -34,6 +35,11 @@ const benefits = [
 export default function MerchantCashAdvance() {
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead 
+        title="Merchant Cash Advance"
+        description="Get fast business funding with a merchant cash advance. 24-hour approval, no credit check, flexible repayment based on your daily credit card sales."
+        keywords="merchant cash advance, business funding, small business loan, working capital, business cash advance, fast business funding"
+      />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -174,7 +180,7 @@ export default function MerchantCashAdvance() {
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                 <img
                   src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&h=600&fit=crop"
-                  alt="Business Growth"
+                  alt="Business owner reviewing merchant cash advance funding options for growth"
                   className="w-full h-auto"
                 />
               </div>

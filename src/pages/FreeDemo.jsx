@@ -89,6 +89,11 @@ export default function FreeDemo() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead 
+        title="Free Demo"
+        description="Schedule a free demo of EzPay America payment processing and POS systems. No credit card required. See how we can transform your business."
+        keywords="free demo, payment processing demo, POS demo, merchant services trial, EzPay demo"
+      />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -57,6 +57,11 @@ const features = [
 export default function RestaurantPOS() {
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead 
+        title="Restaurant POS System"
+        description="Restaurant POS system with tableside ordering, kitchen display integration, online ordering, and tip management. Perfect for full service and quick service restaurants."
+        keywords="restaurant POS, table management, kitchen display system, online ordering, food truck POS, bar POS, quick service POS"
+      />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

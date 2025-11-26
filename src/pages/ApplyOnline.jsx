@@ -226,6 +226,11 @@ export default function ApplyOnline() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead 
+        title="Apply Online"
+        description="Apply for a merchant account with EzPay America. Fast approval, zero transaction fees, free equipment. Complete your application in minutes."
+        keywords="merchant account application, apply for credit card processing, merchant services application, payment processing signup"
+      />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
