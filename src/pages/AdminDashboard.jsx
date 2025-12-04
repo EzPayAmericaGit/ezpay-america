@@ -45,7 +45,78 @@ export default function AdminDashboard() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, data }) => base44.entities.MerchantApplication.update(id, data),
+    mutationFn: async ({ id, data, sendEmail, application }) => {
+      await base44.entities.MerchantApplication.update(id, data);
+      
+      // Send email notification if status changed
+      if (sendEmail && application?.businessEmail) {
+        const statusMessages = {
+          approved: {
+            subject: "Your Merchant Application Has Been Approved!",
+            body: `Dear ${application.ownerFullName || 'Valued Merchant'},
+
+Congratulations! Your merchant application for ${application.legalBusinessName} has been approved.
+
+Our team will be in contact with you shortly to complete the onboarding process and get your payment processing up and running.
+
+If you have any questions, please call us at (865) 316-9625.
+
+Thank you for choosing EzPay America!
+
+Best regards,
+The EzPay America Team`
+          },
+          declined: {
+            subject: "Update on Your Merchant Application",
+            body: `Dear ${application.ownerFullName || 'Valued Merchant'},
+
+Thank you for your interest in EzPay America. After careful review of your application for ${application.legalBusinessName}, we regret to inform you that we are unable to approve your application at this time.
+
+If you have any questions or would like to discuss this decision, please call us at (865) 316-9625.
+
+Thank you for considering EzPay America.
+
+Best regards,
+The EzPay America Team`
+          },
+          documents_needed: {
+            subject: "Additional Documents Required for Your Application",
+            body: `Dear ${application.ownerFullName || 'Valued Merchant'},
+
+Thank you for submitting your merchant application for ${application.legalBusinessName}.
+
+To continue processing your application, we need additional documentation. Please log in to your account or contact us at (865) 316-9625 to discuss what documents are needed.
+
+We appreciate your prompt attention to this matter.
+
+Best regards,
+The EzPay America Team`
+          },
+          under_review: {
+            subject: "Your Application is Under Review",
+            body: `Dear ${application.ownerFullName || 'Valued Merchant'},
+
+Your merchant application for ${application.legalBusinessName} is now under review by our underwriting team.
+
+We will notify you once a decision has been made. This typically takes 1-2 business days.
+
+If you have any questions, please call us at (865) 316-9625.
+
+Best regards,
+The EzPay America Team`
+          }
+        };
+
+        const emailContent = statusMessages[data.status];
+        if (emailContent) {
+          await base44.integrations.Core.SendEmail({
+            to: application.businessEmail,
+            subject: emailContent.subject,
+            body: emailContent.body
+          });
+        }
+      }
+    },
     onSuccess: () => queryClient.invalidateQueries(['adminApplications'])
   });
 
@@ -306,7 +377,7 @@ ${application.notes || ''}`;
                               <label className="text-sm font-medium mb-2 block">Update Status</label>
                               <Select 
                                 value={app.status} 
-                                onValueChange={(value) => updateMutation.mutate({ id: app.id, data: { status: value }})}
+                                onValueChange={(value) => updateMutation.mutate({ id: app.id, data: { status: value }, sendEmail: true, application: app })}
                               >
                                 <SelectTrigger>
                                   <SelectValue />
