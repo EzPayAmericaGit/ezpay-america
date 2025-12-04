@@ -1218,6 +1218,45 @@ export default function ApplyOnline() {
                           </div>
                         </div>
                       </div>
+
+                      <div className="border-t pt-6 mt-6">
+                        <h3 className="text-lg font-semibold mb-4">Additional Documents (Optional)</h3>
+                        <p className="text-sm text-gray-600 mb-4">
+                          Upload any additional documents such as business license, articles of incorporation, or other supporting documents.
+                        </p>
+                        
+                        {formData.additionalDocuments.map((doc, index) => (
+                          <div key={index} className="flex items-center gap-3 mb-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                            <CheckCircle2 className="w-5 h-5 text-green-600" />
+                            <span className="flex-1 text-sm font-medium text-gray-700">{doc.name}</span>
+                            <a 
+                              href={doc.url} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-sm text-amber-600 hover:underline"
+                            >
+                              View
+                            </a>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const updated = formData.additionalDocuments.filter((_, i) => i !== index);
+                                setFormData({...formData, additionalDocuments: updated});
+                              }}
+                              className="text-red-500 hover:text-red-700 text-sm"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        ))}
+
+                        <AdditionalDocumentUploader 
+                          onUpload={(doc) => setFormData({
+                            ...formData, 
+                            additionalDocuments: [...formData.additionalDocuments, doc]
+                          })}
+                        />
+                      </div>
                     </div>
                   )}
 
