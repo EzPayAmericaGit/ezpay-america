@@ -577,12 +577,12 @@ export default function ApplyOnline() {
                             Owner Social Security Number *
                           </label>
                           <Input
-                            type="password"
-                            value={formData.ownerSSN}
-                            onChange={(e) => setFormData({...formData, ownerSSN: e.target.value})}
-                            placeholder="XXX-XX-XXXX"
-                            className={`h-12 ${errors.ownerSSN ? 'border-red-500' : ''}`}
-                          />
+                                                            type="text"
+                                                            value={formData.ownerSSN}
+                                                            onChange={(e) => setFormData({...formData, ownerSSN: e.target.value})}
+                                                            placeholder="XXX-XX-XXXX"
+                                                            className={`h-12 ${errors.ownerSSN ? 'border-red-500' : ''}`}
+                                                          />
                           {errors.ownerSSN && <p className="text-red-500 text-sm mt-1">{errors.ownerSSN}</p>}
                           <p className="text-xs text-gray-500 mt-1">Required for identity verification</p>
                         </div>
