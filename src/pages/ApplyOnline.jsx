@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { base44 } from "@/api/base44Client";
 import { CheckCircle2, ArrowRight, ArrowLeft, Building2, User, DollarSign, FileCheck, Loader2, CreditCard, Landmark } from "lucide-react";
 import DocumentUploader from "../components/application/DocumentUploader";
+import AdditionalDocumentUploader from "../components/application/AdditionalDocumentUploader";
 import { motion, AnimatePresence } from "framer-motion";
 
 const steps = [
@@ -114,9 +115,10 @@ export default function ApplyOnline() {
     accountNumber: "",
     
     // Document URLs
-    driversLicenseUrl: "",
-    voidedCheckUrl: ""
-  });
+            driversLicenseUrl: "",
+            voidedCheckUrl: "",
+            additionalDocuments: []
+          });
 
   const validateStep = (step) => {
     const newErrors = {};
@@ -212,8 +214,9 @@ export default function ApplyOnline() {
         ownerFullName: formData.ownerFullName,
         status: "submitted",
         driversLicenseUrl: formData.driversLicenseUrl || null,
-        voidedCheckUrl: formData.voidedCheckUrl || null,
-        applicationData: formData
+                  voidedCheckUrl: formData.voidedCheckUrl || null,
+                  additionalDocuments: formData.additionalDocuments || [],
+                  applicationData: formData
       });
 
       setSubmitted(true);
