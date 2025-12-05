@@ -44,13 +44,11 @@ export default function Layout({ children }) {
           <div className="flex justify-between items-center h-20">
             {/* Logo */}
             <Link to={createPageUrl("Home")} className="flex items-center gap-3">
-                                <div className="w-12 h-12 rounded-lg flex items-center justify-center shadow-lg">
-                                  <img 
-                                    src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/8eb2dd274_EZSMALL.png" 
-                                    alt="EzPay Logo"
-                                    className="w-12 h-12 object-contain"
-                                  />
-                                </div>
+                                <img 
+                                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/8eb2dd274_EZSMALL.png" 
+                                  alt="EzPay Logo"
+                                  className="w-12 h-12 object-contain"
+                                />
               <div>
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-amber-600 to-amber-800 bg-clip-text text-transparent">
                   EzPay America
