@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,6 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
 import { 
   Building2, 
   Search, 
@@ -20,7 +22,9 @@ import {
   Sparkles,
   RefreshCw,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Newspaper,
+  ShieldAlert
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -37,7 +41,24 @@ export default function AdminDashboard() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [expandedApp, setExpandedApp] = useState(null);
   const [aiReviewing, setAiReviewing] = useState(null);
+  const [authStatus, setAuthStatus] = useState({ loading: true, isAdmin: false });
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const user = await base44.auth.me();
+        if (user?.role === 'admin') {
+          setAuthStatus({ loading: false, isAdmin: true });
+        } else {
+          setAuthStatus({ loading: false, isAdmin: false });
+        }
+      } catch (e) {
+        setAuthStatus({ loading: false, isAdmin: false });
+      }
+    };
+    checkAuth();
+  }, []);
 
   const { data: applications = [], isLoading } = useQuery({
     queryKey: ['adminApplications'],
@@ -221,18 +242,51 @@ ${application.notes || ''}`;
     declined: applications.filter(a => a.status === 'declined').length
   };
 
+  if (authStatus.loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-amber-500" />
+      </div>
+    );
+  }
+
+  if (!authStatus.isAdmin) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Card className="max-w-md">
+          <CardContent className="p-8 text-center">
+            <ShieldAlert className="w-16 h-16 text-red-500 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h2>
+            <p className="text-gray-600 mb-4">You must be an admin to access this page.</p>
+            <Button onClick={() => base44.auth.redirectToLogin()}>
+              Login as Admin
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 py-24 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Application Dashboard</h1>
-          <Button 
-            onClick={() => queryClient.invalidateQueries(['adminApplications'])}
-            variant="outline"
-          >
-            <RefreshCw className="w-4 h-4 mr-2" />
-            Refresh
-          </Button>
+          <div className="flex gap-2">
+            <Link to={createPageUrl("NewsAdmin")}>
+              <Button variant="outline">
+                <Newspaper className="w-4 h-4 mr-2" />
+                News Admin
+              </Button>
+            </Link>
+            <Button 
+              onClick={() => queryClient.invalidateQueries(['adminApplications'])}
+              variant="outline"
+            >
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Refresh
+            </Button>
+          </div>
         </div>
 
         {/* Stats Cards */}
