@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Calendar, Settings } from "lucide-react";
+import { ArrowRight, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { format } from "date-fns";
@@ -68,22 +68,6 @@ const defaultArticles = [
 ];
 
 export default function News() {
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  useEffect(() => {
-    const checkAdmin = async () => {
-      try {
-        const user = await base44.auth.me();
-        if (user?.role === 'admin') {
-          setIsAdmin(true);
-        }
-      } catch (e) {
-        // Not logged in or error
-      }
-    };
-    checkAdmin();
-  }, []);
-
   const { data: dbArticles = [] } = useQuery({
     queryKey: ['publishedNews'],
     queryFn: () => base44.entities.NewsArticle.filter({ published: true }, '-created_date')
@@ -110,19 +94,9 @@ export default function News() {
             transition={{ duration: 0.6 }}
             className="max-w-3xl"
           >
-            <div className="flex items-center gap-4 mb-4">
-              <h1 className="text-5xl md:text-6xl font-bold text-gray-900">
-                EzPay America News
-              </h1>
-              {isAdmin && (
-                <Link to={createPageUrl("NewsAdmin")}>
-                  <Button variant="outline" className="bg-white/90 hover:bg-white border-gray-900 text-gray-900">
-                    <Settings className="w-4 h-4 mr-2" />
-                    Admin
-                  </Button>
-                </Link>
-              )}
-            </div>
+            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-4">
+              EzPay America News
+            </h1>
             <h2 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-4">
               Just Got a Whole Lot Easier
             </h2>
