@@ -48,7 +48,7 @@ export default function Layout({ children }) {
                                   src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/8eb2dd274_EZSMALL.png" 
                                   alt="EzPay Logo"
                                   className="w-12 h-12 object-contain"
-                                  style={{ filter: 'saturate(1.3) hue-rotate(-5deg) brightness(1.05)' }}
+                                  style={{ filter: 'saturate(1.4) hue-rotate(-5deg) brightness(0.95)' }}
                                 />
               <div>
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-amber-600 to-amber-800 bg-clip-text text-transparent">
