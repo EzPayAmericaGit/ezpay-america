@@ -3,6 +3,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { DollarSign, Zap, FileText, TrendingUp, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
 import SEOHead from "../components/SEOHead";
 
 const benefits = [
@@ -167,6 +169,15 @@ export default function MerchantCashAdvance() {
                     </div>
                   </div>
                 ))}
+              </div>
+              
+              <div className="mt-8">
+                <Link to={createPageUrl("ApplyOnline")}>
+                  <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg shadow-xl">
+                    Apply Online
+                    <ArrowRight className="w-5 h-5 ml-2" />
+                  </Button>
+                </Link>
               </div>
             </motion.div>
 
