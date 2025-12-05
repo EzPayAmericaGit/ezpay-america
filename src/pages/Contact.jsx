@@ -3,7 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, Phone, MapPin, Send, CreditCard, Package, FileText, ArrowRight } from "lucide-react";
+import { Mail, Phone, MapPin, Send, CreditCard, Package, FileText, ArrowRight, Loader2 } from "lucide-react";
+import { base44 } from "@/api/base44Client";
 import { motion } from "framer-motion";
 import SEOHead from "../components/SEOHead";
 
@@ -32,11 +33,30 @@ export default function Contact() {
     phone: "",
     message: ""
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Form submission logic would go here
+    setIsSubmitting(true);
+    
+    await base44.integrations.Core.SendEmail({
+      to: "contact@ezpayamerica.com",
+      subject: `Contact Form: ${formData.name}`,
+      body: `
+New contact form submission from the website.
+
+NAME: ${formData.name}
+EMAIL: ${formData.email}
+PHONE: ${formData.phone || 'Not provided'}
+
+MESSAGE:
+${formData.message}
+      `.trim()
+    });
+    
+    setIsSubmitting(false);
+    setSubmitted(true);
   };
 
   return (
@@ -140,6 +160,15 @@ export default function Contact() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-8">
+                  {submitted ? (
+                    <div className="text-center py-8">
+                      <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Send className="w-8 h-8 text-white" />
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-2">Message Sent!</h3>
+                      <p className="text-gray-600">Thank you for contacting us. We'll get back to you soon.</p>
+                    </div>
+                  ) : (
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
@@ -194,11 +223,20 @@ export default function Contact() {
 
                     <Button 
                       type="submit" 
+                      disabled={isSubmitting}
                       className="w-full bg-gray-900 hover:bg-gray-800 text-white h-12 text-lg"
                     >
-                      Send Message
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                          Sending...
+                        </>
+                      ) : (
+                        "Send Message"
+                      )}
                     </Button>
                   </form>
+                  )}
                 </CardContent>
               </Card>
             </motion.div>

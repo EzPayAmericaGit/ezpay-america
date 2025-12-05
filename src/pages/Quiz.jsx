@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { ArrowRight, ArrowLeft, RefreshCw, Store, Briefcase, ShoppingBag, Coffee, Home, Activity, AlertCircle } from "lucide-react";
+import { ArrowRight, ArrowLeft, RefreshCw, Store, Briefcase, ShoppingBag, Coffee, Home, Activity, AlertCircle, Loader2 } from "lucide-react";
+import { base44 } from "@/api/base44Client";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -30,6 +31,8 @@ const industries = {
 export default function Quiz() {
   const [currentStep, setCurrentStep] = useState(1);
   const [showResults, setShowResults] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [contactSubmitted, setContactSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     businessType: "",
     upgradeReasons: [],
@@ -90,6 +93,41 @@ export default function Quiz() {
       return array.filter(i => i !== item);
     }
     return [...array, item];
+  };
+
+  const handleContactSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    await base44.integrations.Core.SendEmail({
+      to: "contact@ezpayamerica.com",
+      subject: `Quiz Lead: ${formData.businessName || 'New Lead'}`,
+      body: `
+New quiz completion and contact form submission.
+
+CONTACT INFORMATION:
+- Name: ${formData.firstName} ${formData.lastName}
+- Email: ${formData.email}
+- Phone: ${formData.phone}
+- Business Name: ${formData.businessName}
+- State: ${formData.state}
+
+QUIZ RESPONSES:
+- Business Type: ${formData.businessType === 'existing' ? 'Existing Business' : 'New Business'}
+- Industry: ${formData.industry} - ${formData.subSector}
+- Current Provider: ${formData.currentProvider || 'N/A'}
+- Upgrade Reasons: ${formData.upgradeReasons.join(', ') || 'N/A'}
+- Systems Needed: ${formData.systems.join(', ') || 'N/A'}
+- Monthly Sales: $${formData.monthlySales.toLocaleString()}
+- Timeline: ${formData.timeline}
+
+MESSAGE:
+${formData.message || 'No additional message'}
+      `.trim()
+    });
+    
+    setIsSubmitting(false);
+    setContactSubmitted(true);
   };
 
   return (
@@ -471,16 +509,58 @@ export default function Quiz() {
               <div className="grid lg:grid-cols-2 gap-12">
                 <Card className="border-none shadow-2xl">
                   <CardContent className="p-8">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-6">Get in touch with a rep today.</h3>
-                    <form className="space-y-4">
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <Input placeholder="First name" className="h-12" />
-                        <Input placeholder="Last name" className="h-12" />
+                    {contactSubmitted ? (
+                      <div className="text-center py-8">
+                        <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                          <ArrowRight className="w-8 h-8 text-white" />
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">Thank You!</h3>
+                        <p className="text-gray-600">A representative will contact you shortly.</p>
                       </div>
-                      <Input type="email" placeholder="Email" className="h-12" />
-                      <Input type="tel" placeholder="Phone number" className="h-12" />
-                      <Input placeholder="Business Name" className="h-12" />
-                      <Select>
+                    ) : (
+                    <>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-6">Get in touch with a rep today.</h3>
+                    <form onSubmit={handleContactSubmit} className="space-y-4">
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <Input 
+                          placeholder="First name" 
+                          className="h-12" 
+                          value={formData.firstName}
+                          onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                          required
+                        />
+                        <Input 
+                          placeholder="Last name" 
+                          className="h-12" 
+                          value={formData.lastName}
+                          onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                          required
+                        />
+                      </div>
+                      <Input 
+                        type="email" 
+                        placeholder="Email" 
+                        className="h-12" 
+                        value={formData.email}
+                        onChange={(e) => setFormData({...formData, email: e.target.value})}
+                        required
+                      />
+                      <Input 
+                        type="tel" 
+                        placeholder="Phone number" 
+                        className="h-12" 
+                        value={formData.phone}
+                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                        required
+                      />
+                      <Input 
+                        placeholder="Business Name" 
+                        className="h-12" 
+                        value={formData.businessName}
+                        onChange={(e) => setFormData({...formData, businessName: e.target.value})}
+                        required
+                      />
+                      <Select value={formData.state} onValueChange={(value) => setFormData({...formData, state: value})}>
                         <SelectTrigger className="h-12">
                           <SelectValue placeholder="Select State" />
                         </SelectTrigger>
@@ -492,11 +572,29 @@ export default function Quiz() {
                           <SelectItem value="FL">Florida</SelectItem>
                         </SelectContent>
                       </Select>
-                      <Textarea placeholder="Message" rows={4} />
-                      <Button className="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white h-12 text-lg">
-                        Submit
+                      <Textarea 
+                        placeholder="Message" 
+                        rows={4} 
+                        value={formData.message}
+                        onChange={(e) => setFormData({...formData, message: e.target.value})}
+                      />
+                      <Button 
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white h-12 text-lg"
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                            Submitting...
+                          </>
+                        ) : (
+                          "Submit"
+                        )}
                       </Button>
                     </form>
+                    </>
+                    )}
                   </CardContent>
                 </Card>
 

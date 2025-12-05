@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import SEOHead from "../components/SEOHead";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CheckCircle2, ArrowRight, Clock, Users, Zap } from "lucide-react";
+import { CheckCircle2, ArrowRight, Clock, Users, Zap, Loader2 } from "lucide-react";
+import { base44 } from "@/api/base44Client";
 import { motion } from "framer-motion";
 
 const benefits = [
@@ -45,10 +46,31 @@ export default function FreeDemo() {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Free demo request:", formData);
+    setIsSubmitting(true);
+    
+    await base44.integrations.Core.SendEmail({
+      to: "contact@ezpayamerica.com",
+      subject: `Free Demo Request: ${formData.businessName}`,
+      body: `
+New free demo request from the website.
+
+CONTACT INFORMATION:
+- Name: ${formData.contactName}
+- Email: ${formData.email}
+- Phone: ${formData.phone}
+
+BUSINESS INFORMATION:
+- Business Name: ${formData.businessName}
+- Business Address: ${formData.businessAddress}
+- Time Zone: ${formData.timeZone}
+      `.trim()
+    });
+    
+    setIsSubmitting(false);
     setSubmitted(true);
   };
 
@@ -278,10 +300,20 @@ export default function FreeDemo() {
 
                     <Button 
                       type="submit" 
+                      disabled={isSubmitting}
                       className="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white h-14 text-lg shadow-xl"
                     >
-                      Request Free Demo
-                      <ArrowRight className="w-5 h-5 ml-2" />
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                          Submitting...
+                        </>
+                      ) : (
+                        <>
+                          Request Free Demo
+                          <ArrowRight className="w-5 h-5 ml-2" />
+                        </>
+                      )}
                     </Button>
                   </form>
                 </CardContent>
