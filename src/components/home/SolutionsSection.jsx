@@ -2,6 +2,8 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Monitor, Code, Cpu, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
 
 export default function SolutionsSection() {
   return (
@@ -40,16 +42,12 @@ export default function SolutionsSection() {
             <p className="text-gray-700 mb-6 leading-relaxed">
               You will receive a monthly statement showing your savings compared to what you would have paid with another company but with EzPay America your savings are assured.
             </p>
-            <a
-              href="https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <Link to={createPageUrl("EzPayPOSHome")}>
               <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white">
                 Learn More
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
-            </a>
+            </Link>
           </motion.div>
 
           {/* Payment Processing Software */}
