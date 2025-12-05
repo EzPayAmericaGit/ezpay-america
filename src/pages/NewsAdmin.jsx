@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Plus, Pencil, Trash2, Eye, EyeOff, Upload, Loader2, Sparkles, RefreshCw, Tags, BarChart3 } from "lucide-react";
+import { Plus, Pencil, Trash2, Eye, EyeOff, Upload, Loader2, Sparkles, RefreshCw, Tags, BarChart3, Wand2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const categories = [
@@ -28,6 +28,9 @@ export default function NewsAdmin() {
   const [uploading, setUploading] = useState(false);
   const [bulkOptimizing, setBulkOptimizing] = useState(false);
   const [optimizeProgress, setOptimizeProgress] = useState({ current: 0, total: 0 });
+  const [showAIGenerator, setShowAIGenerator] = useState(false);
+  const [aiIdea, setAiIdea] = useState("");
+  const [aiGenerating, setAiGenerating] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
@@ -159,6 +162,79 @@ Provide:
     });
   };
 
+  const generateFromIdea = async () => {
+    if (!aiIdea.trim()) return;
+    setAiGenerating(true);
+
+    try {
+      // Generate article content
+      const articleResult = await base44.integrations.Core.InvokeLLM({
+        prompt: `You are a professional content writer for EzPay America, a payment processing company. 
+        
+Create a complete blog article based on this idea: "${aiIdea}"
+
+The article should be:
+- Professional and informative
+- Relevant to payment processing, merchant services, POS systems, or business finance
+- Around 400-600 words
+- Engaging and valuable to business owners
+
+Provide a complete article with all metadata.`,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            title: { type: "string", description: "Catchy, SEO-friendly title" },
+            excerpt: { type: "string", description: "2-3 sentence summary" },
+            content: { type: "string", description: "Full article content, 400-600 words" },
+            category: { type: "string", enum: categories, description: "Best fitting category" },
+            tags: { type: "array", items: { type: "string" }, description: "5-8 relevant tags" },
+            slug: { type: "string", description: "URL-friendly slug" },
+            meta_title: { type: "string", description: "SEO title, max 60 chars" },
+            meta_description: { type: "string", description: "SEO description, max 155 chars" },
+            meta_keywords: { type: "string", description: "Comma-separated keywords" },
+            image_prompt: { type: "string", description: "Detailed prompt for generating a relevant professional image" }
+          }
+        }
+      });
+
+      // Generate image based on the article
+      const { url: imageUrl } = await base44.integrations.Core.GenerateImage({
+        prompt: `High-quality professional photograph for a business blog. ${articleResult.image_prompt}. Style: photorealistic, well-lit, corporate, modern. Clean composition, professional lighting. No text, no logos, no watermarks.`
+      });
+
+      // Calculate reading time
+      const wordCount = articleResult.content?.split(/\s+/).length || 0;
+      const readingTime = Math.max(1, Math.ceil(wordCount / 200));
+
+      // Set form data with generated content
+      setFormData({
+        title: articleResult.title || "",
+        slug: articleResult.slug || "",
+        excerpt: articleResult.excerpt || "",
+        content: articleResult.content || "",
+        image: imageUrl || "",
+        category: articleResult.category || "",
+        tags: articleResult.tags || [],
+        content_score: 75,
+        sentiment: "positive",
+        reading_time: readingTime,
+        published: false,
+        meta_title: articleResult.meta_title || "",
+        meta_description: articleResult.meta_description || "",
+        meta_keywords: articleResult.meta_keywords || ""
+      });
+
+      setShowAIGenerator(false);
+      setAiIdea("");
+      setIsEditing(true);
+    } catch (error) {
+      console.error("AI generation error:", error);
+      alert("Failed to generate article. Please try again.");
+    } finally {
+      setAiGenerating(false);
+    }
+  };
+
   const bulkOptimizeSEO = async () => {
     if (articles.length === 0) return;
     setBulkOptimizing(true);
@@ -235,16 +311,78 @@ Optimize for:
               </Button>
             )}
             {!isEditing && (
-              <Button 
-                onClick={() => setIsEditing(true)}
-                className="bg-amber-500 hover:bg-amber-600"
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                New Article
-              </Button>
+              <>
+                <Button 
+                  onClick={() => setShowAIGenerator(true)}
+                  className="bg-purple-600 hover:bg-purple-700"
+                >
+                  <Wand2 className="w-4 h-4 mr-2" />
+                  AI Generate
+                </Button>
+                <Button 
+                  onClick={() => setIsEditing(true)}
+                  className="bg-amber-500 hover:bg-amber-600"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  New Article
+                </Button>
+              </>
             )}
           </div>
         </div>
+
+        {/* AI Generator Modal */}
+        {showAIGenerator && (
+          <Card className="mb-8 border-purple-200 bg-purple-50">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-purple-700">
+                <Wand2 className="w-5 h-5" />
+                AI Article Generator
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-600 mb-4">
+                Describe your article idea and the AI will generate a complete article with an image.
+              </p>
+              <Textarea
+                value={aiIdea}
+                onChange={(e) => setAiIdea(e.target.value)}
+                placeholder="Example: Write about the benefits of contactless payments for small restaurants, focusing on speed and hygiene..."
+                rows={4}
+                className="mb-4"
+              />
+              <div className="flex gap-2">
+                <Button
+                  onClick={generateFromIdea}
+                  disabled={aiGenerating || !aiIdea.trim()}
+                  className="bg-purple-600 hover:bg-purple-700"
+                >
+                  {aiGenerating ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Generating Article & Image...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-4 h-4 mr-2" />
+                      Generate Article
+                    </>
+                  )}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setShowAIGenerator(false);
+                    setAiIdea("");
+                  }}
+                  disabled={aiGenerating}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {isEditing && (
           <Card className="mb-8">
