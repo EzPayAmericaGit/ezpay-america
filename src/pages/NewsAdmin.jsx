@@ -524,23 +524,14 @@ Optimize for:
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Article Image</label>
+                  <label className="block text-sm font-medium mb-1">Article Image URL</label>
                   <div className="flex gap-2">
                     <Input
                       value={formData.image}
                       onChange={(e) => setFormData({...formData, image: e.target.value})}
-                      placeholder="https://... or upload"
+                      placeholder="https://... or upload below"
                       className="flex-1"
                     />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      disabled={uploading}
-                      onClick={() => document.getElementById('image-upload').click()}
-                      title="Upload image"
-                    >
-                      {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-                    </Button>
                     <Button
                       type="button"
                       variant="outline"
@@ -557,23 +548,49 @@ Optimize for:
                     >
                       <Sparkles className="w-4 h-4" />
                     </Button>
-                    <input
-                      id="image-upload"
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={async (e) => {
-                        const file = e.target.files?.[0];
-                        if (!file) return;
-                        setUploading(true);
-                        const { file_url } = await base44.integrations.Core.UploadFile({ file });
-                        setFormData({...formData, image: file_url});
-                        setUploading(false);
-                      }}
-                    />
                   </div>
+                  
+                  <div className="mt-3">
+                    <label className="block text-sm font-medium mb-2">Or Upload Image from Computer</label>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        disabled={uploading}
+                        onClick={() => document.getElementById('image-upload').click()}
+                        className="w-full"
+                      >
+                        {uploading ? (
+                          <>
+                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                            Uploading...
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="w-4 h-4 mr-2" />
+                            Choose Image File
+                          </>
+                        )}
+                      </Button>
+                      <input
+                        id="image-upload"
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (!file) return;
+                          setUploading(true);
+                          const { file_url } = await base44.integrations.Core.UploadFile({ file });
+                          setFormData({...formData, image: file_url});
+                          setUploading(false);
+                        }}
+                      />
+                    </div>
+                  </div>
+                  
                   {formData.image && (
-                    <img src={formData.image} alt="Preview" className="mt-2 h-32 object-cover rounded" />
+                    <img src={formData.image} alt="Preview" className="mt-3 h-32 object-cover rounded" />
                   )}
                 </div>
                 {/* SEO Section */}
