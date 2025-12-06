@@ -194,7 +194,7 @@ export default function CBDStorePOS() {
               className="relative"
             >
               <img
-                src="https://images.unsplash.com/photo-1612958147948-5545b95602d9?w=800&h=600&fit=crop"
+                src="https://images.unsplash.com/photo-1595147389795-37094173bfd8?w=800&h=600&fit=crop"
                 alt="CBD store with modern POS system"
                 className="w-full h-auto rounded-2xl shadow-2xl"
                 loading="lazy"
