@@ -19,6 +19,7 @@ import NewsAdmin from './pages/NewsAdmin';
 import NewsArticle from './pages/NewsArticle';
 import ApplicationTracker from './pages/ApplicationTracker';
 import AdminDashboard from './pages/AdminDashboard';
+import Sitemap from './pages/Sitemap';
 import __Layout from './Layout.jsx';
 
 
@@ -44,6 +45,7 @@ export const PAGES = {
     "NewsArticle": NewsArticle,
     "ApplicationTracker": ApplicationTracker,
     "AdminDashboard": AdminDashboard,
+    "Sitemap": Sitemap,
 }
 
 export const pagesConfig = {
