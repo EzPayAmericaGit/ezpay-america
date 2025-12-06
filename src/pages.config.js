@@ -24,6 +24,8 @@ import ContentBot from './pages/ContentBot';
 import CoffeePOS from './pages/CoffeePOS';
 import FoodTruckPOS from './pages/FoodTruckPOS';
 import LiquorStorePOS from './pages/LiquorStorePOS';
+import BagelShopPOS from './pages/BagelShopPOS';
+import DeliShopPOS from './pages/DeliShopPOS';
 import __Layout from './Layout.jsx';
 
 
@@ -54,6 +56,8 @@ export const PAGES = {
     "CoffeePOS": CoffeePOS,
     "FoodTruckPOS": FoodTruckPOS,
     "LiquorStorePOS": LiquorStorePOS,
+    "BagelShopPOS": BagelShopPOS,
+    "DeliShopPOS": DeliShopPOS,
 }
 
 export const pagesConfig = {
