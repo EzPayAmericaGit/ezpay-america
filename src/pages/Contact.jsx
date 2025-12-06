@@ -40,10 +40,11 @@ export default function Contact() {
     e.preventDefault();
     setIsSubmitting(true);
     
-    await base44.integrations.Core.SendEmail({
-      to: "contact@ezpayamerica.com",
-      subject: `Contact Form: ${formData.name}`,
-      body: `
+    try {
+      await base44.integrations.Core.SendEmail({
+        to: "contact@ezpayamerica.com",
+        subject: `Contact Form: ${formData.name}`,
+        body: `
 New contact form submission from the website.
 
 NAME: ${formData.name}
@@ -52,11 +53,15 @@ PHONE: ${formData.phone || 'Not provided'}
 
 MESSAGE:
 ${formData.message}
-      `.trim()
-    });
-    
-    setIsSubmitting(false);
-    setSubmitted(true);
+        `.trim()
+      });
+      
+      setSubmitted(true);
+    } catch (error) {
+      alert("There was an error sending your message. Please try calling us at (865) 316-9625 or emailing contact@ezpayamerica.com");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

@@ -36,18 +36,16 @@ export default function Layout({ children }) {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Initialize Crisp Chat Widget
+  // Live Chat - Opens Crisp chat or alternative
+  const openLiveChat = () => {
+    if (window.$crisp) {
+      window.$crisp.push(["do", "chat:open"]);
+    }
+  };
+
+  // Make openLiveChat available globally
   React.useEffect(() => {
-    window.$crisp = [];
-    window.CRISP_WEBSITE_ID = "YOUR_CRISP_WEBSITE_ID"; // Replace with your Crisp Website ID
-    
-    (function() {
-      const d = document;
-      const s = d.createElement("script");
-      s.src = "https://client.crisp.chat/l.js";
-      s.async = 1;
-      d.getElementsByTagName("head")[0].appendChild(s);
-    })();
+    window.openLiveChat = openLiveChat;
   }, []);
 
   return (
