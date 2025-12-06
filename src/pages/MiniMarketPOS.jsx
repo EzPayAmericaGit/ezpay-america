@@ -85,7 +85,7 @@ export default function MiniMarketPOS() {
                 </Button>
               </Link>
               <Link to={createPageUrl("ApplyOnline")}>
-                <Button variant="outline" className="border-2 border-white text-white hover:bg-white/10 px-8 py-6 text-lg">
+                <Button variant="outline" className="border-2 border-white text-white hover:bg-white/10 hover:text-white px-8 py-6 text-lg">
                   Apply Online
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
@@ -228,7 +228,7 @@ export default function MiniMarketPOS() {
                 </Button>
               </Link>
               <Link to={createPageUrl("ApplyOnline")}>
-                <Button variant="outline" className="border-2 border-white text-white hover:bg-white/10 px-8 py-6 text-lg">
+                <Button variant="outline" className="border-2 border-white text-white hover:bg-white/10 hover:text-white px-8 py-6 text-lg">
                   Apply Online Now
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>

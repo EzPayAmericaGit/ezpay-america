@@ -85,7 +85,7 @@ export default function CBDStorePOS() {
                 </Button>
               </Link>
               <Link to={createPageUrl("ApplyOnline")}>
-                <Button variant="outline" className="border-2 border-white text-white hover:bg-white/10 px-8 py-6 text-lg">
+                <Button variant="outline" className="border-2 border-white text-white hover:bg-white/10 hover:text-white px-8 py-6 text-lg">
                   Apply Online
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
@@ -194,7 +194,7 @@ export default function CBDStorePOS() {
               className="relative"
             >
               <img
-                src="https://images.unsplash.com/photo-1595147389795-37094173bfd8?w=800&h=600&fit=crop"
+                src="https://images.unsplash.com/photo-1594834726746-0b33e0d45991?w=800&h=600&fit=crop"
                 alt="CBD store with modern POS system"
                 className="w-full h-auto rounded-2xl shadow-2xl"
                 loading="lazy"
@@ -228,7 +228,7 @@ export default function CBDStorePOS() {
                 </Button>
               </Link>
               <Link to={createPageUrl("ApplyOnline")}>
-                <Button variant="outline" className="border-2 border-white text-white hover:bg-white/10 px-8 py-6 text-lg">
+                <Button variant="outline" className="border-2 border-white text-white hover:bg-white/10 hover:text-white px-8 py-6 text-lg">
                   Apply Online Now
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
