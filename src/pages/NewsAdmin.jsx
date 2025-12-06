@@ -48,6 +48,8 @@ export default function NewsAdmin() {
     meta_keywords: ""
   });
   const [analyzing, setAnalyzing] = useState(false);
+  const [seoOptimizing, setSeoOptimizing] = useState(false);
+  const [seoRecommendations, setSeoRecommendations] = useState(null);
 
   const queryClient = useQueryClient();
 
@@ -233,6 +235,62 @@ Provide a complete article with all metadata.`,
     } finally {
       setAiGenerating(false);
     }
+  };
+
+  const optimizeSEO = async () => {
+    if (!formData.title || !formData.excerpt) {
+      alert("Please add a title and excerpt first");
+      return;
+    }
+    setSeoOptimizing(true);
+    
+    const result = await base44.integrations.Core.InvokeLLM({
+      prompt: `You are an advanced SEO expert specializing in E-E-A-T, semantic search, and Google's helpful content update.
+
+Analyze and optimize this article for maximum search visibility:
+
+ARTICLE INFO:
+Title: "${formData.title}"
+Category: ${formData.category || "business"}
+Excerpt: "${formData.excerpt}"
+Content: "${formData.content ? formData.content.substring(0, 500) : formData.excerpt}..."
+Company: EzPay America (payment processing, POS systems, merchant services)
+
+PROVIDE:
+1. Optimized SEO metadata (title, description, slug, keywords)
+2. Primary keyword + 5-7 long-tail keyword variations
+3. Specific content improvement suggestions
+4. Search intent analysis
+5. SEO score (1-100) with reasoning
+6. Competitor keyword opportunities`,
+      response_json_schema: {
+        type: "object",
+        properties: {
+          slug: { type: "string", description: "SEO-optimized URL slug with primary keyword, lowercase with hyphens" },
+          meta_title: { type: "string", description: "Click-worthy title with primary keyword near beginning, 50-60 chars" },
+          meta_description: { type: "string", description: "Compelling description with CTA and keywords, 150-158 chars" },
+          meta_keywords: { type: "string", description: "10-12 long-tail keywords, comma separated" },
+          primary_keyword: { type: "string", description: "Main target keyword phrase" },
+          keyword_variations: { type: "array", items: { type: "string" }, description: "5-7 semantic keyword variations" },
+          search_intent: { type: "string", enum: ["informational", "commercial", "transactional", "navigational"], description: "Primary search intent" },
+          seo_score: { type: "number", description: "Overall SEO potential score 1-100" },
+          improvements: { type: "array", items: { type: "string" }, description: "3-5 specific actionable improvements" },
+          readability_tips: { type: "array", items: { type: "string" }, description: "2-3 readability enhancements" },
+          competitor_keywords: { type: "array", items: { type: "string" }, description: "3-5 opportunity keywords competitors rank for" }
+        }
+      }
+    });
+
+    setFormData({
+      ...formData,
+      slug: result.slug || formData.slug,
+      meta_title: result.meta_title || formData.meta_title,
+      meta_description: result.meta_description || formData.meta_description,
+      meta_keywords: result.meta_keywords || formData.meta_keywords
+    });
+
+    setSeoRecommendations(result);
+    setSeoOptimizing(false);
   };
 
   const bulkOptimizeSEO = async () => {
@@ -596,64 +654,145 @@ Optimize for:
                 {/* SEO Section */}
                 <div className="border-t pt-4 mt-4">
                   <div className="flex justify-between items-center mb-3">
-                    <h3 className="font-semibold text-gray-900">SEO Settings</h3>
+                    <h3 className="font-semibold text-gray-900">SEO Optimization</h3>
                     <Button
                       type="button"
-                      variant="ghost"
+                      variant="outline"
                       size="sm"
-                      disabled={uploading || !formData.title}
-                      onClick={async () => {
-                        if (!formData.title) return;
-                        setUploading(true);
-                        const result = await base44.integrations.Core.InvokeLLM({
-                          prompt: `Generate SEO metadata for a blog article titled: "${formData.title}". Category: ${formData.category || "business"}. For a payment processing company (EzPay America).`,
-                          response_json_schema: {
-                            type: "object",
-                            properties: {
-                              slug: { type: "string", description: "URL-friendly slug, lowercase with hyphens" },
-                              meta_title: { type: "string", description: "SEO title, max 60 chars" },
-                              meta_description: { type: "string", description: "SEO description, max 160 chars" },
-                              meta_keywords: { type: "string", description: "5-8 relevant keywords, comma separated" }
-                            }
-                          }
-                        });
-                        setFormData({
-                          ...formData,
-                          slug: result.slug || "",
-                          meta_title: result.meta_title || "",
-                          meta_description: result.meta_description || "",
-                          meta_keywords: result.meta_keywords || ""
-                        });
-                        setUploading(false);
-                      }}
+                      disabled={seoOptimizing || !formData.title || !formData.excerpt}
+                      onClick={optimizeSEO}
+                      className="border-blue-500 text-blue-600 hover:bg-blue-50"
                     >
-                      <Sparkles className="w-3 h-3 mr-1" /> Auto-Generate SEO
+                      {seoOptimizing ? (
+                        <>
+                          <Loader2 className="w-3 h-3 mr-1 animate-spin" /> Optimizing...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="w-3 h-3 mr-1" /> AI SEO Assistant
+                        </>
+                      )}
                     </Button>
                   </div>
+
+                  {/* SEO Recommendations Panel */}
+                  {seoRecommendations && (
+                    <div className="bg-blue-50 rounded-lg p-4 mb-4 space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-blue-700 font-semibold">
+                          <BarChart3 className="w-4 h-4" />
+                          SEO Analysis Results
+                        </div>
+                        <Badge className={`${seoRecommendations.seo_score >= 80 ? 'bg-green-500' : seoRecommendations.seo_score >= 60 ? 'bg-amber-500' : 'bg-red-500'} text-white`}>
+                          Score: {seoRecommendations.seo_score}/100
+                        </Badge>
+                      </div>
+
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <div className="text-xs font-medium text-blue-600 mb-1">Primary Keyword</div>
+                          <Badge variant="outline" className="bg-white">{seoRecommendations.primary_keyword}</Badge>
+                        </div>
+                        <div>
+                          <div className="text-xs font-medium text-blue-600 mb-1">Search Intent</div>
+                          <Badge variant="outline" className="bg-white capitalize">{seoRecommendations.search_intent}</Badge>
+                        </div>
+                      </div>
+
+                      {seoRecommendations.keyword_variations?.length > 0 && (
+                        <div>
+                          <div className="text-xs font-medium text-blue-600 mb-2">Keyword Variations</div>
+                          <div className="flex flex-wrap gap-1">
+                            {seoRecommendations.keyword_variations.map((kw, i) => (
+                              <Badge key={i} variant="secondary" className="bg-white text-xs">
+                                {kw}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {seoRecommendations.improvements?.length > 0 && (
+                        <div>
+                          <div className="text-xs font-medium text-blue-600 mb-2">Content Improvements</div>
+                          <ul className="space-y-1 text-sm">
+                            {seoRecommendations.improvements.map((imp, i) => (
+                              <li key={i} className="flex items-start gap-2">
+                                <span className="text-blue-500 mt-0.5">•</span>
+                                <span className="text-gray-700">{imp}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {seoRecommendations.readability_tips?.length > 0 && (
+                        <div>
+                          <div className="text-xs font-medium text-blue-600 mb-2">Readability Tips</div>
+                          <ul className="space-y-1 text-sm">
+                            {seoRecommendations.readability_tips.map((tip, i) => (
+                              <li key={i} className="flex items-start gap-2">
+                                <span className="text-blue-500 mt-0.5">•</span>
+                                <span className="text-gray-700">{tip}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {seoRecommendations.competitor_keywords?.length > 0 && (
+                        <div>
+                          <div className="text-xs font-medium text-blue-600 mb-2">Opportunity Keywords</div>
+                          <div className="flex flex-wrap gap-1">
+                            {seoRecommendations.competitor_keywords.map((kw, i) => (
+                              <Badge key={i} className="bg-amber-100 text-amber-700 text-xs border-amber-300">
+                                {kw}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
                   <div className="grid gap-4">
                     <div>
-                      <label className="block text-sm font-medium mb-1">URL Slug</label>
+                      <label className="block text-sm font-medium mb-1 flex items-center gap-2">
+                        URL Slug
+                        {formData.slug && (
+                          <span className="text-xs text-gray-500">({formData.slug.length} chars)</span>
+                        )}
+                      </label>
                       <Input
                         value={formData.slug}
-                        onChange={(e) => setFormData({...formData, slug: e.target.value})}
+                        onChange={(e) => setFormData({...formData, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-')})}
                         placeholder="article-url-slug"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-1">Meta Title</label>
+                      <label className="block text-sm font-medium mb-1 flex items-center gap-2">
+                        Meta Title
+                        <span className={`text-xs ${formData.meta_title.length > 60 ? 'text-red-500' : formData.meta_title.length > 50 ? 'text-green-500' : 'text-gray-500'}`}>
+                          ({formData.meta_title.length}/60 chars)
+                        </span>
+                      </label>
                       <Input
                         value={formData.meta_title}
                         onChange={(e) => setFormData({...formData, meta_title: e.target.value})}
-                        placeholder="SEO title (max 60 chars)"
+                        placeholder="SEO title (50-60 chars optimal)"
                         maxLength={60}
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-1">Meta Description</label>
+                      <label className="block text-sm font-medium mb-1 flex items-center gap-2">
+                        Meta Description
+                        <span className={`text-xs ${formData.meta_description.length > 160 ? 'text-red-500' : formData.meta_description.length > 150 ? 'text-green-500' : 'text-gray-500'}`}>
+                          ({formData.meta_description.length}/160 chars)
+                        </span>
+                      </label>
                       <Textarea
                         value={formData.meta_description}
                         onChange={(e) => setFormData({...formData, meta_description: e.target.value})}
-                        placeholder="SEO description (max 160 chars)"
+                        placeholder="SEO description (150-160 chars optimal)"
                         rows={2}
                         maxLength={160}
                       />
@@ -665,6 +804,7 @@ Optimize for:
                         onChange={(e) => setFormData({...formData, meta_keywords: e.target.value})}
                         placeholder="keyword1, keyword2, keyword3"
                       />
+                      <p className="text-xs text-gray-500 mt-1">Separate keywords with commas</p>
                     </div>
                   </div>
                 </div>
