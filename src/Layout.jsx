@@ -30,8 +30,7 @@ const navigationItems = [
   { title: "Contact Us", url: createPageUrl("Contact") },
   { title: "Support", url: createPageUrl("Support") },
   { title: "News", url: createPageUrl("News") },
-  { title: "Content Bot", url: createPageUrl("ContentBot") },
-];
+  ];
 
 export default function Layout({ children }) {
   const location = useLocation();
