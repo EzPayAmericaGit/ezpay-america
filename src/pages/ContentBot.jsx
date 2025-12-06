@@ -1,13 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Bot, Sparkles, Loader2, CheckCircle2, Facebook, FileText, Image as ImageIcon } from "lucide-react";
+import { Bot, Sparkles, Loader2, CheckCircle2, Facebook, FileText, Image as ImageIcon, ShieldAlert } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 export default function ContentBot() {
+  const [authStatus, setAuthStatus] = useState({ loading: true, isAdmin: false });
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const user = await base44.auth.me();
+        if (user?.role === 'admin') {
+          setAuthStatus({ loading: false, isAdmin: true });
+        } else {
+          setAuthStatus({ loading: false, isAdmin: false });
+        }
+      } catch (e) {
+        setAuthStatus({ loading: false, isAdmin: false });
+      }
+    };
+    checkAuth();
+  }, []);
   const [idea, setIdea] = useState("");
   const [generating, setGenerating] = useState(false);
   const [generatedArticle, setGeneratedArticle] = useState(null);
@@ -141,6 +158,31 @@ Provide complete metadata optimized for SEO and social media sharing.`,
       setPublishing(false);
     }
   };
+
+  if (authStatus.loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-purple-500" />
+      </div>
+    );
+  }
+
+  if (!authStatus.isAdmin) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Card className="max-w-md">
+          <CardContent className="p-8 text-center">
+            <ShieldAlert className="w-16 h-16 text-red-500 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h2>
+            <p className="text-gray-600 mb-4">You must be an admin to access the Content Bot.</p>
+            <Button onClick={() => base44.auth.redirectToLogin()}>
+              Login as Admin
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 py-24 px-4">

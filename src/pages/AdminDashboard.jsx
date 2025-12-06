@@ -24,7 +24,8 @@ import {
   ChevronDown,
   ChevronUp,
   Newspaper,
-  ShieldAlert
+  ShieldAlert,
+  Bot
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -271,8 +272,14 @@ ${application.notes || ''}`;
     <div className="min-h-screen bg-gray-50 py-24 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Application Dashboard</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
           <div className="flex gap-2">
+            <Link to={createPageUrl("ContentBot")}>
+              <Button variant="outline" className="border-purple-500 text-purple-600 hover:bg-purple-50">
+                <Bot className="w-4 h-4 mr-2" />
+                Content Bot
+              </Button>
+            </Link>
             <Link to={createPageUrl("NewsAdmin")}>
               <Button variant="outline">
                 <Newspaper className="w-4 h-4 mr-2" />
