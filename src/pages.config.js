@@ -30,6 +30,8 @@ import BarTavernPOS from './pages/BarTavernPOS';
 import GroceryStorePOS from './pages/GroceryStorePOS';
 import CBDStorePOS from './pages/CBDStorePOS';
 import VapeStorePOS from './pages/VapeStorePOS';
+import MiniMarketPOS from './pages/MiniMarketPOS';
+import GiftShopPOS from './pages/GiftShopPOS';
 import __Layout from './Layout.jsx';
 
 
@@ -66,6 +68,8 @@ export const PAGES = {
     "GroceryStorePOS": GroceryStorePOS,
     "CBDStorePOS": CBDStorePOS,
     "VapeStorePOS": VapeStorePOS,
+    "MiniMarketPOS": MiniMarketPOS,
+    "GiftShopPOS": GiftShopPOS,
 }
 
 export const pagesConfig = {
