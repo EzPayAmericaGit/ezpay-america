@@ -50,6 +50,8 @@ export default function NewsAdmin() {
   const [analyzing, setAnalyzing] = useState(false);
   const [seoOptimizing, setSeoOptimizing] = useState(false);
   const [seoRecommendations, setSeoRecommendations] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("all");
 
   const queryClient = useQueryClient();
 
@@ -341,6 +343,17 @@ Optimize for:
     setBulkOptimizing(false);
     setOptimizeProgress({ current: 0, total: 0 });
   };
+
+  const filteredArticles = articles.filter(article => {
+    const matchesSearch = searchQuery === "" || 
+      article.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      article.excerpt?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      article.tags?.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+    
+    const matchesCategory = categoryFilter === "all" || article.category === categoryFilter;
+    
+    return matchesSearch && matchesCategory;
+  });
 
   return (
     <div className="min-h-screen bg-gray-50 py-24 px-4">
@@ -638,17 +651,46 @@ Optimize for:
                         onChange={async (e) => {
                           const file = e.target.files?.[0];
                           if (!file) return;
+                          
+                          // Validate file type
+                          if (!file.type.startsWith('image/')) {
+                            alert('Please select an image file');
+                            return;
+                          }
+                          
+                          // Validate file size (max 5MB)
+                          if (file.size > 5 * 1024 * 1024) {
+                            alert('Image size must be less than 5MB');
+                            return;
+                          }
+                          
                           setUploading(true);
-                          const { file_url } = await base44.integrations.Core.UploadFile({ file });
-                          setFormData({...formData, image: file_url});
-                          setUploading(false);
+                          try {
+                            const { file_url } = await base44.integrations.Core.UploadFile({ file });
+                            setFormData({...formData, image: file_url});
+                          } catch (error) {
+                            alert('Failed to upload image. Please try again.');
+                          } finally {
+                            setUploading(false);
+                          }
                         }}
                       />
                     </div>
                   </div>
                   
                   {formData.image && (
-                    <img src={formData.image} alt={`Preview image for article: ${formData.title || 'news article'}`} className="mt-3 h-32 object-cover rounded" loading="lazy" />
+                    <div className="mt-3 relative inline-block">
+                      <img src={formData.image} alt={`Preview image for article: ${formData.title || 'news article'}`} className="h-32 object-cover rounded" loading="lazy" />
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="destructive"
+                        className="absolute top-1 right-1"
+                        onClick={() => setFormData({...formData, image: ""})}
+                      >
+                        Remove
+                      </Button>
+                    </div>
                   )}
                 </div>
                 {/* SEO Section */}
@@ -829,13 +871,49 @@ Optimize for:
           </Card>
         )}
 
+        {/* Search and Filter */}
+        {!isEditing && articles.length > 0 && (
+          <Card className="mb-6">
+            <CardContent className="p-4">
+              <div className="flex gap-4">
+                <div className="flex-1">
+                  <Input
+                    placeholder="Search articles by title, content, or tags..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="h-10"
+                  />
+                </div>
+                <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                  <SelectTrigger className="w-48">
+                    <SelectValue placeholder="All Categories" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Categories</SelectItem>
+                    {categories.map(cat => (
+                      <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              {(searchQuery || categoryFilter !== "all") && (
+                <p className="text-sm text-gray-500 mt-2">
+                  Found {filteredArticles.length} of {articles.length} articles
+                </p>
+              )}
+            </CardContent>
+          </Card>
+        )}
+
         <div className="space-y-4">
           {isLoading ? (
             <p className="text-center text-gray-500">Loading...</p>
           ) : articles.length === 0 ? (
             <p className="text-center text-gray-500">No articles yet.</p>
+          ) : filteredArticles.length === 0 ? (
+            <p className="text-center text-gray-500">No articles match your search.</p>
           ) : (
-            articles.map(article => (
+            filteredArticles.map(article => (
               <Card key={article.id} className={!article.published ? "opacity-60" : ""}>
                 <CardContent className="p-4 flex items-center gap-4">
                   {article.image && (
