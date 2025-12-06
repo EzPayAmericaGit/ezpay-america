@@ -22,7 +22,18 @@ const navigationItems = [
     url: createPageUrl("EzPayPOSHome"),
     submenu: [
       { title: "Retail POS", url: createPageUrl("RetailPOS") },
-      { title: "Restaurant POS", url: createPageUrl("RestaurantPOS") }
+      { title: "Restaurant POS", url: createPageUrl("RestaurantPOS") },
+      { title: "Cafe & Coffee Shops", url: createPageUrl("CoffeePOS") },
+      { title: "Bagel Shops", url: createPageUrl("BagelShopPOS") },
+      { title: "Food Trucks", url: createPageUrl("FoodTruckPOS") },
+      { title: "Deli Shops", url: createPageUrl("DeliShopPOS") },
+      { title: "Bars & Taverns", url: createPageUrl("BarTavernPOS") },
+      { title: "Grocery Stores", url: createPageUrl("GroceryStorePOS") },
+      { title: "CBD Stores", url: createPageUrl("CBDStorePOS") },
+      { title: "Vape Stores", url: createPageUrl("VapeStorePOS") },
+      { title: "Mini Markets", url: createPageUrl("MiniMarketPOS") },
+      { title: "Liquor Stores", url: createPageUrl("LiquorStorePOS") },
+      { title: "Gift Shops", url: createPageUrl("GiftShopPOS") }
     ]
   },
   { title: "Quiz", url: createPageUrl("Quiz") },
