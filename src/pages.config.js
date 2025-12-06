@@ -21,6 +21,9 @@ import ApplicationTracker from './pages/ApplicationTracker';
 import AdminDashboard from './pages/AdminDashboard';
 import Sitemap from './pages/Sitemap';
 import ContentBot from './pages/ContentBot';
+import CoffeePOS from './pages/CoffeePOS';
+import FoodTruckPOS from './pages/FoodTruckPOS';
+import LiquorStorePOS from './pages/LiquorStorePOS';
 import __Layout from './Layout.jsx';
 
 
@@ -48,6 +51,9 @@ export const PAGES = {
     "AdminDashboard": AdminDashboard,
     "Sitemap": Sitemap,
     "ContentBot": ContentBot,
+    "CoffeePOS": CoffeePOS,
+    "FoodTruckPOS": FoodTruckPOS,
+    "LiquorStorePOS": LiquorStorePOS,
 }
 
 export const pagesConfig = {
