@@ -590,7 +590,7 @@ Optimize for:
                   </div>
                   
                   {formData.image && (
-                    <img src={formData.image} alt="Preview" className="mt-3 h-32 object-cover rounded" />
+                    <img src={formData.image} alt={`Preview image for article: ${formData.title || 'news article'}`} className="mt-3 h-32 object-cover rounded" loading="lazy" />
                   )}
                 </div>
                 {/* SEO Section */}
@@ -699,7 +699,7 @@ Optimize for:
               <Card key={article.id} className={!article.published ? "opacity-60" : ""}>
                 <CardContent className="p-4 flex items-center gap-4">
                   {article.image && (
-                    <img src={article.image} alt="" className="w-20 h-14 object-cover rounded" />
+                    <img src={article.image} alt={`Thumbnail for ${article.title}`} className="w-20 h-14 object-cover rounded" loading="lazy" width="80" height="56" />
                   )}
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold truncate">{article.title}</h3>

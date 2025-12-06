@@ -32,9 +32,12 @@ export default function AdditionalOffersSection() {
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-br from-amber-400 to-orange-500 rounded-3xl transform rotate-3"></div>
               <img
-                src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop"
-                alt="Payment Solutions"
+                src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop&q=80&auto=format"
+                alt="EzPay America comprehensive payment processing solutions and POS systems for businesses"
                 className="relative rounded-3xl shadow-2xl"
+                loading="lazy"
+                width="800"
+                height="600"
               />
             </div>
           </motion.div>

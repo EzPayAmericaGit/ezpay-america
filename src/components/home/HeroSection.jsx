@@ -79,8 +79,11 @@ export default function HeroSection() {
             <div className="relative rounded-3xl overflow-hidden shadow-2xl">
               <img
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/f9e2bc49c_BUSINESS.jpg"
-                alt="Payment Processing"
+                alt="Modern payment processing terminal and POS system for retail and restaurant businesses"
                 className="w-full h-auto"
+                loading="eager"
+                width="800"
+                height="600"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
             </div>

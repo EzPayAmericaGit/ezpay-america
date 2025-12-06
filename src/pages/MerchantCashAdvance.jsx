@@ -190,9 +190,12 @@ export default function MerchantCashAdvance() {
             >
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                 <img
-                  src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&h=600&fit=crop"
-                  alt="Business owner reviewing merchant cash advance funding options for growth"
+                  src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&h=600&fit=crop&q=80&auto=format"
+                  alt="Business owner reviewing merchant cash advance funding options for growth and expansion with EzPay America"
                   className="w-full h-auto"
+                  loading="lazy"
+                  width="800"
+                  height="600"
                 />
               </div>
             </motion.div>

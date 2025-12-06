@@ -148,9 +148,12 @@ export default function News() {
                   <Card className="h-full border-none shadow-lg hover:shadow-2xl transition-all duration-300 group overflow-hidden">
                     <div className="relative overflow-hidden">
                       <img
-                        src={article.image || "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop"}
-                        alt={article.title}
+                        src={article.image ? `${article.image}${article.image.includes('unsplash') ? (article.image.includes('?') ? '&' : '?') + 'w=600&h=400&fit=crop&q=80&auto=format' : ''}` : "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop&q=80&auto=format"}
+                        alt={`${article.title} - EzPay America payment processing news and insights`}
                         className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
+                        width="600"
+                        height="400"
                       />
                       <div className="absolute top-4 left-4">
                         <span className="bg-amber-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
