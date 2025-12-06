@@ -20,6 +20,7 @@ import NewsArticle from './pages/NewsArticle';
 import ApplicationTracker from './pages/ApplicationTracker';
 import AdminDashboard from './pages/AdminDashboard';
 import Sitemap from './pages/Sitemap';
+import ContentBot from './pages/ContentBot';
 import __Layout from './Layout.jsx';
 
 
@@ -46,6 +47,7 @@ export const PAGES = {
     "ApplicationTracker": ApplicationTracker,
     "AdminDashboard": AdminDashboard,
     "Sitemap": Sitemap,
+    "ContentBot": ContentBot,
 }
 
 export const pagesConfig = {
