@@ -194,7 +194,7 @@ export default function VapeStorePOS() {
               className="relative"
             >
               <img
-                src="https://images.unsplash.com/photo-1591280063444-d3c514eb6e13?w=800&h=600&fit=crop"
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/933272163_VAPESHOPS.jpg"
                 alt="Vape shop with modern POS system"
                 className="w-full h-auto rounded-2xl shadow-2xl"
                 loading="lazy"
