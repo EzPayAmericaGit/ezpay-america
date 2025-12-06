@@ -122,8 +122,11 @@ export default function RetailPaymentSolutions() {
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                 <img
                   src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/3887a616c_AGoldEZPayPOS.png"
-                  alt="EzPay POS system for retail businesses with zero transaction fees"
+                  alt="EzPay POS system for retail businesses with zero transaction fees and integrated payment processing"
                   className="w-full h-auto"
+                  loading="lazy"
+                  width="800"
+                  height="600"
                 />
               </div>
             </motion.div>
@@ -207,8 +210,11 @@ export default function RetailPaymentSolutions() {
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                 <img
                   src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/3887a616c_AGoldEZPayPOS.png"
-                  alt="Free EzPay payment processing equipment including terminals and card readers"
+                  alt="Free EzPay payment processing equipment including terminals and card readers for retail businesses"
                   className="w-full h-auto"
+                  loading="lazy"
+                  width="800"
+                  height="600"
                 />
               </div>
             </motion.div>

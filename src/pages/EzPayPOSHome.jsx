@@ -70,8 +70,11 @@ export default function EzPayPOSHome() {
             <div className="relative">
               <img
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/3887a616c_AGoldEZPayPOS.png"
-                                      alt="EzPay POS iPad terminal with card reader for retail and restaurant businesses"
+                alt="EzPay POS iPad terminal with card reader for retail and restaurant businesses"
                 className="w-full h-auto rounded-2xl shadow-2xl"
+                loading="eager"
+                width="500"
+                height="400"
               />
             </div>
             <div className="relative">
@@ -79,6 +82,9 @@ export default function EzPayPOSHome() {
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/3887a616c_AGoldEZPayPOS.png"
                 alt="EzPay cloud-based point of sale system with touchscreen display"
                 className="w-full h-auto rounded-2xl shadow-2xl"
+                loading="eager"
+                width="500"
+                height="400"
               />
             </div>
           </motion.div>
@@ -144,6 +150,9 @@ export default function EzPayPOSHome() {
               src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/3887a616c_AGoldEZPayPOS.png"
               alt="EzPay POS software interface showing menu and order management features"
               className="w-full h-auto rounded-3xl shadow-2xl"
+              loading="lazy"
+              width="800"
+              height="600"
             />
           </motion.div>
         </div>
@@ -193,6 +202,9 @@ export default function EzPayPOSHome() {
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/3887a616c_AGoldEZPayPOS.png"
                 alt="EzPay POS retail features including inventory management and loyalty programs"
                 className="w-full h-auto rounded-2xl shadow-xl"
+                loading="lazy"
+                width="800"
+                height="600"
               />
             </motion.div>
           </div>
