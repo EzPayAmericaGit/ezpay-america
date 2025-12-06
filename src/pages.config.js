@@ -26,6 +26,8 @@ import FoodTruckPOS from './pages/FoodTruckPOS';
 import LiquorStorePOS from './pages/LiquorStorePOS';
 import BagelShopPOS from './pages/BagelShopPOS';
 import DeliShopPOS from './pages/DeliShopPOS';
+import BarTavernPOS from './pages/BarTavernPOS';
+import GroceryStorePOS from './pages/GroceryStorePOS';
 import __Layout from './Layout.jsx';
 
 
@@ -58,6 +60,8 @@ export const PAGES = {
     "LiquorStorePOS": LiquorStorePOS,
     "BagelShopPOS": BagelShopPOS,
     "DeliShopPOS": DeliShopPOS,
+    "BarTavernPOS": BarTavernPOS,
+    "GroceryStorePOS": GroceryStorePOS,
 }
 
 export const pagesConfig = {
