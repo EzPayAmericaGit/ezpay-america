@@ -67,65 +67,130 @@ export default function AdminDashboard() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: async ({ id, data, sendEmail, application }) => {
+    mutationFn: async ({ id, data, sendEmail, application, autoOnboard }) => {
+      const oldStatus = application.status;
       await base44.entities.MerchantApplication.update(id, data);
       
-      // Send email notification if status changed
-      if (sendEmail && application?.businessEmail) {
+      // Automated onboarding email sequence
+      if (sendEmail && application?.businessEmail && data.status !== oldStatus) {
         const statusMessages = {
-          approved: {
-            subject: "Your Merchant Application Has Been Approved!",
+          submitted: {
+            subject: "✓ Application Received - Next Steps",
             body: `Dear ${application.ownerFullName || 'Valued Merchant'},
 
-Congratulations! Your merchant application for ${application.legalBusinessName} has been approved.
+Thank you for submitting your merchant application for ${application.legalBusinessName}!
 
-Our team will be in contact with you shortly to complete the onboarding process and get your payment processing up and running.
+🎯 What Happens Next:
+1. Our underwriting team will review your application (1-2 business days)
+2. We may request additional documentation if needed
+3. Once approved, we'll schedule your onboarding call
+4. Your equipment will be shipped within 3-5 business days of approval
 
-If you have any questions, please call us at (865) 316-9625.
+📋 Your Application Summary:
+• Business: ${application.legalBusinessName}
+• DBA: ${application.dbaName || 'N/A'}
+• Submitted: ${new Date().toLocaleDateString()}
+• Status: Under Review
+
+📞 Questions? Call us at (865) 316-9625
+📧 Email: contact@ezpayamerica.com
+
+Track your application status anytime in your dashboard.
+
+Welcome to EzPay America!
+The EzPay Team`
+          },
+          approved: {
+            subject: "🎉 Approved! Welcome to EzPay America",
+            body: `Dear ${application.ownerFullName || 'Valued Merchant'},
+
+Congratulations! Your merchant application for ${application.legalBusinessName} has been APPROVED! 🎊
+
+🚀 Your Onboarding Steps:
+1. ✓ Application Approved
+2. → Equipment Shipping (3-5 business days)
+3. → Account Setup & Training
+4. → Start Processing Payments!
+
+📦 What to Expect:
+• Our onboarding specialist will contact you within 24 hours
+• Free equipment will ship to: ${application.applicationData?.businessPhysicalAddress || 'your business address'}
+• We'll schedule a 30-minute training session
+• You'll receive login credentials for your merchant portal
+
+💳 Your Benefits:
+✓ Zero transaction fees with our surcharge program
+✓ Next-day funding
+✓ 24/7 customer support
+✓ Free POS equipment
+✓ No long-term contracts
+
+📞 Questions? Your dedicated rep will call soon, or reach us at (865) 316-9625
 
 Thank you for choosing EzPay America!
-
-Best regards,
-The EzPay America Team`
+The EzPay Team`
           },
           declined: {
-            subject: "Update on Your Merchant Application",
+            subject: "Application Status Update - EzPay America",
             body: `Dear ${application.ownerFullName || 'Valued Merchant'},
 
-Thank you for your interest in EzPay America. After careful review of your application for ${application.legalBusinessName}, we regret to inform you that we are unable to approve your application at this time.
+Thank you for your interest in EzPay America and for submitting your application for ${application.legalBusinessName}.
 
-If you have any questions or would like to discuss this decision, please call us at (865) 316-9625.
+After careful review of your application, we regret to inform you that we are unable to approve your merchant account at this time.
 
-Thank you for considering EzPay America.
+📞 Want to Discuss?
+Our team is happy to discuss this decision and explore alternative solutions. Please call us at (865) 316-9625.
+
+We appreciate your interest in EzPay America.
 
 Best regards,
 The EzPay America Team`
           },
           documents_needed: {
-            subject: "Additional Documents Required for Your Application",
+            subject: "⚠️ Action Required: Additional Documents Needed",
             body: `Dear ${application.ownerFullName || 'Valued Merchant'},
 
-Thank you for submitting your merchant application for ${application.legalBusinessName}.
+We're reviewing your merchant application for ${application.legalBusinessName} and need additional documentation to proceed.
 
-To continue processing your application, we need additional documentation. Please log in to your account or contact us at (865) 316-9625 to discuss what documents are needed.
+📋 Documents Needed:
+${application.notes ? application.notes.split('\n').filter(line => line.includes('missing') || line.includes('need')).join('\n') : 'Please contact us for details'}
 
-We appreciate your prompt attention to this matter.
+📤 How to Submit:
+1. Log in to your application dashboard
+2. Upload required documents
+3. Or email them to: documents@ezpayamerica.com
 
-Best regards,
-The EzPay America Team`
+⏰ Timeline:
+Please submit within 5 business days to avoid application expiration.
+
+📞 Need Help? Call (865) 316-9625
+
+Thank you for your prompt attention!
+The EzPay Team`
           },
           under_review: {
-            subject: "Your Application is Under Review",
+            subject: "📊 Application Under Review - EzPay America",
             body: `Dear ${application.ownerFullName || 'Valued Merchant'},
 
-Your merchant application for ${application.legalBusinessName} is now under review by our underwriting team.
+Good news! Your merchant application for ${application.legalBusinessName} is now under review by our underwriting team.
 
-We will notify you once a decision has been made. This typically takes 1-2 business days.
+⏱️ What to Expect:
+• Review typically takes 1-2 business days
+• We may contact you if additional information is needed
+• You'll receive an email notification with our decision
 
-If you have any questions, please call us at (865) 316-9625.
+📱 Track Your Application:
+Log in to your dashboard anytime to check status.
 
-Best regards,
-The EzPay America Team`
+💡 In the Meantime:
+• Review our merchant agreement (link will be sent upon approval)
+• Prepare your business location for equipment installation
+• Think about any questions for your onboarding specialist
+
+📞 Questions? Call (865) 316-9625
+
+Thank you for your patience!
+The EzPay Team`
           }
         };
 
@@ -138,6 +203,35 @@ The EzPay America Team`
           });
         }
       }
+
+      // Auto-onboarding sequence for approved applications
+      if (autoOnboard && data.status === 'approved' && application?.businessEmail) {
+        // Schedule follow-up emails
+        setTimeout(async () => {
+          await base44.integrations.Core.SendEmail({
+            to: application.businessEmail,
+            subject: "Day 1: Your EzPay Equipment is On The Way! 📦",
+            body: `Hi ${application.ownerFullName},
+
+Your free payment processing equipment has been shipped!
+
+📦 Tracking Info:
+We'll send tracking details within 24 hours.
+
+📚 Prepare for Success:
+• Watch our quick start video: [link]
+• Download the merchant app: [link]
+• Review processing best practices: [link]
+
+Your onboarding specialist will contact you soon to schedule training.
+
+Questions? Call (865) 316-9625
+
+Excited to have you on board!
+The EzPay Team`
+          });
+        }, 86400000); // 24 hours
+      }
     },
     onSuccess: () => queryClient.invalidateQueries(['adminApplications'])
   });
@@ -149,70 +243,108 @@ The EzPay America Team`
       const appData = application.applicationData || {};
       
       const result = await base44.integrations.Core.InvokeLLM({
-        prompt: `You are a merchant underwriting AI assistant for EzPay America. Analyze this merchant application and provide a risk assessment.
+        prompt: `You are an advanced merchant underwriting AI for EzPay America with expertise in payment processing risk analysis, fraud detection, and business credit evaluation.
 
-Application Details:
-- Business Name: ${application.legalBusinessName}
+Analyze this merchant application using industry best practices and provide a comprehensive risk assessment:
+
+BUSINESS PROFILE:
+- Legal Name: ${application.legalBusinessName}
 - DBA: ${application.dbaName || 'N/A'}
 - Owner: ${application.ownerFullName || 'N/A'}
 - Business Type: ${appData.businessMarketType || 'N/A'}
-- Formation Type: ${appData.businessFormationType || 'N/A'}
-- Years in Business: ${appData.dateBusinessStarted ? Math.floor((Date.now() - new Date(appData.dateBusinessStarted).getTime()) / (365.25 * 24 * 60 * 60 * 1000)) : 'Unknown'}
-- Number of Locations: ${appData.numberOfLocations || '1'}
-- Currently Accepts Cards: ${appData.currentlyAcceptCards || 'No'}
+- Formation: ${appData.businessFormationType || 'N/A'}
+- Years Operating: ${appData.dateBusinessStarted ? Math.floor((Date.now() - new Date(appData.dateBusinessStarted).getTime()) / (365.25 * 24 * 60 * 60 * 1000)) : 'Unknown'}
+- Locations: ${appData.numberOfLocations || '1'}
+- Current Processor: ${appData.currentlyAcceptCards === 'yes' ? appData.currentProcessorName : 'None'}
+
+BUSINESS OPERATIONS:
 - Products/Services: ${appData.productsDescription || 'N/A'}
 - Order Methods: ${appData.orderMethod?.join(', ') || 'N/A'}
-- Delivery Timeframe: ${appData.deliveryTimeframe || 'N/A'}
-- Geographic Areas: ${appData.geographicAreas || 'N/A'}
-- International Card %: ${appData.internationalCardPercentage || '0'}%
-- Seasonal Business: ${appData.isSeasonal || 'No'}
+- Delivery: ${appData.deliveryTimeframe || 'N/A'}
+- Geographic Reach: ${appData.geographicAreas || 'N/A'}
+- International Cards: ${appData.internationalCardPercentage || '0'}%
+- Seasonal: ${appData.isSeasonal || 'No'}
 - Payment Timing: ${appData.paymentTiming || 'N/A'}
 - Cancellation Policy: ${appData.cancellationPolicy || 'N/A'}
 
-Documents Uploaded:
-- Voided Check: ${application.voidedCheckUrl ? 'Yes' : 'No'}
-- Driver's License: ${application.driversLicenseUrl ? 'Yes' : 'No'}
+PROCESSING DETAILS:
+- Avg Ticket: $${appData.averageTicket || 'N/A'}
+- Max Ticket: $${appData.largestTicket || 'N/A'}
+- Monthly Volume: $${appData.monthlyVolume || 'N/A'}
+- Annual Volume: $${appData.annualVolume || 'N/A'}
+- Card Present: ${appData.percentageSwiped || 'N/A'}%
+- Keyed: ${appData.percentageKeyed || 'N/A'}%
+- Internet: ${appData.percentageInternet || 'N/A'}%
 
-DocuSign Status: ${application.docusignStatus || 'Pending'}
+COMPLIANCE & DOCUMENTATION:
+- Voided Check: ${application.voidedCheckUrl ? '✓' : '✗ MISSING'}
+- Driver's License: ${application.driversLicenseUrl ? '✓' : '✗ MISSING'}
+- DocuSign: ${application.docusignStatus || 'Pending'}
+- Additional Docs: ${application.additionalDocuments?.length || 0}
 
-Provide a comprehensive risk assessment including:
-1. Overall risk level (Low, Medium, High)
-2. Key risk factors identified
-3. Positive factors
-4. Missing documents or information
-5. Recommended action (Approve, Request More Info, Decline)
-6. Specific notes for the underwriter`,
+EVALUATE:
+1. Chargeback risk based on industry, delivery time, and refund policy
+2. Fraud indicators (high ticket amounts, international cards, etc.)
+3. Business stability and legitimacy
+4. Compliance with card network rules
+5. Documentation completeness
+
+Provide actionable recommendations for approval decision.`,
         response_json_schema: {
           type: "object",
           properties: {
-            riskLevel: { type: "string", enum: ["Low", "Medium", "High"] },
-            riskScore: { type: "number", description: "1-100 score" },
-            riskFactors: { type: "array", items: { type: "string" } },
-            positiveFactors: { type: "array", items: { type: "string" } },
-            missingItems: { type: "array", items: { type: "string" } },
-            recommendedAction: { type: "string", enum: ["Approve", "Request More Info", "Decline"] },
-            underwriterNotes: { type: "string" }
+            riskLevel: { type: "string", enum: ["Low", "Medium", "High", "Critical"] },
+            riskScore: { type: "number", description: "Risk score 1-100 (lower is better)" },
+            fraudScore: { type: "number", description: "Fraud likelihood 1-100" },
+            chargebackRisk: { type: "string", enum: ["Low", "Medium", "High"] },
+            riskFactors: { type: "array", items: { type: "string" }, description: "Specific risk concerns" },
+            positiveFactors: { type: "array", items: { type: "string" }, description: "Strengths in application" },
+            missingItems: { type: "array", items: { type: "string" }, description: "Required documents/info" },
+            complianceIssues: { type: "array", items: { type: "string" }, description: "Regulatory concerns" },
+            recommendedAction: { type: "string", enum: ["Approve", "Approve with Conditions", "Request More Info", "Decline"] },
+            suggestedConditions: { type: "array", items: { type: "string" }, description: "Conditions if approved" },
+            underwriterNotes: { type: "string", description: "Detailed notes for human review" },
+            confidenceLevel: { type: "number", description: "AI confidence in assessment 1-100" }
           }
         }
       });
 
       const aiNotes = `
-AI REVIEW (${new Date().toLocaleDateString()})
-================================
-Risk Level: ${result.riskLevel} (Score: ${result.riskScore}/100)
-Recommendation: ${result.recommendedAction}
+╔════════════════════════════════════════════════════════════╗
+║           AI UNDERWRITING ANALYSIS - ${new Date().toLocaleDateString()}            ║
+╚════════════════════════════════════════════════════════════╝
 
-Risk Factors:
-${result.riskFactors?.map(f => `• ${f}`).join('\n') || 'None identified'}
+📊 RISK ASSESSMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Overall Risk Level: ${result.riskLevel}
+Risk Score: ${result.riskScore}/100
+Fraud Score: ${result.fraudScore}/100
+Chargeback Risk: ${result.chargebackRisk}
+AI Confidence: ${result.confidenceLevel}%
 
-Positive Factors:
-${result.positiveFactors?.map(f => `• ${f}`).join('\n') || 'None identified'}
+✅ POSITIVE FACTORS
+${result.positiveFactors?.map(f => `  ✓ ${f}`).join('\n') || '  None identified'}
 
-Missing Items:
-${result.missingItems?.map(f => `• ${f}`).join('\n') || 'None'}
+⚠️  RISK FACTORS
+${result.riskFactors?.map(f => `  • ${f}`).join('\n') || '  None identified'}
 
-Notes: ${result.underwriterNotes}
-================================
+📋 MISSING DOCUMENTATION
+${result.missingItems?.length > 0 ? result.missingItems.map(f => `  ⚠ ${f}`).join('\n') : '  ✓ All documents present'}
+
+⚖️  COMPLIANCE ISSUES
+${result.complianceIssues?.length > 0 ? result.complianceIssues.map(f => `  ! ${f}`).join('\n') : '  ✓ No compliance issues detected'}
+
+🎯 RECOMMENDATION: ${result.recommendedAction}
+
+${result.suggestedConditions?.length > 0 ? `
+📝 SUGGESTED CONDITIONS
+${result.suggestedConditions.map(c => `  → ${c}`).join('\n')}
+` : ''}
+
+💭 UNDERWRITER NOTES
+${result.underwriterNotes}
+
+════════════════════════════════════════════════════════════
 ${application.notes || ''}`;
 
       await updateMutation.mutateAsync({
@@ -438,7 +570,7 @@ ${application.notes || ''}`;
                               <label className="text-sm font-medium mb-2 block">Update Status</label>
                               <Select 
                                 value={app.status} 
-                                onValueChange={(value) => updateMutation.mutate({ id: app.id, data: { status: value }, sendEmail: true, application: app })}
+                                onValueChange={(value) => updateMutation.mutate({ id: app.id, data: { status: value }, sendEmail: true, application: app, autoOnboard: value === 'approved' })}
                               >
                                 <SelectTrigger>
                                   <SelectValue />
