@@ -194,7 +194,7 @@ export default function LiquorStorePOS() {
               className="relative"
             >
               <img
-                src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800&h=600&fit=crop"
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/78ddbfc86_LIQUORSTORES.jpg"
                 alt="Liquor store with modern POS system"
                 className="w-full h-auto rounded-2xl shadow-2xl"
                 loading="lazy"
