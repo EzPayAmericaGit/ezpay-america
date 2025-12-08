@@ -57,10 +57,6 @@ export default function Layout({ children }) {
   ] : [])
 ];
 
-export default function Layout({ children }) {
-  const location = useLocation();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
   // Live Chat - Opens Crisp chat or alternative
   const openLiveChat = () => {
     if (window.$crisp) {
