@@ -41,8 +41,8 @@ Deno.serve(async (req) => {
                     <p><strong>Name:</strong> ${name}</p>
                     <p><strong>Email:</strong> ${email}</p>
                     <p><strong>Phone:</strong> ${phone || 'Not provided'}</p>
-                    <p><strong>Message:</strong></p>
-                    <p>${(message || '').replace(/\n/g, '<br>')}</p>
+                    <hr>
+                    <div style="white-space: pre-wrap; font-family: monospace;">${(message || '').replace(/\n/g, '<br>')}</div>
                 `
             }]
         };
