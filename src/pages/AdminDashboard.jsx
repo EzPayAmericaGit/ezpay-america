@@ -406,6 +406,12 @@ ${application.notes || ''}`;
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
           <div className="flex gap-2">
+            <Link to={createPageUrl("UserManagement")}>
+              <Button variant="outline" className="border-blue-500 text-blue-600 hover:bg-blue-50">
+                <Users className="w-4 h-4 mr-2" />
+                Users
+              </Button>
+            </Link>
             <Link to={createPageUrl("ContentBot")}>
               <Button variant="outline" className="border-purple-500 text-purple-600 hover:bg-purple-50">
                 <Bot className="w-4 h-4 mr-2" />
