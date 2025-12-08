@@ -218,10 +218,10 @@ export default function ApplyOnline() {
         applicationData: formData
       });
 
-      // Send email notification
-      await base44.functions.invoke('notifyApplicationSubmitted', {
+      // Send email notification (non-blocking)
+      base44.functions.invoke('notifyApplicationSubmitted', {
         applicationData: formData
-      });
+      }).catch(err => console.error('Email notification error:', err));
 
       setSubmitted(true);
     } catch (error) {
