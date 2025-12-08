@@ -52,8 +52,7 @@ export default function Layout({ children }) {
     { title: "Support", url: createPageUrl("Support") },
     { title: "News", url: createPageUrl("News") },
     ...(user?.role === 'admin' ? [
-      { title: "Admin Dashboard", url: createPageUrl("AdminDashboard") },
-      { title: "News Admin", url: createPageUrl("NewsAdmin") }
+      { title: "Admin Dashboard", url: createPageUrl("AdminDashboard") }
     ] : [])
   ], [user]);
 
