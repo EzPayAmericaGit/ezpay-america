@@ -3,20 +3,30 @@ import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Phone, Menu, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { base44 } from "@/api/base44Client";
 
-const navigationItems = [
-  { title: "Home", url: createPageUrl("Home") },
-  { 
-    title: "Services", 
-    url: createPageUrl("Services"),
-    submenu: [
-      { title: "Retail Merchants", url: createPageUrl("RetailMerchants") },
-      { title: "Restaurant Merchants", url: createPageUrl("RestaurantMerchants") },
-      { title: "Web Payment Pages", url: createPageUrl("WebPaymentPages") },
-      { title: "Get A Merchant Cash Advance", url: createPageUrl("MerchantCashAdvance") },
-      { title: "Retail Payment Solutions", url: createPageUrl("RetailPaymentSolutions") }
-    ]
-  },
+export default function Layout({ children }) {
+  const location = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [user, setUser] = useState(null);
+
+  React.useEffect(() => {
+    base44.auth.me().then(setUser).catch(() => setUser(null));
+  }, []);
+
+  const navigationItems = [
+    { title: "Home", url: createPageUrl("Home") },
+    { 
+      title: "Services", 
+      url: createPageUrl("Services"),
+      submenu: [
+        { title: "Retail Merchants", url: createPageUrl("RetailMerchants") },
+        { title: "Restaurant Merchants", url: createPageUrl("RestaurantMerchants") },
+        { title: "Web Payment Pages", url: createPageUrl("WebPaymentPages") },
+        { title: "Get A Merchant Cash Advance", url: createPageUrl("MerchantCashAdvance") },
+        { title: "Retail Payment Solutions", url: createPageUrl("RetailPaymentSolutions") }
+      ]
+    },
   { 
     title: "EzPay POS", 
     url: createPageUrl("EzPayPOSHome"),
@@ -41,7 +51,11 @@ const navigationItems = [
   { title: "Contact Us", url: createPageUrl("Contact") },
   { title: "Support", url: createPageUrl("Support") },
   { title: "News", url: createPageUrl("News") },
-  ];
+  ...(user?.role === 'admin' ? [
+    { title: "Admin Dashboard", url: createPageUrl("AdminDashboard") },
+    { title: "News Admin", url: createPageUrl("NewsAdmin") }
+  ] : [])
+];
 
 export default function Layout({ children }) {
   const location = useLocation();
