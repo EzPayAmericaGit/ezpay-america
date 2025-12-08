@@ -465,8 +465,16 @@ Optimize for:
 
         {isEditing && (
           <Card className="mb-8">
-            <CardHeader>
+            <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>{editingArticle ? "Edit Article" : "New Article"}</CardTitle>
+              <Button 
+                onClick={() => setShowAIGenerator(true)}
+                className="bg-purple-600 hover:bg-purple-700"
+                type="button"
+              >
+                <Wand2 className="w-4 h-4 mr-2" />
+                AI Generate Article
+              </Button>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
