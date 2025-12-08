@@ -361,7 +361,7 @@ Optimize for:
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">News Admin</h1>
           <div className="flex gap-2">
-            {!isEditing && (
+            {!isEditing ? (
               <>
                 <Button 
                   onClick={() => setIsEditing(true)}
@@ -398,6 +398,14 @@ Optimize for:
                   </Button>
                 )}
               </>
+            ) : (
+              <Button 
+                onClick={() => setShowAIGenerator(true)}
+                className="bg-purple-600 hover:bg-purple-700"
+              >
+                <Wand2 className="w-4 h-4 mr-2" />
+                AI Generate Article
+              </Button>
             )}
           </div>
         </div>
