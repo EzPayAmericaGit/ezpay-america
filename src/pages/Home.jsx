@@ -4,7 +4,6 @@ import HeroSection from "../components/home/HeroSection";
 import BenefitsSection from "../components/home/BenefitsSection";
 import SolutionsSection from "../components/home/SolutionsSection";
 import BusinessTypesSection from "../components/home/BusinessTypesSection";
-import TestimonialsSection from "../components/home/TestimonialsSection";
 import Footer from "../components/home/Footer";
 import OtherBenefitsSection from "../components/home/OtherBenefitsSection";
 import AdditionalOffersSection from "../components/home/AdditionalOffersSection";
@@ -26,7 +25,6 @@ export default function Home() {
       <RestaurantTypesSection />
       <OtherBenefitsSection />
       <AdditionalOffersSection />
-      <TestimonialsSection />
       <Footer />
     </div>
   );
