@@ -27,8 +27,8 @@ const supportOptions = [
     icon: Mail,
     title: "Email Support",
     description: "Send us your questions and we'll respond within 24 hours.",
-    action: "Send Email",
-    href: "mailto:contact@ezpayamerica.com",
+    action: "Contact Us",
+    href: createPageUrl("Contact"),
     color: "from-green-500 to-green-600"
   },
   {
