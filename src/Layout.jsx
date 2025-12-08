@@ -69,15 +69,15 @@ export default function Layout({ children }) {
           <div className="flex justify-between items-center h-20">
             {/* Logo */}
             <Link to={createPageUrl("Home")} className="flex items-center gap-3">
-              <img 
-                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/8eb2dd274_EZSMALL.png" 
-                alt="EzPay America - Zero-Fee Payment Processing Solutions"
-                className="w-12 h-12 object-contain"
-                style={{ filter: 'saturate(1.4) hue-rotate(-5deg) brightness(0.95)' }}
-                loading="eager"
-                width="48"
-                height="48"
-              />
+                                <img 
+                                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/8eb2dd274_EZSMALL.png" 
+                                  alt="EzPay America - Zero-Fee Payment Processing Solutions"
+                                  className="w-12 h-12 object-contain"
+                                  style={{ filter: 'saturate(1.4) hue-rotate(-5deg) brightness(0.95)' }}
+                                  loading="eager"
+                                  width="48"
+                                  height="48"
+                                />
               <div>
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-amber-600 to-amber-800 bg-clip-text text-transparent">
                   EzPay America
