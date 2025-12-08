@@ -45,6 +45,8 @@ export default function AdminDashboard() {
   const [expandedApp, setExpandedApp] = useState(null);
   const [aiReviewing, setAiReviewing] = useState(null);
   const [authStatus, setAuthStatus] = useState({ loading: true, isAdmin: false });
+  const [aiIdea, setAiIdea] = useState("");
+  const [aiGenerating, setAiGenerating] = useState(false);
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -377,6 +379,86 @@ ${application.notes || ''}`;
     declined: applications.filter(a => a.status === 'declined').length
   };
 
+  const generateNewsArticle = async () => {
+    if (!aiIdea.trim()) return;
+    setAiGenerating(true);
+
+    try {
+      const categories = [
+        "Mobile Payments",
+        "Restaurant Tips", 
+        "POS Systems",
+        "Merchant Services",
+        "Business News",
+        "Industry Insights",
+        "Technology",
+        "Industry News",
+        "Future Trends"
+      ];
+
+      const articleResult = await base44.integrations.Core.InvokeLLM({
+        prompt: `You are a professional content writer for EzPay America, a payment processing company. 
+        
+Create a complete blog article based on this idea: "${aiIdea}"
+
+The article should be:
+- Professional and informative
+- Relevant to payment processing, merchant services, POS systems, or business finance
+- Around 400-600 words
+- Engaging and valuable to business owners
+
+Provide a complete article with all metadata.`,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            title: { type: "string", description: "Catchy, SEO-friendly title" },
+            excerpt: { type: "string", description: "2-3 sentence summary" },
+            content: { type: "string", description: "Full article content, 400-600 words" },
+            category: { type: "string", enum: categories, description: "Best fitting category" },
+            tags: { type: "array", items: { type: "string" }, description: "5-8 relevant tags" },
+            slug: { type: "string", description: "URL-friendly slug" },
+            meta_title: { type: "string", description: "SEO title, max 60 chars" },
+            meta_description: { type: "string", description: "SEO description, max 155 chars" },
+            meta_keywords: { type: "string", description: "Comma-separated keywords" },
+            image_prompt: { type: "string", description: "Detailed prompt for generating a relevant professional image" }
+          }
+        }
+      });
+
+      const { url: imageUrl } = await base44.integrations.Core.GenerateImage({
+        prompt: `High-quality professional photograph for a business blog. ${articleResult.image_prompt}. Style: photorealistic, well-lit, corporate, modern. Clean composition, professional lighting. No text, no logos, no watermarks.`
+      });
+
+      const wordCount = articleResult.content?.split(/\s+/).length || 0;
+      const readingTime = Math.max(1, Math.ceil(wordCount / 200));
+
+      await base44.entities.NewsArticle.create({
+        title: articleResult.title || "",
+        slug: articleResult.slug || "",
+        excerpt: articleResult.excerpt || "",
+        content: articleResult.content || "",
+        image: imageUrl || "",
+        category: articleResult.category || "",
+        tags: articleResult.tags || [],
+        content_score: 75,
+        sentiment: "positive",
+        reading_time: readingTime,
+        published: false,
+        meta_title: articleResult.meta_title || "",
+        meta_description: articleResult.meta_description || "",
+        meta_keywords: articleResult.meta_keywords || ""
+      });
+
+      setAiIdea("");
+      alert("News article generated successfully! Check NewsAdmin to review and publish.");
+    } catch (error) {
+      console.error("AI generation error:", error);
+      alert("Failed to generate article. Please try again.");
+    } finally {
+      setAiGenerating(false);
+    }
+  };
+
   if (authStatus.loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -469,6 +551,53 @@ ${application.notes || ''}`;
             </CardContent>
           </Card>
         </div>
+
+        {/* AI News Generator - Always Visible */}
+        <Card className="mb-8 border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-purple-700">
+              <Wand2 className="w-5 h-5" />
+              AI News Article Generator
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-gray-600 mb-4">
+              Describe your article idea and AI will generate a complete article with an image.
+            </p>
+            <Textarea
+              value={aiIdea}
+              onChange={(e) => setAiIdea(e.target.value)}
+              placeholder="Example: Write about the benefits of contactless payments for small restaurants, focusing on speed and hygiene..."
+              rows={3}
+              className="mb-4"
+            />
+            <div className="flex gap-2">
+              <Button
+                onClick={generateNewsArticle}
+                disabled={aiGenerating || !aiIdea.trim()}
+                className="bg-purple-600 hover:bg-purple-700"
+              >
+                {aiGenerating ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Generating Article & Image...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-4 h-4 mr-2" />
+                    Generate Article
+                  </>
+                )}
+              </Button>
+              <Link to={createPageUrl("NewsAdmin")}>
+                <Button variant="outline">
+                  <Newspaper className="w-4 h-4 mr-2" />
+                  View All Articles
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Filters */}
         <div className="flex gap-4 mb-6">
