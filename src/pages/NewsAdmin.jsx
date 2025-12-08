@@ -361,7 +361,7 @@ Optimize for:
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">News Admin</h1>
           <div className="flex gap-2">
-            {!isEditing && articles.length > 0 && (
+            {articles.length > 0 && (
               <Button 
                 onClick={bulkOptimizeSEO}
                 disabled={bulkOptimizing}
@@ -381,23 +381,24 @@ Optimize for:
                 )}
               </Button>
             )}
+            <Button 
+              onClick={() => {
+                setShowAIGenerator(true);
+                setIsEditing(false);
+              }}
+              className="bg-purple-600 hover:bg-purple-700"
+            >
+              <Wand2 className="w-4 h-4 mr-2" />
+              AI Generate Article
+            </Button>
             {!isEditing && (
-              <>
-                <Button 
-                  onClick={() => setShowAIGenerator(true)}
-                  className="bg-purple-600 hover:bg-purple-700"
-                >
-                  <Wand2 className="w-4 h-4 mr-2" />
-                  AI Generate
-                </Button>
-                <Button 
-                  onClick={() => setIsEditing(true)}
-                  className="bg-amber-500 hover:bg-amber-600"
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  New Article
-                </Button>
-              </>
+              <Button 
+                onClick={() => setIsEditing(true)}
+                className="bg-amber-500 hover:bg-amber-600"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Add Manually
+              </Button>
             )}
           </div>
         </div>
