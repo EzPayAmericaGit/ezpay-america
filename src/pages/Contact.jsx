@@ -41,19 +41,11 @@ export default function Contact() {
     setIsSubmitting(true);
     
     try {
-      await base44.integrations.Core.SendEmail({
-        to: "contact@ezpayamerica.com",
-        subject: `Contact Form: ${formData.name}`,
-        body: `
-New contact form submission from the website.
-
-NAME: ${formData.name}
-EMAIL: ${formData.email}
-PHONE: ${formData.phone || 'Not provided'}
-
-MESSAGE:
-${formData.message}
-        `.trim()
+      await base44.functions.invoke('sendContactEmail', {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        message: formData.message
       });
       
       setSubmitted(true);
