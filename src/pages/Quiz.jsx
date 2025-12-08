@@ -99,16 +99,13 @@ export default function Quiz() {
     e.preventDefault();
     setIsSubmitting(true);
     
-    await base44.integrations.Core.SendEmail({
-      to: "contact@ezpayamerica.com",
-      subject: `Quiz Lead: ${formData.businessName || 'New Lead'}`,
-      body: `
-New quiz completion and contact form submission.
-
-CONTACT INFORMATION:
-- Name: ${formData.firstName} ${formData.lastName}
-- Email: ${formData.email}
-- Phone: ${formData.phone}
+    try {
+      const response = await base44.functions.invoke('sendContactEmail', {
+        name: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        phone: formData.phone,
+        message: `
+BUSINESS INFORMATION:
 - Business Name: ${formData.businessName}
 - State: ${formData.state}
 
@@ -123,11 +120,20 @@ QUIZ RESPONSES:
 
 MESSAGE:
 ${formData.message || 'No additional message'}
-      `.trim()
-    });
-    
-    setIsSubmitting(false);
-    setContactSubmitted(true);
+        `.trim()
+      });
+      
+      if (response.data?.error) {
+        throw new Error(response.data.error);
+      }
+      
+      setContactSubmitted(true);
+    } catch (error) {
+      console.error("Quiz form error:", error);
+      alert(`Error: ${error.message || "Failed to send message"}. Please call us at (865) 316-9625.`);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
