@@ -52,26 +52,24 @@ export default function FreeDemo() {
     e.preventDefault();
     setIsSubmitting(true);
     
-    await base44.integrations.Core.SendEmail({
-      to: "contact@ezpayamerica.com",
-      subject: `Free Demo Request: ${formData.businessName}`,
-      body: `
-New free demo request from the website.
-
-CONTACT INFORMATION:
-- Name: ${formData.contactName}
-- Email: ${formData.email}
-- Phone: ${formData.phone}
-
-BUSINESS INFORMATION:
-- Business Name: ${formData.businessName}
-- Business Address: ${formData.businessAddress}
-- Time Zone: ${formData.timeZone}
-      `.trim()
-    });
-    
-    setIsSubmitting(false);
-    setSubmitted(true);
+    try {
+      await base44.entities.DemoRequest.create({
+        contactName: formData.contactName,
+        email: formData.email,
+        phone: formData.phone,
+        businessName: formData.businessName,
+        businessAddress: formData.businessAddress,
+        timeZone: formData.timeZone,
+        status: "pending"
+      });
+      
+      setSubmitted(true);
+    } catch (error) {
+      console.error("Error submitting demo request:", error);
+      alert("Error submitting request. Please try again or call (865) 316-9625.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (submitted) {

@@ -205,7 +205,6 @@ export default function ApplyOnline() {
     setIsSubmitting(true);
 
     try {
-      // Save application to database
       await base44.entities.MerchantApplication.create({
         legalBusinessName: formData.legalBusinessName,
         dbaName: formData.dbaName,
@@ -217,34 +216,6 @@ export default function ApplyOnline() {
         voidedCheckUrl: formData.voidedCheckUrl || null,
         additionalDocuments: formData.additionalDocuments || [],
         applicationData: formData
-      });
-
-      // Send admin notification email
-      await base44.integrations.Core.SendEmail({
-        to: "contact@ezpayamerica.com",
-        subject: `New Merchant Application: ${formData.legalBusinessName}`,
-        body: `
-A new merchant application has been submitted.
-
-BUSINESS INFORMATION:
-- Legal Business Name: ${formData.legalBusinessName}
-- DBA: ${formData.dbaName}
-- Business Type: ${formData.businessMarketType}
-- Phone: ${formData.businessPhone}
-- Email: ${formData.businessEmail}
-
-OWNER INFORMATION:
-- Name: ${formData.ownerFullName}
-- Title: ${formData.ownerTitle}
-- Phone: ${formData.ownerPersonalPhone}
-
-PROCESSING DETAILS:
-- Monthly Volume: $${formData.monthlyVolume}
-- Average Ticket: $${formData.averageTicket}
-- Annual Volume: $${formData.annualVolume}
-
-Please log in to the admin dashboard to review this application.
-        `.trim()
       });
 
       setSubmitted(true);
