@@ -968,7 +968,7 @@ Optimize for:
                         </Badge>
                       )}
                     </div>
-                    <div className="flex items-center gap-2 mt-1">
+                    <div className="flex items-center gap-2 mt-1 flex-wrap">
                       <span className="text-sm text-gray-500">{article.category}</span>
                       {!article.published && article.scheduled_publish_date && (
                         <span className="text-xs text-blue-600">
