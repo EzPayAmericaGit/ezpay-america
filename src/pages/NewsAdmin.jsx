@@ -972,7 +972,13 @@ Optimize for:
                       <span className="text-sm text-gray-500">{article.category}</span>
                       {!article.published && article.scheduled_publish_date && (
                         <span className="text-xs text-blue-600">
-                          {new Date(article.scheduled_publish_date).toLocaleString()}
+                          {(() => {
+                            try {
+                              return new Date(article.scheduled_publish_date).toLocaleString();
+                            } catch {
+                              return article.scheduled_publish_date;
+                            }
+                          })()}
                         </span>
                       )}
                       {article.content_score && (
