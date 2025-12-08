@@ -36,9 +36,9 @@ export default function RetailMerchants() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Retail Merchant Solutions"
-        description="Payment processing solutions for retail businesses. Accept all payment types, PCI compliant, fast setup, and free equipment through our Free Equipment Program."
-        keywords="retail payment processing, retail merchant services, store credit card processing, retail POS, boutique payment solutions"
+        title="Retail Payment Processing & POS Solutions for Stores"
+        description="Transform your retail business with EzPay America's zero-fee payment processing. Accept all payment types - credit, debit, contactless, mobile. Free POS equipment, no contracts, 24-hour approval. Perfect for boutiques, grocery stores, gift shops, and retail chains nationwide."
+        keywords="retail payment processing, retail merchant services, store credit card processing, retail POS system, boutique payment solutions, grocery store payments, gift shop POS, retail merchant account, contactless payments retail, free retail POS equipment"
       />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500">

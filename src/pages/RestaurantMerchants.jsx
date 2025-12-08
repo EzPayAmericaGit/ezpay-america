@@ -36,9 +36,9 @@ export default function RestaurantMerchants() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Restaurant Merchant Solutions"
-        description="Payment processing for restaurants, cafes, food trucks, and delivery services. Tableside ordering, tip adjustment, split checks, and online ordering integration."
-        keywords="restaurant payment processing, cafe merchant services, food truck payments, restaurant POS, hospitality payment solutions"
+        title="Restaurant Payment Processing & POS Systems | Food Service Solutions"
+        description="Specialized payment processing for restaurants, cafes, food trucks, and food service businesses. Features tableside ordering, tip adjustment, split checks, kitchen integration, and online ordering. Zero transaction fees, free equipment, 24/7 support. Built for hospitality."
+        keywords="restaurant payment processing, cafe merchant services, food truck payments, restaurant POS system, hospitality payment solutions, tableside payment, tip adjustment, split check POS, online ordering integration, delivery payment processing, quick service POS"
       />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500">
