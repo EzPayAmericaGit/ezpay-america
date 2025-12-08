@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Plus, Pencil, Trash2, Eye, EyeOff, Upload, Loader2, Sparkles, RefreshCw, Tags, BarChart3, Wand2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Eye, EyeOff, Upload, Loader2, Sparkles, RefreshCw, Tags, BarChart3, Wand2, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const categories = [
@@ -43,6 +43,7 @@ export default function NewsAdmin() {
     sentiment: "",
     reading_time: null,
     published: false,
+    scheduled_publish_date: "",
     meta_title: "",
     meta_description: "",
     meta_keywords: ""
@@ -82,7 +83,7 @@ export default function NewsAdmin() {
   });
 
   const resetForm = () => {
-    setFormData({ title: "", slug: "", excerpt: "", content: "", image: "", category: "", tags: [], content_score: null, sentiment: "", reading_time: null, published: false, meta_title: "", meta_description: "", meta_keywords: "" });
+    setFormData({ title: "", slug: "", excerpt: "", content: "", image: "", category: "", tags: [], content_score: null, sentiment: "", reading_time: null, published: false, scheduled_publish_date: "", meta_title: "", meta_description: "", meta_keywords: "" });
     setIsEditing(false);
     setEditingArticle(null);
   };
@@ -100,6 +101,7 @@ export default function NewsAdmin() {
       sentiment: article.sentiment || "",
       reading_time: article.reading_time || null,
       published: article.published || false,
+      scheduled_publish_date: article.scheduled_publish_date || "",
       meta_title: article.meta_title || "",
       meta_description: article.meta_description || "",
       meta_keywords: article.meta_keywords || ""
@@ -223,6 +225,7 @@ Provide a complete article with all metadata.`,
         sentiment: "positive",
         reading_time: readingTime,
         published: false,
+        scheduled_publish_date: "",
         meta_title: articleResult.meta_title || "",
         meta_description: articleResult.meta_description || "",
         meta_keywords: articleResult.meta_keywords || ""
@@ -867,12 +870,32 @@ Optimize for:
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 pt-4">
-                  <Switch
-                    checked={formData.published}
-                    onCheckedChange={(v) => setFormData({...formData, published: v})}
-                  />
-                  <label className="text-sm font-medium">Published</label>
+                <div className="border-t pt-4 mt-4">
+                  <h3 className="font-semibold text-gray-900 mb-3">Publishing</h3>
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2">
+                      <Switch
+                        checked={formData.published}
+                        onCheckedChange={(v) => setFormData({...formData, published: v, scheduled_publish_date: v ? "" : formData.scheduled_publish_date})}
+                      />
+                      <label className="text-sm font-medium">Publish Now</label>
+                    </div>
+                    
+                    {!formData.published && (
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Schedule Publish Date & Time</label>
+                        <Input
+                          type="datetime-local"
+                          value={formData.scheduled_publish_date}
+                          onChange={(e) => setFormData({...formData, scheduled_publish_date: e.target.value})}
+                          min={new Date().toISOString().slice(0, 16)}
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                          Article will auto-publish at this time (leave empty for manual publishing)
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <div className="flex gap-2">
                   <Button type="submit" className="bg-amber-500 hover:bg-amber-600">
@@ -936,9 +959,22 @@ Optimize for:
                     <img src={article.image} alt={`Thumbnail for ${article.title}`} className="w-20 h-14 object-cover rounded" loading="lazy" width="80" height="56" />
                   )}
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold truncate">{article.title}</h3>
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-semibold truncate">{article.title}</h3>
+                      {!article.published && article.scheduled_publish_date && (
+                        <Badge className="bg-blue-100 text-blue-700 border-blue-300 text-xs flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          Scheduled
+                        </Badge>
+                      )}
+                    </div>
                     <div className="flex items-center gap-2 mt-1">
                       <span className="text-sm text-gray-500">{article.category}</span>
+                      {!article.published && article.scheduled_publish_date && (
+                        <span className="text-xs text-blue-600">
+                          {new Date(article.scheduled_publish_date).toLocaleString()}
+                        </span>
+                      )}
                       {article.content_score && (
                         <Badge variant="outline" className={`text-xs ${article.content_score >= 70 ? 'border-green-500 text-green-600' : article.content_score >= 40 ? 'border-amber-500 text-amber-600' : 'border-red-500 text-red-600'}`}>
                           Score: {article.content_score}
