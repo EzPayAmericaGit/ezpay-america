@@ -70,9 +70,9 @@ export default function Services() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <SEOHead 
-        title="Payment Processing Services & Merchant Solutions"
-        description="Comprehensive payment processing services from EzPay America: credit card processing, mobile payments, POS systems, e-commerce integration, ACH processing, and merchant cash advance. Zero fees, free equipment, 24/7 US support. Get approved in 24 hours."
-        keywords="payment processing services, credit card processing, mobile payment solutions, POS systems, e-commerce payments, ACH processing, merchant cash advance, payment gateway, gift card programs, merchant services USA"
+        title="Services"
+        description="EzPay America payment processing services including credit card processing, mobile payments, POS systems, e-commerce integration, and merchant cash advance."
+        keywords="credit card processing, mobile payments, POS systems, e-commerce payments, ACH processing, merchant cash advance, payment gateway"
       />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-500 to-orange-600 text-white">

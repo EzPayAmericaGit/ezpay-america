@@ -33,7 +33,6 @@ import VapeStorePOS from './pages/VapeStorePOS';
 import MiniMarketPOS from './pages/MiniMarketPOS';
 import GiftShopPOS from './pages/GiftShopPOS';
 import UserManagement from './pages/UserManagement';
-import BusinessCalculators from './pages/BusinessCalculators';
 import __Layout from './Layout.jsx';
 
 
@@ -73,11 +72,10 @@ export const PAGES = {
     "MiniMarketPOS": MiniMarketPOS,
     "GiftShopPOS": GiftShopPOS,
     "UserManagement": UserManagement,
-    "BusinessCalculators": BusinessCalculators,
 }
 
 export const pagesConfig = {
-    mainPage: "Services",
+    mainPage: "Home",
     Pages: PAGES,
     Layout: __Layout,
 };

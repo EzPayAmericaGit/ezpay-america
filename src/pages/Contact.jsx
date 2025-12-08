@@ -41,21 +41,16 @@ export default function Contact() {
     setIsSubmitting(true);
     
     try {
-      const response = await base44.functions.invoke('sendContactEmail', {
+      await base44.functions.invoke('sendContactEmail', {
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
         message: formData.message
       });
       
-      if (response.data?.error) {
-        throw new Error(response.data.error);
-      }
-      
       setSubmitted(true);
     } catch (error) {
-      console.error("Contact form error:", error);
-      alert(`Error: ${error.message || "Failed to send message"}. Please try calling us at (865) 316-9625 or emailing contact@ezpayamerica.com`);
+      alert("There was an error sending your message. Please try calling us at (865) 316-9625 or emailing contact@ezpayamerica.com");
     } finally {
       setIsSubmitting(false);
     }

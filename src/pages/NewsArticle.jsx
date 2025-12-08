@@ -109,28 +109,6 @@ export default function NewsArticlePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            {/* Video */}
-            {article.video_url && (
-              <div className="mb-8">
-                <div className="aspect-video rounded-lg overflow-hidden shadow-xl">
-                  {article.video_url.includes('youtube.com') || article.video_url.includes('youtu.be') ? (
-                    <iframe
-                      src={article.video_url.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/')}
-                      className="w-full h-full"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
-                  ) : (
-                    <video 
-                      src={article.video_url}
-                      controls
-                      className="w-full h-full"
-                    />
-                  )}
-                </div>
-              </div>
-            )}
-
             {/* Excerpt */}
             <p className="text-xl md:text-2xl text-gray-600 leading-relaxed mb-8 font-medium border-l-4 border-amber-500 pl-6">
               {article.excerpt}

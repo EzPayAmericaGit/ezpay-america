@@ -1,30 +1,38 @@
 import React from "react";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
+import { ArrowRight, Phone } from "lucide-react";
+
 import SEOHead from "../components/SEOHead";
 import HeroSection from "../components/home/HeroSection";
 import BenefitsSection from "../components/home/BenefitsSection";
+import OtherBenefitsSection from "../components/home/OtherBenefitsSection";
 import SolutionsSection from "../components/home/SolutionsSection";
 import BusinessTypesSection from "../components/home/BusinessTypesSection";
-import Footer from "../components/home/Footer";
-import OtherBenefitsSection from "../components/home/OtherBenefitsSection";
 import AdditionalOffersSection from "../components/home/AdditionalOffersSection";
+import TestimonialsSection from "../components/home/TestimonialsSection";
 import RestaurantTypesSection from "../components/home/RestaurantTypesSection";
+import ContactFormSection from "../components/home/ContactFormSection";
+import Footer from "../components/home/Footer";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Home - Zero-Fee Payment Processing & POS Systems"
-        description="Transform your business with EzPay America's zero-fee payment processing, state-of-the-art POS systems, and merchant services. Free equipment, 24/7 support, no contracts. Trusted by thousands of businesses nationwide."
-        keywords="payment processing, merchant services, POS system, credit card processing, zero fee processing, EzPay America, payment gateway, mobile payments, restaurant POS, retail POS, free equipment, no contracts"
+        title="Home"
+        description="EzPay America offers zero-fee payment processing, free POS systems, and merchant services. No monthly fees, no contracts, 24/7 US-based support."
+        keywords="payment processing, merchant services, zero fee processing, free POS system, credit card processing, EzPay America"
       />
-      
       <HeroSection />
       <BenefitsSection />
+      <OtherBenefitsSection />
       <SolutionsSection />
       <BusinessTypesSection />
-      <RestaurantTypesSection />
-      <OtherBenefitsSection />
       <AdditionalOffersSection />
+      <TestimonialsSection />
+      <RestaurantTypesSection />
+      <ContactFormSection />
       <Footer />
     </div>
   );

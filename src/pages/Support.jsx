@@ -27,8 +27,8 @@ const supportOptions = [
     icon: Mail,
     title: "Email Support",
     description: "Send us your questions and we'll respond within 24 hours.",
-    action: "Contact Us",
-    href: createPageUrl("Contact"),
+    action: "Send Email",
+    href: "mailto:contact@ezpayamerica.com",
     color: "from-green-500 to-green-600"
   },
   {
@@ -72,9 +72,9 @@ export default function Support() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <SEOHead 
-        title="24/7 Merchant Support Center | Payment Processing Help"
-        description="Expert support for your EzPay America merchant account, available 24/7. Get immediate help via phone at (865) 316-9625, email, or live chat. US-based support team ready to assist with payment processing, POS systems, troubleshooting, and account management."
-        keywords="EzPay support, merchant support 24/7, payment processing help, customer service, credit card processing support, POS system support, merchant account help, technical support merchants, US-based support, merchant services hotline"
+        title="Support Center"
+        description="Get 24/7 support for your EzPay America merchant account. Phone, email, and live chat support available. Call (865) 316-9625 for immediate assistance."
+        keywords="EzPay support, merchant support, payment processing help, 24/7 customer service, credit card processing support"
       />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-500 to-orange-600 text-white">

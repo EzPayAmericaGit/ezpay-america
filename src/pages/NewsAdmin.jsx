@@ -361,15 +361,28 @@ Optimize for:
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">News Admin</h1>
           <div className="flex gap-2">
-            {!isEditing ? (
+            {!isEditing && articles.length > 0 && (
+              <Button 
+                onClick={bulkOptimizeSEO}
+                disabled={bulkOptimizing}
+                variant="outline"
+                className="border-amber-500 text-amber-600 hover:bg-amber-50"
+              >
+                {bulkOptimizing ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Optimizing {optimizeProgress.current}/{optimizeProgress.total}
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Bulk Optimize SEO
+                  </>
+                )}
+              </Button>
+            )}
+            {!isEditing && (
               <>
-                <Button 
-                  onClick={() => setIsEditing(true)}
-                  className="bg-amber-500 hover:bg-amber-600"
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  New Article
-                </Button>
                 <Button 
                   onClick={() => setShowAIGenerator(true)}
                   className="bg-purple-600 hover:bg-purple-700"
@@ -377,35 +390,14 @@ Optimize for:
                   <Wand2 className="w-4 h-4 mr-2" />
                   AI Generate
                 </Button>
-                {articles.length > 0 && (
-                  <Button 
-                    onClick={bulkOptimizeSEO}
-                    disabled={bulkOptimizing}
-                    variant="outline"
-                    className="border-amber-500 text-amber-600 hover:bg-amber-50"
-                  >
-                    {bulkOptimizing ? (
-                      <>
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Optimizing {optimizeProgress.current}/{optimizeProgress.total}
-                      </>
-                    ) : (
-                      <>
-                        <RefreshCw className="w-4 h-4 mr-2" />
-                        Bulk Optimize SEO
-                      </>
-                    )}
-                  </Button>
-                )}
+                <Button 
+                  onClick={() => setIsEditing(true)}
+                  className="bg-amber-500 hover:bg-amber-600"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  New Article
+                </Button>
               </>
-            ) : (
-              <Button 
-                onClick={() => setShowAIGenerator(true)}
-                className="bg-purple-600 hover:bg-purple-700"
-              >
-                <Wand2 className="w-4 h-4 mr-2" />
-                AI Generate Article
-              </Button>
             )}
           </div>
         </div>
@@ -465,16 +457,8 @@ Optimize for:
 
         {isEditing && (
           <Card className="mb-8">
-            <CardHeader className="flex flex-row items-center justify-between">
+            <CardHeader>
               <CardTitle>{editingArticle ? "Edit Article" : "New Article"}</CardTitle>
-              <Button 
-                onClick={() => setShowAIGenerator(true)}
-                className="bg-purple-600 hover:bg-purple-700"
-                type="button"
-              >
-                <Wand2 className="w-4 h-4 mr-2" />
-                AI Generate Article
-              </Button>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">

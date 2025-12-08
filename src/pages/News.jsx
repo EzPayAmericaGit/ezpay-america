@@ -199,10 +199,10 @@ export default function News() {
             viewport={{ once: true }}
             className="space-y-6"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold text-white">
               Request a Free Consultation Today
             </h2>
-            <p className="text-xl text-gray-300 mb-6">
+            <p className="text-xl text-gray-300">
               Ready to transform your payment processing? Get started with EzPay America.
             </p>
             <a

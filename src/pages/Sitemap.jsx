@@ -14,17 +14,6 @@ export default function Sitemap() {
       { path: '/EzPayPOSHome', priority: '0.9', changefreq: 'weekly' },
       { path: '/RetailPOS', priority: '0.8', changefreq: 'weekly' },
       { path: '/RestaurantPOS', priority: '0.8', changefreq: 'weekly' },
-      { path: '/CoffeePOS', priority: '0.7', changefreq: 'weekly' },
-      { path: '/BagelShopPOS', priority: '0.7', changefreq: 'weekly' },
-      { path: '/FoodTruckPOS', priority: '0.7', changefreq: 'weekly' },
-      { path: '/DeliShopPOS', priority: '0.7', changefreq: 'weekly' },
-      { path: '/BarTavernPOS', priority: '0.7', changefreq: 'weekly' },
-      { path: '/GroceryStorePOS', priority: '0.7', changefreq: 'weekly' },
-      { path: '/CBDStorePOS', priority: '0.7', changefreq: 'weekly' },
-      { path: '/VapeStorePOS', priority: '0.7', changefreq: 'weekly' },
-      { path: '/MiniMarketPOS', priority: '0.7', changefreq: 'weekly' },
-      { path: '/LiquorStorePOS', priority: '0.7', changefreq: 'weekly' },
-      { path: '/GiftShopPOS', priority: '0.7', changefreq: 'weekly' },
       { path: '/Quiz', priority: '0.7', changefreq: 'monthly' },
       { path: '/ApplyOnline', priority: '1.0', changefreq: 'monthly' },
       { path: '/Contact', priority: '0.9', changefreq: 'monthly' },
@@ -67,17 +56,6 @@ ${pages.map(page => `  <url>
             <li><a href="/EzPayPOSHome" className="text-amber-600 hover:underline">EzPay POS</a></li>
             <li><a href="/RetailPOS" className="text-amber-600 hover:underline">Retail POS</a></li>
             <li><a href="/RestaurantPOS" className="text-amber-600 hover:underline">Restaurant POS</a></li>
-            <li><a href="/CoffeePOS" className="text-amber-600 hover:underline">Cafe & Coffee Shops POS</a></li>
-            <li><a href="/BagelShopPOS" className="text-amber-600 hover:underline">Bagel Shops POS</a></li>
-            <li><a href="/FoodTruckPOS" className="text-amber-600 hover:underline">Food Trucks POS</a></li>
-            <li><a href="/DeliShopPOS" className="text-amber-600 hover:underline">Deli Shops POS</a></li>
-            <li><a href="/BarTavernPOS" className="text-amber-600 hover:underline">Bars & Taverns POS</a></li>
-            <li><a href="/GroceryStorePOS" className="text-amber-600 hover:underline">Grocery Stores POS</a></li>
-            <li><a href="/CBDStorePOS" className="text-amber-600 hover:underline">CBD Stores POS</a></li>
-            <li><a href="/VapeStorePOS" className="text-amber-600 hover:underline">Vape Stores POS</a></li>
-            <li><a href="/MiniMarketPOS" className="text-amber-600 hover:underline">Mini Markets POS</a></li>
-            <li><a href="/LiquorStorePOS" className="text-amber-600 hover:underline">Liquor Stores POS</a></li>
-            <li><a href="/GiftShopPOS" className="text-amber-600 hover:underline">Gift Shops POS</a></li>
             <li><a href="/Quiz" className="text-amber-600 hover:underline">Quiz</a></li>
             <li><a href="/ApplyOnline" className="text-amber-600 hover:underline">Apply Online</a></li>
             <li><a href="/Contact" className="text-amber-600 hover:underline">Contact</a></li>
