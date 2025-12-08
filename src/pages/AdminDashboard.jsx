@@ -25,7 +25,9 @@ import {
   ChevronUp,
   Newspaper,
   ShieldAlert,
-  Bot
+  Bot,
+  Users,
+  Wand2
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -412,10 +414,10 @@ ${application.notes || ''}`;
                 Users
               </Button>
             </Link>
-            <Link to={createPageUrl("ContentBot")}>
-              <Button variant="outline" className="border-purple-500 text-purple-600 hover:bg-purple-50">
-                <Bot className="w-4 h-4 mr-2" />
-                Content Bot
+            <Link to={createPageUrl("NewsAdmin")}>
+              <Button className="bg-purple-600 hover:bg-purple-700">
+                <Wand2 className="w-4 h-4 mr-2" />
+                AI Generate News
               </Button>
             </Link>
             <Link to={createPageUrl("NewsAdmin")}>
