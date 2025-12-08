@@ -41,6 +41,8 @@ const navigationItems = [
   { title: "Contact Us", url: createPageUrl("Contact") },
   { title: "Support", url: createPageUrl("Support") },
   { title: "News", url: createPageUrl("News") },
+  { title: "Testimonials", url: createPageUrl("Testimonials") },
+  { title: "Calculators", url: createPageUrl("BusinessCalculators") }
   ];
 
 export default function Layout({ children }) {
