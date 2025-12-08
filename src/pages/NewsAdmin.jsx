@@ -361,35 +361,8 @@ Optimize for:
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">News Admin</h1>
           <div className="flex gap-2">
-            {!isEditing && articles.length > 0 && (
-              <Button 
-                onClick={bulkOptimizeSEO}
-                disabled={bulkOptimizing}
-                variant="outline"
-                className="border-amber-500 text-amber-600 hover:bg-amber-50"
-              >
-                {bulkOptimizing ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Optimizing {optimizeProgress.current}/{optimizeProgress.total}
-                  </>
-                ) : (
-                  <>
-                    <RefreshCw className="w-4 h-4 mr-2" />
-                    Bulk Optimize SEO
-                  </>
-                )}
-              </Button>
-            )}
             {!isEditing && (
               <>
-                <Button 
-                  onClick={() => setShowAIGenerator(true)}
-                  className="bg-purple-600 hover:bg-purple-700"
-                >
-                  <Wand2 className="w-4 h-4 mr-2" />
-                  AI Generate
-                </Button>
                 <Button 
                   onClick={() => setIsEditing(true)}
                   className="bg-amber-500 hover:bg-amber-600"
@@ -397,6 +370,33 @@ Optimize for:
                   <Plus className="w-4 h-4 mr-2" />
                   New Article
                 </Button>
+                <Button 
+                  onClick={() => setShowAIGenerator(true)}
+                  className="bg-purple-600 hover:bg-purple-700"
+                >
+                  <Wand2 className="w-4 h-4 mr-2" />
+                  AI Generate
+                </Button>
+                {articles.length > 0 && (
+                  <Button 
+                    onClick={bulkOptimizeSEO}
+                    disabled={bulkOptimizing}
+                    variant="outline"
+                    className="border-amber-500 text-amber-600 hover:bg-amber-50"
+                  >
+                    {bulkOptimizing ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Optimizing {optimizeProgress.current}/{optimizeProgress.total}
+                      </>
+                    ) : (
+                      <>
+                        <RefreshCw className="w-4 h-4 mr-2" />
+                        Bulk Optimize SEO
+                      </>
+                    )}
+                  </Button>
+                )}
               </>
             )}
           </div>
