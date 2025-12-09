@@ -39,6 +39,7 @@ import CustomerOnboarding from './pages/CustomerOnboarding';
 import EmailMarketing from './pages/EmailMarketing';
 import Shop from './pages/Shop';
 import Checkout from './pages/Checkout';
+import Offers from './pages/Offers';
 import __Layout from './Layout.jsx';
 
 
@@ -84,6 +85,7 @@ export const PAGES = {
     "EmailMarketing": EmailMarketing,
     "Shop": Shop,
     "Checkout": Checkout,
+    "Offers": Offers,
 }
 
 export const pagesConfig = {
