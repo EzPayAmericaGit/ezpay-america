@@ -38,6 +38,20 @@ Deno.serve(async (req) => {
         nmiResponse: nmiData
       });
 
+      // Send order confirmation email
+      try {
+        await base44.asServiceRole.functions.invoke('sendOrderConfirmation', {
+          orderData: {
+            ...orderData,
+            orderNumber: orderData.orderNumber,
+            customerName: orderData.customerName,
+            customerEmail: orderData.customerEmail
+          }
+        });
+      } catch (emailError) {
+        console.error('Email error:', emailError);
+      }
+
       return Response.json({ 
         success: true, 
         orderId: order.id,

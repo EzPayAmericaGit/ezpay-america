@@ -7,6 +7,8 @@ import { ShoppingCart, Star, Package } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import SEOHead from "../components/SEOHead";
+import ShopSupportChat from "../components/shop/ShopSupportChat";
+import ShoppingCartTutorial from "../components/shop/ShoppingCartTutorial";
 
 export default function Shop() {
   const navigate = useNavigate();
@@ -76,6 +78,9 @@ export default function Shop() {
         description="Shop EzPay America products and services"
         keywords="shop, products, payment solutions, POS systems"
       />
+      
+      <ShoppingCartTutorial />
+      <ShopSupportChat />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
