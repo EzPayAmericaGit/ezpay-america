@@ -42,6 +42,7 @@ import Checkout from './pages/Checkout';
 import Offers from './pages/Offers';
 import ProductAdmin from './pages/ProductAdmin';
 import SettingsAdmin from './pages/SettingsAdmin';
+import OrderHistory from './pages/OrderHistory';
 import __Layout from './Layout.jsx';
 
 
@@ -90,6 +91,7 @@ export const PAGES = {
     "Offers": Offers,
     "ProductAdmin": ProductAdmin,
     "SettingsAdmin": SettingsAdmin,
+    "OrderHistory": OrderHistory,
 }
 
 export const pagesConfig = {
