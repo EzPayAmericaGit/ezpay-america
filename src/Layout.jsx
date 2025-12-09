@@ -144,7 +144,7 @@ export default function Layout({ children }) {
                     className="flex items-center gap-2"
                   >
                     <User className="w-4 h-4" />
-                    {user.full_name || 'Account'}
+                    Login
                   </Button>
                   {accountMenuOpen && (
                     <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
