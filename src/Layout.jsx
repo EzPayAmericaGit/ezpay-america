@@ -103,7 +103,7 @@ export default function Layout({ children }) {
                   >
                     <Link
                       to={item.url}
-                      className={`flex items-center gap-1 text-sm lg:text-base text-gray-700 hover:text-amber-600 font-medium transition-colors whitespace-nowrap ${
+                      className={`flex items-center gap-1 text-xs lg:text-sm text-gray-700 hover:text-amber-600 font-medium transition-colors whitespace-nowrap ${
                         location.pathname === item.url ? "text-amber-600" : ""
                       }`}
                     >
@@ -128,7 +128,7 @@ export default function Layout({ children }) {
                   <Link
                     key={item.title}
                     to={item.url}
-                    className={`text-sm lg:text-base text-gray-700 hover:text-amber-600 font-medium transition-colors whitespace-nowrap ${
+                    className={`text-xs lg:text-sm text-gray-700 hover:text-amber-600 font-medium transition-colors whitespace-nowrap ${
                       location.pathname === item.url ? "text-amber-600" : ""
                     }`}
                   >
@@ -141,9 +141,9 @@ export default function Layout({ children }) {
                   <Button
                     variant="outline"
                     onClick={() => setAccountMenuOpen(!accountMenuOpen)}
-                    className="flex items-center gap-2"
+                    className="flex items-center gap-1 text-xs lg:text-sm px-2 lg:px-4"
                   >
-                    <User className="w-4 h-4" />
+                    <User className="w-3 h-3 lg:w-4 lg:h-4" />
                     Login
                   </Button>
                   {accountMenuOpen && (
@@ -184,13 +184,14 @@ export default function Layout({ children }) {
                 <Button
                   variant="outline"
                   onClick={() => base44.auth.redirectToLogin()}
+                  className="text-xs lg:text-sm px-2 lg:px-4"
                 >
                   Login
                 </Button>
               )}
               <a href="tel:8653169625">
-                <Button className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-lg">
-                  <Phone className="w-4 h-4 mr-2" />
+                <Button className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-lg text-xs lg:text-sm px-2 lg:px-4">
+                  <Phone className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
                   (865) 316-9625
                 </Button>
               </a>
