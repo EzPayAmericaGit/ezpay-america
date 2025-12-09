@@ -1,14 +1,31 @@
 import { useEffect } from "react";
 
-export default function SEOHead({ title, description, keywords }) {
+export default function SEOHead({ title, description, keywords, image, url }) {
   
-  // Set document title immediately
+  // Set document title immediately - keep titles unique and descriptive
   if (typeof document !== 'undefined') {
-    document.title = title ? `${title} | EzPay America` : "EzPay America - Payment Processing Solutions";
+    document.title = title ? `${title} | EzPay America` : "EzPay America - Zero-Fee Payment Processing & POS Systems";
   }
 
   useEffect(() => {
-    // Update or create meta description
+    // Charset
+    let metaCharset = document.querySelector('meta[charset]');
+    if (!metaCharset) {
+      metaCharset = document.createElement('meta');
+      metaCharset.setAttribute('charset', 'utf-8');
+      document.head.insertBefore(metaCharset, document.head.firstChild);
+    }
+
+    // Viewport
+    let metaViewport = document.querySelector('meta[name="viewport"]');
+    if (!metaViewport) {
+      metaViewport = document.createElement('meta');
+      metaViewport.name = "viewport";
+      metaViewport.content = "width=device-width, initial-scale=1";
+      document.head.appendChild(metaViewport);
+    }
+
+    // Meta Description - keep under 155 characters
     let metaDescription = document.querySelector('meta[name="description"]');
     if (!metaDescription) {
       metaDescription = document.createElement('meta');
@@ -17,7 +34,7 @@ export default function SEOHead({ title, description, keywords }) {
     }
     metaDescription.setAttribute('content', description || "EzPay America offers zero-fee payment processing, POS systems, and merchant services for retail and restaurant businesses across the USA.");
     
-    // Update or create meta keywords
+    // Meta Keywords
     let metaKeywords = document.querySelector('meta[name="keywords"]');
     if (!metaKeywords) {
       metaKeywords = document.createElement('meta');
@@ -26,14 +43,23 @@ export default function SEOHead({ title, description, keywords }) {
     }
     metaKeywords.content = keywords || "payment processing, merchant services, POS system, credit card processing, zero fee processing, EzPay America";
     
-    // Open Graph tags
+    // Canonical URL
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.rel = "canonical";
+      document.head.appendChild(canonical);
+    }
+    canonical.href = url || window.location.href;
+
+    // Open Graph tags for social sharing
     let ogTitle = document.querySelector('meta[property="og:title"]');
     if (!ogTitle) {
       ogTitle = document.createElement('meta');
       ogTitle.setAttribute('property', 'og:title');
       document.head.appendChild(ogTitle);
     }
-    ogTitle.content = title || "EzPay America - Payment Processing Solutions";
+    ogTitle.content = title || "EzPay America - Zero-Fee Payment Processing Solutions";
     
     let ogDescription = document.querySelector('meta[property="og:description"]');
     if (!ogDescription) {
@@ -50,8 +76,57 @@ export default function SEOHead({ title, description, keywords }) {
       document.head.appendChild(ogType);
     }
     ogType.content = "website";
+
+    let ogUrl = document.querySelector('meta[property="og:url"]');
+    if (!ogUrl) {
+      ogUrl = document.createElement('meta');
+      ogUrl.setAttribute('property', 'og:url');
+      document.head.appendChild(ogUrl);
+    }
+    ogUrl.content = url || window.location.href;
+
+    let ogImage = document.querySelector('meta[property="og:image"]');
+    if (!ogImage) {
+      ogImage = document.createElement('meta');
+      ogImage.setAttribute('property', 'og:image');
+      document.head.appendChild(ogImage);
+    }
+    ogImage.content = image || "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/8eb2dd274_EZSMALL.png";
+
+    // Twitter Card tags
+    let twitterCard = document.querySelector('meta[name="twitter:card"]');
+    if (!twitterCard) {
+      twitterCard = document.createElement('meta');
+      twitterCard.name = "twitter:card";
+      document.head.appendChild(twitterCard);
+    }
+    twitterCard.content = "summary_large_image";
+
+    let twitterTitle = document.querySelector('meta[name="twitter:title"]');
+    if (!twitterTitle) {
+      twitterTitle = document.createElement('meta');
+      twitterTitle.name = "twitter:title";
+      document.head.appendChild(twitterTitle);
+    }
+    twitterTitle.content = title || "EzPay America - Zero-Fee Payment Processing Solutions";
+
+    let twitterDescription = document.querySelector('meta[name="twitter:description"]');
+    if (!twitterDescription) {
+      twitterDescription = document.createElement('meta');
+      twitterDescription.name = "twitter:description";
+      document.head.appendChild(twitterDescription);
+    }
+    twitterDescription.content = description || "Zero-fee payment processing solutions for your business.";
+
+    let twitterImage = document.querySelector('meta[name="twitter:image"]');
+    if (!twitterImage) {
+      twitterImage = document.createElement('meta');
+      twitterImage.name = "twitter:image";
+      document.head.appendChild(twitterImage);
+    }
+    twitterImage.content = image || "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/8eb2dd274_EZSMALL.png";
     
-  }, [title, description, keywords]);
+  }, [title, description, keywords, image, url]);
 
   return null;
 }
