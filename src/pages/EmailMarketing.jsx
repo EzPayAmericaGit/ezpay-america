@@ -165,6 +165,7 @@ export default function EmailMarketing() {
                       <SelectItem value="pending_applications">Pending Applications</SelectItem>
                       <SelectItem value="approved_merchants">Approved Merchants</SelectItem>
                       <SelectItem value="demo_requests">Demo Requests</SelectItem>
+                      <SelectItem value="website_visitors">Website Visitors</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
