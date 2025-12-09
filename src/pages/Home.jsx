@@ -1,20 +1,17 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
-import { createPageUrl } from "@/utils";
-import { ArrowRight, Phone } from "lucide-react";
+import React, { Suspense } from "react";
 
 import SEOHead from "../components/SEOHead";
 import HeroSection from "../components/home/HeroSection";
-import BenefitsSection from "../components/home/BenefitsSection";
-import OtherBenefitsSection from "../components/home/OtherBenefitsSection";
-import SolutionsSection from "../components/home/SolutionsSection";
-import BusinessTypesSection from "../components/home/BusinessTypesSection";
-import AdditionalOffersSection from "../components/home/AdditionalOffersSection";
-import TestimonialsSection from "../components/home/TestimonialsSection";
-import RestaurantTypesSection from "../components/home/RestaurantTypesSection";
-import ContactFormSection from "../components/home/ContactFormSection";
-import Footer from "../components/home/Footer";
+
+const BenefitsSection = React.lazy(() => import("../components/home/BenefitsSection"));
+const OtherBenefitsSection = React.lazy(() => import("../components/home/OtherBenefitsSection"));
+const SolutionsSection = React.lazy(() => import("../components/home/SolutionsSection"));
+const BusinessTypesSection = React.lazy(() => import("../components/home/BusinessTypesSection"));
+const AdditionalOffersSection = React.lazy(() => import("../components/home/AdditionalOffersSection"));
+const TestimonialsSection = React.lazy(() => import("../components/home/TestimonialsSection"));
+const RestaurantTypesSection = React.lazy(() => import("../components/home/RestaurantTypesSection"));
+const ContactFormSection = React.lazy(() => import("../components/home/ContactFormSection"));
+const Footer = React.lazy(() => import("../components/home/Footer"));
 
 export default function Home() {
   return (
@@ -25,15 +22,17 @@ export default function Home() {
         keywords="payment processing, merchant services, zero fee processing, free POS system, credit card processing, EzPay America"
       />
       <HeroSection />
-      <BenefitsSection />
-      <OtherBenefitsSection />
-      <SolutionsSection />
-      <BusinessTypesSection />
-      <AdditionalOffersSection />
-      <TestimonialsSection />
-      <RestaurantTypesSection />
-      <ContactFormSection />
-      <Footer />
+      <Suspense fallback={<div className="h-screen" />}>
+        <BenefitsSection />
+        <OtherBenefitsSection />
+        <SolutionsSection />
+        <BusinessTypesSection />
+        <AdditionalOffersSection />
+        <TestimonialsSection />
+        <RestaurantTypesSection />
+        <ContactFormSection />
+        <Footer />
+      </Suspense>
     </div>
   );
 }
