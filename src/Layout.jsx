@@ -34,6 +34,7 @@ export default function Layout({ children }) {
       submenu: [
         { title: "Retail POS", url: createPageUrl("RetailPOS") },
         { title: "Restaurant POS", url: createPageUrl("RestaurantPOS") },
+        { title: "Countertop Payment Terminal", url: createPageUrl("CountertopTerminal") },
         { title: "Cafe & Coffee Shops", url: createPageUrl("CoffeePOS") },
         { title: "Bagel Shops", url: createPageUrl("BagelShopPOS") },
         { title: "Food Trucks", url: createPageUrl("FoodTruckPOS") },
