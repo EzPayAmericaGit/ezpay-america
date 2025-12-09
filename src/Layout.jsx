@@ -87,7 +87,7 @@ export default function Layout({ children }) {
                 height="48"
               />
               <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-amber-600 to-amber-800 bg-clip-text text-transparent">
+                <h1 className="text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-amber-600 to-amber-800 bg-clip-text text-transparent whitespace-nowrap">
                   EzPay America
                 </h1>
               </div>
