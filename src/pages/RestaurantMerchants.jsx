@@ -126,8 +126,11 @@ export default function RestaurantMerchants() {
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                 <img
                   src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=600&fit=crop"
-                  alt="Restaurant payment processing solutions with tableside ordering and kitchen integration"
+                  alt="Restaurant dining with EzPay tableside payment processing, tip adjustment, and split check features"
                   className="w-full h-auto"
+                  loading="lazy"
+                  width="800"
+                  height="600"
                 />
               </div>
             </motion.div>

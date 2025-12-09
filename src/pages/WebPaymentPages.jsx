@@ -211,8 +211,11 @@ export default function WebPaymentPages() {
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                 <img
                   src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop"
-                  alt="Web payment pages dashboard showing online payment collection and invoice management"
+                  alt="Web payment pages dashboard showing online payment collection and invoice management with EzPay"
                   className="w-full h-auto"
+                  loading="lazy"
+                  width="800"
+                  height="600"
                 />
               </div>
             </motion.div>

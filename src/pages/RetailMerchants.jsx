@@ -159,6 +159,9 @@ export default function RetailMerchants() {
                   src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/3887a616c_AGoldEZPayPOS.png"
                   alt="EzPay POS system for retail stores with zero transaction fees and free equipment"
                   className="w-full h-auto"
+                  loading="lazy"
+                  width="800"
+                  height="600"
                 />
               </div>
             </motion.div>
