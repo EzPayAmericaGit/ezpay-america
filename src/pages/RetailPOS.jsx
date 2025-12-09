@@ -219,10 +219,12 @@ export default function RetailPOS() {
             <p className="text-xl text-gray-600">
               Start your free trial today. No credit card required.
             </p>
-            <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg shadow-xl">
-              Get Started Now
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
+            <Link to={createPageUrl("FreeDemo")}>
+              <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg shadow-xl">
+                Get Started Now
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
           </motion.div>
         </div>
       </section>
