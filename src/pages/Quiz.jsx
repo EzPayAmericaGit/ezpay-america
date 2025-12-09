@@ -133,9 +133,9 @@ ${formData.message || 'No additional message'}
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Payment Processing Quiz - Find Your Perfect Solution"
-        description="Take our interactive quiz to discover the best payment processing and POS solution for your business. Get personalized recommendations in minutes."
-        keywords="payment processing quiz, POS system finder, merchant services comparison, business payment solution, restaurant POS finder"
+        title="Payment Solution Finder Quiz - Find Your Perfect POS System"
+        description="Take our quick interactive quiz to discover the best payment processing and POS solution tailored to your business type, industry, and needs. Get personalized recommendations in minutes with free consultation included."
+        keywords="payment solution quiz, POS system finder, payment processing quiz, merchant services quiz, business payment quiz, find my POS system, POS system selector, payment solution finder, business type quiz, industry solution finder, which POS system, best POS for my business, payment processing recommendations, merchant services finder, business needs assessment, solution matcher, payment calculator, POS comparison tool, free consultation, business evaluation quiz, payment needs analysis, custom solution finder, tailored recommendations, personalized payment solutions"
       />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500">

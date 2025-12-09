@@ -58,9 +58,9 @@ export default function RestaurantPOS() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Restaurant POS System"
-        description="Restaurant POS system with tableside ordering, kitchen display integration, online ordering, and tip management. Perfect for full service and quick service restaurants."
-        keywords="restaurant POS, table management, kitchen display system, online ordering, food truck POS, bar POS, quick service POS"
+        title="Restaurant POS System - Complete Point of Sale for Restaurants"
+        description="Full-featured restaurant POS system with table management, kitchen display system, online ordering, delivery integration, tip management, and integrated payments. Perfect for full service restaurants, quick service, cafes, bars, and food trucks."
+        keywords="restaurant POS system, restaurant point of sale, restaurant POS software, full service restaurant POS, table service POS, fine dining POS, quick service restaurant POS, QSR POS, fast casual POS, cafe POS, coffee shop POS, bar POS, food truck POS, kitchen display system, KDS, table management system, reservation system, menu management, online ordering integration, delivery integration, DoorDash, Uber Eats, GrubHub, tip management, split checks, tableside ordering, server management, shift scheduling, food cost tracking, menu engineering, restaurant analytics, sales reporting, employee time clock"
       />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500">

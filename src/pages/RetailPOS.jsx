@@ -58,9 +58,9 @@ export default function RetailPOS() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Retail POS System"
-        description="Complete retail POS system with inventory management, customer tracking, integrated payments, and mobile apps. Free equipment program available."
-        keywords="retail POS, point of sale retail, inventory management, retail payment processing, barcode scanning, retail software"
+        title="Retail POS System - Point of Sale Software for Retail Stores"
+        description="Complete retail POS system with inventory management, customer tracking, barcode scanning, integrated payments, and mobile apps. Free equipment program available. Perfect for boutiques, convenience stores, and specialty retail."
+        keywords="retail POS system, retail point of sale, retail POS software, store POS system, shop POS, boutique POS, retail management software, inventory management system, stock management, barcode scanning, SKU management, UPC scanning, multi-location retail POS, convenience store POS, gift shop POS, clothing store POS, apparel retail POS, specialty retail software, customer management, loyalty programs, retail analytics, sales reporting, employee tracking, retail checkout system, integrated payments, contactless retail payments, mobile retail POS, tablet POS system, cloud retail POS, real-time inventory, purchase orders, vendor management, price management, retail tax management"
       />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500">
