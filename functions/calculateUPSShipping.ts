@@ -88,8 +88,10 @@ Deno.serve(async (req) => {
     });
 
   } catch (error) {
+    console.error('Shipping calc error:', error);
     // Fallback: try to get flat rate from settings
     try {
+      const base44 = createClientFromRequest(req);
       const settings = await base44.asServiceRole.entities.Settings.list();
       const flatRate = settings.find(s => s.settingKey === 'flat_shipping_rate');
       const shippingCost = flatRate ? parseFloat(flatRate.settingValue) : 12.99;
@@ -98,7 +100,8 @@ Deno.serve(async (req) => {
         success: true, 
         shippingCost 
       });
-    } catch {
+    } catch (innerError) {
+      console.error('Fallback error:', innerError);
       return Response.json({ 
         success: true, 
         shippingCost: 12.99 

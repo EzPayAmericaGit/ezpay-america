@@ -36,7 +36,7 @@ export default function Checkout() {
   const [calculatingShipping, setCalculatingShipping] = useState(false);
   const [taxRate, setTaxRate] = useState(0.08);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const loadSettings = async () => {
       try {
         const settings = await base44.entities.Settings.list();
