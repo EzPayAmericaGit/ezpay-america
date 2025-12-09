@@ -7,8 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Package, Search, Loader2, Calendar, DollarSign, MapPin, Eye, RefreshCw, TrendingUp } from "lucide-react";
+import { Package, Search, Loader2, Calendar, DollarSign, MapPin, Eye, RefreshCw, TrendingUp, Download, Printer, Mail, Clock } from "lucide-react";
 import SEOHead from "../components/SEOHead";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function OrdersAdmin() {
   const queryClient = useQueryClient();
@@ -17,6 +18,8 @@ export default function OrdersAdmin() {
   const [paymentFilter, setPaymentFilter] = useState("all");
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [trackingNumber, setTrackingNumber] = useState("");
+  const [orderNotes, setOrderNotes] = useState("");
 
   const { data: orders = [], isLoading } = useQuery({
     queryKey: ['admin-orders'],
@@ -27,9 +30,99 @@ export default function OrdersAdmin() {
     mutationFn: ({ id, data }) => base44.entities.Order.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-orders'] });
-      setDialogOpen(false);
     }
   });
+
+  const exportToCSV = () => {
+    const csv = [
+      ['Order Number', 'Customer', 'Email', 'Date', 'Total', 'Status', 'Payment'],
+      ...filteredOrders.map(o => [
+        o.orderNumber,
+        o.customerName,
+        o.customerEmail,
+        new Date(o.created_date).toLocaleDateString(),
+        o.total?.toFixed(2),
+        o.status,
+        o.paymentStatus
+      ])
+    ].map(row => row.join(',')).join('\n');
+
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `orders-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+  };
+
+  const printInvoice = (order) => {
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Invoice #${order.orderNumber}</title>
+          <style>
+            body { font-family: Arial, sans-serif; padding: 40px; }
+            h1 { color: #f59e0b; }
+            table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+            th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+            .total { font-weight: bold; font-size: 18px; }
+          </style>
+        </head>
+        <body>
+          <h1>EzPay America</h1>
+          <h2>Invoice #${order.orderNumber}</h2>
+          <p><strong>Date:</strong> ${new Date(order.created_date).toLocaleDateString()}</p>
+          <p><strong>Customer:</strong> ${order.customerName}</p>
+          <p><strong>Email:</strong> ${order.customerEmail}</p>
+          <p><strong>Phone:</strong> ${order.customerPhone}</p>
+          <h3>Shipping Address</h3>
+          <p>${order.shippingAddress?.address}<br/>
+          ${order.shippingAddress?.city}, ${order.shippingAddress?.state} ${order.shippingAddress?.zip}</p>
+          <h3>Items</h3>
+          <table>
+            <tr><th>Product</th><th>Qty</th><th>Price</th><th>Total</th></tr>
+            ${order.items?.map(item => `
+              <tr>
+                <td>${item.name}</td>
+                <td>${item.quantity}</td>
+                <td>$${item.price.toFixed(2)}</td>
+                <td>$${(item.price * item.quantity).toFixed(2)}</td>
+              </tr>
+            `).join('')}
+          </table>
+          <p><strong>Subtotal:</strong> $${order.subtotal?.toFixed(2)}</p>
+          <p><strong>Tax:</strong> $${order.tax?.toFixed(2)}</p>
+          <p><strong>Shipping:</strong> $${order.shipping?.toFixed(2)}</p>
+          <p class="total">Total: $${order.total?.toFixed(2)}</p>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+    printWindow.print();
+  };
+
+  const sendStatusEmail = async (order, newStatus) => {
+    try {
+      await base44.integrations.Core.SendEmail({
+        to: order.customerEmail,
+        subject: `Order #${order.orderNumber} - Status Update`,
+        body: `Dear ${order.customerName},
+
+Your order #${order.orderNumber} status has been updated to: ${newStatus.toUpperCase()}
+
+${trackingNumber ? `Tracking Number: ${trackingNumber}` : ''}
+
+Thank you for your business!
+
+EzPay America
+(865) 316-9625`
+      });
+      alert('Status email sent successfully!');
+    } catch (error) {
+      alert('Failed to send email');
+    }
+  };
 
   const statusColors = {
     pending: 'bg-yellow-100 text-yellow-800',
@@ -86,13 +179,22 @@ export default function OrdersAdmin() {
             <h1 className="text-3xl font-bold text-gray-900">Orders</h1>
             <p className="text-gray-500 mt-1">Manage customer orders</p>
           </div>
-          <Button 
-            onClick={() => queryClient.invalidateQueries(['admin-orders'])}
-            variant="outline"
-          >
-            <RefreshCw className="w-4 h-4 mr-2" />
-            Refresh
-          </Button>
+          <div className="flex gap-2">
+            <Button 
+              onClick={exportToCSV}
+              variant="outline"
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Export CSV
+            </Button>
+            <Button 
+              onClick={() => queryClient.invalidateQueries(['admin-orders'])}
+              variant="outline"
+            >
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Refresh
+            </Button>
+          </div>
         </div>
 
         {/* Stats */}
@@ -222,16 +324,27 @@ export default function OrdersAdmin() {
                       </Badge>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => {
-                          setSelectedOrder(order);
-                          setDialogOpen(true);
-                        }}
-                      >
-                        <Eye className="w-4 h-4" />
-                      </Button>
+                      <div className="flex gap-1 justify-end">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            setSelectedOrder(order);
+                            setTrackingNumber(order.trackingNumber || "");
+                            setOrderNotes(order.notes || "");
+                            setDialogOpen(true);
+                          }}
+                        >
+                          <Eye className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => printInvoice(order)}
+                        >
+                          <Printer className="w-4 h-4" />
+                        </Button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -317,7 +430,7 @@ export default function OrdersAdmin() {
               {/* Status Update */}
               <div className="border-t pt-4">
                 <h3 className="font-semibold mb-3">Update Order Status</h3>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4 mb-4">
                   <div>
                     <label className="block text-sm font-medium mb-2">Order Status</label>
                     <Select 
@@ -327,6 +440,7 @@ export default function OrdersAdmin() {
                           id: selectedOrder.id, 
                           data: { status: value } 
                         });
+                        setSelectedOrder({...selectedOrder, status: value});
                       }}
                     >
                       <SelectTrigger>
@@ -350,6 +464,7 @@ export default function OrdersAdmin() {
                           id: selectedOrder.id, 
                           data: { paymentStatus: value } 
                         });
+                        setSelectedOrder({...selectedOrder, paymentStatus: value});
                       }}
                     >
                       <SelectTrigger>
@@ -364,17 +479,100 @@ export default function OrdersAdmin() {
                     </Select>
                   </div>
                 </div>
+
+                {/* Tracking Number */}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-2">Tracking Number</label>
+                  <div className="flex gap-2">
+                    <Input
+                      value={trackingNumber}
+                      onChange={(e) => setTrackingNumber(e.target.value)}
+                      placeholder="Enter tracking number..."
+                    />
+                    <Button
+                      onClick={() => {
+                        updateOrderMutation.mutate({
+                          id: selectedOrder.id,
+                          data: { trackingNumber }
+                        });
+                      }}
+                      size="sm"
+                    >
+                      Save
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Order Notes */}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-2">Order Notes</label>
+                  <Textarea
+                    value={orderNotes}
+                    onChange={(e) => setOrderNotes(e.target.value)}
+                    placeholder="Add internal notes..."
+                    rows={3}
+                  />
+                  <Button
+                    onClick={() => {
+                      updateOrderMutation.mutate({
+                        id: selectedOrder.id,
+                        data: { notes: orderNotes }
+                      });
+                    }}
+                    size="sm"
+                    className="mt-2"
+                  >
+                    Save Notes
+                  </Button>
+                </div>
+
+                {/* Send Email */}
+                <Button
+                  onClick={() => sendStatusEmail(selectedOrder, selectedOrder.status)}
+                  variant="outline"
+                  className="w-full"
+                >
+                  <Mail className="w-4 h-4 mr-2" />
+                  Send Status Update Email
+                </Button>
               </div>
 
               {/* Transaction Info */}
               {selectedOrder.transactionId && (
                 <div className="border-t pt-4">
                   <h3 className="font-semibold mb-2">Payment Information</h3>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-600 mb-2">
                     Transaction ID: {selectedOrder.transactionId}
                   </p>
+                  {selectedOrder.trackingNumber && (
+                    <p className="text-sm text-gray-600">
+                      Tracking: {selectedOrder.trackingNumber}
+                    </p>
+                  )}
                 </div>
               )}
+
+              {/* Order Timeline */}
+              <div className="border-t pt-4">
+                <h3 className="font-semibold mb-3 flex items-center gap-2">
+                  <Clock className="w-4 h-4" />
+                  Order Timeline
+                </h3>
+                <div className="space-y-2 text-sm">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                    <span className="text-gray-500">Created:</span>
+                    <span className="font-medium">{new Date(selectedOrder.created_date).toLocaleString()}</span>
+                  </div>
+                  {selectedOrder.updated_date && selectedOrder.updated_date !== selectedOrder.created_date && (
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-amber-500"></div>
+                      <span className="text-gray-500">Last Updated:</span>
+                      <span className="font-medium">{new Date(selectedOrder.updated_date).toLocaleString()}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           )}
         </DialogContent>
