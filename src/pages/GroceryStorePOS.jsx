@@ -195,9 +195,11 @@ export default function GroceryStorePOS() {
             >
               <img
                 src="https://images.unsplash.com/photo-1534723452862-4c874018d66d?w=800&h=600&fit=crop"
-                alt="Modern grocery store checkout with POS system"
+                alt="Grocery store checkout lane with EzPay POS system, barcode scanner, and integrated payment terminal"
                 className="w-full h-auto rounded-2xl shadow-2xl"
                 loading="lazy"
+                width="800"
+                height="600"
               />
             </motion.div>
           </div>

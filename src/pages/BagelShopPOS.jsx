@@ -195,9 +195,11 @@ export default function BagelShopPOS() {
             >
               <img
                 src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&h=600&fit=crop"
-                alt="Bagel shop counter with POS system"
+                alt="Fresh bagels displayed at breakfast shop counter with EzPay POS system for fast checkout"
                 className="w-full h-auto rounded-2xl shadow-2xl"
                 loading="lazy"
+                width="800"
+                height="600"
               />
             </motion.div>
           </div>

@@ -195,9 +195,11 @@ export default function FoodTruckPOS() {
             >
               <img
                 src="https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?w=800&h=600&fit=crop"
-                alt="Food truck with mobile POS system"
+                alt="Modern food truck serving customers using mobile EzPay POS system with wireless payment processing"
                 className="w-full h-auto rounded-2xl shadow-2xl"
                 loading="lazy"
+                width="800"
+                height="600"
               />
             </motion.div>
           </div>
