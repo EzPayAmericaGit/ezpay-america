@@ -61,13 +61,6 @@ export default function Layout({ children }) {
         { title: "Email Marketing", url: createPageUrl("EmailMarketing") },
         { title: "Dashboard", url: createPageUrl("AdminDashboard") }
       ]
-    }] : []),
-    ...(user ? [{
-      title: "My Account",
-      url: createPageUrl("CustomerOnboarding"),
-      submenu: [
-        { title: "Onboarding", url: createPageUrl("CustomerOnboarding") }
-      ]
     }] : [])
   ], [user]);
 
