@@ -26,6 +26,7 @@ export default function EmailMarketing() {
     imageUrl: ""
   });
   const [uploading, setUploading] = useState(false);
+  const [imageLink, setImageLink] = useState("");
 
   useEffect(() => {
     loadCampaigns();
@@ -106,18 +107,25 @@ export default function EmailMarketing() {
     setUploading(true);
     try {
       const result = await base44.integrations.Core.UploadFile({ file });
-      const imageUrl = result.file_url;
-      setFormData({
-        ...formData, 
-        imageUrl: imageUrl,
-        content: formData.content + `<img src="${imageUrl}" alt="Email image" style="max-width: 100%; height: auto;" />`
-      });
+      setFormData({...formData, imageUrl: result.file_url});
     } catch (error) {
       console.error("Upload error:", error);
       alert("Error uploading image");
     } finally {
       setUploading(false);
     }
+  };
+
+  const insertImageIntoContent = () => {
+    if (!formData.imageUrl) return;
+    
+    const imageTag = `<img src="${formData.imageUrl}" alt="Email image" style="max-width: 100%; height: auto;" />`;
+    const imageHtml = imageLink 
+      ? `<a href="${imageLink}" target="_blank">${imageTag}</a>`
+      : imageTag;
+    
+    setFormData({...formData, content: formData.content + imageHtml});
+    setImageLink("");
   };
 
   const getStatusColor = (status) => {
@@ -196,7 +204,7 @@ export default function EmailMarketing() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Upload Image (Optional)</label>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <Input
                       type="file"
                       accept="image/*"
@@ -211,15 +219,33 @@ export default function EmailMarketing() {
                       </div>
                     )}
                     {formData.imageUrl && (
-                      <div className="flex items-center gap-2">
-                        <img src={formData.imageUrl} alt="Preview" className="h-20 w-20 object-cover rounded" />
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={() => setFormData({...formData, imageUrl: ""})}
-                        >
-                          Remove
-                        </Button>
+                      <div className="space-y-2 p-3 bg-gray-50 rounded-lg">
+                        <img src={formData.imageUrl} alt="Preview" className="h-32 w-auto object-cover rounded" />
+                        <Input
+                          placeholder="Link URL (optional) - e.g., https://example.com or /page-name"
+                          value={imageLink}
+                          onChange={(e) => setImageLink(e.target.value)}
+                          className="text-sm"
+                        />
+                        <div className="flex gap-2">
+                          <Button 
+                            size="sm"
+                            onClick={insertImageIntoContent}
+                            className="bg-blue-600 hover:bg-blue-700"
+                          >
+                            Insert into Email
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => {
+                              setFormData({...formData, imageUrl: ""});
+                              setImageLink("");
+                            }}
+                          >
+                            Remove
+                          </Button>
+                        </div>
                       </div>
                     )}
                   </div>
