@@ -61,8 +61,8 @@ export default function ProductAdmin() {
 
     setUploading(true);
     try {
-      const { data } = await base44.integrations.Core.UploadFile({ file });
-      setFormData({ ...formData, image: data.file_url });
+      const result = await base44.integrations.Core.UploadFile({ file });
+      setFormData({ ...formData, image: result.file_url });
     } catch (error) {
       alert('Failed to upload image');
       console.error(error);
