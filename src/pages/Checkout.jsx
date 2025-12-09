@@ -39,6 +39,26 @@ export default function Checkout() {
   const tax = subtotal * 0.08;
   const total = subtotal + tax + shippingCost;
 
+  const calculateShipping = async (zipCode) => {
+    if (zipCode.length !== 5) return;
+    
+    setCalculatingShipping(true);
+    try {
+      const { data } = await base44.functions.invoke('calculateUPSShipping', {
+        zipCode,
+        items: cart
+      });
+      
+      if (data.success) {
+        setShippingCost(data.shippingCost);
+      }
+    } catch (error) {
+      setShippingCost(12.99);
+    } finally {
+      setCalculatingShipping(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setProcessing(true);
