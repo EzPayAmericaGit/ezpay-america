@@ -489,80 +489,102 @@ Provide a complete article with all metadata.`,
     <div className="min-h-screen bg-gray-50 py-24 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-          <div className="flex gap-2 flex-wrap">
-              <Link to={createPageUrl("OrdersAdmin")}>
-                <Button variant="outline" className="border-amber-500 text-amber-600 hover:bg-amber-50">
-                  <Package className="w-4 h-4 mr-2" />
-                  Orders
-                </Button>
-              </Link>
-              <Link to={createPageUrl("ProductAdmin")}>
-                <Button variant="outline" className="border-green-500 text-green-600 hover:bg-green-50">
-                  <Package className="w-4 h-4 mr-2" />
-                  Products
-                </Button>
-              </Link>
-              <Link to={createPageUrl("SettingsAdmin")}>
-                <Button variant="outline" className="border-gray-500 text-gray-600 hover:bg-gray-50">
-                  <Building2 className="w-4 h-4 mr-2" />
-                  Settings
-                </Button>
-              </Link>
-              <Link to={createPageUrl("UserManagement")}>
-                <Button variant="outline" className="border-blue-500 text-blue-600 hover:bg-blue-50">
-                  <Users className="w-4 h-4 mr-2" />
-                  Users
-                </Button>
-              </Link>
-              <Link to={createPageUrl("NewsAdmin")}>
-                <Button variant="outline">
-                  <Newspaper className="w-4 h-4 mr-2" />
-                  News
-                </Button>
-              </Link>
-              <Button 
-                onClick={() => queryClient.invalidateQueries(['adminApplications'])}
-                variant="outline"
-              >
-                <RefreshCw className="w-4 h-4 mr-2" />
-                Refresh
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+            <p className="text-gray-500 mt-1">Manage your business operations</p>
+          </div>
+          <div className="flex gap-2">
+            <Link to={createPageUrl("SettingsAdmin")}>
+              <Button variant="outline">
+                <Building2 className="w-4 h-4 mr-2" />
+                Settings
               </Button>
-            </div>
+            </Link>
+            <Button 
+              onClick={() => queryClient.invalidateQueries(['adminApplications'])}
+              variant="outline"
+            >
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Refresh
+            </Button>
+          </div>
+        </div>
+
+        {/* Quick Links Grid */}
+        <div className="grid md:grid-cols-4 gap-4 mb-8">
+          <Link to={createPageUrl("OrdersAdmin")}>
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-l-4 border-l-amber-500">
+              <CardContent className="p-6">
+                <Package className="w-8 h-8 text-amber-600 mb-2" />
+                <h3 className="font-semibold text-gray-900">Orders</h3>
+                <p className="text-sm text-gray-500">Manage customer orders</p>
+              </CardContent>
+            </Card>
+          </Link>
+          <Link to={createPageUrl("ProductAdmin")}>
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-l-4 border-l-green-500">
+              <CardContent className="p-6">
+                <Package className="w-8 h-8 text-green-600 mb-2" />
+                <h3 className="font-semibold text-gray-900">Products</h3>
+                <p className="text-sm text-gray-500">Manage store products</p>
+              </CardContent>
+            </Card>
+          </Link>
+          <Link to={createPageUrl("UserManagement")}>
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-l-4 border-l-blue-500">
+              <CardContent className="p-6">
+                <Users className="w-8 h-8 text-blue-600 mb-2" />
+                <h3 className="font-semibold text-gray-900">Users</h3>
+                <p className="text-sm text-gray-500">Manage user accounts</p>
+              </CardContent>
+            </Card>
+          </Link>
+          <Link to={createPageUrl("NewsAdmin")}>
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-l-4 border-l-purple-500">
+              <CardContent className="p-6">
+                <Newspaper className="w-8 h-8 text-purple-600 mb-2" />
+                <h3 className="font-semibold text-gray-900">News</h3>
+                <p className="text-sm text-gray-500">Manage blog articles</p>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-          <Card>
-            <CardContent className="p-4 text-center">
-              <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
-              <p className="text-sm text-gray-500">Total</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4 text-center">
-              <p className="text-2xl font-bold text-blue-600">{stats.submitted}</p>
-              <p className="text-sm text-gray-500">Submitted</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4 text-center">
-              <p className="text-2xl font-bold text-amber-600">{stats.under_review}</p>
-              <p className="text-sm text-gray-500">In Review</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4 text-center">
-              <p className="text-2xl font-bold text-green-600">{stats.approved}</p>
-              <p className="text-sm text-gray-500">Approved</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4 text-center">
-              <p className="text-2xl font-bold text-red-600">{stats.declined}</p>
-              <p className="text-sm text-gray-500">Declined</p>
-            </CardContent>
-          </Card>
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Merchant Applications</h2>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <Card>
+              <CardContent className="p-4 text-center">
+                <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
+                <p className="text-sm text-gray-500">Total</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-4 text-center">
+                <p className="text-2xl font-bold text-blue-600">{stats.submitted}</p>
+                <p className="text-sm text-gray-500">Submitted</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-4 text-center">
+                <p className="text-2xl font-bold text-amber-600">{stats.under_review}</p>
+                <p className="text-sm text-gray-500">In Review</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-4 text-center">
+                <p className="text-2xl font-bold text-green-600">{stats.approved}</p>
+                <p className="text-sm text-gray-500">Approved</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-4 text-center">
+                <p className="text-2xl font-bold text-red-600">{stats.declined}</p>
+                <p className="text-sm text-gray-500">Declined</p>
+              </CardContent>
+            </Card>
+          </div>
         </div>
 
         {/* AI News Generator - Always Visible */}

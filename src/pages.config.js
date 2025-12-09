@@ -44,6 +44,7 @@ import ProductAdmin from './pages/ProductAdmin';
 import SettingsAdmin from './pages/SettingsAdmin';
 import OrderHistory from './pages/OrderHistory';
 import OrdersAdmin from './pages/OrdersAdmin';
+import MyAccount from './pages/MyAccount';
 import __Layout from './Layout.jsx';
 
 
@@ -94,6 +95,7 @@ export const PAGES = {
     "SettingsAdmin": SettingsAdmin,
     "OrderHistory": OrderHistory,
     "OrdersAdmin": OrdersAdmin,
+    "MyAccount": MyAccount,
 }
 
 export const pagesConfig = {

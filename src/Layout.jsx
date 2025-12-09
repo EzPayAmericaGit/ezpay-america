@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Phone, Menu, X, ChevronDown } from "lucide-react";
+import { Phone, Menu, X, ChevronDown, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { base44 } from "@/api/base44Client";
 import AnalyticsTracker from "@/components/AnalyticsTracker";
@@ -10,6 +10,7 @@ export default function Layout({ children }) {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState(null);
+  const [accountMenuOpen, setAccountMenuOpen] = useState(false);
 
   React.useEffect(() => {
     base44.auth.me().then(setUser).catch(() => setUser(null));
@@ -135,13 +136,65 @@ export default function Layout({ children }) {
                   </Link>
                 )
               ))}
+              {user ? (
+                <div className="relative">
+                  <Button
+                    variant="outline"
+                    onClick={() => setAccountMenuOpen(!accountMenuOpen)}
+                    className="flex items-center gap-2"
+                  >
+                    <User className="w-4 h-4" />
+                    {user.full_name || 'Account'}
+                  </Button>
+                  {accountMenuOpen && (
+                    <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
+                      <Link
+                        to={createPageUrl("MyAccount")}
+                        className="block px-4 py-2 text-gray-700 hover:bg-amber-50"
+                        onClick={() => setAccountMenuOpen(false)}
+                      >
+                        My Account
+                      </Link>
+                      <Link
+                        to={createPageUrl("OrderHistory")}
+                        className="block px-4 py-2 text-gray-700 hover:bg-amber-50"
+                        onClick={() => setAccountMenuOpen(false)}
+                      >
+                        Order History
+                      </Link>
+                      {user.role === 'admin' && (
+                        <Link
+                          to={createPageUrl("AdminDashboard")}
+                          className="block px-4 py-2 text-gray-700 hover:bg-amber-50"
+                          onClick={() => setAccountMenuOpen(false)}
+                        >
+                          Admin Dashboard
+                        </Link>
+                      )}
+                      <button
+                        onClick={() => base44.auth.logout()}
+                        className="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Button
+                  variant="outline"
+                  onClick={() => base44.auth.redirectToLogin()}
+                >
+                  Login
+                </Button>
+              )}
               <a href="tel:8653169625">
                 <Button className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-lg">
                   <Phone className="w-4 h-4 mr-2" />
                   (865) 316-9625
                 </Button>
               </a>
-            </nav>
+              </nav>
 
             {/* Mobile Menu Button */}
             <button
