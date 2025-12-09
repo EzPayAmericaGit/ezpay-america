@@ -80,9 +80,9 @@ export default function News() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="News"
-        description="Stay updated with the latest payment processing news, industry insights, and tips for merchants from EzPay America."
-        keywords="payment processing news, merchant services updates, POS industry news, credit card processing tips, EzPay America blog"
+        title="Payment Processing News & Industry Insights"
+        description="Stay updated with the latest payment processing news, industry insights, merchant tips, and business trends from EzPay America. Expert advice on POS systems, mobile payments, and merchant services."
+        keywords="payment processing news, merchant services updates, POS industry news, credit card processing tips, EzPay America blog, payment industry trends, merchant services blog, payment processing articles, POS system guides, mobile payment news, contactless payment trends, digital payment innovations, fintech news, payment technology, merchant tips, restaurant payment tips, retail payment advice, business payment strategies, payment processing best practices, merchant account tips, payment security news, PCI compliance updates, fraud prevention tips, chargeback management, payment processing regulations, merchant services industry, payment processor news, credit card industry news, payment gateway updates, e-commerce payment trends, online payment news, payment integration tips, business growth tips, small business payment advice, merchant success stories, payment processing case studies, industry analysis, market trends, payment statistics, merchant resources, business tools, payment calculators, cost savings tips"
       />
       
       {/* Hero Section */}

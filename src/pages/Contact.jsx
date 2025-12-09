@@ -59,9 +59,9 @@ export default function Contact() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Contact Us"
-        description="Contact EzPay America for payment processing solutions. Call (865) 316-9625 or email contact@ezpayamerica.com. Located in Weaverville, NC."
-        keywords="contact EzPay America, payment processing support, merchant services contact, credit card processing help"
+        title="Contact Us - EzPay America Payment Processing"
+        description="Contact EzPay America for payment processing solutions. Call (865) 316-9625 or email contact@ezpayamerica.com. Located in Weaverville, NC. Free consultation, fast response, 24/7 support available."
+        keywords="contact EzPay America, payment processing support, merchant services contact, credit card processing help, merchant services phone number, payment processing consultation, free consultation, sales inquiries, technical support, customer service, merchant account support, POS system help, payment terminal support, Weaverville NC, North Carolina payment processing, local merchant services, EzPay America phone, EzPay America email, EzPay America address, get in touch, request demo, schedule consultation, payment processing questions, merchant services inquiries, business payment solutions, contact merchant services, reach EzPay America, customer support number, 24/7 merchant support"
       />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500">

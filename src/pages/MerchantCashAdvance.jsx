@@ -38,9 +38,9 @@ export default function MerchantCashAdvance() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Merchant Cash Advance"
-        description="Get fast business funding with a merchant cash advance. 24-hour approval, no credit check, flexible repayment based on your daily credit card sales."
-        keywords="merchant cash advance, business funding, small business loan, working capital, business cash advance, fast business funding"
+        title="Merchant Cash Advance - Fast Business Funding"
+        description="Get fast business funding with a merchant cash advance from EzPay America. 24-hour approval, no credit check required, flexible repayment based on your daily credit card sales. Funds deposited directly into your account."
+        keywords="merchant cash advance, MCA, business funding, small business loan, working capital, business cash advance, fast business funding, quick business capital, instant business loan, no credit check business loan, bad credit business funding, alternative business financing, merchant financing, credit card advance, sales-based financing, revenue-based financing, business line of credit, short-term business loan, emergency business funding, same-day business funding, 24-hour approval, fast approval business loan, easy business funding, simple business loan, online business loan, business loan application, merchant advance, cash advance for business, advance on credit card sales, future receivables financing, small business capital, startup funding, business expansion loan, inventory financing, equipment financing, seasonal business funding, bridge financing, business growth capital, restaurant funding, retail business loan, franchise financing, multi-location funding, business acquisition loan, renovation loan, marketing campaign funding, payroll financing, business emergency fund, business opportunity funding, no collateral business loan, unsecured business loan, flexible repayment loan, automatic payment deduction, daily payment deduction, percentage-based repayment, sales-based repayment, no fixed payment, cash flow friendly, business-friendly financing, merchant services financing, payment processor funding, POS system financing, credit card processor advance"
       />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500">

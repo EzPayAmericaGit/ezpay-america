@@ -70,9 +70,9 @@ export default function Services() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <SEOHead 
-        title="Services"
-        description="EzPay America payment processing services including credit card processing, mobile payments, POS systems, e-commerce integration, and merchant cash advance."
-        keywords="credit card processing, mobile payments, POS systems, e-commerce payments, ACH processing, merchant cash advance, payment gateway"
+        title="Payment Processing Services & Merchant Solutions"
+        description="EzPay America payment processing services including credit card processing, mobile payments, POS systems, e-commerce integration, ACH processing, and merchant cash advance. Zero-fee processing with free equipment."
+        keywords="payment processing services, merchant services, credit card processing, mobile payment solutions, POS systems, point of sale, e-commerce payments, online payment gateway, ACH processing, electronic check processing, merchant cash advance, business funding, gift card programs, loyalty programs, payment terminal, card reader, EMV chip card processing, contactless payments, NFC payments, tap to pay, Apple Pay, Google Pay, Samsung Pay, digital wallet, virtual terminal, recurring billing, subscription payments, invoice payments, payment integration, shopping cart integration, WooCommerce payments, Shopify payments, Magento payments, BigCommerce, payment API, secure payment processing, PCI compliance, fraud protection, chargeback prevention, payment security, SSL encryption, tokenization, payment analytics, sales reporting, real-time reporting, business intelligence, multi-location processing, franchise payment solutions, retail payment processing, restaurant payment systems, hospitality payments, healthcare payments, professional services payments, B2B payments, wholesale payments, distribution payments, manufacturing payments, next-day funding, same-day deposits, fast funding, competitive rates, low processing fees, transparent pricing, no hidden fees, no monthly fees, no annual fees, month to month, no contract, free equipment, free terminal, free card reader, free setup, free installation, 24/7 support, USA-based support, merchant support, technical support, payment processing support"
       />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-500 to-orange-600 text-white">

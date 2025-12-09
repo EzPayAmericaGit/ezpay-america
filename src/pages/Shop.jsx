@@ -74,9 +74,9 @@ export default function Shop() {
   return (
     <div className="min-h-screen bg-white py-20">
       <SEOHead 
-        title="EzCart - Shop"
-        description="Shop EzPay America products and services"
-        keywords="shop, products, payment solutions, POS systems"
+        title="Shop Payment Processing Equipment & POS Systems"
+        description="Shop EzPay America products including POS systems, credit card terminals, mobile card readers, receipt printers, cash drawers, and payment processing equipment. Free shipping on orders over $99."
+        keywords="buy POS system, shop POS equipment, credit card terminal for sale, payment terminal, card reader, mobile card reader, wireless card reader, bluetooth card reader, EMV terminal, chip card reader, contactless terminal, NFC reader, tap to pay terminal, countertop terminal, mobile POS terminal, portable card reader, iPad POS system, tablet POS, Android POS, all-in-one POS, touchscreen POS, receipt printer, thermal printer, kitchen printer, bar printer, cash drawer, cash register, barcode scanner, label printer, customer display, pole display, kitchen display screen, payment processing equipment, merchant services equipment, credit card machine, swipe terminal, PIN pad, signature pad, wireless printer, ethernet printer, USB printer, bluetooth printer, POS accessories, POS hardware, POS peripherals, payment device, credit card reader, debit card reader, gift card reader, loyalty card reader, integrated payments, payment solutions, merchant equipment, retail equipment, restaurant equipment, POS supplies, receipt paper, thermal paper, ribbon cartridges, cleaning cards, printer maintenance, equipment warranty, POS bundles, starter kits, complete POS systems, turnkey solutions, plug and play POS, easy setup POS, wireless payment solutions, mobile payment devices, portable payment terminals, on-the-go payments, field service equipment, delivery equipment, trade show equipment, event payment processing, outdoor payment solutions, rugged terminals, weatherproof equipment, battery powered, charging station, equipment stands, mounting brackets, security cables, protective cases, carrying cases, equipment financing, payment plans, lease to own, rent to own, equipment upgrades, trade-in program, refurbished equipment, certified pre-owned, new equipment, latest technology"
       />
       
       <ShoppingCartTutorial />
