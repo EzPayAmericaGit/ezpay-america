@@ -165,6 +165,9 @@ export default function Checkout() {
               <Card className="mb-6">
                 <CardHeader>
                   <CardTitle>Contact Information</CardTitle>
+                  <p className="text-sm text-amber-600 font-semibold mt-2">
+                    NOTE: THIS PURCHASE REQUIRES A NEW APPROVED MERCHANT APPLICATION WITH EzPay America Inc.
+                  </p>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid md:grid-cols-2 gap-4">
