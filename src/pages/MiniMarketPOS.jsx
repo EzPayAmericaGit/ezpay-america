@@ -195,9 +195,11 @@ export default function MiniMarketPOS() {
             >
               <img
                 src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=800&h=600&fit=crop"
-                alt="Convenience store checkout with modern POS system"
+                alt="Convenience store checkout counter with EzPay POS system and barcode scanner for fast transactions"
                 className="w-full h-auto rounded-2xl shadow-2xl"
                 loading="lazy"
+                width="800"
+                height="600"
               />
             </motion.div>
           </div>

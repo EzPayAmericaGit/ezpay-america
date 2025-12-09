@@ -195,9 +195,11 @@ export default function BarTavernPOS() {
             >
               <img
                 src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800&h=600&fit=crop"
-                alt="Modern bar with POS system"
+                alt="Modern bar interior with EzPay POS system for tab management and payment processing"
                 className="w-full h-auto rounded-2xl shadow-2xl"
                 loading="lazy"
+                width="800"
+                height="600"
               />
             </motion.div>
           </div>

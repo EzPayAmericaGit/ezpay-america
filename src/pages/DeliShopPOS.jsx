@@ -195,9 +195,11 @@ export default function DeliShopPOS() {
             >
               <img
                 src="https://images.unsplash.com/photo-1619740455993-557c2f88fcc3?w=800&h=600&fit=crop"
-                alt="Deli counter with modern POS system"
+                alt="Deli counter with fresh meats and EzPay POS system for sandwich ordering and weight-based pricing"
                 className="w-full h-auto rounded-2xl shadow-2xl"
                 loading="lazy"
+                width="800"
+                height="600"
               />
             </motion.div>
           </div>

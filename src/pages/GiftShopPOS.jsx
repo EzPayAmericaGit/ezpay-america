@@ -195,9 +195,11 @@ export default function GiftShopPOS() {
             >
               <img
                 src="https://images.unsplash.com/photo-1513885535751-8b9238bd345a?w=800&h=600&fit=crop"
-                alt="Gift shop boutique with modern POS system"
+                alt="Boutique gift shop interior with EzPay POS system for gift registry and customer management"
                 className="w-full h-auto rounded-2xl shadow-2xl"
                 loading="lazy"
+                width="800"
+                height="600"
               />
             </motion.div>
           </div>
