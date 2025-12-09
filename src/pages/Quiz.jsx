@@ -132,6 +132,11 @@ ${formData.message || 'No additional message'}
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead 
+        title="Payment Processing Quiz - Find Your Perfect Solution"
+        description="Take our interactive quiz to discover the best payment processing and POS solution for your business. Get personalized recommendations in minutes."
+        keywords="payment processing quiz, POS system finder, merchant services comparison, business payment solution, restaurant POS finder"
+      />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -493,7 +498,14 @@ ${formData.message || 'No additional message'}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                   >
                     <Card className="border-none shadow-xl overflow-hidden">
-                      <img src={solution.image} alt={solution.name} className="w-full h-48 object-cover" />
+                      <img 
+                        src={solution.image} 
+                        alt={`${solution.name} - Complete POS and payment processing solution for your business`} 
+                        className="w-full h-48 object-cover"
+                        loading="lazy"
+                        width="400"
+                        height="300"
+                      />
                       <CardContent className="p-6">
                         <h3 className="text-xl font-bold text-gray-900 mb-2">{solution.name}</h3>
                         <p className="text-gray-600">
@@ -601,8 +613,11 @@ ${formData.message || 'No additional message'}
                 <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                   <img
                     src="https://images.unsplash.com/photo-1556742521-9713bf272865?w=800&h=600&fit=crop"
-                    alt="Payment Processing"
+                    alt="Business owner reviewing payment processing solutions and POS system recommendations"
                     className="w-full h-full object-cover"
+                    loading="lazy"
+                    width="800"
+                    height="600"
                   />
                 </div>
               </div>
