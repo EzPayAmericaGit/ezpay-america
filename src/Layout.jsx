@@ -94,7 +94,7 @@ export default function Layout({ children }) {
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-8">
+            <nav className="hidden lg:flex items-center gap-4 xl:gap-6">
               {navigationItems.map((item) => (
                 item.submenu ? (
                   <div 
@@ -103,7 +103,7 @@ export default function Layout({ children }) {
                   >
                     <Link
                       to={item.url}
-                      className={`flex items-center gap-1 text-gray-700 hover:text-amber-600 font-medium transition-colors ${
+                      className={`flex items-center gap-1 text-sm lg:text-base text-gray-700 hover:text-amber-600 font-medium transition-colors whitespace-nowrap ${
                         location.pathname === item.url ? "text-amber-600" : ""
                       }`}
                     >
@@ -128,7 +128,7 @@ export default function Layout({ children }) {
                   <Link
                     key={item.title}
                     to={item.url}
-                    className={`text-gray-700 hover:text-amber-600 font-medium transition-colors ${
+                    className={`text-sm lg:text-base text-gray-700 hover:text-amber-600 font-medium transition-colors whitespace-nowrap ${
                       location.pathname === item.url ? "text-amber-600" : ""
                     }`}
                   >
@@ -198,7 +198,7 @@ export default function Layout({ children }) {
 
             {/* Mobile Menu Button */}
             <button
-              className="md:hidden p-2 rounded-lg hover:bg-gray-100"
+              className="lg:hidden p-2 rounded-lg hover:bg-gray-100"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? (
@@ -212,7 +212,7 @@ export default function Layout({ children }) {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-gray-200 bg-white">
+          <div className="lg:hidden border-t border-gray-200 bg-white">
             <nav className="px-4 py-4 space-y-3">
               {navigationItems.map((item) => (
                 <div key={item.title}>
