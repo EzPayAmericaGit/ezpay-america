@@ -4,7 +4,7 @@ import { createPageUrl } from "@/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { base44 } from "@/api/base44Client";
-import { Newspaper, FileText, Users, ShieldAlert, Loader2, UserCircle, BarChart3, Mail, ShoppingBag } from "lucide-react";
+import { Newspaper, FileText, Users, ShieldAlert, Loader2, UserCircle, BarChart3, Mail, ShoppingBag, Settings } from "lucide-react";
 
 export default function Admin() {
   const [authStatus, setAuthStatus] = useState({ loading: true, isAdmin: false });
@@ -109,6 +109,22 @@ export default function Admin() {
               <CardContent>
                 <p className="text-gray-600">
                   Manage EzCart products, upload images, and set pricing.
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link to={createPageUrl("SettingsAdmin")}>
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Settings className="w-6 h-6 text-gray-600" />
+                  Store Settings
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">
+                  Configure tax rates and shipping costs for EzCart.
                 </p>
               </CardContent>
             </Card>
