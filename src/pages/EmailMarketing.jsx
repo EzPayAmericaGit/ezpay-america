@@ -22,8 +22,10 @@ export default function EmailMarketing() {
     name: "",
     subject: "",
     content: "",
-    targetAudience: "all"
+    targetAudience: "all",
+    imageUrl: ""
   });
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     loadCampaigns();
@@ -50,7 +52,7 @@ export default function EmailMarketing() {
       }
       
       setShowDialog(false);
-      setFormData({ name: "", subject: "", content: "", targetAudience: "all" });
+      setFormData({ name: "", subject: "", content: "", targetAudience: "all", imageUrl: "" });
       setEditingCampaign(null);
       loadCampaigns();
     } catch (error) {
@@ -91,9 +93,26 @@ export default function EmailMarketing() {
       name: campaign.name,
       subject: campaign.subject,
       content: campaign.content,
-      targetAudience: campaign.targetAudience
+      targetAudience: campaign.targetAudience,
+      imageUrl: campaign.imageUrl || ""
     });
     setShowDialog(true);
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    setUploading(true);
+    try {
+      const result = await base44.integrations.Core.UploadFile({ file });
+      setFormData({...formData, imageUrl: result.file_url});
+    } catch (error) {
+      console.error("Upload error:", error);
+      alert("Error uploading image");
+    } finally {
+      setUploading(false);
+    }
   };
 
   const getStatusColor = (status) => {
@@ -123,7 +142,7 @@ export default function EmailMarketing() {
               <Button 
                 onClick={() => {
                   setEditingCampaign(null);
-                  setFormData({ name: "", subject: "", content: "", targetAudience: "all" });
+                  setFormData({ name: "", subject: "", content: "", targetAudience: "all", imageUrl: "" });
                 }}
                 className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white"
               >
@@ -168,6 +187,37 @@ export default function EmailMarketing() {
                       <SelectItem value="website_visitors">Website Visitors</SelectItem>
                     </SelectContent>
                   </Select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Upload Image (Optional)</label>
+                  <div className="space-y-2">
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      disabled={uploading}
+                      className="cursor-pointer"
+                    />
+                    {uploading && (
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Uploading...
+                      </div>
+                    )}
+                    {formData.imageUrl && (
+                      <div className="flex items-center gap-2">
+                        <img src={formData.imageUrl} alt="Preview" className="h-20 w-20 object-cover rounded" />
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => setFormData({...formData, imageUrl: ""})}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div>
