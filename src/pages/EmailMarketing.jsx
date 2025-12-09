@@ -106,7 +106,12 @@ export default function EmailMarketing() {
     setUploading(true);
     try {
       const result = await base44.integrations.Core.UploadFile({ file });
-      setFormData({...formData, imageUrl: result.file_url});
+      const imageUrl = result.file_url;
+      setFormData({
+        ...formData, 
+        imageUrl: imageUrl,
+        content: formData.content + `<img src="${imageUrl}" alt="Email image" style="max-width: 100%; height: auto;" />`
+      });
     } catch (error) {
       console.error("Upload error:", error);
       alert("Error uploading image");
