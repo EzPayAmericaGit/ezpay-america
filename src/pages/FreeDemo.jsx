@@ -63,6 +63,11 @@ export default function FreeDemo() {
         status: "pending"
       });
       
+      // Send special offer email
+      base44.functions.invoke('sendSpecialOfferEmail', { 
+        email: formData.email 
+      }).catch(err => console.error('Special offer email error:', err));
+      
       setSubmitted(true);
     } catch (error) {
       console.error("Error submitting demo request:", error);
