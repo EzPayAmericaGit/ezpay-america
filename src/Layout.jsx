@@ -53,15 +53,7 @@ export default function Layout({ children }) {
     { title: "Contact Us", url: createPageUrl("Contact") },
     { title: "Support", url: createPageUrl("Support") },
     { title: "News", url: createPageUrl("News") },
-    ...(user?.role === 'admin' ? [{
-      title: "Admin",
-      url: createPageUrl("AdminDashboard"),
-      submenu: [
-        { title: "Analytics", url: createPageUrl("Analytics") },
-        { title: "Email Marketing", url: createPageUrl("EmailMarketing") },
-        { title: "Dashboard", url: createPageUrl("AdminDashboard") }
-      ]
-    }] : [])
+    ...(user?.role === 'admin' ? [{ title: "Admin", url: createPageUrl("Admin") }] : [])
   ], [user]);
 
   // Live Chat - Opens Crisp chat or alternative

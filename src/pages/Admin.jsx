@@ -4,7 +4,7 @@ import { createPageUrl } from "@/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { base44 } from "@/api/base44Client";
-import { Newspaper, FileText, Users, ShieldAlert, Loader2, UserCircle } from "lucide-react";
+import { Newspaper, FileText, Users, ShieldAlert, Loader2, UserCircle, BarChart3, Mail } from "lucide-react";
 
 export default function Admin() {
   const [authStatus, setAuthStatus] = useState({ loading: true, isAdmin: false });
@@ -66,17 +66,33 @@ export default function Admin() {
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Admin Panel</h1>
         
         <div className="grid md:grid-cols-2 gap-6">
-          <Link to={createPageUrl("NewsAdmin")}>
+          <Link to={createPageUrl("Analytics")}>
             <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Newspaper className="w-6 h-6 text-purple-600" />
-                  News Admin
+                  <BarChart3 className="w-6 h-6 text-blue-600" />
+                  Analytics
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-gray-600">
-                  Manage news articles, create AI-generated content, and optimize SEO.
+                  View website analytics, traffic data, and user behavior insights.
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link to={createPageUrl("EmailMarketing")}>
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Mail className="w-6 h-6 text-red-600" />
+                  Email Marketing
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">
+                  Create and manage email campaigns to reach your audience.
                 </p>
               </CardContent>
             </Card>
@@ -98,11 +114,27 @@ export default function Admin() {
             </Card>
           </Link>
 
+          <Link to={createPageUrl("NewsAdmin")}>
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Newspaper className="w-6 h-6 text-purple-600" />
+                  News Admin
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">
+                  Manage news articles, create AI-generated content, and optimize SEO.
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
+
           <Link to={createPageUrl("UserManagement")}>
             <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Users className="w-6 h-6 text-blue-600" />
+                  <Users className="w-6 h-6 text-indigo-600" />
                   User Management
                 </CardTitle>
               </CardHeader>
