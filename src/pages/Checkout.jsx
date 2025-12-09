@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,9 +34,25 @@ export default function Checkout() {
   const [orderId, setOrderId] = useState(null);
   const [shippingCost, setShippingCost] = useState(0);
   const [calculatingShipping, setCalculatingShipping] = useState(false);
+  const [taxRate, setTaxRate] = useState(0.08);
+
+  React.useEffect(() => {
+    const loadSettings = async () => {
+      try {
+        const settings = await base44.entities.Settings.list();
+        const taxSetting = settings.find(s => s.settingKey === 'tax_rate');
+        if (taxSetting) {
+          setTaxRate(parseFloat(taxSetting.settingValue) / 100);
+        }
+      } catch (error) {
+        console.error('Failed to load settings');
+      }
+    };
+    loadSettings();
+  }, []);
 
   const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const tax = subtotal * 0.08;
+  const tax = subtotal * taxRate;
   const total = subtotal + tax + shippingCost;
 
   const calculateShipping = async (zipCode) => {
