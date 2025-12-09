@@ -16,6 +16,7 @@ export default function Shop() {
     const saved = localStorage.getItem('ezCart');
     return saved ? JSON.parse(saved) : [];
   });
+  const [selectedCategory, setSelectedCategory] = useState('All');
 
   const { data: products = [], isLoading } = useQuery({
     queryKey: ['products'],
@@ -56,6 +57,12 @@ export default function Shop() {
   const cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
+  const categories = ['All', ...new Set(products.map(p => p.category).filter(Boolean))];
+  
+  const filteredProducts = selectedCategory === 'All' 
+    ? products 
+    : products.filter(p => p.category === selectedCategory);
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -63,13 +70,6 @@ export default function Shop() {
       </div>
     );
   }
-
-  const categories = ['All', ...new Set(products.map(p => p.category).filter(Boolean))];
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  
-  const filteredProducts = selectedCategory === 'All' 
-    ? products 
-    : products.filter(p => p.category === selectedCategory);
 
   return (
     <div className="min-h-screen bg-white py-20">
