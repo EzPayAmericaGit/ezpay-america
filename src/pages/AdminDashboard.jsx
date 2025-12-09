@@ -27,7 +27,8 @@ import {
   ShieldAlert,
   Bot,
   Users,
-  Wand2
+  Wand2,
+  Package
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -489,7 +490,19 @@ Provide a complete article with all metadata.`,
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
+            <Link to={createPageUrl("ProductAdmin")}>
+              <Button variant="outline" className="border-green-500 text-green-600 hover:bg-green-50">
+                <Package className="w-4 h-4 mr-2" />
+                Products
+              </Button>
+            </Link>
+            <Link to={createPageUrl("SettingsAdmin")}>
+              <Button variant="outline" className="border-gray-500 text-gray-600 hover:bg-gray-50">
+                <Building2 className="w-4 h-4 mr-2" />
+                Settings
+              </Button>
+            </Link>
             <Link to={createPageUrl("UserManagement")}>
               <Button variant="outline" className="border-blue-500 text-blue-600 hover:bg-blue-50">
                 <Users className="w-4 h-4 mr-2" />
@@ -497,15 +510,9 @@ Provide a complete article with all metadata.`,
               </Button>
             </Link>
             <Link to={createPageUrl("NewsAdmin")}>
-              <Button className="bg-purple-600 hover:bg-purple-700">
-                <Wand2 className="w-4 h-4 mr-2" />
-                AI Generate News
-              </Button>
-            </Link>
-            <Link to={createPageUrl("NewsAdmin")}>
               <Button variant="outline">
                 <Newspaper className="w-4 h-4 mr-2" />
-                News Admin
+                News
               </Button>
             </Link>
             <Button 
