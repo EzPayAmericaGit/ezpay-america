@@ -195,9 +195,11 @@ export default function CoffeePOS() {
             >
               <img
                 src="https://images.unsplash.com/photo-1511920170033-f8396924c348?w=800&h=600&fit=crop"
-                alt="Coffee shop barista using POS system"
+                alt="Barista using EzPay POS system in modern coffee shop for fast order entry and customer loyalty"
                 className="w-full h-auto rounded-2xl shadow-2xl"
                 loading="lazy"
+                width="800"
+                height="600"
               />
             </motion.div>
           </div>
