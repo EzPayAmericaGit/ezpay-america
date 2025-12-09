@@ -32,11 +32,12 @@ export default function Checkout() {
   const [processing, setProcessing] = useState(false);
   const [orderComplete, setOrderComplete] = useState(false);
   const [orderId, setOrderId] = useState(null);
+  const [shippingCost, setShippingCost] = useState(0);
+  const [calculatingShipping, setCalculatingShipping] = useState(false);
 
   const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const tax = subtotal * 0.08;
-  const shipping = 9.99;
-  const total = subtotal + tax + shipping;
+  const total = subtotal + tax + shippingCost;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -65,7 +66,7 @@ export default function Checkout() {
           })),
           subtotal,
           tax,
-          shipping,
+          shipping: shippingCost,
           total
         },
         paymentData: {
@@ -204,7 +205,14 @@ export default function Checkout() {
                     <Input
                       placeholder="ZIP"
                       value={formData.zip}
-                      onChange={(e) => setFormData({...formData, zip: e.target.value})}
+                      onChange={(e) => {
+                        const zip = e.target.value;
+                        setFormData({...formData, zip});
+                        if (zip.length === 5) {
+                          calculateShipping(zip);
+                        }
+                      }}
+                      maxLength={5}
                       required
                     />
                   </div>
@@ -281,8 +289,16 @@ export default function Checkout() {
                     <span>${tax.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span>Shipping</span>
-                    <span>${shipping.toFixed(2)}</span>
+                    <span>Shipping (UPS Ground)</span>
+                    <span>
+                      {calculatingShipping ? (
+                        <Loader2 className="w-4 h-4 animate-spin inline" />
+                      ) : shippingCost > 0 ? (
+                        `$${shippingCost.toFixed(2)}`
+                      ) : (
+                        'Enter ZIP'
+                      )}
+                    </span>
                   </div>
                   <div className="flex justify-between font-bold text-lg border-t pt-2">
                     <span>Total</span>
