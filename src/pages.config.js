@@ -34,6 +34,9 @@ import MiniMarketPOS from './pages/MiniMarketPOS';
 import GiftShopPOS from './pages/GiftShopPOS';
 import UserManagement from './pages/UserManagement';
 import Admin from './pages/Admin';
+import Analytics from './pages/Analytics';
+import CustomerOnboarding from './pages/CustomerOnboarding';
+import EmailMarketing from './pages/EmailMarketing';
 import __Layout from './Layout.jsx';
 
 
@@ -74,6 +77,9 @@ export const PAGES = {
     "GiftShopPOS": GiftShopPOS,
     "UserManagement": UserManagement,
     "Admin": Admin,
+    "Analytics": Analytics,
+    "CustomerOnboarding": CustomerOnboarding,
+    "EmailMarketing": EmailMarketing,
 }
 
 export const pagesConfig = {

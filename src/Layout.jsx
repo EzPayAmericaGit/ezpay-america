@@ -50,7 +50,12 @@ export default function Layout({ children }) {
     { title: "Apply Online", url: createPageUrl("ApplyOnline") },
     { title: "Contact Us", url: createPageUrl("Contact") },
     { title: "Support", url: createPageUrl("Support") },
-    { title: "News", url: createPageUrl("News") }
+    { title: "News", url: createPageUrl("News") },
+    ...(user?.role === 'admin' ? [
+      { title: "Analytics", url: createPageUrl("Analytics") },
+      { title: "Email Marketing", url: createPageUrl("EmailMarketing") }
+    ] : []),
+    ...(user ? [{ title: "Onboarding", url: createPageUrl("CustomerOnboarding") }] : [])
   ], [user]);
 
   // Live Chat - Opens Crisp chat or alternative
