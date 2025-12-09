@@ -4,7 +4,7 @@ import { createPageUrl } from "@/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { base44 } from "@/api/base44Client";
-import { Newspaper, FileText, Users, ShieldAlert, Loader2, UserCircle, BarChart3, Mail } from "lucide-react";
+import { Newspaper, FileText, Users, ShieldAlert, Loader2, UserCircle, BarChart3, Mail, ShoppingBag } from "lucide-react";
 
 export default function Admin() {
   const [authStatus, setAuthStatus] = useState({ loading: true, isAdmin: false });
@@ -93,6 +93,22 @@ export default function Admin() {
               <CardContent>
                 <p className="text-gray-600">
                   Create and manage email campaigns to reach your audience.
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link to={createPageUrl("ProductAdmin")}>
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <ShoppingBag className="w-6 h-6 text-orange-600" />
+                  Product Management
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">
+                  Manage EzCart products, upload images, and set pricing.
                 </p>
               </CardContent>
             </Card>
