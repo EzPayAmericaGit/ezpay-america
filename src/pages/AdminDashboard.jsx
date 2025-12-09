@@ -491,38 +491,44 @@ Provide a complete article with all metadata.`,
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
           <div className="flex gap-2 flex-wrap">
-            <Link to={createPageUrl("ProductAdmin")}>
-              <Button variant="outline" className="border-green-500 text-green-600 hover:bg-green-50">
-                <Package className="w-4 h-4 mr-2" />
-                Products
+              <Link to={createPageUrl("OrdersAdmin")}>
+                <Button variant="outline" className="border-amber-500 text-amber-600 hover:bg-amber-50">
+                  <Package className="w-4 h-4 mr-2" />
+                  Orders
+                </Button>
+              </Link>
+              <Link to={createPageUrl("ProductAdmin")}>
+                <Button variant="outline" className="border-green-500 text-green-600 hover:bg-green-50">
+                  <Package className="w-4 h-4 mr-2" />
+                  Products
+                </Button>
+              </Link>
+              <Link to={createPageUrl("SettingsAdmin")}>
+                <Button variant="outline" className="border-gray-500 text-gray-600 hover:bg-gray-50">
+                  <Building2 className="w-4 h-4 mr-2" />
+                  Settings
+                </Button>
+              </Link>
+              <Link to={createPageUrl("UserManagement")}>
+                <Button variant="outline" className="border-blue-500 text-blue-600 hover:bg-blue-50">
+                  <Users className="w-4 h-4 mr-2" />
+                  Users
+                </Button>
+              </Link>
+              <Link to={createPageUrl("NewsAdmin")}>
+                <Button variant="outline">
+                  <Newspaper className="w-4 h-4 mr-2" />
+                  News
+                </Button>
+              </Link>
+              <Button 
+                onClick={() => queryClient.invalidateQueries(['adminApplications'])}
+                variant="outline"
+              >
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Refresh
               </Button>
-            </Link>
-            <Link to={createPageUrl("SettingsAdmin")}>
-              <Button variant="outline" className="border-gray-500 text-gray-600 hover:bg-gray-50">
-                <Building2 className="w-4 h-4 mr-2" />
-                Settings
-              </Button>
-            </Link>
-            <Link to={createPageUrl("UserManagement")}>
-              <Button variant="outline" className="border-blue-500 text-blue-600 hover:bg-blue-50">
-                <Users className="w-4 h-4 mr-2" />
-                Users
-              </Button>
-            </Link>
-            <Link to={createPageUrl("NewsAdmin")}>
-              <Button variant="outline">
-                <Newspaper className="w-4 h-4 mr-2" />
-                News
-              </Button>
-            </Link>
-            <Button 
-              onClick={() => queryClient.invalidateQueries(['adminApplications'])}
-              variant="outline"
-            >
-              <RefreshCw className="w-4 h-4 mr-2" />
-              Refresh
-            </Button>
-          </div>
+            </div>
         </div>
 
         {/* Stats Cards */}
