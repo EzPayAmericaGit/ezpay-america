@@ -17,9 +17,9 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Home"
-        description="EzPay America offers zero-fee payment processing, free POS systems, and merchant services. No monthly fees, no contracts, 24/7 US-based support."
-        keywords="payment processing, merchant services, zero fee processing, free POS system, credit card processing, EzPay America"
+        title="Zero-Fee Payment Processing & Merchant Services"
+        description="EzPay America - Leading payment processing solutions with zero transaction fees, free POS systems, and merchant services for retail and restaurants. No monthly fees, no contracts, 24/7 US support. Accept credit cards, mobile payments, and contactless transactions."
+        keywords="payment processing, merchant services, zero fee processing, free POS system, credit card processing, EzPay America, retail payments, restaurant POS"
       />
       <HeroSection />
       <Suspense fallback={<div className="h-screen" />}>

@@ -1,18 +1,21 @@
 import { useEffect } from "react";
 
 export default function SEOHead({ title, description, keywords }) {
-  useEffect(() => {
-    // Update document title
+  
+  // Set document title immediately
+  if (typeof document !== 'undefined') {
     document.title = title ? `${title} | EzPay America` : "EzPay America - Payment Processing Solutions";
-    
+  }
+
+  useEffect(() => {
     // Update or create meta description
     let metaDescription = document.querySelector('meta[name="description"]');
     if (!metaDescription) {
       metaDescription = document.createElement('meta');
       metaDescription.name = "description";
-      document.head.appendChild(metaDescription);
+      document.head.insertBefore(metaDescription, document.head.firstChild);
     }
-    metaDescription.content = description || "EzPay America offers zero-fee payment processing, POS systems, and merchant services for retail and restaurant businesses across the USA.";
+    metaDescription.setAttribute('content', description || "EzPay America offers zero-fee payment processing, POS systems, and merchant services for retail and restaurant businesses across the USA.");
     
     // Update or create meta keywords
     let metaKeywords = document.querySelector('meta[name="keywords"]');
