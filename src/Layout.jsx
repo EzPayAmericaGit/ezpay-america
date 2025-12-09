@@ -4,6 +4,7 @@ import { createPageUrl } from "@/utils";
 import { Phone, Menu, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { base44 } from "@/api/base44Client";
+import AnalyticsTracker from "../components/AnalyticsTracker";
 
 export default function Layout({ children }) {
   const location = useLocation();
@@ -50,12 +51,7 @@ export default function Layout({ children }) {
     { title: "Apply Online", url: createPageUrl("ApplyOnline") },
     { title: "Contact Us", url: createPageUrl("Contact") },
     { title: "Support", url: createPageUrl("Support") },
-    { title: "News", url: createPageUrl("News") },
-    ...(user?.role === 'admin' ? [
-      { title: "Analytics", url: createPageUrl("Analytics") },
-      { title: "Email Marketing", url: createPageUrl("EmailMarketing") }
-    ] : []),
-    ...(user ? [{ title: "Onboarding", url: createPageUrl("CustomerOnboarding") }] : [])
+    { title: "News", url: createPageUrl("News") }
   ], [user]);
 
   // Live Chat - Opens Crisp chat or alternative
@@ -72,6 +68,7 @@ export default function Layout({ children }) {
 
   return (
     <div className="min-h-screen bg-white">
+      <AnalyticsTracker />
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
