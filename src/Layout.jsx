@@ -51,7 +51,7 @@ export default function Layout({ children }) {
     { title: "Quiz", url: createPageUrl("Quiz") },
     { title: "Apply Online", url: createPageUrl("ApplyOnline") },
     { title: "Contact Us", url: createPageUrl("Contact") },
-    { title: "Support", url: createPageUrl("Support") },
+    { title: "Shop", url: createPageUrl("Shop") },
     { title: "News", url: createPageUrl("News") }
   ], [user]);
 

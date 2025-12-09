@@ -1,0 +1,58 @@
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.4';
+
+Deno.serve(async (req) => {
+  try {
+    const base44 = createClientFromRequest(req);
+    const { orderData, paymentData } = await req.json();
+
+    // Build NMI request
+    const nmiParams = new URLSearchParams({
+      security_key: Deno.env.get("NMI_API_KEY"),
+      type: 'sale',
+      ccnumber: paymentData.cardNumber.replace(/\s/g, ''),
+      ccexp: paymentData.expiry.replace(/\s/g, ''),
+      cvv: paymentData.cvv,
+      amount: orderData.total.toFixed(2),
+      first_name: paymentData.firstName,
+      last_name: paymentData.lastName,
+      email: orderData.customerEmail,
+      orderid: orderData.orderNumber
+    });
+
+    // Process payment with NMI
+    const nmiResponse = await fetch('https://secure.nmi.com/api/transact.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: nmiParams
+    });
+
+    const responseText = await nmiResponse.text();
+    const nmiData = Object.fromEntries(new URLSearchParams(responseText));
+
+    if (nmiData.response === '1') {
+      // Payment successful - create order
+      const order = await base44.asServiceRole.entities.Order.create({
+        ...orderData,
+        paymentStatus: 'paid',
+        transactionId: nmiData.transactionid,
+        nmiResponse: nmiData
+      });
+
+      return Response.json({ 
+        success: true, 
+        orderId: order.id,
+        transactionId: nmiData.transactionid
+      });
+    } else {
+      return Response.json({ 
+        success: false, 
+        error: nmiData.responsetext || 'Payment failed'
+      }, { status: 400 });
+    }
+  } catch (error) {
+    return Response.json({ 
+      success: false, 
+      error: error.message 
+    }, { status: 500 });
+  }
+});

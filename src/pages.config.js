@@ -37,6 +37,8 @@ import Admin from './pages/Admin';
 import Analytics from './pages/Analytics';
 import CustomerOnboarding from './pages/CustomerOnboarding';
 import EmailMarketing from './pages/EmailMarketing';
+import Shop from './pages/Shop';
+import Checkout from './pages/Checkout';
 import __Layout from './Layout.jsx';
 
 
@@ -80,6 +82,8 @@ export const PAGES = {
     "Analytics": Analytics,
     "CustomerOnboarding": CustomerOnboarding,
     "EmailMarketing": EmailMarketing,
+    "Shop": Shop,
+    "Checkout": Checkout,
 }
 
 export const pagesConfig = {
