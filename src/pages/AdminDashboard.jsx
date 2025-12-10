@@ -548,6 +548,15 @@ Provide a complete article with all metadata.`,
               </CardContent>
             </Card>
           </Link>
+          <Link to={createPageUrl("BacklinkOutreach")}>
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-l-4 border-l-pink-500">
+              <CardContent className="p-6">
+                <Bot className="w-8 h-8 text-pink-600 mb-2" />
+                <h3 className="font-semibold text-gray-900">Backlinks</h3>
+                <p className="text-sm text-gray-500">AI SEO outreach</p>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
 
         {/* Stats Cards */}
