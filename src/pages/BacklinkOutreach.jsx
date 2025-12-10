@@ -82,9 +82,9 @@ Return just the email body, no subject line.`,
     
     setIsSending(true);
     try {
-      await base44.integrations.Core.SendEmail({
+      await base44.functions.invoke('sendBacklinkEmail', {
         to: recipientEmail,
-        subject: `Partnership Opportunity with EzPay America`,
+        subject: 'Partnership Opportunity with EzPay America',
         body: generatedEmail
       });
       setSent(true);
