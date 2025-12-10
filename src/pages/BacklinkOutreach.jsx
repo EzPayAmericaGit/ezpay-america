@@ -56,6 +56,16 @@ The email should:
 4. Be professional but friendly
 5. Include a clear call to action
 6. Be concise (under 200 words)
+7. ALWAYS end with this exact signature:
+
+Best regards,
+
+Jeremy Carrigg
+Director Of Operations
+EzPay America Inc.
+(865) 316-9625
+contact@ezpayamerica.com
+www.ezpayamerica.com
 
 Return just the email body, no subject line.`,
         response_json_schema: {
