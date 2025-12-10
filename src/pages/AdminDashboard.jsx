@@ -557,6 +557,15 @@ Provide a complete article with all metadata.`,
               </CardContent>
             </Card>
           </Link>
+          <Link to={createPageUrl("BusinessScraper")}>
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-l-4 border-l-indigo-500">
+              <CardContent className="p-6">
+                <Bot className="w-8 h-8 text-indigo-600 mb-2" />
+                <h3 className="font-semibold text-gray-900">Lead Scraper</h3>
+                <p className="text-sm text-gray-500">Extract business info</p>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
 
         {/* Stats Cards */}
