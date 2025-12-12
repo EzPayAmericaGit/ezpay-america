@@ -92,7 +92,7 @@ export default function CountertopTerminal() {
               className="relative"
             >
               <img
-                src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=600&fit=crop"
+                src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=600&h=600&fit=crop"
                 alt="Modern countertop payment terminal processing transactions"
                 className="rounded-2xl shadow-2xl"
                 loading="eager"
