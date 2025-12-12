@@ -47,6 +47,7 @@ import OrdersAdmin from './pages/OrdersAdmin';
 import MyAccount from './pages/MyAccount';
 import BacklinkOutreach from './pages/BacklinkOutreach';
 import NotificationPreferences from './pages/NotificationPreferences';
+import CountertopTerminal from './pages/CountertopTerminal';
 import __Layout from './Layout.jsx';
 
 
@@ -100,6 +101,7 @@ export const PAGES = {
     "MyAccount": MyAccount,
     "BacklinkOutreach": BacklinkOutreach,
     "NotificationPreferences": NotificationPreferences,
+    "CountertopTerminal": CountertopTerminal,
 }
 
 export const pagesConfig = {
