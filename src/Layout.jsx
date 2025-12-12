@@ -51,7 +51,7 @@ export default function Layout({ children }) {
       ]
     },
     { title: "Quiz", url: createPageUrl("Quiz") },
-    { title: "Apply Online", url: "https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true#application-form" },
+    { title: "Apply Online", url: createPageUrl("ApplyOnline") },
     { title: "Contact", url: createPageUrl("Contact") },
     { title: "Shop", url: createPageUrl("Shop") },
     { title: "News", url: createPageUrl("News") }
