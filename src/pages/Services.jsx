@@ -139,7 +139,7 @@ export default function Services() {
               Join thousands of businesses that trust EzPay America for their payment processing needs.
             </p>
             <a
-              href="https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true"
+              href="https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true#application-form"
               target="_blank"
               rel="noopener noreferrer"
             >

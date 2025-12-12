@@ -77,7 +77,7 @@ export default function Contact() {
               Work smarter, automate for efficiency, and open up new revenue streams.
             </p>
             <a
-              href="https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true"
+              href="https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true#application-form"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -290,7 +290,7 @@ export default function Contact() {
                 Get started with EzPay America and discover how we can transform your payment processing experience.
               </p>
               <a
-                href="https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true"
+                href="https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true#application-form"
                 target="_blank"
                 rel="noopener noreferrer"
               >
