@@ -56,6 +56,14 @@ export default function Layout({ children }) {
     { title: "Shop", url: createPageUrl("Shop") },
     { title: "News", url: createPageUrl("News") },
     { 
+      title: "Payments", 
+      url: createPageUrl("ProcessPayment"),
+      submenu: [
+        { title: "Process Payment", url: createPageUrl("ProcessPayment") },
+        { title: "Transaction History", url: createPageUrl("TransactionHistory") }
+      ]
+    },
+    { 
       title: "Admin", 
       url: createPageUrl("AdminDashboard"),
       submenu: [

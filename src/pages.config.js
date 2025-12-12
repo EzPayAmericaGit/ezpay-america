@@ -55,6 +55,8 @@ import ECommerce from './pages/ECommerce';
 import CRM from './pages/CRM';
 import Invoicing from './pages/Invoicing';
 import BusinessDashboard from './pages/BusinessDashboard';
+import ProcessPayment from './pages/ProcessPayment';
+import TransactionHistory from './pages/TransactionHistory';
 import __Layout from './Layout.jsx';
 
 
@@ -116,6 +118,8 @@ export const PAGES = {
     "CRM": CRM,
     "Invoicing": Invoicing,
     "BusinessDashboard": BusinessDashboard,
+    "ProcessPayment": ProcessPayment,
+    "TransactionHistory": TransactionHistory,
 }
 
 export const pagesConfig = {
