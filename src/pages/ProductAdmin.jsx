@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Edit, Trash2, Upload, Loader2, Search, Filter, Package, DollarSign, Eye, EyeOff, Star } from "lucide-react";
+import { Plus, Edit, Trash2, Upload, Loader2, Search, Filter, Package, DollarSign, Eye, EyeOff, Star, X } from "lucide-react";
 import SEOHead from "../components/SEOHead";
 
 export default function ProductAdmin() {
@@ -27,6 +27,7 @@ export default function ProductAdmin() {
     category: "",
     stock: "",
     image: "",
+    images: [],
     active: true,
     sku: "",
     isBundle: false,
@@ -82,6 +83,35 @@ export default function ProductAdmin() {
     }
   };
 
+  const handleMultipleImageUpload = async (e) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+    
+    const currentImages = formData.images || [];
+    if (currentImages.length + files.length > 4) {
+      alert('Maximum 4 images allowed');
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const uploadPromises = files.map(file => base44.integrations.Core.UploadFile({ file }));
+      const results = await Promise.all(uploadPromises);
+      const newImageUrls = results.map(r => r.file_url);
+      setFormData({ ...formData, images: [...currentImages, ...newImageUrls] });
+    } catch (error) {
+      alert('Failed to upload images');
+      console.error(error);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const removeImage = (index) => {
+    const newImages = formData.images.filter((_, i) => i !== index);
+    setFormData({ ...formData, images: newImages });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     
@@ -108,6 +138,7 @@ export default function ProductAdmin() {
       category: "",
       stock: "",
       image: "",
+      images: [],
       active: true,
       sku: "",
       isBundle: false,
@@ -128,6 +159,7 @@ export default function ProductAdmin() {
       category: product.category || "",
       stock: product.stock?.toString() || "0",
       image: product.image || "",
+      images: product.images || [],
       active: product.active !== false,
       sku: product.sku || "",
       isBundle: product.isBundle || false,
@@ -311,25 +343,43 @@ export default function ProductAdmin() {
                   </div>
                 </div>
 
-                {/* Product Image */}
+                {/* Product Images */}
                 <div className="space-y-4 border-t pt-4">
-                  <h3 className="font-semibold text-gray-900">Product Image</h3>
+                  <h3 className="font-semibold text-gray-900">Product Images (Up to 4)</h3>
                   
-                  {formData.image && (
-                    <div className="mb-2">
-                      <img src={formData.image} alt="Preview" className="w-32 h-32 object-cover rounded border" />
+                  {formData.images?.length > 0 && (
+                    <div className="grid grid-cols-4 gap-3 mb-3">
+                      {formData.images.map((img, index) => (
+                        <div key={index} className="relative">
+                          <img src={img} alt={`Product ${index + 1}`} className="w-full h-24 object-cover rounded border" />
+                          <button
+                            type="button"
+                            onClick={() => removeImage(index)}
+                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </div>
+                      ))}
                     </div>
                   )}
-                  <div className="flex gap-2">
-                    <Input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      disabled={uploading}
-                      className="flex-1"
-                    />
-                    {uploading && <Loader2 className="w-5 h-5 animate-spin" />}
-                  </div>
+                  
+                  {(formData.images?.length || 0) < 4 && (
+                    <div className="flex gap-2">
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={handleMultipleImageUpload}
+                        disabled={uploading}
+                        className="flex-1"
+                      />
+                      {uploading && <Loader2 className="w-5 h-5 animate-spin" />}
+                    </div>
+                  )}
+                  <p className="text-xs text-gray-500">
+                    {formData.images?.length || 0} of 4 images uploaded
+                  </p>
                 </div>
 
                 {/* Bundle Configuration */}

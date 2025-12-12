@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingCart, Star, Package } from "lucide-react";
+import { ShoppingCart, Star, Package, ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import SEOHead from "../components/SEOHead";
@@ -17,6 +17,7 @@ export default function Shop() {
     return saved ? JSON.parse(saved) : [];
   });
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [currentImageIndex, setCurrentImageIndex] = useState({});
 
   const { data: products = [], isLoading } = useQuery({
     queryKey: ['products'],
@@ -139,17 +140,51 @@ export default function Shop() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredProducts.map((product) => {
             const inCart = cart.find(item => item.id === product.id);
+            const productImages = product.images?.length > 0 ? product.images : (product.image ? [product.image] : []);
+            const currentIndex = currentImageIndex[product.id] || 0;
             
             return (
               <div key={product.id} className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all">
-                {/* Product Image */}
+                {/* Product Image with Gallery */}
                 <div className="relative aspect-square bg-gray-50 overflow-hidden">
-                  {product.image ? (
-                    <img 
-                      src={product.image} 
-                      alt={product.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
+                  {productImages.length > 0 ? (
+                    <>
+                      <img 
+                        src={productImages[currentIndex]} 
+                        alt={product.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      {productImages.length > 1 && (
+                        <>
+                          <button
+                            onClick={() => setCurrentImageIndex({
+                              ...currentImageIndex,
+                              [product.id]: currentIndex === 0 ? productImages.length - 1 : currentIndex - 1
+                            })}
+                            className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <ChevronLeft className="w-5 h-5" />
+                          </button>
+                          <button
+                            onClick={() => setCurrentImageIndex({
+                              ...currentImageIndex,
+                              [product.id]: currentIndex === productImages.length - 1 ? 0 : currentIndex + 1
+                            })}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <ChevronRight className="w-5 h-5" />
+                          </button>
+                          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
+                            {productImages.map((_, idx) => (
+                              <div
+                                key={idx}
+                                className={`w-2 h-2 rounded-full ${idx === currentIndex ? 'bg-white' : 'bg-white/50'}`}
+                              />
+                            ))}
+                          </div>
+                        </>
+                      )}
+                    </>
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
                       <Package className="w-16 h-16 text-gray-300" />
