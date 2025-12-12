@@ -3,6 +3,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
 import { 
   Clock, 
   DollarSign, 
@@ -79,16 +81,12 @@ export default function RetailPaymentSolutions() {
             <p className="text-xl text-gray-800 mb-8">
               EzPay America offers an easy and affordable way to process retail payments quickly and securely, allowing you to save money on transaction fees and other associated costs.
             </p>
-            <a
-              href="https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <Link to={createPageUrl("ApplyOnline")}>
               <Button className="bg-gray-900 hover:bg-gray-800 text-white px-8 py-6 text-lg shadow-xl">
                 Apply Online
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
-            </a>
+            </Link>
           </motion.div>
         </div>
       </section>
@@ -181,16 +179,12 @@ export default function RetailPaymentSolutions() {
             <p className="text-xl text-gray-600">
               It's Ez to get started accepting payments with EzPay America. Just click the button below and get started today.
             </p>
-            <a
-              href="https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <Link to={createPageUrl("ApplyOnline")}>
               <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg shadow-xl">
                 Apply Online Now!
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
-            </a>
+            </Link>
           </motion.div>
         </div>
       </section>
@@ -258,16 +252,12 @@ export default function RetailPaymentSolutions() {
               <p className="text-gray-600 mb-6 leading-relaxed">
                 With many one-stop-shop solutions available at EzPay America, our POS offerings are unmatched by our competitors.
               </p>
-              <a
-                href="https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <Link to={createPageUrl("ApplyOnline")}>
                 <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white">
                   Apply Online Now!
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
-              </a>
+              </Link>
             </motion.div>
 
             {/* Payment Processing Hardware */}

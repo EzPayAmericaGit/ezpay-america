@@ -23,12 +23,12 @@ export default function ContactFormSection() {
             Simply click the button below to complete your online merchant application and start accepting payments with EzPay America.
           </p>
           
-          <a href="https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true#application-form" target="_blank" rel="noopener noreferrer">
+          <Link to={createPageUrl("ApplyOnline")}>
             <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-12 py-8 text-xl shadow-xl">
               Apply Online Now
               <ArrowRight className="w-6 h-6 ml-3" />
             </Button>
-          </a>
+          </Link>
 
           <p className="text-gray-400 text-sm">
             Questions? Call us at <a href="tel:8653169625" className="text-amber-500 hover:text-amber-400 font-semibold">(865) 316-9625</a>

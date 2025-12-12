@@ -2,6 +2,8 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import SEOHead from "../components/SEOHead";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
 import { 
   CreditCard, 
   Smartphone, 
@@ -138,16 +140,12 @@ export default function Services() {
             <p className="text-xl text-gray-600">
               Join thousands of businesses that trust EzPay America for their payment processing needs.
             </p>
-            <a
-              href="https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true#application-form"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <Link to={createPageUrl("ApplyOnline")}>
               <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg shadow-xl">
                 Apply Online Now
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
-            </a>
+            </Link>
           </motion.div>
         </div>
       </section>
