@@ -46,6 +46,7 @@ import OrderHistory from './pages/OrderHistory';
 import OrdersAdmin from './pages/OrdersAdmin';
 import MyAccount from './pages/MyAccount';
 import BacklinkOutreach from './pages/BacklinkOutreach';
+import NotificationPreferences from './pages/NotificationPreferences';
 import __Layout from './Layout.jsx';
 
 
@@ -98,6 +99,7 @@ export const PAGES = {
     "OrdersAdmin": OrdersAdmin,
     "MyAccount": MyAccount,
     "BacklinkOutreach": BacklinkOutreach,
+    "NotificationPreferences": NotificationPreferences,
 }
 
 export const pagesConfig = {
