@@ -50,9 +50,9 @@ export default function LiquorStorePOS() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Liquor Store POS System"
-        description="Complete POS system for liquor stores. Age verification, inventory management, case break pricing, and compliance tools for beer, wine, and spirits retailers."
-        keywords="liquor store POS, wine shop POS, alcohol retail POS, beer store point of sale, age verification POS"
+        title="Liquor Store POS"
+        description="Compliant liquor store POS with age verification, inventory, case pricing. Free equipment & setup. Call (865) 316-9625."
+        keywords="liquor store POS, wine shop POS, alcohol retail POS, beer store software, age verification POS, EzPay America"
       />
 
       {/* Hero Section */}

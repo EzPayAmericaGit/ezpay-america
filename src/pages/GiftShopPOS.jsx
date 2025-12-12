@@ -50,9 +50,9 @@ export default function GiftShopPOS() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Gift Shop POS System"
-        description="Complete POS system for gift shops and boutiques. Gift registry, custom pricing, gift wrapping, customer database, and seasonal planning tools."
-        keywords="gift shop POS, boutique POS system, gift store point of sale, retail gift shop software"
+        title="Gift Shop POS"
+        description="Gift shop POS with registry, custom pricing, gift wrapping. Perfect for boutiques. Free equipment. Call (865) 316-9625."
+        keywords="gift shop POS, boutique POS, gift store software, retail POS, gift registry system, EzPay America"
       />
 
       {/* Hero Section */}

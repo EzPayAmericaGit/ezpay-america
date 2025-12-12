@@ -2,9 +2,10 @@ import { useEffect } from "react";
 
 export default function SEOHead({ title, description, keywords, image, url }) {
   
-  // Set document title immediately - keep titles unique and descriptive
+  // Set document title immediately - keep under 60 characters when possible
   if (typeof document !== 'undefined') {
-    document.title = title ? `${title} | EzPay America` : "EzPay America - Zero-Fee Payment Processing & POS Systems";
+    const fullTitle = title ? `${title} | EzPay America` : "EzPay America - Zero-Fee Payment Processing";
+    document.title = fullTitle;
   }
 
   useEffect(() => {
@@ -125,6 +126,111 @@ export default function SEOHead({ title, description, keywords, image, url }) {
       document.head.appendChild(twitterImage);
     }
     twitterImage.content = image || "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/8eb2dd274_EZSMALL.png";
+    
+    // Add JSON-LD Structured Data for Local Business
+    let structuredData = document.querySelector('script[type="application/ld+json"]');
+    if (!structuredData) {
+      structuredData = document.createElement('script');
+      structuredData.type = 'application/ld+json';
+      document.head.appendChild(structuredData);
+    }
+    
+    const schema = {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "@id": "https://ezpayamerica.com",
+      "name": "EzPay America",
+      "description": description || "Zero-fee payment processing and POS systems for retail and restaurant businesses",
+      "url": url || window.location.href,
+      "logo": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/8eb2dd274_EZSMALL.png",
+      "image": image || "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/8eb2dd274_EZSMALL.png",
+      "telephone": "+1-865-316-9625",
+      "priceRange": "$$",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "US"
+      },
+      "geo": {
+        "@type": "GeoCoordinates"
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ],
+        "opens": "00:00",
+        "closes": "23:59"
+      },
+      "sameAs": [
+        "https://www.facebook.com/ezpayamerica",
+        "https://twitter.com/ezpayamerica"
+      ],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Payment Processing Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Zero-Fee Payment Processing",
+              "description": "Payment processing with zero transaction fees"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "POS Systems",
+              "description": "Point of sale systems for retail and restaurants"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Merchant Services",
+              "description": "Complete merchant services and support"
+            }
+          }
+        ]
+      }
+    };
+    
+    structuredData.textContent = JSON.stringify(schema);
+
+    // Add robots meta tag
+    let metaRobots = document.querySelector('meta[name="robots"]');
+    if (!metaRobots) {
+      metaRobots = document.createElement('meta');
+      metaRobots.name = "robots";
+      document.head.appendChild(metaRobots);
+    }
+    metaRobots.content = "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
+
+    // Add language meta tag
+    let metaLanguage = document.querySelector('meta[http-equiv="content-language"]');
+    if (!metaLanguage) {
+      metaLanguage = document.createElement('meta');
+      metaLanguage.setAttribute('http-equiv', 'content-language');
+      document.head.appendChild(metaLanguage);
+    }
+    metaLanguage.content = "en-US";
+
+    // Add theme color for mobile
+    let metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (!metaThemeColor) {
+      metaThemeColor = document.createElement('meta');
+      metaThemeColor.name = "theme-color";
+      document.head.appendChild(metaThemeColor);
+    }
+    metaThemeColor.content = "#F59E0B";
     
   }, [title, description, keywords, image, url]);
 

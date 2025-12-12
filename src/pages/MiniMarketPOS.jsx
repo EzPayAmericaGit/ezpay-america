@@ -50,9 +50,9 @@ export default function MiniMarketPOS() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Mini Market & Convenience Store POS System"
-        description="Complete POS system for mini markets and convenience stores. Fast scanning, gas station integration, inventory tracking, and 24/7 operations support."
-        keywords="convenience store POS, mini market POS system, c-store point of sale, gas station POS, corner store software"
+        title="Mini Market POS System"
+        description="Fast POS for convenience stores with barcode scanning, fuel integration, inventory tracking. Free equipment. Call (865) 316-9625."
+        keywords="convenience store POS, mini market POS, c-store point of sale, gas station POS, corner store software, EzPay America"
       />
 
       {/* Hero Section */}
