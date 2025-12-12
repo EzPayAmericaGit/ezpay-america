@@ -150,16 +150,12 @@ ${formData.message || 'No additional message'}
             <p className="text-xl text-gray-800 mb-8">
               Work smarter, automate for efficiency, and open up new revenue streams.
             </p>
-            <a
-              href="https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <Link to={createPageUrl("ApplyOnline")}>
               <Button className="bg-gray-900 hover:bg-gray-800 text-white px-8 py-6 text-lg shadow-xl">
                 Apply Online
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
-            </a>
+            </Link>
           </motion.div>
         </div>
       </section>
