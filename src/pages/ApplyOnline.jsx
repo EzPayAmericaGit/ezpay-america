@@ -294,7 +294,7 @@ export default function ApplyOnline() {
       </section>
 
       {/* Application Form */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-gray-100">
+      <section id="application-form" className="py-20 bg-gradient-to-br from-gray-50 to-gray-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Progress Steps */}
           <div className="mb-12">
