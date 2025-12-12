@@ -5,18 +5,23 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import SEOHead from "../components/SEOHead";
 import { base44 } from "@/api/base44Client";
-import { Mail, Send, Users, BarChart3, Plus, Edit, Trash2, Eye, Loader2 } from "lucide-react";
+import { Mail, Send, Users, BarChart3, Plus, Edit, Trash2, Eye, Loader2, Zap, Clock, ShoppingCart, Gift, RefreshCw, Power, PowerOff } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Switch } from "@/components/ui/switch";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 export default function EmailMarketing() {
   const [campaigns, setCampaigns] = useState([]);
+  const [workflows, setWorkflows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
+  const [showWorkflowDialog, setShowWorkflowDialog] = useState(false);
   const [editingCampaign, setEditingCampaign] = useState(null);
+  const [editingWorkflow, setEditingWorkflow] = useState(null);
   
   const [formData, setFormData] = useState({
     name: "",
@@ -25,11 +30,20 @@ export default function EmailMarketing() {
     targetAudience: "all",
     imageUrl: ""
   });
+  const [workflowData, setWorkflowData] = useState({
+    name: "",
+    type: "abandoned_cart",
+    active: true,
+    trigger: { delayMinutes: 60 },
+    segmentation: { customerStatus: [] },
+    emailTemplate: { subject: "", content: "", fromName: "EzPay America" }
+  });
   const [uploading, setUploading] = useState(false);
   const [imageLink, setImageLink] = useState("");
 
   useEffect(() => {
     loadCampaigns();
+    loadWorkflows();
   }, []);
 
   const loadCampaigns = async () => {
@@ -40,6 +54,15 @@ export default function EmailMarketing() {
       console.error("Load campaigns error:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadWorkflows = async () => {
+    try {
+      const data = await base44.entities.EmailWorkflow.list('-created_date', 50);
+      setWorkflows(data || []);
+    } catch (error) {
+      console.error("Load workflows error:", error);
     }
   };
 
@@ -128,6 +151,83 @@ export default function EmailMarketing() {
     setImageLink("");
   };
 
+  const saveWorkflow = async () => {
+    setCreating(true);
+    try {
+      if (editingWorkflow) {
+        await base44.entities.EmailWorkflow.update(editingWorkflow.id, workflowData);
+      } else {
+        await base44.entities.EmailWorkflow.create(workflowData);
+      }
+      
+      setShowWorkflowDialog(false);
+      resetWorkflowForm();
+      loadWorkflows();
+    } catch (error) {
+      console.error("Save workflow error:", error);
+      alert("Error saving workflow");
+    } finally {
+      setCreating(false);
+    }
+  };
+
+  const resetWorkflowForm = () => {
+    setWorkflowData({
+      name: "",
+      type: "abandoned_cart",
+      active: true,
+      trigger: { delayMinutes: 60 },
+      segmentation: { customerStatus: [] },
+      emailTemplate: { subject: "", content: "", fromName: "EzPay America" }
+    });
+    setEditingWorkflow(null);
+  };
+
+  const toggleWorkflow = async (workflow) => {
+    try {
+      await base44.entities.EmailWorkflow.update(workflow.id, {
+        active: !workflow.active
+      });
+      loadWorkflows();
+    } catch (error) {
+      console.error("Toggle workflow error:", error);
+    }
+  };
+
+  const deleteWorkflow = async (id) => {
+    if (!confirm("Delete this workflow?")) return;
+    try {
+      await base44.entities.EmailWorkflow.delete(id);
+      loadWorkflows();
+    } catch (error) {
+      console.error("Delete error:", error);
+    }
+  };
+
+  const openEditWorkflow = (workflow) => {
+    setEditingWorkflow(workflow);
+    setWorkflowData({
+      name: workflow.name,
+      type: workflow.type,
+      active: workflow.active,
+      trigger: workflow.trigger || { delayMinutes: 60 },
+      segmentation: workflow.segmentation || { customerStatus: [] },
+      emailTemplate: workflow.emailTemplate || { subject: "", content: "", fromName: "EzPay America" }
+    });
+    setShowWorkflowDialog(true);
+  };
+
+  const getWorkflowIcon = (type) => {
+    const icons = {
+      abandoned_cart: ShoppingCart,
+      post_purchase: Gift,
+      promotional: Mail,
+      re_engagement: RefreshCw,
+      welcome: Users
+    };
+    return icons[type] || Zap;
+  };
+
   const getStatusColor = (status) => {
     const colors = {
       draft: 'bg-gray-100 text-gray-700',
@@ -144,11 +244,23 @@ export default function EmailMarketing() {
       <SEOHead title="Email Marketing" description="Manage email campaigns and newsletters" />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-4xl font-bold text-gray-900">Email Marketing</h1>
-            <p className="text-gray-600 mt-2">Create and send email campaigns to your audience</p>
-          </div>
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-gray-900">Email Marketing</h1>
+          <p className="text-gray-600 mt-2">Create campaigns and automate email workflows</p>
+        </div>
+
+        <Tabs defaultValue="campaigns" className="w-full">
+          <TabsList className="mb-6">
+            <TabsTrigger value="campaigns">Campaigns</TabsTrigger>
+            <TabsTrigger value="workflows">Automated Workflows</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="campaigns">
+            <div className="flex justify-between items-center mb-6">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">Email Campaigns</h2>
+                <p className="text-gray-600 text-sm mt-1">One-time email blasts to your audience</p>
+              </div>
           
           <Dialog open={showDialog} onOpenChange={setShowDialog}>
             <DialogTrigger asChild>
@@ -374,6 +486,231 @@ export default function EmailMarketing() {
             </Card>
           )}
         </div>
+          </TabsContent>
+
+          <TabsContent value="workflows">
+            <div className="flex justify-between items-center mb-6">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">Automated Workflows</h2>
+                <p className="text-gray-600 text-sm mt-1">Set up trigger-based email automations</p>
+              </div>
+              
+              <Dialog open={showWorkflowDialog} onOpenChange={setShowWorkflowDialog}>
+                <DialogTrigger asChild>
+                  <Button 
+                    onClick={resetWorkflowForm}
+                    className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white"
+                  >
+                    <Plus className="w-5 h-5 mr-2" />
+                    New Workflow
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle>{editingWorkflow ? 'Edit Workflow' : 'Create Automated Workflow'}</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4 py-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Workflow Name *</label>
+                      <Input
+                        value={workflowData.name}
+                        onChange={(e) => setWorkflowData({...workflowData, name: e.target.value})}
+                        placeholder="e.g., Abandoned Cart Recovery"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Workflow Type *</label>
+                      <Select value={workflowData.type} onValueChange={(value) => setWorkflowData({...workflowData, type: value})}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="abandoned_cart">Abandoned Cart</SelectItem>
+                          <SelectItem value="post_purchase">Post-Purchase Follow-up</SelectItem>
+                          <SelectItem value="promotional">Promotional Campaign</SelectItem>
+                          <SelectItem value="re_engagement">Re-engagement</SelectItem>
+                          <SelectItem value="welcome">Welcome Series</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Delay (minutes) *
+                      </label>
+                      <Input
+                        type="number"
+                        value={workflowData.trigger.delayMinutes}
+                        onChange={(e) => setWorkflowData({
+                          ...workflowData, 
+                          trigger: {...workflowData.trigger, delayMinutes: parseInt(e.target.value)}
+                        })}
+                        placeholder="60"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Target Customer Status</label>
+                      <Select 
+                        value={workflowData.segmentation.customerStatus?.[0] || "all"}
+                        onValueChange={(value) => setWorkflowData({
+                          ...workflowData,
+                          segmentation: {...workflowData.segmentation, customerStatus: value === "all" ? [] : [value]}
+                        })}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Customers</SelectItem>
+                          <SelectItem value="lead">Leads Only</SelectItem>
+                          <SelectItem value="active">Active Only</SelectItem>
+                          <SelectItem value="inactive">Inactive Only</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Email Subject *</label>
+                      <Input
+                        value={workflowData.emailTemplate.subject}
+                        onChange={(e) => setWorkflowData({
+                          ...workflowData,
+                          emailTemplate: {...workflowData.emailTemplate, subject: e.target.value}
+                        })}
+                        placeholder="Complete your purchase today!"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Email Content *</label>
+                      <ReactQuill 
+                        value={workflowData.emailTemplate.content}
+                        onChange={(value) => setWorkflowData({
+                          ...workflowData,
+                          emailTemplate: {...workflowData.emailTemplate, content: value}
+                        })}
+                        className="bg-white"
+                        style={{ height: '300px', marginBottom: '50px' }}
+                      />
+                    </div>
+
+                    <div className="flex gap-3 pt-4">
+                      <Button 
+                        onClick={saveWorkflow}
+                        disabled={!workflowData.name || !workflowData.emailTemplate.subject || creating}
+                        className="bg-gradient-to-r from-purple-500 to-purple-600"
+                      >
+                        {creating ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                        {editingWorkflow ? 'Update Workflow' : 'Create Workflow'}
+                      </Button>
+                      <Button variant="outline" onClick={() => setShowWorkflowDialog(false)}>
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
+
+            <div className="grid gap-6">
+              {workflows.map((workflow) => {
+                const WorkflowIcon = getWorkflowIcon(workflow.type);
+                return (
+                  <Card key={workflow.id} className="shadow-lg hover:shadow-xl transition-shadow">
+                    <CardContent className="p-6">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-center gap-4 flex-1">
+                          <div className={`p-3 rounded-lg ${workflow.active ? 'bg-purple-100' : 'bg-gray-100'}`}>
+                            <WorkflowIcon className={`w-6 h-6 ${workflow.active ? 'text-purple-600' : 'text-gray-400'}`} />
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-1">
+                              <h3 className="text-xl font-bold text-gray-900">{workflow.name}</h3>
+                              <span className={`px-3 py-1 rounded-full text-xs font-semibold ${workflow.active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
+                                {workflow.active ? 'Active' : 'Inactive'}
+                              </span>
+                            </div>
+                            <p className="text-sm text-gray-600">
+                              Type: {workflow.type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())} • 
+                              Delay: {workflow.trigger?.delayMinutes || 0} min
+                            </p>
+                            {workflow.lastRun && (
+                              <p className="text-xs text-gray-500 mt-1">
+                                Last run: {new Date(workflow.lastRun).toLocaleString()}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center gap-2">
+                          <Switch
+                            checked={workflow.active}
+                            onCheckedChange={() => toggleWorkflow(workflow)}
+                          />
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => openEditWorkflow(workflow)}
+                          >
+                            <Edit className="w-4 h-4" />
+                          </Button>
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => deleteWorkflow(workflow.id)}
+                            className="text-red-600"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+
+                      {workflow.stats && (
+                        <div className="grid grid-cols-4 gap-4 pt-4 border-t">
+                          <div className="text-center">
+                            <p className="text-2xl font-bold text-gray-900">{workflow.stats.totalSent || 0}</p>
+                            <p className="text-sm text-gray-500">Sent</p>
+                          </div>
+                          <div className="text-center">
+                            <p className="text-2xl font-bold text-blue-600">{workflow.stats.totalOpened || 0}</p>
+                            <p className="text-sm text-gray-500">Opened</p>
+                          </div>
+                          <div className="text-center">
+                            <p className="text-2xl font-bold text-purple-600">{workflow.stats.totalClicked || 0}</p>
+                            <p className="text-sm text-gray-500">Clicked</p>
+                          </div>
+                          <div className="text-center">
+                            <p className="text-2xl font-bold text-green-600">{workflow.stats.totalConverted || 0}</p>
+                            <p className="text-sm text-gray-500">Converted</p>
+                          </div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                );
+              })}
+
+              {workflows.length === 0 && !loading && (
+                <Card className="shadow-lg">
+                  <CardContent className="p-12 text-center">
+                    <Zap className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">No workflows yet</h3>
+                    <p className="text-gray-600 mb-6">Create your first automated workflow</p>
+                    <Button 
+                      onClick={() => setShowWorkflowDialog(true)}
+                      className="bg-gradient-to-r from-purple-500 to-purple-600"
+                    >
+                      <Plus className="w-5 h-5 mr-2" />
+                      Create Workflow
+                    </Button>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
