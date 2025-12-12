@@ -9,7 +9,7 @@ Deno.serve(async (req) => {
 
         const emailBody = {
             personalizations: [{
-                to: [{ email: "contact@ezpayamerica.com" }],
+                to: [{ email: "mail@ezpayamerica.com" }],
                 subject: `Contact Form: ${name}`
             }],
             from: { email: FROM_EMAIL },

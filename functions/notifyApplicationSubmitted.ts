@@ -12,7 +12,7 @@ Deno.serve(async (req) => {
         // Send email to business owner
         const emailBody = {
             personalizations: [{
-                to: [{ email: "contact@ezpayamerica.com" }],
+                to: [{ email: "mail@ezpayamerica.com" }],
                 subject: `New Merchant Application: ${applicationData.legalBusinessName}`
             }],
             from: { email: FROM_EMAIL },
