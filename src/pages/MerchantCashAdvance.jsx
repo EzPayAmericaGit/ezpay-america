@@ -57,16 +57,12 @@ export default function MerchantCashAdvance() {
             <p className="text-xl text-gray-800 mb-8">
               Quick access to working capital for your business. Get funded fast based on your future credit card sales - no collateral required.
             </p>
-            <a
-              href="https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <Link to={createPageUrl("ApplyOnline")}>
               <Button className="bg-gray-900 hover:bg-gray-800 text-white px-8 py-6 text-lg shadow-xl">
                 Apply Now
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
-            </a>
+            </Link>
           </motion.div>
         </div>
       </section>
@@ -266,16 +262,12 @@ export default function MerchantCashAdvance() {
             <p className="text-xl text-gray-600">
               Apply in minutes and get approved within 24 hours. No hidden fees, no surprises.
             </p>
-            <a
-              href="https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <Link to={createPageUrl("ApplyOnline")}>
               <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg shadow-xl">
                 Apply for Merchant Cash Advance
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
-            </a>
+            </Link>
           </motion.div>
         </div>
       </section>
