@@ -7,6 +7,8 @@ import { Mail, Phone, MapPin, Send, CreditCard, Package, FileText, ArrowRight, L
 import { base44 } from "@/api/base44Client";
 import { motion } from "framer-motion";
 import SEOHead from "../components/SEOHead";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
 
 const benefits = [
   {
@@ -76,16 +78,12 @@ export default function Contact() {
             <p className="text-xl text-gray-800 mb-8">
               Work smarter, automate for efficiency, and open up new revenue streams.
             </p>
-            <a
-              href="https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true#application-form"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <Link to={createPageUrl("ApplyOnline")}>
               <Button className="bg-gray-900 hover:bg-gray-800 text-white px-8 py-6 text-lg shadow-xl">
                 Apply Online
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
-            </a>
+            </Link>
           </motion.div>
         </div>
       </section>
@@ -289,16 +287,12 @@ export default function Contact() {
               <p className="text-xl text-gray-300 mb-8">
                 Get started with EzPay America and discover how we can transform your payment processing experience.
               </p>
-              <a
-                href="https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true#application-form"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <Link to={createPageUrl("ApplyOnline")}>
                 <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg shadow-xl">
                   Apply Online!
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
-              </a>
+              </Link>
             </motion.div>
 
             <motion.div
