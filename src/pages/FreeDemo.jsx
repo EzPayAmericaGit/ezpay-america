@@ -301,23 +301,15 @@ export default function FreeDemo() {
                       </Select>
                     </div>
 
-                    <Button 
-                      type="submit" 
-                      disabled={isSubmitting}
-                      className="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white h-14 text-lg shadow-xl"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                          Submitting...
-                        </>
-                      ) : (
-                        <>
-                          Request Free Demo
-                          <ArrowRight className="w-5 h-5 ml-2" />
-                        </>
-                      )}
-                    </Button>
+                    <Link to={createPageUrl("FreeDemo")}>
+                      <Button 
+                        type="button"
+                        className="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white h-14 text-lg shadow-xl"
+                      >
+                        Request Free Demo
+                        <ArrowRight className="w-5 h-5 ml-2" />
+                      </Button>
+                    </Link>
                   </form>
                 </CardContent>
               </Card>
