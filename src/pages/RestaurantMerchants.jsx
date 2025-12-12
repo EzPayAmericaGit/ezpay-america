@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { UtensilsCrossed, Coffee, Truck, Clock, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import SEOHead from "../components/SEOHead";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
 
 const restaurantTypes = [
   {
@@ -55,16 +57,12 @@ export default function RestaurantMerchants() {
             <p className="text-xl text-gray-800 mb-8">
               Specialized payment processing for restaurants, cafes, food trucks, and the entire food service industry. Fast, reliable, and built for hospitality.
             </p>
-            <a
-              href="https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <Link to={createPageUrl("ApplyOnline")}>
               <Button className="bg-gray-900 hover:bg-gray-800 text-white px-8 py-6 text-lg shadow-xl">
                 Apply Online
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
-            </a>
+            </Link>
           </motion.div>
         </div>
       </section>
@@ -186,16 +184,12 @@ export default function RestaurantMerchants() {
             <p className="text-xl text-gray-600">
               Get the payment processing solution your restaurant deserves. No hidden fees, no long-term contracts.
             </p>
-            <a
-              href="https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <Link to={createPageUrl("ApplyOnline")}>
               <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg shadow-xl">
                 Apply Online Now!
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
-            </a>
+            </Link>
           </motion.div>
         </div>
       </section>
