@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import SEOHead from "../components/SEOHead";
 import { Monitor, Smartphone, BarChart3, Users, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -34,6 +35,11 @@ const features = [
 export default function EzPayPOS() {
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead 
+        title="EzPay POS System"
+        description="The complete point-of-sale solution for modern businesses. Powerful features, easy to use, and built to help you grow."
+        keywords="EzPay POS, point of sale system, POS software, business management, retail POS, restaurant POS"
+      />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
