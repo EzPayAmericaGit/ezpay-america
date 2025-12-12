@@ -221,7 +221,7 @@ export default function CountertopTerminal() {
                 </Button>
               </Link>
               <Link to={createPageUrl("ApplyOnline")}>
-                <Button variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-gray-900 px-8 py-6 text-lg">
+                <Button variant="outline" className="border-2 border-orange-500 text-orange-500 hover:bg-gray-900 hover:text-white hover:border-gray-900 px-8 py-6 text-lg">
                   Apply Online Now
                 </Button>
               </Link>
