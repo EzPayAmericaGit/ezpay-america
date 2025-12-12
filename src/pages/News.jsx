@@ -202,7 +202,7 @@ export default function News() {
             <h2 className="text-4xl md:text-5xl font-bold text-white">
               Request a Free Consultation Today
             </h2>
-            <p className="text-xl text-gray-300">
+            <p className="text-xl text-gray-300 mb-12">
               Ready to transform your payment processing? Get started with EzPay America.
             </p>
             <a
