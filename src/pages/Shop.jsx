@@ -90,7 +90,12 @@ export default function Shop() {
 
         {/* Header with Cart */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Shop</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-3xl font-bold text-gray-900">Shop</h1>
+            <span className="text-orange-600 font-semibold text-sm">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ALL ITEMS PURCHASED REQUIRE A NEW AND APPROVED ACCOUNT WITH EzPay America Inc.
+            </span>
+          </div>
           
           {cartCount > 0 && (
             <Button 
