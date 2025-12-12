@@ -23,7 +23,7 @@ export default function ContactFormSection() {
             Simply click the button below to complete your online merchant application and start accepting payments with EzPay America.
           </p>
           
-          <Link to={createPageUrl("ApplyOnline")}>
+          <Link to={createPageUrl("ApplyOnline")} className="block mt-12">
             <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-12 py-8 text-xl shadow-xl">
               Apply Online Now
               <ArrowRight className="w-6 h-6 ml-3" />
