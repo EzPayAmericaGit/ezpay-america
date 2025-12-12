@@ -7,6 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { CheckCircle2, ArrowRight, Clock, Users, Zap, Loader2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
 
 const benefits = [
   {
