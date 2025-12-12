@@ -211,11 +211,11 @@ export default function News() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-              <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg shadow-xl">
-                Apply Online!
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </a>
+                <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg shadow-xl">
+                  Apply Online!
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </a>
             </div>
           </motion.div>
         </div>
