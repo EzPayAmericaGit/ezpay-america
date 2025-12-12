@@ -52,7 +52,7 @@ export default function AdditionalOffersSection() {
           >
             <div>
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                EzPay America Also Offers
+                EzPay America<br />Also Offers
               </h2>
             </div>
 
