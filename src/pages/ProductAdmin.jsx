@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Edit, Trash2, Upload, Loader2, Search, Filter, Package, DollarSign, Eye, EyeOff, Star, X } from "lucide-react";
+import { Plus, Edit, Trash2, Upload, Loader2, Search, Filter, Package, DollarSign, Eye, EyeOff, Star, X, ArrowUpDown } from "lucide-react";
 import SEOHead from "../components/SEOHead";
 
 export default function ProductAdmin() {
@@ -19,6 +19,8 @@ export default function ProductAdmin() {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("created_date");
+  const [sortOrder, setSortOrder] = useState("desc");
   
   const [formData, setFormData] = useState({
     name: "",
@@ -202,6 +204,34 @@ export default function ProductAdmin() {
       (statusFilter === "featured" && product.featured);
     
     return matchesSearch && matchesCategory && matchesStatus;
+  }).sort((a, b) => {
+    let aValue, bValue;
+    
+    switch (sortBy) {
+      case "name":
+        aValue = a.name?.toLowerCase() || "";
+        bValue = b.name?.toLowerCase() || "";
+        break;
+      case "price":
+        aValue = a.price || 0;
+        bValue = b.price || 0;
+        break;
+      case "stock":
+        aValue = a.stock || 0;
+        bValue = b.stock || 0;
+        break;
+      case "created_date":
+      default:
+        aValue = new Date(a.created_date);
+        bValue = new Date(b.created_date);
+        break;
+    }
+    
+    if (sortOrder === "asc") {
+      return aValue > bValue ? 1 : -1;
+    } else {
+      return aValue < bValue ? 1 : -1;
+    }
   });
 
   const stats = {
@@ -477,13 +507,13 @@ export default function ProductAdmin() {
           </div>
         </div>
 
-        {/* Filters */}
+        {/* Filters & Search */}
         <div className="bg-white border rounded-lg p-4 mb-6">
-          <div className="grid md:grid-cols-3 gap-4">
-            <div className="relative">
+          <div className="grid md:grid-cols-5 gap-4">
+            <div className="relative md:col-span-2">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <Input
-                placeholder="Search products, SKU..."
+                placeholder="Search by name, SKU, or description..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
@@ -514,7 +544,62 @@ export default function ProductAdmin() {
                 <SelectItem value="featured">Featured</SelectItem>
               </SelectContent>
             </Select>
+
+            <Select value={`${sortBy}-${sortOrder}`} onValueChange={(value) => {
+              const [field, order] = value.split('-');
+              setSortBy(field);
+              setSortOrder(order);
+            }}>
+              <SelectTrigger>
+                <ArrowUpDown className="w-4 h-4 mr-2" />
+                <SelectValue placeholder="Sort by" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="created_date-desc">Newest First</SelectItem>
+                <SelectItem value="created_date-asc">Oldest First</SelectItem>
+                <SelectItem value="name-asc">Name (A-Z)</SelectItem>
+                <SelectItem value="name-desc">Name (Z-A)</SelectItem>
+                <SelectItem value="price-asc">Price (Low-High)</SelectItem>
+                <SelectItem value="price-desc">Price (High-Low)</SelectItem>
+                <SelectItem value="stock-asc">Stock (Low-High)</SelectItem>
+                <SelectItem value="stock-desc">Stock (High-Low)</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
+          
+          {(searchTerm || categoryFilter !== "all" || statusFilter !== "all") && (
+            <div className="flex gap-2 mt-3">
+              <span className="text-sm text-gray-500">Active filters:</span>
+              {searchTerm && (
+                <span className="text-xs bg-gray-100 px-2 py-1 rounded">
+                  Search: "{searchTerm}"
+                  <button onClick={() => setSearchTerm("")} className="ml-1 text-gray-500 hover:text-gray-700">×</button>
+                </span>
+              )}
+              {categoryFilter !== "all" && (
+                <span className="text-xs bg-gray-100 px-2 py-1 rounded">
+                  Category: {categoryFilter}
+                  <button onClick={() => setCategoryFilter("all")} className="ml-1 text-gray-500 hover:text-gray-700">×</button>
+                </span>
+              )}
+              {statusFilter !== "all" && (
+                <span className="text-xs bg-gray-100 px-2 py-1 rounded">
+                  Status: {statusFilter}
+                  <button onClick={() => setStatusFilter("all")} className="ml-1 text-gray-500 hover:text-gray-700">×</button>
+                </span>
+              )}
+              <button 
+                onClick={() => {
+                  setSearchTerm("");
+                  setCategoryFilter("all");
+                  setStatusFilter("all");
+                }}
+                className="text-xs text-purple-600 hover:text-purple-700 font-medium ml-2"
+              >
+                Clear all
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Products Table */}
