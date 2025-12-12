@@ -178,11 +178,12 @@ export default function RestaurantMerchants() {
             viewport={{ once: true }}
             className="space-y-6"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 text-center">
               Serve More Customers, Faster
             </h2>
-            <p className="text-xl text-gray-600">
-              Get the payment processing solution your restaurant deserves. No hidden fees, no long-term contracts.
+            <p className="text-xl text-gray-600 text-center">
+              Get the payment processing solution your restaurant deserves.<br />
+              No hidden fees, no long-term contracts.
             </p>
             <Link to={createPageUrl("ApplyOnline")}>
               <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg shadow-xl">
