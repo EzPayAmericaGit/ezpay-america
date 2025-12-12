@@ -180,7 +180,7 @@ export default function RetailMerchants() {
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900">
               Ready to Transform Your Retail Business?
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-xl text-gray-600 text-center">
               Join thousands of retail merchants who trust EzPay America for their payment processing needs.
             </p>
             <Link to={createPageUrl("ApplyOnline")}>
