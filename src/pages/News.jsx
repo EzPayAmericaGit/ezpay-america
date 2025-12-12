@@ -202,14 +202,15 @@ export default function News() {
             <h2 className="text-4xl md:text-5xl font-bold text-white">
               Request a Free Consultation Today
             </h2>
-            <p className="text-xl text-gray-300 mb-12">
+            <p className="text-xl text-gray-300">
               Ready to transform your payment processing? Get started with EzPay America.
             </p>
-            <a
-              href="https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <div className="pt-12">
+              <a
+                href="https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
               <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg shadow-xl">
                 Apply Online!
                 <ArrowRight className="w-5 h-5 ml-2" />
