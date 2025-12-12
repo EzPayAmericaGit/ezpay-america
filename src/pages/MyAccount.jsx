@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { User, Package, MapPin, Mail, Phone, LogOut, Loader2, Edit2, Save } from "lucide-react";
+import { User, Package, MapPin, Mail, Phone, LogOut, Loader2, Edit2, Save, Bell } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import SEOHead from "../components/SEOHead";
@@ -208,6 +208,12 @@ export default function MyAccount() {
                 <Button variant="outline" className="w-full">
                   <Mail className="w-4 h-4 mr-2" />
                   Contact Support
+                </Button>
+              </Link>
+              <Link to={createPageUrl("NotificationPreferences")}>
+                <Button variant="outline" className="w-full">
+                  <Bell className="w-4 h-4 mr-2" />
+                  Notification Settings
                 </Button>
               </Link>
               {user?.role === 'admin' && (
