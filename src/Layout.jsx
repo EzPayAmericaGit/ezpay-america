@@ -55,34 +55,8 @@ export default function Layout({ children }) {
       { title: "Apply Online", url: createPageUrl("ApplyOnline") },
       { title: "Contact", url: createPageUrl("Contact") },
       { title: "Shop", url: createPageUrl("Shop") },
-      { title: "News", url: createPageUrl("News") },
-      { 
-        title: "Payments", 
-        url: createPageUrl("ProcessPayment"),
-        submenu: [
-          { title: "Process Payment", url: createPageUrl("ProcessPayment") },
-          { title: "Transaction History", url: createPageUrl("TransactionHistory") }
-        ]
-      }
+      { title: "News", url: createPageUrl("News") }
     ];
-
-    // Admin section - only visible to admin users
-    if (user?.role === 'admin') {
-      items.push({ 
-        title: "Management", 
-        url: createPageUrl("AdminDashboard"),
-        submenu: [
-          { title: "Admin Dashboard", url: createPageUrl("AdminDashboard") },
-          { title: "Business Dashboard", url: createPageUrl("BusinessDashboard") },
-          { title: "CRM", url: createPageUrl("CRM") },
-          { title: "Invoicing", url: createPageUrl("Invoicing") },
-          { title: "Orders", url: createPageUrl("OrdersAdmin") },
-          { title: "Products", url: createPageUrl("ProductAdmin") },
-          { title: "Applications", url: createPageUrl("ApplicationTracker") },
-          { title: "Users", url: createPageUrl("UserManagement") }
-        ]
-      });
-    }
 
     return items;
   }, [user]);

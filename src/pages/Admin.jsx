@@ -4,7 +4,7 @@ import { createPageUrl } from "@/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { base44 } from "@/api/base44Client";
-import { Newspaper, FileText, Users, ShieldAlert, Loader2, UserCircle, BarChart3, Mail, ShoppingBag, Settings } from "lucide-react";
+import { Newspaper, FileText, Users, ShieldAlert, Loader2, UserCircle, BarChart3, Mail, ShoppingBag, Settings, CreditCard, Receipt, DollarSign, Briefcase, Package, ClipboardList } from "lucide-react";
 
 export default function Admin() {
   const [authStatus, setAuthStatus] = useState({ loading: true, isAdmin: false });
@@ -65,7 +65,166 @@ export default function Admin() {
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Admin Panel</h1>
         
-        <div className="grid md:grid-cols-2 gap-6">
+        {/* Payment Processing Section */}
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Payment Processing</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Link to={createPageUrl("ProcessPayment")}>
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <CreditCard className="w-6 h-6 text-green-600" />
+                    Process Payment
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">
+                    Securely process customer payments through NMI Gateway.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link to={createPageUrl("TransactionHistory")}>
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Receipt className="w-6 h-6 text-blue-600" />
+                    Transaction History
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">
+                    View and manage all payment transactions and statuses.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+          </div>
+        </div>
+
+        {/* Business Management Section */}
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Business Management</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Link to={createPageUrl("AdminDashboard")}>
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <BarChart3 className="w-6 h-6 text-purple-600" />
+                    Admin Dashboard
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">
+                    Review and manage merchant applications with AI assistance.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link to={createPageUrl("BusinessDashboard")}>
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Briefcase className="w-6 h-6 text-indigo-600" />
+                    Business Dashboard
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">
+                    View sales metrics, revenue trends, and business analytics.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link to={createPageUrl("CRM")}>
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Users className="w-6 h-6 text-teal-600" />
+                    CRM
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">
+                    Manage customer relationships, leads, and interactions.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link to={createPageUrl("Invoicing")}>
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <FileText className="w-6 h-6 text-orange-600" />
+                    Invoicing
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">
+                    Create and manage professional invoices for customers.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link to={createPageUrl("OrdersAdmin")}>
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Package className="w-6 h-6 text-cyan-600" />
+                    Orders
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">
+                    Manage customer orders and shipping information.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link to={createPageUrl("ApplicationTracker")}>
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <ClipboardList className="w-6 h-6 text-pink-600" />
+                    Applications
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">
+                    Track and manage merchant application submissions.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link to={createPageUrl("UserManagement")}>
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Users className="w-6 h-6 text-indigo-600" />
+                    User Management
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">
+                    Manage user accounts and permissions.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+          </div>
+        </div>
+
+        {/* Store & Content Section */}
+        <div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Store & Content</h2>
+          <div className="grid md:grid-cols-2 gap-6">
           <Link to={createPageUrl("Analytics")}>
             <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
               <CardHeader>
@@ -130,69 +289,39 @@ export default function Admin() {
             </Card>
           </Link>
 
-          <Link to={createPageUrl("AdminDashboard")}>
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FileText className="w-6 h-6 text-amber-600" />
-                  Application Admin
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  Review and manage merchant applications with AI assistance.
-                </p>
-              </CardContent>
-            </Card>
-          </Link>
+            <Link to={createPageUrl("NewsAdmin")}>
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Newspaper className="w-6 h-6 text-purple-600" />
+                    News Admin
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">
+                    Manage news articles, create AI-generated content, and optimize SEO.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
 
-          <Link to={createPageUrl("NewsAdmin")}>
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Newspaper className="w-6 h-6 text-purple-600" />
-                  News Admin
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  Manage news articles, create AI-generated content, and optimize SEO.
-                </p>
-              </CardContent>
-            </Card>
-          </Link>
-
-          <Link to={createPageUrl("UserManagement")}>
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="w-6 h-6 text-indigo-600" />
-                  User Management
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  Manage user accounts and permissions.
-                </p>
-              </CardContent>
-            </Card>
-          </Link>
-
-          <Link to={createPageUrl("CustomerOnboarding")}>
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <UserCircle className="w-6 h-6 text-green-600" />
-                  My Account
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  View your onboarding status and account details.
-                </p>
-              </CardContent>
-            </Card>
-          </Link>
+            <Link to={createPageUrl("CustomerOnboarding")}>
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <UserCircle className="w-6 h-6 text-green-600" />
+                    My Account
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">
+                    View your onboarding status and account details.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+          </div>
+        </div>
         </div>
       </div>
     </div>
