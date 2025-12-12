@@ -334,16 +334,12 @@ export default function FreeDemo() {
             <p className="text-xl text-gray-300">
               Skip the demo and apply online now to start processing payments today.
             </p>
-            <a
-              href="https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Button variant="outline" className="border-2 border-white text-white hover:bg-white/10 px-8 py-6 text-lg">
+            <Link to={createPageUrl("ApplyOnline")}>
+              <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg">
                 Apply Online Now
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
-            </a>
+            </Link>
           </motion.div>
         </div>
       </section>
