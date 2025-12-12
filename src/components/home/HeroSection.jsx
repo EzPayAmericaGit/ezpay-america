@@ -2,6 +2,8 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
 
 export default function HeroSection() {
   return (
@@ -53,11 +55,7 @@ export default function HeroSection() {
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
               </a>
-              <a
-                href="https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true#application-form"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <Link to={createPageUrl("ApplyOnline")}>
                 <Button 
                   variant="outline" 
                   className="w-full sm:w-auto border-2 border-amber-600 text-amber-600 hover:bg-amber-50 px-8 py-6 text-lg shadow-lg"
@@ -65,7 +63,7 @@ export default function HeroSection() {
                   Apply Online
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
-              </a>
+              </Link>
             </div>
           </motion.div>
 
