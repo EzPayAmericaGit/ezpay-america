@@ -155,7 +155,7 @@ export default function CountertopTerminal() {
               viewport={{ once: true }}
             >
               <img
-                src="https://images.unsplash.com/photo-1556742111-a301076d9d18?w=600&h=400&fit=crop"
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/14e7432f1_desktoppaymentterminal.jpg"
                 alt="Business owner using countertop payment terminal"
                 className="rounded-2xl shadow-xl"
                 loading="lazy"
