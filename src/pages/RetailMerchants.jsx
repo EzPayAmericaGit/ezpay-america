@@ -177,13 +177,14 @@ export default function RetailMerchants() {
             viewport={{ once: true }}
             className="space-y-6"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 text-center">
               Ready to Transform Your Retail Business?
             </h2>
             <p className="text-xl text-gray-600 text-center">
-              Join thousands of retail merchants who trust EzPay America for their payment processing needs.
+              Join thousands of retail merchants who trust<br />
+              EzPay America for their payment processing needs.
             </p>
-            <Link to={createPageUrl("ApplyOnline")}>
+            <Link to={createPageUrl("ApplyOnline")} className="block mt-12">
               <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg shadow-xl">
                 Apply Online Now!
                 <ArrowRight className="w-5 h-5 ml-2" />

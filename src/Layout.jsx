@@ -56,12 +56,17 @@ export default function Layout({ children }) {
     { title: "Shop", url: createPageUrl("Shop") },
     { title: "News", url: createPageUrl("News") },
     { 
-      title: "Business Tools", 
-      url: createPageUrl("BusinessDashboard"),
+      title: "Admin", 
+      url: createPageUrl("AdminDashboard"),
       submenu: [
-        { title: "Dashboard", url: createPageUrl("BusinessDashboard") },
+        { title: "Admin Dashboard", url: createPageUrl("AdminDashboard") },
+        { title: "Business Dashboard", url: createPageUrl("BusinessDashboard") },
         { title: "CRM", url: createPageUrl("CRM") },
-        { title: "Invoicing", url: createPageUrl("Invoicing") }
+        { title: "Invoicing", url: createPageUrl("Invoicing") },
+        { title: "Orders", url: createPageUrl("OrdersAdmin") },
+        { title: "Products", url: createPageUrl("ProductAdmin") },
+        { title: "Applications", url: createPageUrl("ApplicationTracker") },
+        { title: "Users", url: createPageUrl("UserManagement") }
       ]
     }
   ], [user]);
