@@ -48,6 +48,10 @@ import MyAccount from './pages/MyAccount';
 import BacklinkOutreach from './pages/BacklinkOutreach';
 import NotificationPreferences from './pages/NotificationPreferences';
 import CountertopTerminal from './pages/CountertopTerminal';
+import ACHPayments from './pages/ACHPayments';
+import MobilePayments from './pages/MobilePayments';
+import MerchantCapital from './pages/MerchantCapital';
+import ECommerce from './pages/ECommerce';
 import __Layout from './Layout.jsx';
 
 
@@ -102,6 +106,10 @@ export const PAGES = {
     "BacklinkOutreach": BacklinkOutreach,
     "NotificationPreferences": NotificationPreferences,
     "CountertopTerminal": CountertopTerminal,
+    "ACHPayments": ACHPayments,
+    "MobilePayments": MobilePayments,
+    "MerchantCapital": MerchantCapital,
+    "ECommerce": ECommerce,
 }
 
 export const pagesConfig = {
