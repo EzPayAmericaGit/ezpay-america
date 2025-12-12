@@ -54,7 +54,16 @@ export default function Layout({ children }) {
     { title: "Apply Online", url: createPageUrl("ApplyOnline") },
     { title: "Contact", url: createPageUrl("Contact") },
     { title: "Shop", url: createPageUrl("Shop") },
-    { title: "News", url: createPageUrl("News") }
+    { title: "News", url: createPageUrl("News") },
+    { 
+      title: "Business Tools", 
+      url: createPageUrl("BusinessDashboard"),
+      submenu: [
+        { title: "Dashboard", url: createPageUrl("BusinessDashboard") },
+        { title: "CRM", url: createPageUrl("CRM") },
+        { title: "Invoicing", url: createPageUrl("Invoicing") }
+      ]
+    }
   ], [user]);
 
   // Live Chat - Opens Crisp chat or alternative

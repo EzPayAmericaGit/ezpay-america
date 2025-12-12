@@ -52,6 +52,9 @@ import ACHPayments from './pages/ACHPayments';
 import MobilePayments from './pages/MobilePayments';
 import MerchantCapital from './pages/MerchantCapital';
 import ECommerce from './pages/ECommerce';
+import CRM from './pages/CRM';
+import Invoicing from './pages/Invoicing';
+import BusinessDashboard from './pages/BusinessDashboard';
 import __Layout from './Layout.jsx';
 
 
@@ -110,6 +113,9 @@ export const PAGES = {
     "MobilePayments": MobilePayments,
     "MerchantCapital": MerchantCapital,
     "ECommerce": ECommerce,
+    "CRM": CRM,
+    "Invoicing": Invoicing,
+    "BusinessDashboard": BusinessDashboard,
 }
 
 export const pagesConfig = {
