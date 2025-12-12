@@ -60,7 +60,7 @@ export default function BusinessTypesSection() {
                   <div className={`w-14 h-14 bg-gradient-to-br ${type.color} rounded-xl flex items-center justify-center`}>
                     <type.icon className="w-7 h-7 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold">
+                  <h3 className="text-xl font-bold text-orange-500">
                     {type.title}
                   </h3>
                   <p className="text-gray-300 text-sm leading-relaxed">
