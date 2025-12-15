@@ -90,13 +90,8 @@ export default function Shop() {
         </div>
 
         {/* Header with Cart */}
-        <div className="flex justify-between items-center mb-8">
-          <div className="flex items-center gap-2">
-            <h1 className="text-3xl font-bold text-gray-900">Shop</h1>
-            <span className="text-orange-600 font-semibold text-sm">
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ALL ITEMS PURCHASED REQUIRE A NEW AND APPROVED ACCOUNT WITH EzPay America Inc.
-            </span>
-          </div>
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold text-gray-900">Shop</h1>
           
           {cartCount > 0 && (
             <Button 
@@ -111,6 +106,21 @@ export default function Shop() {
               </span>
             </Button>
           )}
+        </div>
+
+        {/* Account Requirement Notice */}
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-4 mb-8 rounded-r-lg">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <p className="text-amber-800 font-semibold">
+              ALL ITEMS PURCHASED REQUIRE A NEW AND APPROVED ACCOUNT WITH EzPay America Inc.
+            </p>
+            <Button 
+              onClick={() => navigate(createPageUrl("ApplyOnline"))}
+              className="bg-amber-600 hover:bg-amber-700 text-white whitespace-nowrap"
+            >
+              Sign Up Online
+            </Button>
+          </div>
         </div>
 
         {/* Category Filter */}
