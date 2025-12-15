@@ -185,7 +185,7 @@ export default function Layout({ children }) {
                           }}
                           className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-amber-50"
                         >
-                          My Account Login
+                          Login To My Account
                         </button>
                         <button
                           onClick={() => {
@@ -203,7 +203,7 @@ export default function Layout({ children }) {
                           }}
                           className="block w-full text-left px-4 py-2 text-amber-600 hover:bg-amber-50 font-semibold"
                         >
-                          Sign Up Now
+                          No account? Signup
                         </button>
                         <button
                           onClick={() => {
@@ -314,7 +314,7 @@ export default function Layout({ children }) {
                     }}
                     className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-amber-50 hover:text-amber-600 rounded-lg transition-colors"
                   >
-                    My Account Login
+                    Login To My Account
                   </button>
                   <button
                     onClick={() => {
@@ -332,7 +332,7 @@ export default function Layout({ children }) {
                     }}
                     className="block w-full text-left px-4 py-2 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors font-semibold"
                   >
-                    Sign Up Now
+                    No account? Signup
                   </button>
                   <button
                     onClick={() => {
