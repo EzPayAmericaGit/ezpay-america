@@ -7,19 +7,25 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Package, Search, Loader2, Calendar, DollarSign, MapPin, Eye, RefreshCw, TrendingUp, Download, Printer, Mail, Clock } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Package, Search, Loader2, Calendar, DollarSign, MapPin, Eye, RefreshCw, TrendingUp, Download, Printer, Mail, Clock, Filter, CheckSquare, BarChart3 } from "lucide-react";
 import SEOHead from "../components/SEOHead";
 import { Textarea } from "@/components/ui/textarea";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function OrdersAdmin() {
   const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [paymentFilter, setPaymentFilter] = useState("all");
+  const [dateFilter, setDateFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("newest");
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [trackingNumber, setTrackingNumber] = useState("");
   const [orderNotes, setOrderNotes] = useState("");
+  const [selectedOrders, setSelectedOrders] = useState([]);
+  const [showAnalytics, setShowAnalytics] = useState(false);
 
   const { data: orders = [], isLoading } = useQuery({
     queryKey: ['admin-orders'],
@@ -139,6 +145,23 @@ EzPay America
     refunded: 'bg-orange-100 text-orange-800'
   };
 
+  const bulkUpdateStatus = async (status) => {
+    if (selectedOrders.length === 0) return;
+    
+    try {
+      await Promise.all(
+        selectedOrders.map(orderId => 
+          base44.entities.Order.update(orderId, { status })
+        )
+      );
+      queryClient.invalidateQueries({ queryKey: ['admin-orders'] });
+      setSelectedOrders([]);
+      alert(`${selectedOrders.length} orders updated to ${status}`);
+    } catch (error) {
+      alert('Failed to update orders');
+    }
+  };
+
   const filteredOrders = orders.filter(order => {
     const matchesSearch = !searchTerm || 
       order.orderNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -148,7 +171,27 @@ EzPay America
     const matchesStatus = statusFilter === "all" || order.status === statusFilter;
     const matchesPayment = paymentFilter === "all" || order.paymentStatus === paymentFilter;
     
-    return matchesSearch && matchesStatus && matchesPayment;
+    const orderDate = new Date(order.created_date);
+    const now = new Date();
+    let matchesDate = true;
+    
+    if (dateFilter === "today") {
+      matchesDate = orderDate.toDateString() === now.toDateString();
+    } else if (dateFilter === "week") {
+      const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      matchesDate = orderDate >= weekAgo;
+    } else if (dateFilter === "month") {
+      const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+      matchesDate = orderDate >= monthAgo;
+    }
+    
+    return matchesSearch && matchesStatus && matchesPayment && matchesDate;
+  }).sort((a, b) => {
+    if (sortBy === "newest") return new Date(b.created_date) - new Date(a.created_date);
+    if (sortBy === "oldest") return new Date(a.created_date) - new Date(b.created_date);
+    if (sortBy === "highest") return (b.total || 0) - (a.total || 0);
+    if (sortBy === "lowest") return (a.total || 0) - (b.total || 0);
+    return 0;
   });
 
   const stats = {
@@ -157,7 +200,17 @@ EzPay America
     pending: orders.filter(o => o.status === 'pending').length,
     processing: orders.filter(o => o.status === 'processing').length,
     shipped: orders.filter(o => o.status === 'shipped').length,
-    delivered: orders.filter(o => o.status === 'delivered').length
+    delivered: orders.filter(o => o.status === 'delivered').length,
+    avgOrderValue: orders.length > 0 ? orders.reduce((sum, o) => sum + (o.total || 0), 0) / orders.length : 0,
+    paidOrders: orders.filter(o => o.paymentStatus === 'paid').length
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedOrders.length === filteredOrders.length) {
+      setSelectedOrders([]);
+    } else {
+      setSelectedOrders(filteredOrders.map(o => o.id));
+    }
   };
 
   if (isLoading) {
@@ -174,18 +227,25 @@ EzPay America
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Orders</h1>
-            <p className="text-gray-500 mt-1">Manage customer orders</p>
+            <h1 className="text-3xl font-bold text-gray-900">Orders Management</h1>
+            <p className="text-gray-500 mt-1">{filteredOrders.length} of {orders.length} orders</p>
           </div>
           <div className="flex gap-2">
+            <Button 
+              onClick={() => setShowAnalytics(!showAnalytics)}
+              variant="outline"
+            >
+              <BarChart3 className="w-4 h-4 mr-2" />
+              Analytics
+            </Button>
             <Button 
               onClick={exportToCSV}
               variant="outline"
             >
               <Download className="w-4 h-4 mr-2" />
-              Export CSV
+              Export
             </Button>
             <Button 
               onClick={() => queryClient.invalidateQueries(['admin-orders'])}
@@ -196,6 +256,48 @@ EzPay America
             </Button>
           </div>
         </div>
+
+        {/* Analytics Panel */}
+        <AnimatePresence>
+          {showAnalytics && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="mb-6"
+            >
+              <Card>
+                <CardHeader>
+                  <CardTitle>Order Analytics</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="text-center p-4 bg-blue-50 rounded-lg">
+                      <p className="text-sm text-gray-600">Avg Order Value</p>
+                      <p className="text-2xl font-bold text-blue-600">${stats.avgOrderValue.toFixed(2)}</p>
+                    </div>
+                    <div className="text-center p-4 bg-green-50 rounded-lg">
+                      <p className="text-sm text-gray-600">Paid Orders</p>
+                      <p className="text-2xl font-bold text-green-600">{stats.paidOrders}</p>
+                    </div>
+                    <div className="text-center p-4 bg-purple-50 rounded-lg">
+                      <p className="text-sm text-gray-600">Completion Rate</p>
+                      <p className="text-2xl font-bold text-purple-600">
+                        {stats.total > 0 ? ((stats.delivered / stats.total) * 100).toFixed(1) : 0}%
+                      </p>
+                    </div>
+                    <div className="text-center p-4 bg-amber-50 rounded-lg">
+                      <p className="text-sm text-gray-600">Pending Revenue</p>
+                      <p className="text-2xl font-bold text-amber-600">
+                        ${orders.filter(o => o.status === 'pending').reduce((sum, o) => sum + (o.total || 0), 0).toFixed(2)}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-6">
@@ -240,11 +342,11 @@ EzPay America
         {/* Filters */}
         <Card className="mb-6">
           <CardContent className="p-4">
-            <div className="grid md:grid-cols-3 gap-4">
+            <div className="grid md:grid-cols-5 gap-4 mb-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <Input
-                  placeholder="Search orders, email, customer..."
+                  placeholder="Search orders..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
@@ -277,7 +379,56 @@ EzPay America
                   <SelectItem value="refunded">Refunded</SelectItem>
                 </SelectContent>
               </Select>
+
+              <Select value={dateFilter} onValueChange={setDateFilter}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Date Range" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Time</SelectItem>
+                  <SelectItem value="today">Today</SelectItem>
+                  <SelectItem value="week">Last 7 Days</SelectItem>
+                  <SelectItem value="month">Last 30 Days</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Sort By" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="newest">Newest First</SelectItem>
+                  <SelectItem value="oldest">Oldest First</SelectItem>
+                  <SelectItem value="highest">Highest Value</SelectItem>
+                  <SelectItem value="lowest">Lowest Value</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
+
+            {/* Bulk Actions */}
+            {selectedOrders.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg border border-blue-200"
+              >
+                <CheckSquare className="w-5 h-5 text-blue-600" />
+                <span className="text-sm font-medium text-blue-900">
+                  {selectedOrders.length} order{selectedOrders.length > 1 ? 's' : ''} selected
+                </span>
+                <div className="flex gap-2 ml-auto">
+                  <Button size="sm" onClick={() => bulkUpdateStatus('processing')}>
+                    Mark Processing
+                  </Button>
+                  <Button size="sm" onClick={() => bulkUpdateStatus('shipped')}>
+                    Mark Shipped
+                  </Button>
+                  <Button size="sm" variant="outline" onClick={() => setSelectedOrders([])}>
+                    Clear
+                  </Button>
+                </div>
+              </motion.div>
+            )}
           </CardContent>
         </Card>
 
@@ -287,6 +438,12 @@ EzPay America
             <table className="w-full">
               <thead className="bg-gray-50 border-b">
                 <tr>
+                  <th className="px-6 py-3 text-left">
+                    <Checkbox
+                      checked={selectedOrders.length === filteredOrders.length && filteredOrders.length > 0}
+                      onCheckedChange={toggleSelectAll}
+                    />
+                  </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Order</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Customer</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
@@ -299,6 +456,18 @@ EzPay America
               <tbody className="divide-y">
                 {filteredOrders.map((order) => (
                   <tr key={order.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4">
+                      <Checkbox
+                        checked={selectedOrders.includes(order.id)}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            setSelectedOrders([...selectedOrders, order.id]);
+                          } else {
+                            setSelectedOrders(selectedOrders.filter(id => id !== order.id));
+                          }
+                        }}
+                      />
+                    </td>
                     <td className="px-6 py-4">
                       <div className="font-medium text-gray-900">#{order.orderNumber}</div>
                       <div className="text-xs text-gray-500">{order.items?.length || 0} items</div>
