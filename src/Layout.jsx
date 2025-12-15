@@ -142,6 +142,14 @@ export default function Layout({ children }) {
                   </Link>
                 )
               ))}
+              {user?.role === 'admin' && (
+                <Link
+                  to={createPageUrl("AdminDashboard")}
+                  className="text-xs lg:text-sm text-gray-700 hover:text-amber-600 font-medium transition-colors whitespace-nowrap"
+                >
+                  Admin Area
+                </Link>
+              )}
               {user ? (
                 <div className="relative">
                   <Button
@@ -150,7 +158,7 @@ export default function Layout({ children }) {
                     className="flex items-center gap-1 text-xs lg:text-sm px-2 lg:px-4"
                   >
                     <User className="w-3 h-3 lg:w-4 lg:h-4" />
-                    Login
+                    Account
                   </Button>
                   {accountMenuOpen && (
                     <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
@@ -168,15 +176,6 @@ export default function Layout({ children }) {
                       >
                         Order History
                       </Link>
-                      {user.role === 'admin' && (
-                        <Link
-                          to={createPageUrl("AdminDashboard")}
-                          className="block px-4 py-2 text-gray-700 hover:bg-amber-50"
-                          onClick={() => setAccountMenuOpen(false)}
-                        >
-                          Admin Dashboard
-                        </Link>
-                      )}
                       <button
                         onClick={() => base44.auth.logout()}
                         className="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50"
@@ -187,13 +186,21 @@ export default function Layout({ children }) {
                   )}
                 </div>
               ) : (
-                <Button
-                  variant="outline"
-                  onClick={() => base44.auth.redirectToLogin()}
-                  className="text-xs lg:text-sm px-2 lg:px-4"
-                >
-                  Login
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => base44.auth.redirectToLogin()}
+                    className="text-xs lg:text-sm px-2 lg:px-4"
+                  >
+                    Login
+                  </Button>
+                  <Button
+                    onClick={() => base44.auth.redirectToLogin()}
+                    className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white text-xs lg:text-sm px-2 lg:px-4"
+                  >
+                    Sign Up
+                  </Button>
+                </div>
               )}
               <a href="tel:8653169625">
                 <Button className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-lg text-xs lg:text-sm px-2 lg:px-4">
@@ -258,6 +265,55 @@ export default function Layout({ children }) {
                   )}
                 </div>
               ))}
+              {user ? (
+                <>
+                  {user.role === 'admin' && (
+                    <Link
+                      to={createPageUrl("AdminDashboard")}
+                      className="block px-4 py-2 text-gray-700 hover:bg-amber-50 hover:text-amber-600 rounded-lg transition-colors font-semibold"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Admin Area
+                    </Link>
+                  )}
+                  <Link
+                    to={createPageUrl("MyAccount")}
+                    className="block px-4 py-2 text-gray-700 hover:bg-amber-50 hover:text-amber-600 rounded-lg transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    My Account
+                  </Link>
+                  <Link
+                    to={createPageUrl("OrderHistory")}
+                    className="block px-4 py-2 text-gray-700 hover:bg-amber-50 hover:text-amber-600 rounded-lg transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Order History
+                  </Link>
+                  <button
+                    onClick={() => base44.auth.logout()}
+                    className="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <div className="space-y-2">
+                  <Button
+                    onClick={() => base44.auth.redirectToLogin()}
+                    variant="outline"
+                    className="w-full"
+                  >
+                    Login
+                  </Button>
+                  <Button
+                    onClick={() => base44.auth.redirectToLogin()}
+                    className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white"
+                  >
+                    Sign Up
+                  </Button>
+                </div>
+              )}
               <a href="tel:8653169625" className="block pt-2">
                 <Button className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white">
                   <Phone className="w-4 h-4 mr-2" />
