@@ -110,7 +110,7 @@ export default function Shop() {
 
         {/* Account Requirement Notice */}
         <div className="bg-amber-50 border-l-4 border-amber-500 p-4 mb-8 rounded-r-lg">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-5">
             <p className="text-amber-800 font-semibold">
               ALL ITEMS PURCHASED REQUIRE A NEW AND APPROVED ACCOUNT WITH EzPay America Inc.
             </p>
