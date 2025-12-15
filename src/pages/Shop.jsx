@@ -3,12 +3,15 @@ import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingCart, Star, Package, ChevronLeft, ChevronRight } from "lucide-react";
+import { ShoppingCart, Star, Package, ChevronLeft, ChevronRight, SlidersHorizontal } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import SEOHead from "../components/SEOHead";
 import ShopSupportChat from "../components/shop/ShopSupportChat";
 import ShoppingCartTutorial from "../components/shop/ShoppingCartTutorial";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function Shop() {
   const navigate = useNavigate();
@@ -18,6 +21,11 @@ export default function Shop() {
   });
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [currentImageIndex, setCurrentImageIndex] = useState({});
+  const [sortBy, setSortBy] = useState('name-asc');
+  const [priceRange, setPriceRange] = useState([0, 10000]);
+  const [stockFilter, setStockFilter] = useState('all');
+  const [minRating, setMinRating] = useState(0);
+  const [showFilters, setShowFilters] = useState(false);
 
   const { data: products = [], isLoading } = useQuery({
     queryKey: ['products'],
@@ -60,9 +68,39 @@ export default function Shop() {
 
   const categories = ['All', ...new Set(products.map(p => p.category).filter(Boolean))];
   
-  const filteredProducts = selectedCategory === 'All' 
+  const maxPrice = Math.max(...products.map(p => p.price), 10000);
+  
+  let filteredProducts = selectedCategory === 'All' 
     ? products 
     : products.filter(p => p.category === selectedCategory);
+  
+  // Apply filters
+  filteredProducts = filteredProducts.filter(p => {
+    const priceMatch = p.price >= priceRange[0] && p.price <= priceRange[1];
+    const stockMatch = stockFilter === 'all' || 
+                       (stockFilter === 'in-stock' && p.stock > 0) ||
+                       (stockFilter === 'out-of-stock' && p.stock === 0);
+    const ratingMatch = 5 >= minRating; // Assuming all products have 5 stars
+    return priceMatch && stockMatch && ratingMatch;
+  });
+  
+  // Apply sorting
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    switch(sortBy) {
+      case 'price-asc':
+        return a.price - b.price;
+      case 'price-desc':
+        return b.price - a.price;
+      case 'name-asc':
+        return a.name.localeCompare(b.name);
+      case 'name-desc':
+        return b.name.localeCompare(a.name);
+      case 'popularity':
+        return 0; // Keep original order for popularity
+      default:
+        return 0;
+    }
+  });
 
   if (isLoading) {
     return (
@@ -141,14 +179,130 @@ export default function Shop() {
           ))}
         </div>
 
-        {/* Results count */}
-        <p className="text-sm text-gray-500 mb-6">
-          Showing {filteredProducts.length} results
-        </p>
+        {/* Filters and Sort Bar */}
+        <div className="mb-6 space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <Button
+                variant="outline"
+                onClick={() => setShowFilters(!showFilters)}
+                className="gap-2"
+              >
+                <SlidersHorizontal className="w-4 h-4" />
+                Filters
+              </Button>
+              <p className="text-sm text-gray-500">
+                Showing {sortedProducts.length} results
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-600">Sort by:</span>
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="w-48">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="name-asc">Name (A-Z)</SelectItem>
+                  <SelectItem value="name-desc">Name (Z-A)</SelectItem>
+                  <SelectItem value="price-asc">Price (Low to High)</SelectItem>
+                  <SelectItem value="price-desc">Price (High to Low)</SelectItem>
+                  <SelectItem value="popularity">Popularity</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Advanced Filters Panel */}
+          {showFilters && (
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 space-y-6">
+              <div className="grid md:grid-cols-3 gap-6">
+                {/* Price Range */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-3">
+                    Price Range: ${priceRange[0]} - ${priceRange[1]}
+                  </label>
+                  <Slider
+                    value={priceRange}
+                    onValueChange={setPriceRange}
+                    max={maxPrice}
+                    step={10}
+                    className="mb-2"
+                  />
+                </div>
+
+                {/* Stock Availability */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-3">
+                    Stock Availability
+                  </label>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2">
+                      <Checkbox
+                        checked={stockFilter === 'all'}
+                        onCheckedChange={() => setStockFilter('all')}
+                      />
+                      <span className="text-sm">All Products</span>
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <Checkbox
+                        checked={stockFilter === 'in-stock'}
+                        onCheckedChange={() => setStockFilter('in-stock')}
+                      />
+                      <span className="text-sm">In Stock Only</span>
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <Checkbox
+                        checked={stockFilter === 'out-of-stock'}
+                        onCheckedChange={() => setStockFilter('out-of-stock')}
+                      />
+                      <span className="text-sm">Out of Stock</span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Minimum Rating */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-3">
+                    Minimum Rating
+                  </label>
+                  <div className="space-y-2">
+                    {[5, 4, 3, 2, 1].map((rating) => (
+                      <label key={rating} className="flex items-center gap-2">
+                        <Checkbox
+                          checked={minRating === rating}
+                          onCheckedChange={() => setMinRating(rating)}
+                        />
+                        <div className="flex items-center gap-1">
+                          {[...Array(rating)].map((_, i) => (
+                            <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                          ))}
+                          <span className="text-sm ml-1">& up</span>
+                        </div>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-end">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setPriceRange([0, maxPrice]);
+                    setStockFilter('all');
+                    setMinRating(0);
+                  }}
+                >
+                  Reset Filters
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* Products Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredProducts.map((product) => {
+          {sortedProducts.map((product) => {
             const inCart = cart.find(item => item.id === product.id);
             const productImages = product.images?.length > 0 ? product.images : (product.image ? [product.image] : []);
             const currentIndex = currentImageIndex[product.id] || 0;
@@ -282,7 +436,7 @@ export default function Shop() {
           })}
         </div>
 
-        {filteredProducts.length === 0 && (
+        {sortedProducts.length === 0 && (
           <div className="text-center py-20">
             <Package className="w-16 h-16 text-gray-300 mx-auto mb-4" />
             <p className="text-gray-500 text-lg">No products found.</p>
