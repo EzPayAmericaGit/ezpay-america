@@ -342,6 +342,29 @@ export default function SEOHead({ title, description, keywords, image, url }) {
       metaGoogleVerify.content = "";
       document.head.appendChild(metaGoogleVerify);
     }
+
+    // Add Wurkzen Web Receptionist script
+    let wurkzenScript = document.querySelector('script[src="https://agent.wurkzen.com/wurkzen-agent-core.js"]');
+    if (!wurkzenScript) {
+      window.wurkzenagent = { app_id: "sPeKbTj9vqQKwbLrZdygbbQNsbqQvJvy" };
+      
+      const loadScript = () => {
+        let e = document.createElement("script");
+        e.type = "text/javascript";
+        e.async = true;
+        e.src = "https://agent.wurkzen.com/wurkzen-agent-core.js";
+        let t = document.getElementsByTagName("script")[0];
+        if (t && t.parentNode) {
+          t.parentNode.insertBefore(e, t);
+        }
+      };
+      
+      if (document.readyState === "complete") {
+        loadScript();
+      } else {
+        window.addEventListener("load", loadScript, false);
+      }
+    }
     
   }, [title, description, keywords, image, url]);
 
