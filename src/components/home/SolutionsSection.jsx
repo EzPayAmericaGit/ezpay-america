@@ -67,16 +67,12 @@ export default function SolutionsSection() {
             <p className="text-gray-700 mb-6 leading-relaxed">
               With many one-stop-shop solutions available at EzPay America, our POS offerings are unmatched by our competitors.
             </p>
-            <a
-              href="https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <Link to={createPageUrl("ApplyOnline")}>
               <Button variant="outline" className="border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white">
                 Apply Online Now!
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
-            </a>
+            </Link>
           </motion.div>
 
           {/* Payment Processing Hardware */}
