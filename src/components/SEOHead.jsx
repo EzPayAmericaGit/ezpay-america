@@ -148,70 +148,126 @@ export default function SEOHead({ title, description, keywords, image, url }) {
     
     const schema = {
       "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "@id": "https://ezpayamerica.com",
-      "name": "EzPay America",
-      "description": description || "Zero-fee payment processing and POS systems for retail and restaurant businesses",
-      "url": url || window.location.href,
-      "logo": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/8eb2dd274_EZSMALL.png",
-      "image": image || "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/8eb2dd274_EZSMALL.png",
-      "telephone": "+1-865-316-9625",
-      "priceRange": "$$",
-      "address": {
-        "@type": "PostalAddress",
-        "addressCountry": "US"
-      },
-      "geo": {
-        "@type": "GeoCoordinates"
-      },
-      "openingHoursSpecification": {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-          "Sunday"
-        ],
-        "opens": "00:00",
-        "closes": "23:59"
-      },
-      "sameAs": [
-        "https://www.facebook.com/ezpayamerica",
-        "https://twitter.com/ezpayamerica"
-      ],
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "Payment Processing Services",
-        "itemListElement": [
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Zero-Fee Payment Processing",
-              "description": "Payment processing with zero transaction fees"
-            }
+      "@graph": [
+        {
+          "@type": "LocalBusiness",
+          "@id": "https://ezpayamerica.com/#organization",
+          "name": "EzPay America",
+          "alternateName": "EzPay America Inc",
+          "description": description || "Zero-fee payment processing and POS systems for retail and restaurant businesses across the United States",
+          "url": "https://ezpayamerica.com",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/8eb2dd274_EZSMALL.png",
+            "width": 512,
+            "height": 512
           },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "POS Systems",
-              "description": "Point of sale systems for retail and restaurants"
-            }
+          "image": {
+            "@type": "ImageObject",
+            "url": image || "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/8eb2dd274_EZSMALL.png"
           },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Merchant Services",
-              "description": "Complete merchant services and support"
-            }
+          "telephone": "+1-865-316-9625",
+          "priceRange": "$$",
+          "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "US",
+            "addressRegion": "United States"
+          },
+          "areaServed": {
+            "@type": "Country",
+            "name": "United States"
+          },
+          "openingHoursSpecification": {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+            "opens": "00:00",
+            "closes": "23:59"
+          },
+          "sameAs": [
+            "https://www.facebook.com/ezpayamerica",
+            "https://twitter.com/ezpayamerica"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://ezpayamerica.com/#website",
+          "url": "https://ezpayamerica.com",
+          "name": "EzPay America - Payment Processing Solutions",
+          "publisher": {
+            "@id": "https://ezpayamerica.com/#organization"
+          },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://ezpayamerica.com/search?q={search_term_string}",
+            "query-input": "required name=search_term_string"
           }
-        ]
-      }
+        },
+        {
+          "@type": "WebPage",
+          "@id": (url || window.location.href) + "#webpage",
+          "url": url || window.location.href,
+          "name": title ? `${title} | EzPay America` : "EzPay America - Zero-Fee Payment Processing",
+          "isPartOf": {
+            "@id": "https://ezpayamerica.com/#website"
+          },
+          "about": {
+            "@id": "https://ezpayamerica.com/#organization"
+          },
+          "description": description || "Zero-fee payment processing solutions for your business",
+          "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://ezpayamerica.com"
+              }
+            ]
+          }
+        },
+        {
+          "@type": "Service",
+          "serviceType": "Payment Processing",
+          "provider": {
+            "@id": "https://ezpayamerica.com/#organization"
+          },
+          "areaServed": {
+            "@type": "Country",
+            "name": "United States"
+          },
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Payment Processing Services",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Zero-Fee Payment Processing",
+                  "description": "Credit card processing with zero transaction fees for merchants"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "POS Systems",
+                  "description": "Cloud-based point of sale systems for retail and restaurants"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Merchant Account Services",
+                  "description": "Complete merchant account setup and support"
+                }
+              }
+            ]
+          }
+        }
+      ]
     };
     
     structuredData.textContent = JSON.stringify(schema);

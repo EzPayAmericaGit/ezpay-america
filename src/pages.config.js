@@ -57,6 +57,7 @@ import Invoicing from './pages/Invoicing';
 import BusinessDashboard from './pages/BusinessDashboard';
 import ProcessPayment from './pages/ProcessPayment';
 import TransactionHistory from './pages/TransactionHistory';
+import RobotsTxt from './pages/RobotsTxt';
 import __Layout from './Layout.jsx';
 
 
@@ -120,6 +121,7 @@ export const PAGES = {
     "BusinessDashboard": BusinessDashboard,
     "ProcessPayment": ProcessPayment,
     "TransactionHistory": TransactionHistory,
+    "RobotsTxt": RobotsTxt,
 }
 
 export const pagesConfig = {

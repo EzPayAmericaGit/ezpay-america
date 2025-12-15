@@ -4,55 +4,57 @@ export default function Sitemap() {
   useEffect(() => {
     const baseUrl = window.location.origin;
     const pages = [
-      // Core Pages - Highest Priority
-      { path: '/', priority: '1.0', changefreq: 'daily', title: 'Home - EzPay America Payment Processing' },
+      // Core Pages - Highest Priority (Primary conversion paths)
+      { path: '/', priority: '1.0', changefreq: 'daily', title: 'Home - EzPay America Zero-Fee Payment Processing' },
       { path: '/ApplyOnline', priority: '1.0', changefreq: 'weekly', title: 'Apply Online - Merchant Account Application' },
+      { path: '/FreeDemo', priority: '0.95', changefreq: 'weekly', title: 'Free Demo - Schedule Consultation' },
       
-      // Main Service Pages
+      // Main Category Pages
       { path: '/Services', priority: '0.9', changefreq: 'weekly', title: 'Payment Processing Services' },
-      { path: '/EzPayPOSHome', priority: '0.9', changefreq: 'weekly', title: 'EzPay POS System - Cloud Point of Sale' },
-      { path: '/FreeDemo', priority: '0.9', changefreq: 'monthly', title: 'Free Demo - Schedule a Consultation' },
+      { path: '/EzPayPOSHome', priority: '0.9', changefreq: 'weekly', title: 'EzPay POS - Cloud Point of Sale System' },
+      { path: '/Shop', priority: '0.9', changefreq: 'daily', title: 'Shop Payment Equipment & POS Hardware' },
+      { path: '/News', priority: '0.85', changefreq: 'daily', title: 'Payment Processing News & Industry Insights' },
       { path: '/Contact', priority: '0.9', changefreq: 'monthly', title: 'Contact EzPay America' },
-      { path: '/Shop', priority: '0.9', changefreq: 'daily', title: 'Shop Payment Equipment & POS Systems' },
       
-      // Merchant Solutions
-      { path: '/RetailMerchants', priority: '0.8', changefreq: 'weekly', title: 'Retail Merchant Services' },
-      { path: '/RestaurantMerchants', priority: '0.8', changefreq: 'weekly', title: 'Restaurant Merchant Services' },
-      { path: '/WebPaymentPages', priority: '0.8', changefreq: 'weekly', title: 'Web Payment Pages' },
-      { path: '/MerchantCashAdvance', priority: '0.8', changefreq: 'weekly', title: 'Merchant Cash Advance' },
+      // Services Submenu - High Priority
+      { path: '/RetailMerchants', priority: '0.85', changefreq: 'weekly', title: 'Retail Merchant Payment Services' },
+      { path: '/RestaurantMerchants', priority: '0.85', changefreq: 'weekly', title: 'Restaurant Merchant Services' },
+      { path: '/WebPaymentPages', priority: '0.8', changefreq: 'weekly', title: 'Web Payment Pages & Virtual Terminal' },
+      { path: '/MerchantCashAdvance', priority: '0.8', changefreq: 'weekly', title: 'Merchant Cash Advance & Business Funding' },
       { path: '/RetailPaymentSolutions', priority: '0.8', changefreq: 'weekly', title: 'Retail Payment Solutions' },
       
-      // POS Systems - Industry Specific
-      { path: '/RetailPOS', priority: '0.8', changefreq: 'weekly', title: 'Retail POS System' },
-      { path: '/RestaurantPOS', priority: '0.8', changefreq: 'weekly', title: 'Restaurant POS System' },
+      // POS Systems - Main Categories
+      { path: '/RetailPOS', priority: '0.85', changefreq: 'weekly', title: 'Retail POS System - Inventory & Sales' },
+      { path: '/RestaurantPOS', priority: '0.85', changefreq: 'weekly', title: 'Restaurant POS - Table & Kitchen Management' },
       { path: '/CountertopTerminal', priority: '0.8', changefreq: 'weekly', title: 'Countertop Payment Terminal' },
       
-      // Specialty Food & Beverage POS
-      { path: '/CoffeePOS', priority: '0.7', changefreq: 'weekly', title: 'Coffee Shop & Cafe POS' },
-      { path: '/BagelShopPOS', priority: '0.7', changefreq: 'weekly', title: 'Bagel Shop POS System' },
-      { path: '/FoodTruckPOS', priority: '0.7', changefreq: 'weekly', title: 'Food Truck Mobile POS' },
-      { path: '/DeliShopPOS', priority: '0.7', changefreq: 'weekly', title: 'Deli Shop POS System' },
-      { path: '/BarTavernPOS', priority: '0.7', changefreq: 'weekly', title: 'Bar & Tavern POS System' },
+      // Food & Beverage POS - Industry Specific
+      { path: '/CoffeePOS', priority: '0.75', changefreq: 'weekly', title: 'Coffee Shop & Cafe POS System' },
+      { path: '/BagelShopPOS', priority: '0.75', changefreq: 'weekly', title: 'Bagel Shop & Bakery POS' },
+      { path: '/FoodTruckPOS', priority: '0.75', changefreq: 'weekly', title: 'Food Truck Mobile POS System' },
+      { path: '/DeliShopPOS', priority: '0.75', changefreq: 'weekly', title: 'Deli & Sandwich Shop POS' },
+      { path: '/BarTavernPOS', priority: '0.75', changefreq: 'weekly', title: 'Bar & Tavern POS System' },
       
       // Specialty Retail POS
-      { path: '/GroceryStorePOS', priority: '0.7', changefreq: 'weekly', title: 'Grocery Store POS System' },
-      { path: '/CBDStorePOS', priority: '0.7', changefreq: 'weekly', title: 'CBD Store POS System' },
-      { path: '/VapeStorePOS', priority: '0.7', changefreq: 'weekly', title: 'Vape & Smoke Shop POS' },
-      { path: '/MiniMarketPOS', priority: '0.7', changefreq: 'weekly', title: 'Convenience Store POS' },
-      { path: '/LiquorStorePOS', priority: '0.7', changefreq: 'weekly', title: 'Liquor Store POS System' },
-      { path: '/GiftShopPOS', priority: '0.7', changefreq: 'weekly', title: 'Gift Shop POS System' },
+      { path: '/GroceryStorePOS', priority: '0.75', changefreq: 'weekly', title: 'Grocery Store POS System' },
+      { path: '/MiniMarketPOS', priority: '0.75', changefreq: 'weekly', title: 'Convenience Store & Mini Market POS' },
+      { path: '/LiquorStorePOS', priority: '0.75', changefreq: 'weekly', title: 'Liquor Store POS - Age Verification' },
+      { path: '/CBDStorePOS', priority: '0.75', changefreq: 'weekly', title: 'CBD & Hemp Store POS System' },
+      { path: '/VapeStorePOS', priority: '0.75', changefreq: 'weekly', title: 'Vape & Smoke Shop POS' },
+      { path: '/GiftShopPOS', priority: '0.75', changefreq: 'weekly', title: 'Gift Shop & Boutique POS' },
       
-      // Additional Services
-      { path: '/ACHPayments', priority: '0.7', changefreq: 'monthly', title: 'ACH Payment Processing' },
+      // Additional Payment Services
+      { path: '/ACHPayments', priority: '0.7', changefreq: 'monthly', title: 'ACH Payment Processing & Bank Transfers' },
       { path: '/MobilePayments', priority: '0.7', changefreq: 'monthly', title: 'Mobile Payment Solutions' },
-      { path: '/MerchantCapital', priority: '0.7', changefreq: 'monthly', title: 'Merchant Capital & Financing' },
-      { path: '/ECommerce', priority: '0.7', changefreq: 'monthly', title: 'E-Commerce Payment Gateway' },
+      { path: '/MerchantCapital', priority: '0.7', changefreq: 'monthly', title: 'Merchant Capital & Business Financing' },
+      { path: '/ECommerce', priority: '0.7', changefreq: 'monthly', title: 'E-Commerce Payment Gateway Integration' },
       
-      // Content & Resources
-      { path: '/News', priority: '0.8', changefreq: 'daily', title: 'Payment Processing News & Insights' },
-      { path: '/Quiz', priority: '0.7', changefreq: 'monthly', title: 'Business Type Quiz' },
-      { path: '/Support', priority: '0.8', changefreq: 'weekly', title: 'Customer Support' },
-      { path: '/Sitemap', priority: '0.5', changefreq: 'monthly', title: 'Sitemap' }
+      // Tools & Resources
+      { path: '/Quiz', priority: '0.7', changefreq: 'monthly', title: 'Business Type Quiz - Find Your Solution' },
+      { path: '/Support', priority: '0.8', changefreq: 'weekly', title: 'Customer Support & Help Center' },
+      
+      // Utility Pages
+      { path: '/Sitemap', priority: '0.5', changefreq: 'monthly', title: 'Sitemap - All Pages' }
     ];
 
     const today = new Date().toISOString().split('T')[0];
