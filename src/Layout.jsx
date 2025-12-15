@@ -205,6 +205,15 @@ export default function Layout({ children }) {
                         >
                           Sign Up Now
                         </button>
+                        <button
+                          onClick={() => {
+                            setAccountMenuOpen(false);
+                            base44.auth.logout();
+                          }}
+                          className="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50"
+                        >
+                          Logout
+                        </button>
                       </>
                     )}
                   </div>
@@ -324,6 +333,15 @@ export default function Layout({ children }) {
                     className="block w-full text-left px-4 py-2 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors font-semibold"
                   >
                     Sign Up Now
+                  </button>
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      base44.auth.logout();
+                    }}
+                    className="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                  >
+                    Logout
                   </button>
                 </>
               )}
