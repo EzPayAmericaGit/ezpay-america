@@ -4,39 +4,63 @@ export default function Sitemap() {
   useEffect(() => {
     const baseUrl = window.location.origin;
     const pages = [
-      { path: '/', priority: '1.0', changefreq: 'daily' },
-      { path: '/Services', priority: '0.9', changefreq: 'weekly' },
-      { path: '/RetailMerchants', priority: '0.8', changefreq: 'weekly' },
-      { path: '/RestaurantMerchants', priority: '0.8', changefreq: 'weekly' },
-      { path: '/WebPaymentPages', priority: '0.8', changefreq: 'weekly' },
-      { path: '/MerchantCashAdvance', priority: '0.8', changefreq: 'weekly' },
-      { path: '/RetailPaymentSolutions', priority: '0.8', changefreq: 'weekly' },
-      { path: '/EzPayPOSHome', priority: '0.9', changefreq: 'weekly' },
-      { path: '/RetailPOS', priority: '0.8', changefreq: 'weekly' },
-      { path: '/RestaurantPOS', priority: '0.8', changefreq: 'weekly' },
-      { path: '/CoffeePOS', priority: '0.7', changefreq: 'weekly' },
-      { path: '/BagelShopPOS', priority: '0.7', changefreq: 'weekly' },
-      { path: '/FoodTruckPOS', priority: '0.7', changefreq: 'weekly' },
-      { path: '/DeliShopPOS', priority: '0.7', changefreq: 'weekly' },
-      { path: '/BarTavernPOS', priority: '0.7', changefreq: 'weekly' },
-      { path: '/GroceryStorePOS', priority: '0.7', changefreq: 'weekly' },
-      { path: '/CBDStorePOS', priority: '0.7', changefreq: 'weekly' },
-      { path: '/VapeStorePOS', priority: '0.7', changefreq: 'weekly' },
-      { path: '/MiniMarketPOS', priority: '0.7', changefreq: 'weekly' },
-      { path: '/LiquorStorePOS', priority: '0.7', changefreq: 'weekly' },
-      { path: '/GiftShopPOS', priority: '0.7', changefreq: 'weekly' },
-      { path: '/Quiz', priority: '0.7', changefreq: 'monthly' },
-      { path: '/ApplyOnline', priority: '1.0', changefreq: 'monthly' },
-      { path: '/Contact', priority: '0.9', changefreq: 'monthly' },
-      { path: '/Support', priority: '0.9', changefreq: 'monthly' },
-      { path: '/News', priority: '0.8', changefreq: 'daily' },
-      { path: '/FreeDemo', priority: '0.9', changefreq: 'monthly' }
+      // Core Pages - Highest Priority
+      { path: '/', priority: '1.0', changefreq: 'daily', title: 'Home - EzPay America Payment Processing' },
+      { path: '/ApplyOnline', priority: '1.0', changefreq: 'weekly', title: 'Apply Online - Merchant Account Application' },
+      
+      // Main Service Pages
+      { path: '/Services', priority: '0.9', changefreq: 'weekly', title: 'Payment Processing Services' },
+      { path: '/EzPayPOSHome', priority: '0.9', changefreq: 'weekly', title: 'EzPay POS System - Cloud Point of Sale' },
+      { path: '/FreeDemo', priority: '0.9', changefreq: 'monthly', title: 'Free Demo - Schedule a Consultation' },
+      { path: '/Contact', priority: '0.9', changefreq: 'monthly', title: 'Contact EzPay America' },
+      { path: '/Shop', priority: '0.9', changefreq: 'daily', title: 'Shop Payment Equipment & POS Systems' },
+      
+      // Merchant Solutions
+      { path: '/RetailMerchants', priority: '0.8', changefreq: 'weekly', title: 'Retail Merchant Services' },
+      { path: '/RestaurantMerchants', priority: '0.8', changefreq: 'weekly', title: 'Restaurant Merchant Services' },
+      { path: '/WebPaymentPages', priority: '0.8', changefreq: 'weekly', title: 'Web Payment Pages' },
+      { path: '/MerchantCashAdvance', priority: '0.8', changefreq: 'weekly', title: 'Merchant Cash Advance' },
+      { path: '/RetailPaymentSolutions', priority: '0.8', changefreq: 'weekly', title: 'Retail Payment Solutions' },
+      
+      // POS Systems - Industry Specific
+      { path: '/RetailPOS', priority: '0.8', changefreq: 'weekly', title: 'Retail POS System' },
+      { path: '/RestaurantPOS', priority: '0.8', changefreq: 'weekly', title: 'Restaurant POS System' },
+      { path: '/CountertopTerminal', priority: '0.8', changefreq: 'weekly', title: 'Countertop Payment Terminal' },
+      
+      // Specialty Food & Beverage POS
+      { path: '/CoffeePOS', priority: '0.7', changefreq: 'weekly', title: 'Coffee Shop & Cafe POS' },
+      { path: '/BagelShopPOS', priority: '0.7', changefreq: 'weekly', title: 'Bagel Shop POS System' },
+      { path: '/FoodTruckPOS', priority: '0.7', changefreq: 'weekly', title: 'Food Truck Mobile POS' },
+      { path: '/DeliShopPOS', priority: '0.7', changefreq: 'weekly', title: 'Deli Shop POS System' },
+      { path: '/BarTavernPOS', priority: '0.7', changefreq: 'weekly', title: 'Bar & Tavern POS System' },
+      
+      // Specialty Retail POS
+      { path: '/GroceryStorePOS', priority: '0.7', changefreq: 'weekly', title: 'Grocery Store POS System' },
+      { path: '/CBDStorePOS', priority: '0.7', changefreq: 'weekly', title: 'CBD Store POS System' },
+      { path: '/VapeStorePOS', priority: '0.7', changefreq: 'weekly', title: 'Vape & Smoke Shop POS' },
+      { path: '/MiniMarketPOS', priority: '0.7', changefreq: 'weekly', title: 'Convenience Store POS' },
+      { path: '/LiquorStorePOS', priority: '0.7', changefreq: 'weekly', title: 'Liquor Store POS System' },
+      { path: '/GiftShopPOS', priority: '0.7', changefreq: 'weekly', title: 'Gift Shop POS System' },
+      
+      // Additional Services
+      { path: '/ACHPayments', priority: '0.7', changefreq: 'monthly', title: 'ACH Payment Processing' },
+      { path: '/MobilePayments', priority: '0.7', changefreq: 'monthly', title: 'Mobile Payment Solutions' },
+      { path: '/MerchantCapital', priority: '0.7', changefreq: 'monthly', title: 'Merchant Capital & Financing' },
+      { path: '/ECommerce', priority: '0.7', changefreq: 'monthly', title: 'E-Commerce Payment Gateway' },
+      
+      // Content & Resources
+      { path: '/News', priority: '0.8', changefreq: 'daily', title: 'Payment Processing News & Insights' },
+      { path: '/Quiz', priority: '0.7', changefreq: 'monthly', title: 'Business Type Quiz' },
+      { path: '/Support', priority: '0.8', changefreq: 'weekly', title: 'Customer Support' },
+      { path: '/Sitemap', priority: '0.5', changefreq: 'monthly', title: 'Sitemap' }
     ];
 
     const today = new Date().toISOString().split('T')[0];
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${pages.map(page => `  <url>
     <loc>${baseUrl}${page.path}</loc>
     <lastmod>${today}</lastmod>
@@ -46,45 +70,129 @@ ${pages.map(page => `  <url>
 </urlset>`;
 
     // Set content type and display XML
-    document.body.innerHTML = `<pre style="font-family: monospace; white-space: pre-wrap; word-wrap: break-word;">${xml.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>`;
+    const contentType = document.querySelector('meta[http-equiv="Content-Type"]');
+    if (!contentType) {
+      const meta = document.createElement('meta');
+      meta.setAttribute('http-equiv', 'Content-Type');
+      meta.content = 'application/xml; charset=utf-8';
+      document.head.appendChild(meta);
+    }
+    
+    document.body.innerHTML = `<pre style="font-family: monospace; white-space: pre-wrap; word-wrap: break-word; padding: 20px;">${xml.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>`;
     
   }, []);
 
   return (
     <div className="min-h-screen bg-white p-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6">Sitemap</h1>
-        <div className="bg-gray-100 p-6 rounded-lg">
-          <h2 className="text-xl font-semibold mb-4">Available Pages:</h2>
-          <ul className="space-y-2">
-            <li><a href="/" className="text-amber-600 hover:underline">Home</a></li>
-            <li><a href="/Services" className="text-amber-600 hover:underline">Services</a></li>
-            <li><a href="/RetailMerchants" className="text-amber-600 hover:underline">Retail Merchants</a></li>
-            <li><a href="/RestaurantMerchants" className="text-amber-600 hover:underline">Restaurant Merchants</a></li>
-            <li><a href="/WebPaymentPages" className="text-amber-600 hover:underline">Web Payment Pages</a></li>
-            <li><a href="/MerchantCashAdvance" className="text-amber-600 hover:underline">Merchant Cash Advance</a></li>
-            <li><a href="/RetailPaymentSolutions" className="text-amber-600 hover:underline">Retail Payment Solutions</a></li>
-            <li><a href="/EzPayPOSHome" className="text-amber-600 hover:underline">EzPay POS</a></li>
-            <li><a href="/RetailPOS" className="text-amber-600 hover:underline">Retail POS</a></li>
-            <li><a href="/RestaurantPOS" className="text-amber-600 hover:underline">Restaurant POS</a></li>
-            <li><a href="/CoffeePOS" className="text-amber-600 hover:underline">Coffee Shop POS</a></li>
-            <li><a href="/BagelShopPOS" className="text-amber-600 hover:underline">Bagel Shop POS</a></li>
-            <li><a href="/FoodTruckPOS" className="text-amber-600 hover:underline">Food Truck POS</a></li>
-            <li><a href="/DeliShopPOS" className="text-amber-600 hover:underline">Deli Shop POS</a></li>
-            <li><a href="/BarTavernPOS" className="text-amber-600 hover:underline">Bar & Tavern POS</a></li>
-            <li><a href="/GroceryStorePOS" className="text-amber-600 hover:underline">Grocery Store POS</a></li>
-            <li><a href="/CBDStorePOS" className="text-amber-600 hover:underline">CBD Store POS</a></li>
-            <li><a href="/VapeStorePOS" className="text-amber-600 hover:underline">Vape Store POS</a></li>
-            <li><a href="/MiniMarketPOS" className="text-amber-600 hover:underline">Mini Market POS</a></li>
-            <li><a href="/LiquorStorePOS" className="text-amber-600 hover:underline">Liquor Store POS</a></li>
-            <li><a href="/GiftShopPOS" className="text-amber-600 hover:underline">Gift Shop POS</a></li>
-            <li><a href="/Quiz" className="text-amber-600 hover:underline">Quiz</a></li>
-            <li><a href="/ApplyOnline" className="text-amber-600 hover:underline">Apply Online</a></li>
-            <li><a href="/Contact" className="text-amber-600 hover:underline">Contact</a></li>
-            <li><a href="/Support" className="text-amber-600 hover:underline">Support</a></li>
-            <li><a href="/News" className="text-amber-600 hover:underline">News</a></li>
-            <li><a href="/FreeDemo" className="text-amber-600 hover:underline">Free Demo</a></li>
-          </ul>
+      <div className="max-w-6xl mx-auto">
+        <h1 className="text-4xl font-bold mb-4 text-gray-900">EzPay America Sitemap</h1>
+        <p className="text-gray-600 mb-8">Complete directory of all pages and services</p>
+        
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Main Pages */}
+          <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-lg border border-amber-200">
+            <h2 className="text-xl font-bold mb-4 text-gray-900 flex items-center gap-2">
+              <span className="w-2 h-2 bg-amber-500 rounded-full"></span>
+              Main Pages
+            </h2>
+            <ul className="space-y-2">
+              <li><a href="/" className="text-amber-700 hover:text-amber-900 hover:underline font-medium">Home</a></li>
+              <li><a href="/Services" className="text-amber-700 hover:text-amber-900 hover:underline font-medium">Services</a></li>
+              <li><a href="/ApplyOnline" className="text-amber-700 hover:text-amber-900 hover:underline font-medium">Apply Online</a></li>
+              <li><a href="/FreeDemo" className="text-amber-700 hover:text-amber-900 hover:underline font-medium">Schedule Free Demo</a></li>
+              <li><a href="/Contact" className="text-amber-700 hover:text-amber-900 hover:underline font-medium">Contact Us</a></li>
+              <li><a href="/Shop" className="text-amber-700 hover:text-amber-900 hover:underline font-medium">Shop Equipment</a></li>
+            </ul>
+          </div>
+
+          {/* Merchant Services */}
+          <div className="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-lg border border-blue-200">
+            <h2 className="text-xl font-bold mb-4 text-gray-900 flex items-center gap-2">
+              <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+              Merchant Services
+            </h2>
+            <ul className="space-y-2">
+              <li><a href="/RetailMerchants" className="text-blue-700 hover:text-blue-900 hover:underline">Retail Merchants</a></li>
+              <li><a href="/RestaurantMerchants" className="text-blue-700 hover:text-blue-900 hover:underline">Restaurant Merchants</a></li>
+              <li><a href="/WebPaymentPages" className="text-blue-700 hover:text-blue-900 hover:underline">Web Payment Pages</a></li>
+              <li><a href="/MerchantCashAdvance" className="text-blue-700 hover:text-blue-900 hover:underline">Merchant Cash Advance</a></li>
+              <li><a href="/RetailPaymentSolutions" className="text-blue-700 hover:text-blue-900 hover:underline">Retail Payment Solutions</a></li>
+              <li><a href="/ACHPayments" className="text-blue-700 hover:text-blue-900 hover:underline">ACH Payments</a></li>
+              <li><a href="/MobilePayments" className="text-blue-700 hover:text-blue-900 hover:underline">Mobile Payments</a></li>
+              <li><a href="/ECommerce" className="text-blue-700 hover:text-blue-900 hover:underline">E-Commerce Gateway</a></li>
+            </ul>
+          </div>
+
+          {/* POS Systems */}
+          <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-lg border border-green-200">
+            <h2 className="text-xl font-bold mb-4 text-gray-900 flex items-center gap-2">
+              <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+              POS Systems
+            </h2>
+            <ul className="space-y-2">
+              <li><a href="/EzPayPOSHome" className="text-green-700 hover:text-green-900 hover:underline font-medium">EzPay POS Overview</a></li>
+              <li><a href="/RetailPOS" className="text-green-700 hover:text-green-900 hover:underline">Retail POS</a></li>
+              <li><a href="/RestaurantPOS" className="text-green-700 hover:text-green-900 hover:underline">Restaurant POS</a></li>
+              <li><a href="/CountertopTerminal" className="text-green-700 hover:text-green-900 hover:underline">Countertop Terminal</a></li>
+            </ul>
+          </div>
+
+          {/* Food & Beverage */}
+          <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-lg border border-purple-200">
+            <h2 className="text-xl font-bold mb-4 text-gray-900 flex items-center gap-2">
+              <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
+              Food & Beverage
+            </h2>
+            <ul className="space-y-2">
+              <li><a href="/CoffeePOS" className="text-purple-700 hover:text-purple-900 hover:underline">Coffee Shop POS</a></li>
+              <li><a href="/BagelShopPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Bagel Shop POS</a></li>
+              <li><a href="/FoodTruckPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Food Truck POS</a></li>
+              <li><a href="/DeliShopPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Deli Shop POS</a></li>
+              <li><a href="/BarTavernPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Bar & Tavern POS</a></li>
+            </ul>
+          </div>
+
+          {/* Specialty Retail */}
+          <div className="bg-gradient-to-br from-red-50 to-rose-50 p-6 rounded-lg border border-red-200">
+            <h2 className="text-xl font-bold mb-4 text-gray-900 flex items-center gap-2">
+              <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+              Specialty Retail
+            </h2>
+            <ul className="space-y-2">
+              <li><a href="/GroceryStorePOS" className="text-red-700 hover:text-red-900 hover:underline">Grocery Store POS</a></li>
+              <li><a href="/MiniMarketPOS" className="text-red-700 hover:text-red-900 hover:underline">Convenience Store POS</a></li>
+              <li><a href="/LiquorStorePOS" className="text-red-700 hover:text-red-900 hover:underline">Liquor Store POS</a></li>
+              <li><a href="/CBDStorePOS" className="text-red-700 hover:text-red-900 hover:underline">CBD Store POS</a></li>
+              <li><a href="/VapeStorePOS" className="text-red-700 hover:text-red-900 hover:underline">Vape Shop POS</a></li>
+              <li><a href="/GiftShopPOS" className="text-red-700 hover:text-red-900 hover:underline">Gift Shop POS</a></li>
+            </ul>
+          </div>
+
+          {/* Resources */}
+          <div className="bg-gradient-to-br from-gray-50 to-slate-50 p-6 rounded-lg border border-gray-200">
+            <h2 className="text-xl font-bold mb-4 text-gray-900 flex items-center gap-2">
+              <span className="w-2 h-2 bg-gray-500 rounded-full"></span>
+              Resources
+            </h2>
+            <ul className="space-y-2">
+              <li><a href="/News" className="text-gray-700 hover:text-gray-900 hover:underline">News & Insights</a></li>
+              <li><a href="/Quiz" className="text-gray-700 hover:text-gray-900 hover:underline">Business Quiz</a></li>
+              <li><a href="/Support" className="text-gray-700 hover:text-gray-900 hover:underline">Support Center</a></li>
+              <li><a href="/Sitemap" className="text-gray-700 hover:text-gray-900 hover:underline">Sitemap</a></li>
+            </ul>
+          </div>
+        </div>
+
+        {/* SEO Information */}
+        <div className="mt-12 bg-amber-50 border-l-4 border-amber-500 p-6 rounded">
+          <h3 className="text-lg font-bold text-gray-900 mb-2">For Search Engines</h3>
+          <p className="text-sm text-gray-700">
+            This sitemap follows Google's XML sitemap protocol with priorities, change frequencies, and last modification dates. 
+            All pages are optimized for search engines with proper meta tags, structured data, and semantic HTML.
+          </p>
+          <p className="text-sm text-gray-600 mt-3">
+            Total Pages: {pages.length} | Last Updated: {today}
+          </p>
         </div>
       </div>
     </div>

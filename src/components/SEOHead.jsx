@@ -22,8 +22,19 @@ export default function SEOHead({ title, description, keywords, image, url }) {
     if (!metaViewport) {
       metaViewport = document.createElement('meta');
       metaViewport.name = "viewport";
-      metaViewport.content = "width=device-width, initial-scale=1";
+      metaViewport.content = "width=device-width, initial-scale=1.0, maximum-scale=5.0";
       document.head.appendChild(metaViewport);
+    } else {
+      metaViewport.content = "width=device-width, initial-scale=1.0, maximum-scale=5.0";
+    }
+
+    // Format Detection (iOS)
+    let metaFormatDetection = document.querySelector('meta[name="format-detection"]');
+    if (!metaFormatDetection) {
+      metaFormatDetection = document.createElement('meta');
+      metaFormatDetection.name = "format-detection";
+      metaFormatDetection.content = "telephone=yes";
+      document.head.appendChild(metaFormatDetection);
     }
 
     // Meta Description - keep under 155 characters
@@ -231,6 +242,50 @@ export default function SEOHead({ title, description, keywords, image, url }) {
       document.head.appendChild(metaThemeColor);
     }
     metaThemeColor.content = "#F59E0B";
+
+    // Add author meta tag
+    let metaAuthor = document.querySelector('meta[name="author"]');
+    if (!metaAuthor) {
+      metaAuthor = document.createElement('meta');
+      metaAuthor.name = "author";
+      document.head.appendChild(metaAuthor);
+    }
+    metaAuthor.content = "EzPay America";
+
+    // Add geo tags for local SEO
+    let metaGeoRegion = document.querySelector('meta[name="geo.region"]');
+    if (!metaGeoRegion) {
+      metaGeoRegion = document.createElement('meta');
+      metaGeoRegion.name = "geo.region";
+      metaGeoRegion.content = "US";
+      document.head.appendChild(metaGeoRegion);
+    }
+
+    let metaGeoPlacename = document.querySelector('meta[name="geo.placename"]');
+    if (!metaGeoPlacename) {
+      metaGeoPlacename = document.createElement('meta');
+      metaGeoPlacename.name = "geo.placename";
+      metaGeoPlacename.content = "United States";
+      document.head.appendChild(metaGeoPlacename);
+    }
+
+    // Add referrer policy
+    let metaReferrer = document.querySelector('meta[name="referrer"]');
+    if (!metaReferrer) {
+      metaReferrer = document.createElement('meta');
+      metaReferrer.name = "referrer";
+      metaReferrer.content = "origin-when-cross-origin";
+      document.head.appendChild(metaReferrer);
+    }
+
+    // Google verification (placeholder - user should add actual code)
+    let metaGoogleVerify = document.querySelector('meta[name="google-site-verification"]');
+    if (!metaGoogleVerify) {
+      metaGoogleVerify = document.createElement('meta');
+      metaGoogleVerify.name = "google-site-verification";
+      metaGoogleVerify.content = "";
+      document.head.appendChild(metaGoogleVerify);
+    }
     
   }, [title, description, keywords, image, url]);
 
