@@ -152,7 +152,7 @@ export default function Layout({ children }) {
                   Account
                 </Button>
                 {accountMenuOpen && (
-                  <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
+                  <div className="absolute top-full right-0 mt-2 w-52 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
                     {user ? (
                       <>
                         <Link
