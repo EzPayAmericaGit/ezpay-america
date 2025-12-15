@@ -142,14 +142,6 @@ export default function Layout({ children }) {
                   </Link>
                 )
               ))}
-              {user?.role === 'admin' && (
-                <Link
-                  to={createPageUrl("Admin")}
-                  className="text-xs lg:text-sm text-gray-700 hover:text-amber-600 font-medium transition-colors whitespace-nowrap"
-                >
-                  Cart Admin
-                </Link>
-              )}
               {user ? (
                 <div className="relative">
                   <Button
@@ -267,15 +259,6 @@ export default function Layout({ children }) {
               ))}
               {user ? (
                 <>
-                  {user.role === 'admin' && (
-                    <Link
-                      to={createPageUrl("Admin")}
-                      className="block px-4 py-2 text-gray-700 hover:bg-amber-50 hover:text-amber-600 rounded-lg transition-colors font-semibold"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Cart Admin
-                    </Link>
-                  )}
                   <Link
                     to={createPageUrl("MyAccount")}
                     className="block px-4 py-2 text-gray-700 hover:bg-amber-50 hover:text-amber-600 rounded-lg transition-colors"
