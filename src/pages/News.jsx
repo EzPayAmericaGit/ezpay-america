@@ -206,16 +206,12 @@ export default function News() {
               Ready to transform your payment processing? Get started with EzPay America.
             </p>
             <div className="pt-12">
-              <a
-                href="https://hq.netevia.com/MerchantApplication/Index/68c59701-6e8c-4268-b846-ebe8fb143210?startNew=true"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <Link to={createPageUrl("ApplyOnline")}>
                 <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg shadow-xl">
                   Apply Online!
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
-              </a>
+              </Link>
             </div>
           </motion.div>
         </div>
