@@ -22,26 +22,34 @@ Deno.serve(async (req) => {
 
     // Post to Facebook
     try {
-      const fbResponse = await base44.functions.invoke('postToFacebook', {
+      const fbResponse = await base44.asServiceRole.functions.invoke('postToFacebook', {
         message,
         image_url,
         link
       });
-      results.facebook = { success: true, data: fbResponse.data };
+      if (fbResponse.data?.success) {
+        results.facebook = { success: true, data: fbResponse.data };
+      } else {
+        results.facebook = { success: false, error: fbResponse.data?.error || 'Unknown error' };
+      }
     } catch (error) {
-      results.facebook = { success: false, error: error.message };
+      results.facebook = { success: false, error: error.message || String(error) };
     }
 
     // Post to LinkedIn
     try {
-      const liResponse = await base44.functions.invoke('postToLinkedIn', {
+      const liResponse = await base44.asServiceRole.functions.invoke('postToLinkedIn', {
         message,
         link,
         image_url
       });
-      results.linkedin = { success: true, data: liResponse.data };
+      if (liResponse.data?.success) {
+        results.linkedin = { success: true, data: liResponse.data };
+      } else {
+        results.linkedin = { success: false, error: liResponse.data?.error || 'Unknown error' };
+      }
     } catch (error) {
-      results.linkedin = { success: false, error: error.message };
+      results.linkedin = { success: false, error: error.message || String(error) };
     }
 
     const allSuccessful = results.facebook.success && results.linkedin.success;
