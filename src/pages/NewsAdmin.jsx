@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Plus, Pencil, Trash2, Eye, EyeOff, Upload, Loader2, Sparkles, RefreshCw, Tags, BarChart3, Wand2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Eye, EyeOff, Upload, Loader2, Sparkles, RefreshCw, Tags, BarChart3, Wand2, Share2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const categories = [
@@ -52,6 +52,7 @@ export default function NewsAdmin() {
   const [seoRecommendations, setSeoRecommendations] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
+  const [posting, setPosting] = useState(null);
 
   const queryClient = useQueryClient();
 
@@ -80,6 +81,38 @@ export default function NewsAdmin() {
     mutationFn: (id) => base44.entities.NewsArticle.delete(id),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['newsArticles'] })
   });
+
+  const postToSocial = async (article) => {
+    setPosting(article.id);
+    try {
+      const articleUrl = `${window.location.origin}/news/${article.slug}`;
+      const message = `${article.title}\n\n${article.excerpt}\n\nRead more: ${articleUrl}`;
+      
+      const response = await base44.functions.invoke('postToSocialMedia', {
+        message,
+        image_url: article.image,
+        link: articleUrl
+      });
+
+      if (response.data.success) {
+        alert('Successfully posted to Facebook and LinkedIn!');
+      } else if (response.data.partial_success) {
+        const failedPlatforms = [];
+        if (!response.data.results.facebook.success) failedPlatforms.push('Facebook');
+        if (!response.data.results.linkedin.success) failedPlatforms.push('LinkedIn');
+        alert(`Posted successfully, but failed on: ${failedPlatforms.join(', ')}\n\nCheck console for details.`);
+        console.error('Social media posting errors:', response.data.results);
+      } else {
+        alert('Failed to post to social media. Check console for details.');
+        console.error('Social media posting errors:', response.data.results);
+      }
+    } catch (error) {
+      console.error('Error posting to social media:', error);
+      alert('Error posting to social media: ' + error.message);
+    } finally {
+      setPosting(null);
+    }
+  };
 
   const resetForm = () => {
     setFormData({ title: "", slug: "", excerpt: "", content: "", image: "", category: "", tags: [], content_score: null, sentiment: "", reading_time: null, published: false, meta_title: "", meta_description: "", meta_keywords: "" });
@@ -954,6 +987,20 @@ Optimize for:
                       title={article.published ? "Unpublish" : "Publish"}
                     >
                       {article.published ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="ghost"
+                      onClick={() => postToSocial(article)}
+                      disabled={posting === article.id}
+                      title="Post to Facebook & LinkedIn"
+                      className="text-blue-600 hover:text-blue-700"
+                    >
+                      {posting === article.id ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Share2 className="w-4 h-4" />
+                      )}
                     </Button>
                     <Button size="sm" variant="ghost" onClick={() => handleEdit(article)}>
                       <Pencil className="w-4 h-4" />
