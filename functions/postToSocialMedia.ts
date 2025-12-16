@@ -27,12 +27,9 @@ Deno.serve(async (req) => {
         image_url,
         link
       });
-      if (fbResponse.data?.success) {
-        results.facebook = { success: true, data: fbResponse.data };
-      } else {
-        results.facebook = { success: false, error: fbResponse.data?.error || 'Unknown error' };
-      }
+      results.facebook = { success: true, data: fbResponse };
     } catch (error) {
+      console.error('Facebook posting error:', error);
       results.facebook = { success: false, error: error.message || String(error) };
     }
 
@@ -43,12 +40,9 @@ Deno.serve(async (req) => {
         link,
         image_url
       });
-      if (liResponse.data?.success) {
-        results.linkedin = { success: true, data: liResponse.data };
-      } else {
-        results.linkedin = { success: false, error: liResponse.data?.error || 'Unknown error' };
-      }
+      results.linkedin = { success: true, data: liResponse };
     } catch (error) {
+      console.error('LinkedIn posting error:', error);
       results.linkedin = { success: false, error: error.message || String(error) };
     }
 
