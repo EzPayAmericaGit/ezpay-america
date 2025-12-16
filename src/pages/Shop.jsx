@@ -29,9 +29,18 @@ export default function Shop() {
 
   const { data: products = [], isLoading, error } = useQuery({
     queryKey: ['products'],
-    queryFn: () => base44.entities.Product.filter({ active: true }),
-    retry: 1,
-    staleTime: 30000
+    queryFn: async () => {
+      try {
+        return await base44.entities.Product.filter({ active: true });
+      } catch (err) {
+        console.error('Product fetch error:', err);
+        return [];
+      }
+    },
+    retry: 2,
+    retryDelay: 1000,
+    staleTime: 60000,
+    cacheTime: 300000
   });
 
   const addToCart = (product) => {
@@ -114,10 +123,22 @@ export default function Shop() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-600 mb-4">Unable to load products</p>
-          <Button onClick={() => window.location.reload()}>Retry</Button>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center py-20">
+        <div className="text-center max-w-md mx-auto px-4">
+          <Package className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Connection Issue</h2>
+          <p className="text-gray-600 mb-6">We're having trouble loading our products. This may be due to high traffic or a temporary connection issue.</p>
+          <div className="space-y-3">
+            <Button onClick={() => window.location.reload()} className="w-full bg-amber-600 hover:bg-amber-700">
+              Refresh Page
+            </Button>
+            <p className="text-sm text-gray-500">
+              Need immediate assistance? Call us at{' '}
+              <a href="tel:8653169625" className="text-amber-600 font-semibold hover:underline">
+                (865) 316-9625
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     );
