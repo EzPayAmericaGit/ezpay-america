@@ -27,9 +27,11 @@ export default function Shop() {
   const [minRating, setMinRating] = useState(0);
   const [showFilters, setShowFilters] = useState(false);
 
-  const { data: products = [], isLoading } = useQuery({
+  const { data: products = [], isLoading, error } = useQuery({
     queryKey: ['products'],
-    queryFn: () => base44.entities.Product.filter({ active: true })
+    queryFn: () => base44.entities.Product.filter({ active: true }),
+    retry: 1,
+    staleTime: 30000
   });
 
   const addToCart = (product) => {
@@ -106,6 +108,17 @@ export default function Shop() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">Loading products...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">Unable to load products</p>
+          <Button onClick={() => window.location.reload()}>Retry</Button>
+        </div>
       </div>
     );
   }
