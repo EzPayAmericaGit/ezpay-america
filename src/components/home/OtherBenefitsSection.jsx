@@ -12,8 +12,7 @@ const otherBenefits = [
   },
   {
     title: "No Batch Fees",
-    description: "Why should you be charged for closing out at the end of the business day? Batch out as much as you like. That is just one of the advantages of using EzPay America's payment systems.",
-    linkToShop: true
+    description: "Why should you be charged for closing out at the end of the business day? Batch out as much as you like. That is just one of the advantages of using EzPay America's payment systems."
   },
   {
     title: "No Swipe Fees",
@@ -58,15 +57,9 @@ export default function OtherBenefitsSection() {
                   <h3 className="text-xl font-bold text-gray-900 mb-3">
                     {benefit.title}
                   </h3>
-                  {benefit.linkToShop ? (
-                    <Link to={createPageUrl("Shop")} className="text-gray-600 leading-relaxed hover:text-amber-600 transition-colors">
-                      {benefit.description}
-                    </Link>
-                  ) : (
-                    <p className="text-gray-600 leading-relaxed">
-                      {benefit.description}
-                    </p>
-                  )}
+                  <p className="text-gray-600 leading-relaxed">
+                    {benefit.description}
+                  </p>
                 </div>
               </div>
             </motion.div>
