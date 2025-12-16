@@ -92,10 +92,12 @@ export default function SolutionsSection() {
             <p className="text-gray-700 mb-6 leading-relaxed">
               With many one-stop-shop solutions available at EzPay America, our POS offerings are unmatched by our competitors.
             </p>
-            <Button variant="outline" className="border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white">
-              Explore Now
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
+            <Link to={createPageUrl("Shop")}>
+              <Button variant="outline" className="border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white">
+                Explore Now
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
           </motion.div>
         </div>
       </div>
