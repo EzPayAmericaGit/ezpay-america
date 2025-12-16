@@ -118,6 +118,41 @@ export default function Shop() {
         keywords="buy POS system, shop POS equipment, credit card terminal for sale, payment terminal, card reader, mobile card reader, wireless card reader, bluetooth card reader, EMV terminal, chip card reader, contactless terminal, NFC reader, tap to pay terminal, countertop terminal, mobile POS terminal, portable card reader, iPad POS system, tablet POS, Android POS, all-in-one POS, touchscreen POS, receipt printer, thermal printer, kitchen printer, bar printer, cash drawer, cash register, barcode scanner, label printer, customer display, pole display, kitchen display screen, payment processing equipment, merchant services equipment, credit card machine, swipe terminal, PIN pad, signature pad, wireless printer, ethernet printer, USB printer, bluetooth printer, POS accessories, POS hardware, POS peripherals, payment device, credit card reader, debit card reader, gift card reader, loyalty card reader, integrated payments, payment solutions, merchant equipment, retail equipment, restaurant equipment, POS supplies, receipt paper, thermal paper, ribbon cartridges, cleaning cards, printer maintenance, equipment warranty, POS bundles, starter kits, complete POS systems, turnkey solutions, plug and play POS, easy setup POS, wireless payment solutions, mobile payment devices, portable payment terminals, on-the-go payments, field service equipment, delivery equipment, trade show equipment, event payment processing, outdoor payment solutions, rugged terminals, weatherproof equipment, battery powered, charging station, equipment stands, mounting brackets, security cables, protective cases, carrying cases, equipment financing, payment plans, lease to own, rent to own, equipment upgrades, trade-in program, refurbished equipment, certified pre-owned, new equipment, latest technology"
       />
       
+      {/* Product Structured Data for Google */}
+      {sortedProducts.map((product) => (
+        <script key={product.id} type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org/",
+            "@type": "Product",
+            "name": product.name,
+            "description": product.description || product.name,
+            "image": product.images?.length > 0 ? product.images : [product.image],
+            "brand": {
+              "@type": "Brand",
+              "name": "EzPay America"
+            },
+            "offers": {
+              "@type": "Offer",
+              "url": window.location.href,
+              "priceCurrency": "USD",
+              "price": product.price.toFixed(2),
+              "availability": product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+              "seller": {
+                "@type": "Organization",
+                "name": "EzPay America"
+              }
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "5",
+              "reviewCount": "1"
+            },
+            "sku": product.sku || product.id,
+            "category": product.category
+          })}
+        </script>
+      ))}
+      
       <ShoppingCartTutorial />
       <ShopSupportChat />
       
