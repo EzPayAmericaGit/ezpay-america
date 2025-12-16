@@ -263,10 +263,73 @@ export default function Checkout() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-20">
       <SEOHead 
-        title="Checkout - EzCart"
-        description="Complete your purchase securely"
-        keywords="checkout, secure payment"
+        title="Secure Checkout - Complete Your Purchase | EzPay America"
+        description="Complete your secure checkout for payment processing equipment and POS systems. Fast shipping, secure payment processing, and 24/7 support. Shop EzPay America today."
+        keywords="secure checkout, buy POS system, payment equipment checkout, merchant services purchase, credit card terminal checkout, online payment processing, secure shopping cart, buy payment terminal, POS system purchase, merchant equipment order"
       />
+      
+      {/* Shopping Cart Structured Data for Google */}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ShoppingCart",
+          "name": "EzPay America Shopping Cart",
+          "itemListElement": cart.map((item, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "item": {
+              "@type": "Product",
+              "name": item.name,
+              "description": item.description || item.name,
+              "image": item.images?.[0] || item.image,
+              "brand": {
+                "@type": "Brand",
+                "name": "EzPay America"
+              },
+              "offers": {
+                "@type": "Offer",
+                "url": window.location.origin + "/shop",
+                "priceCurrency": "USD",
+                "price": item.price.toFixed(2),
+                "availability": "https://schema.org/InStock",
+                "seller": {
+                  "@type": "Organization",
+                  "name": "EzPay America"
+                }
+              },
+              "sku": item.sku || item.id,
+              "category": item.category
+            }
+          }))
+        })}
+      </script>
+      
+      {/* Order Structured Data */}
+      {cart.length > 0 && (
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Order",
+            "merchant": {
+              "@type": "Organization",
+              "name": "EzPay America"
+            },
+            "orderStatus": "https://schema.org/OrderProcessing",
+            "orderedItem": cart.map(item => ({
+              "@type": "OrderItem",
+              "orderItemNumber": item.id,
+              "orderQuantity": item.quantity,
+              "orderedItem": {
+                "@type": "Product",
+                "name": item.name,
+                "sku": item.sku || item.id
+              }
+            })),
+            "price": total.toFixed(2),
+            "priceCurrency": "USD"
+          })}
+        </script>
+      )}
       
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {user && (
