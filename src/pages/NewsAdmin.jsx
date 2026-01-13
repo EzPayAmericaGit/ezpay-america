@@ -88,23 +88,23 @@ export default function NewsAdmin() {
       const articleUrl = `${window.location.origin}/news/${article.slug}`;
       const message = `${article.title}\n\n${article.excerpt}\n\nRead more: ${articleUrl}`;
       
-      const response = await base44.functions.invoke('postToSocialMedia', {
+      const response = await base44.asServiceRole.functions.invoke('postToSocialMedia', {
         message,
         image_url: article.image,
         link: articleUrl
       });
 
-      if (response.data.success) {
+      if (response.success) {
         alert('Successfully posted to Facebook and LinkedIn!');
-      } else if (response.data.partial_success) {
+      } else if (response.partial_success) {
         const failedPlatforms = [];
-        if (!response.data.results.facebook.success) failedPlatforms.push('Facebook');
-        if (!response.data.results.linkedin.success) failedPlatforms.push('LinkedIn');
+        if (!response.results.facebook.success) failedPlatforms.push('Facebook');
+        if (!response.results.linkedin.success) failedPlatforms.push('LinkedIn');
         alert(`Posted successfully, but failed on: ${failedPlatforms.join(', ')}\n\nCheck console for details.`);
-        console.error('Social media posting errors:', response.data.results);
+        console.error('Social media posting errors:', response.results);
       } else {
         alert('Failed to post to social media. Check console for details.');
-        console.error('Social media posting errors:', response.data.results);
+        console.error('Social media posting errors:', response.results);
       }
     } catch (error) {
       console.error('Error posting to social media:', error);
