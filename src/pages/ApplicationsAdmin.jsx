@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Building2, User, DollarSign, FileText, Search, Download, Eye } from "lucide-react";
+import { Building2, User, DollarSign, FileText, Search, Download, Eye, Landmark } from "lucide-react";
 import SEOHead from "../components/SEOHead";
 import RiskAssessment from "../components/application/RiskAssessment";
 
@@ -220,10 +220,24 @@ export default function ApplicationsAdmin() {
                   <div><span className="font-semibold">Market Type:</span> {selectedApp.applicationData?.businessMarketType}</div>
                   <div><span className="font-semibold">Formation:</span> {selectedApp.applicationData?.businessFormationType}</div>
                   <div><span className="font-semibold">Tax ID:</span> {selectedApp.applicationData?.taxId}</div>
+                  <div><span className="font-semibold">Business Name on Tax Return:</span> {selectedApp.applicationData?.businessNameOnTaxReturn}</div>
                   <div><span className="font-semibold">Started:</span> {selectedApp.applicationData?.dateBusinessStarted}</div>
                   <div><span className="font-semibold">Phone:</span> {selectedApp.applicationData?.businessPhone}</div>
                   <div><span className="font-semibold">Email:</span> {selectedApp.applicationData?.businessEmail}</div>
-                  <div className="md:col-span-2"><span className="font-semibold">Address:</span> {selectedApp.applicationData?.businessPhysicalAddress}</div>
+                  <div><span className="font-semibold">Locations:</span> {selectedApp.applicationData?.numberOfLocations}</div>
+                  <div><span className="font-semibold">Location Type:</span> {selectedApp.applicationData?.businessLocationType}</div>
+                  <div><span className="font-semibold">Zoning:</span> {selectedApp.applicationData?.zoningInfo}</div>
+                  <div><span className="font-semibold">Permanent Signage:</span> {selectedApp.applicationData?.hasPermanentSignage}</div>
+                  <div className="md:col-span-2"><span className="font-semibold">Physical Address:</span> {selectedApp.applicationData?.businessPhysicalAddress}</div>
+                  {selectedApp.applicationData?.corporateAddress && (
+                    <div className="md:col-span-2"><span className="font-semibold">Corporate Address:</span> {selectedApp.applicationData?.corporateAddress}</div>
+                  )}
+                  {selectedApp.applicationData?.currentlyAcceptCards === 'yes' && (
+                    <>
+                      <div><span className="font-semibold">Current Processor:</span> {selectedApp.applicationData?.currentProcessorName}</div>
+                      <div><span className="font-semibold">Current Merchant ID:</span> {selectedApp.applicationData?.currentMerchantId}</div>
+                    </>
+                  )}
                 </CardContent>
               </Card>
 
@@ -243,7 +257,9 @@ export default function ApplicationsAdmin() {
                   <div><span className="font-semibold">SSN:</span> ***-**-{selectedApp.applicationData?.ownerSSN?.slice(-4)}</div>
                   <div><span className="font-semibold">Personal Phone:</span> {selectedApp.applicationData?.ownerPersonalPhone}</div>
                   <div><span className="font-semibold">Personal Email:</span> {selectedApp.applicationData?.ownerPersonalEmail}</div>
-                  <div><span className="font-semibold">DL:</span> {selectedApp.applicationData?.ownerDriversLicense} ({selectedApp.applicationData?.ownerDLState})</div>
+                  <div><span className="font-semibold">DL Number:</span> {selectedApp.applicationData?.ownerDriversLicense}</div>
+                  <div><span className="font-semibold">DL State:</span> {selectedApp.applicationData?.ownerDLState}</div>
+                  <div><span className="font-semibold">DL Expiration:</span> {selectedApp.applicationData?.ownerDLExpiration}</div>
                   <div className="md:col-span-2"><span className="font-semibold">Home Address:</span> {selectedApp.applicationData?.ownerHomeAddress}</div>
                 </CardContent>
               </Card>
@@ -256,14 +272,50 @@ export default function ApplicationsAdmin() {
                     Processing Information
                   </CardTitle>
                 </CardHeader>
+                <CardContent className="space-y-4 text-sm">
+                  <div className="grid md:grid-cols-2 gap-3">
+                    <div><span className="font-semibold">Monthly Volume:</span> ${selectedApp.applicationData?.monthlyVolume}</div>
+                    <div><span className="font-semibold">Annual Volume:</span> ${selectedApp.applicationData?.annualVolume}</div>
+                    <div><span className="font-semibold">Monthly Amex Volume:</span> ${selectedApp.applicationData?.amexVolume || 'N/A'}</div>
+                    <div><span className="font-semibold">Avg Ticket:</span> ${selectedApp.applicationData?.averageTicket}</div>
+                    <div><span className="font-semibold">Largest Ticket:</span> ${selectedApp.applicationData?.largestTicket}</div>
+                    <div><span className="font-semibold">Swiped:</span> {selectedApp.applicationData?.percentageSwiped}%</div>
+                    <div><span className="font-semibold">Keyed:</span> {selectedApp.applicationData?.percentageKeyed}%</div>
+                    <div><span className="font-semibold">Internet:</span> {selectedApp.applicationData?.percentageInternet}%</div>
+                  </div>
+                  <div className="border-t pt-3">
+                    <h4 className="font-semibold text-gray-700 mb-2">Products & Services</h4>
+                    <p className="text-gray-600">{selectedApp.applicationData?.productsDescription}</p>
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-3">
+                    <div><span className="font-semibold">Order Methods:</span> {selectedApp.applicationData?.orderMethod?.join(', ') || 'N/A'}</div>
+                    <div><span className="font-semibold">Delivery Timeframe:</span> {selectedApp.applicationData?.deliveryTimeframe}</div>
+                    <div><span className="font-semibold">Payment Timing:</span> {selectedApp.applicationData?.paymentTiming?.replace('_', ' ')}</div>
+                    <div><span className="font-semibold">Geographic Areas:</span> {selectedApp.applicationData?.geographicAreas}</div>
+                    <div><span className="font-semibold">International Cards:</span> {selectedApp.applicationData?.internationalCardPercentage}%</div>
+                    <div><span className="font-semibold">Seasonal:</span> {selectedApp.applicationData?.isSeasonal}</div>
+                    {selectedApp.applicationData?.isSeasonal === 'yes' && (
+                      <div><span className="font-semibold">Active Months:</span> {selectedApp.applicationData?.seasonalMonths}</div>
+                    )}
+                    <div className="md:col-span-2"><span className="font-semibold">Warranty/Guaranty:</span> {selectedApp.applicationData?.warrantyGuaranty}</div>
+                    <div className="md:col-span-2"><span className="font-semibold">Return Policy:</span> {selectedApp.applicationData?.cancellationPolicy}</div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Banking Info */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Landmark className="w-5 h-5 text-amber-600" />
+                    Banking Information
+                  </CardTitle>
+                </CardHeader>
                 <CardContent className="grid md:grid-cols-2 gap-3 text-sm">
-                  <div><span className="font-semibold">Monthly Volume:</span> ${selectedApp.applicationData?.monthlyVolume}</div>
-                  <div><span className="font-semibold">Annual Volume:</span> ${selectedApp.applicationData?.annualVolume}</div>
-                  <div><span className="font-semibold">Avg Ticket:</span> ${selectedApp.applicationData?.averageTicket}</div>
-                  <div><span className="font-semibold">Max Ticket:</span> ${selectedApp.applicationData?.largestTicket}</div>
-                  <div><span className="font-semibold">Swiped:</span> {selectedApp.applicationData?.percentageSwiped}%</div>
-                  <div><span className="font-semibold">Keyed:</span> {selectedApp.applicationData?.percentageKeyed}%</div>
-                  <div><span className="font-semibold">Internet:</span> {selectedApp.applicationData?.percentageInternet}%</div>
+                  <div><span className="font-semibold">Bank Name:</span> {selectedApp.applicationData?.bankName}</div>
+                  <div><span className="font-semibold">Account Type:</span> {selectedApp.applicationData?.accountType?.replace('_', ' ')}</div>
+                  <div><span className="font-semibold">Routing Number:</span> {selectedApp.applicationData?.routingNumber}</div>
+                  <div><span className="font-semibold">Account Number:</span> ****{selectedApp.applicationData?.accountNumber?.slice(-4)}</div>
                 </CardContent>
               </Card>
 
@@ -307,6 +359,9 @@ export default function ApplicationsAdmin() {
                       📄 {doc.name}
                     </a>
                   ))}
+                  {!selectedApp.driversLicenseUrl && !selectedApp.voidedCheckUrl && selectedApp.additionalDocuments?.length === 0 && (
+                    <p className="text-gray-500 text-center py-4">No documents uploaded</p>
+                  )}
                 </CardContent>
               </Card>
 
