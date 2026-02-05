@@ -2,10 +2,11 @@ import { useEffect } from "react";
 
 export default function SEOHead({ title, description, keywords, image, url }) {
   
-  // Set document title immediately - keep under 60 characters when possible
+  // Set document title immediately - Google recommends 50-60 characters
   if (typeof document !== 'undefined') {
     const fullTitle = title ? `${title} | EzPay America` : "EzPay America - Zero-Fee Payment Processing";
-    document.title = fullTitle;
+    // Ensure title is under 60 characters for optimal display
+    document.title = fullTitle.length > 60 ? fullTitle.substring(0, 57) + '...' : fullTitle;
   }
 
   useEffect(() => {
@@ -37,14 +38,16 @@ export default function SEOHead({ title, description, keywords, image, url }) {
       document.head.appendChild(metaFormatDetection);
     }
 
-    // Meta Description - keep under 155 characters
+    // Meta Description - Google recommends 150-160 characters for optimal display
     let metaDescription = document.querySelector('meta[name="description"]');
     if (!metaDescription) {
       metaDescription = document.createElement('meta');
       metaDescription.name = "description";
       document.head.insertBefore(metaDescription, document.head.firstChild);
     }
-    metaDescription.setAttribute('content', description || "EzPay America offers zero-fee payment processing, POS systems, and merchant services for retail and restaurant businesses across the USA.");
+    const finalDescription = description || "EzPay America offers zero-fee payment processing, POS systems, and merchant services for retail and restaurant businesses across the USA.";
+    // Ensure description is 150-160 characters for best SERP display
+    metaDescription.setAttribute('content', finalDescription.length > 160 ? finalDescription.substring(0, 157) + '...' : finalDescription);
     
     // Meta Keywords
     let metaKeywords = document.querySelector('meta[name="keywords"]');
@@ -272,16 +275,71 @@ export default function SEOHead({ title, description, keywords, image, url }) {
     
     structuredData.textContent = JSON.stringify(schema);
 
-    // Add robots meta tag
+    // Add FAQ Schema for common questions (helps with featured snippets)
+    let faqSchema = document.querySelector('script[data-schema="faq"]');
+    if (!faqSchema) {
+      faqSchema = document.createElement('script');
+      faqSchema.type = 'application/ld+json';
+      faqSchema.setAttribute('data-schema', 'faq');
+      document.head.appendChild(faqSchema);
+    }
+    
+    const faqData = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is zero-fee payment processing?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Zero-fee payment processing allows merchants to accept credit card payments without paying transaction fees. The processing cost is passed to the customer as a service fee."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What types of businesses does EzPay America serve?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EzPay America serves retail stores, restaurants, cafes, bars, food trucks, grocery stores, and various specialty shops across the United States with tailored POS and payment solutions."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I get started with EzPay America?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "You can get started by applying online, taking our business quiz, or calling (865) 316-9625 to speak with a payment specialist."
+          }
+        }
+      ]
+    };
+    
+    faqSchema.textContent = JSON.stringify(faqData);
+
+    // Robots meta - Google recommends being explicit about crawling preferences
     let metaRobots = document.querySelector('meta[name="robots"]');
     if (!metaRobots) {
       metaRobots = document.createElement('meta');
       metaRobots.name = "robots";
       document.head.appendChild(metaRobots);
     }
+    // Allow Google to show rich previews (images, snippets, videos)
     metaRobots.content = "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
+    
+    // Add Googlebot specific meta
+    let metaGooglebot = document.querySelector('meta[name="googlebot"]');
+    if (!metaGooglebot) {
+      metaGooglebot = document.createElement('meta');
+      metaGooglebot.name = "googlebot";
+      document.head.appendChild(metaGooglebot);
+    }
+    metaGooglebot.content = "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
 
-    // Add language meta tag
+    // Add language meta tag and HTML lang attribute (critical for accessibility and SEO)
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = "en-US";
+    }
     let metaLanguage = document.querySelector('meta[http-equiv="content-language"]');
     if (!metaLanguage) {
       metaLanguage = document.createElement('meta');

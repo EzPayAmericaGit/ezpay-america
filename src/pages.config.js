@@ -108,6 +108,7 @@ import TransactionHistory from './pages/TransactionHistory';
 import UserManagement from './pages/UserManagement';
 import VapeStorePOS from './pages/VapeStorePOS';
 import WebPaymentPages from './pages/WebPaymentPages';
+import CustomerPortal from './pages/CustomerPortal';
 import __Layout from './Layout.jsx';
 
 
@@ -173,6 +174,7 @@ export const PAGES = {
     "UserManagement": UserManagement,
     "VapeStorePOS": VapeStorePOS,
     "WebPaymentPages": WebPaymentPages,
+    "CustomerPortal": CustomerPortal,
 }
 
 export const pagesConfig = {
