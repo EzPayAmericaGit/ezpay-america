@@ -8,6 +8,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { X, Send, User, Calendar, Tag, Loader2, Paperclip } from "lucide-react";
 import { motion } from "framer-motion";
+import AgentAssignment from "./AgentAssignment";
+import TemplateSelector from "./TemplateSelector";
 
 export default function TicketDetails({ ticket, user, isAdmin, onUpdate, onClose }) {
   const [newMessage, setNewMessage] = useState("");
@@ -100,7 +102,7 @@ export default function TicketDetails({ ticket, user, isAdmin, onUpdate, onClose
               </Badge>
             </div>
             <h2 className="text-lg font-semibold text-gray-900 mb-3">{ticket.title}</h2>
-            <div className="flex items-center gap-4 text-sm text-gray-600">
+            <div className="flex items-center gap-4 text-sm text-gray-600 flex-wrap">
               <span className="flex items-center gap-1">
                 <User className="w-4 h-4" />
                 {ticket.customerName}
@@ -113,6 +115,7 @@ export default function TicketDetails({ ticket, user, isAdmin, onUpdate, onClose
                 <Tag className="w-4 h-4" />
                 {ticket.category}
               </span>
+              {isAdmin && <AgentAssignment ticket={ticket} />}
             </div>
           </div>
           <Button variant="ghost" size="icon" onClick={onClose}>
@@ -225,6 +228,12 @@ export default function TicketDetails({ ticket, user, isAdmin, onUpdate, onClose
       {/* Reply Box */}
       {ticket.status !== 'closed' && (
         <div className="border-t p-4 bg-gray-50">
+          {isAdmin && (
+            <TemplateSelector 
+              category={ticket.category}
+              onSelectTemplate={(templateMessage) => setNewMessage(templateMessage)}
+            />
+          )}
           <div className="flex gap-3">
             <Textarea
               placeholder="Type your message..."
