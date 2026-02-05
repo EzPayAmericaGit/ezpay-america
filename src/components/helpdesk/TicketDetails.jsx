@@ -10,6 +10,7 @@ import { X, Send, User, Calendar, Tag, Loader2, Paperclip } from "lucide-react";
 import { motion } from "framer-motion";
 import AgentAssignment from "./AgentAssignment";
 import TemplateSelector from "./TemplateSelector";
+import TicketSummary from "./TicketSummary";
 
 export default function TicketDetails({ ticket, user, isAdmin, onUpdate, onClose }) {
   const [newMessage, setNewMessage] = useState("");
@@ -116,6 +117,7 @@ export default function TicketDetails({ ticket, user, isAdmin, onUpdate, onClose
                 {ticket.category}
               </span>
               {isAdmin && <AgentAssignment ticket={ticket} />}
+              {isAdmin && <TicketSummary ticket={ticket} />}
             </div>
           </div>
           <Button variant="ghost" size="icon" onClick={onClose}>
