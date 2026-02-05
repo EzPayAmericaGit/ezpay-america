@@ -309,6 +309,9 @@ export default function ApplicationsAdmin() {
                 </CardContent>
               </Card>
 
+              {/* Risk Assessment */}
+              <RiskAssessment application={selectedApp} />
+
               {/* Notes */}
               <Card>
                 <CardHeader>

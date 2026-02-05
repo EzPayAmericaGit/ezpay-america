@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { FileText, Plus, Search, Send, DollarSign, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
+import SEOHead from "../components/SEOHead";
 
 export default function Invoicing() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -121,6 +122,10 @@ export default function Invoicing() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
+      <SEOHead 
+        title="Invoicing"
+        description="Create and manage professional invoices for your business"
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
