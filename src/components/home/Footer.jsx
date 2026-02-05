@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
 import { Mail, Phone, MapPin } from "lucide-react";
 
 export default function Footer() {
@@ -60,6 +62,14 @@ export default function Footer() {
               <li className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-amber-400 mt-1" />
                 <span>United States</span>
+              </li>
+              <li className="pt-2">
+                <Link 
+                  to={createPageUrl("Contact")}
+                  className="text-amber-400 hover:text-amber-300 transition-colors font-medium"
+                >
+                  Visit Contact Page →
+                </Link>
               </li>
             </ul>
           </div>
