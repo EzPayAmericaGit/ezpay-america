@@ -52,6 +52,7 @@ import Admin from './pages/Admin';
 import AdminDashboard from './pages/AdminDashboard';
 import Analytics from './pages/Analytics';
 import ApplicationTracker from './pages/ApplicationTracker';
+import ApplicationsAdmin from './pages/ApplicationsAdmin';
 import ApplyOnline from './pages/ApplyOnline';
 import BacklinkOutreach from './pages/BacklinkOutreach';
 import BagelShopPOS from './pages/BagelShopPOS';
@@ -107,7 +108,6 @@ import TransactionHistory from './pages/TransactionHistory';
 import UserManagement from './pages/UserManagement';
 import VapeStorePOS from './pages/VapeStorePOS';
 import WebPaymentPages from './pages/WebPaymentPages';
-import ApplicationsAdmin from './pages/ApplicationsAdmin';
 import __Layout from './Layout.jsx';
 
 
@@ -117,6 +117,7 @@ export const PAGES = {
     "AdminDashboard": AdminDashboard,
     "Analytics": Analytics,
     "ApplicationTracker": ApplicationTracker,
+    "ApplicationsAdmin": ApplicationsAdmin,
     "ApplyOnline": ApplyOnline,
     "BacklinkOutreach": BacklinkOutreach,
     "BagelShopPOS": BagelShopPOS,
@@ -172,7 +173,6 @@ export const PAGES = {
     "UserManagement": UserManagement,
     "VapeStorePOS": VapeStorePOS,
     "WebPaymentPages": WebPaymentPages,
-    "ApplicationsAdmin": ApplicationsAdmin,
 }
 
 export const pagesConfig = {
