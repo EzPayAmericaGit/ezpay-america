@@ -107,6 +107,7 @@ import WebPaymentPages from './pages/WebPaymentPages';
 import Sitemap from './pages/Sitemap';
 import NewsAdmin from './pages/NewsAdmin';
 import OrderHistory from './pages/OrderHistory';
+import Helpdesk from './pages/Helpdesk';
 import __Layout from './Layout.jsx';
 
 
@@ -171,6 +172,7 @@ export const PAGES = {
     "Sitemap": Sitemap,
     "NewsAdmin": NewsAdmin,
     "OrderHistory": OrderHistory,
+    "Helpdesk": Helpdesk,
 }
 
 export const pagesConfig = {

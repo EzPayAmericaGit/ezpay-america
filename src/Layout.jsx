@@ -55,7 +55,8 @@ export default function Layout({ children }) {
       { title: "Apply Online", url: createPageUrl("ApplyOnline") },
       { title: "Contact", url: createPageUrl("Contact") },
       { title: "Shop", url: createPageUrl("Shop") },
-      { title: "News", url: createPageUrl("News") }
+      { title: "News", url: createPageUrl("News") },
+      { title: "Helpdesk", url: createPageUrl("Helpdesk") }
     ];
 
     return items;
