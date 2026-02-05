@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Building2, User, DollarSign, FileText, Search, Download, Eye } from "lucide-react";
 import SEOHead from "../components/SEOHead";
+import RiskAssessment from "../components/application/RiskAssessment";
 
 export default function ApplicationsAdmin() {
   const [user, setUser] = useState(null);
