@@ -74,6 +74,7 @@ import FoodTruckPOS from './pages/FoodTruckPOS';
 import FreeDemo from './pages/FreeDemo';
 import GiftShopPOS from './pages/GiftShopPOS';
 import GroceryStorePOS from './pages/GroceryStorePOS';
+import Helpdesk from './pages/Helpdesk';
 import Home from './pages/Home';
 import Invoicing from './pages/Invoicing';
 import LiquorStorePOS from './pages/LiquorStorePOS';
@@ -83,9 +84,11 @@ import MiniMarketPOS from './pages/MiniMarketPOS';
 import MobilePayments from './pages/MobilePayments';
 import MyAccount from './pages/MyAccount';
 import News from './pages/News';
+import NewsAdmin from './pages/NewsAdmin';
 import NewsArticle from './pages/NewsArticle';
 import NotificationPreferences from './pages/NotificationPreferences';
 import Offers from './pages/Offers';
+import OrderHistory from './pages/OrderHistory';
 import OrdersAdmin from './pages/OrdersAdmin';
 import ProcessPayment from './pages/ProcessPayment';
 import ProductAdmin from './pages/ProductAdmin';
@@ -99,15 +102,12 @@ import RobotsTxt from './pages/RobotsTxt';
 import Services from './pages/Services';
 import SettingsAdmin from './pages/SettingsAdmin';
 import Shop from './pages/Shop';
+import Sitemap from './pages/Sitemap';
 import Support from './pages/Support';
 import TransactionHistory from './pages/TransactionHistory';
 import UserManagement from './pages/UserManagement';
 import VapeStorePOS from './pages/VapeStorePOS';
 import WebPaymentPages from './pages/WebPaymentPages';
-import Sitemap from './pages/Sitemap';
-import NewsAdmin from './pages/NewsAdmin';
-import OrderHistory from './pages/OrderHistory';
-import Helpdesk from './pages/Helpdesk';
 import __Layout from './Layout.jsx';
 
 
@@ -139,6 +139,7 @@ export const PAGES = {
     "FreeDemo": FreeDemo,
     "GiftShopPOS": GiftShopPOS,
     "GroceryStorePOS": GroceryStorePOS,
+    "Helpdesk": Helpdesk,
     "Home": Home,
     "Invoicing": Invoicing,
     "LiquorStorePOS": LiquorStorePOS,
@@ -148,9 +149,11 @@ export const PAGES = {
     "MobilePayments": MobilePayments,
     "MyAccount": MyAccount,
     "News": News,
+    "NewsAdmin": NewsAdmin,
     "NewsArticle": NewsArticle,
     "NotificationPreferences": NotificationPreferences,
     "Offers": Offers,
+    "OrderHistory": OrderHistory,
     "OrdersAdmin": OrdersAdmin,
     "ProcessPayment": ProcessPayment,
     "ProductAdmin": ProductAdmin,
@@ -164,15 +167,12 @@ export const PAGES = {
     "Services": Services,
     "SettingsAdmin": SettingsAdmin,
     "Shop": Shop,
+    "Sitemap": Sitemap,
     "Support": Support,
     "TransactionHistory": TransactionHistory,
     "UserManagement": UserManagement,
     "VapeStorePOS": VapeStorePOS,
     "WebPaymentPages": WebPaymentPages,
-    "Sitemap": Sitemap,
-    "NewsAdmin": NewsAdmin,
-    "OrderHistory": OrderHistory,
-    "Helpdesk": Helpdesk,
 }
 
 export const pagesConfig = {
