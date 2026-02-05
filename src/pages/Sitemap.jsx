@@ -1,16 +1,6 @@
-import { useEffect, useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { useEffect } from "react";
 
 export default function Sitemap() {
-  const [newsArticles, setNewsArticles] = useState([]);
-
-  useEffect(() => {
-    // Fetch published news articles
-    base44.entities.NewsArticle.filter({ published: true })
-      .then(articles => setNewsArticles(articles))
-      .catch(err => console.error('Failed to fetch news articles:', err));
-  }, []);
-
   useEffect(() => {
     const baseUrl = window.location.origin;
     const pages = [
@@ -67,39 +57,18 @@ export default function Sitemap() {
       { path: '/Sitemap', priority: '0.5', changefreq: 'monthly', title: 'Sitemap - All Pages' }
     ];
 
-    // Add news articles dynamically
-    const newsPages = newsArticles.map(article => ({
-      path: `/NewsArticle?slug=${article.slug || `id=${article.id}`}`,
-      priority: '0.7',
-      changefreq: 'weekly',
-      title: article.title,
-      lastmod: article.updated_date || article.created_date,
-      image: article.image
-    }));
-
-    const allPages = [...pages, ...newsPages];
     const today = new Date().toISOString().split('T')[0];
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
-        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
-${allPages.map(page => {
-  const lastmod = page.lastmod ? new Date(page.lastmod).toISOString().split('T')[0] : today;
-  const imageTag = page.image ? `
-    <image:image>
-      <image:loc>${page.image}</image:loc>
-      <image:title>${page.title?.replace(/[<>&'"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;',"'":'&apos;','"':'&quot;'}[c]))||''}</image:title>
-    </image:image>` : '';
-  
-  return `  <url>
+${pages.map(page => `  <url>
     <loc>${baseUrl}${page.path}</loc>
-    <lastmod>${lastmod}</lastmod>
+    <lastmod>${today}</lastmod>
     <changefreq>${page.changefreq}</changefreq>
-    <priority>${page.priority}</priority>${imageTag}
-  </url>`;
-}).join('\n')}
+    <priority>${page.priority}</priority>
+  </url>`).join('\n')}
 </urlset>`;
 
     // Set content type and display XML
@@ -208,17 +177,7 @@ ${allPages.map(page => {
               Resources
             </h2>
             <ul className="space-y-2">
-              <li><a href="/News" className="text-gray-700 hover:text-gray-900 hover:underline font-medium">News & Insights</a></li>
-              {newsArticles.slice(0, 5).map(article => (
-                <li key={article.id}>
-                  <a href={`/NewsArticle?slug=${article.slug || `id=${article.id}`}`} className="text-gray-600 hover:text-gray-800 hover:underline text-sm">
-                    {article.title}
-                  </a>
-                </li>
-              ))}
-              {newsArticles.length > 5 && (
-                <li className="text-xs text-gray-500">+ {newsArticles.length - 5} more articles</li>
-              )}
+              <li><a href="/News" className="text-gray-700 hover:text-gray-900 hover:underline">News & Insights</a></li>
               <li><a href="/Quiz" className="text-gray-700 hover:text-gray-900 hover:underline">Business Quiz</a></li>
               <li><a href="/Support" className="text-gray-700 hover:text-gray-900 hover:underline">Support Center</a></li>
               <li><a href="/Sitemap" className="text-gray-700 hover:text-gray-900 hover:underline">Sitemap</a></li>
@@ -234,7 +193,7 @@ ${allPages.map(page => {
             All pages are optimized for search engines with proper meta tags, structured data, and semantic HTML.
           </p>
           <p className="text-sm text-gray-600 mt-3">
-            Total Pages: {pages.length + newsArticles.length} ({pages.length} static pages + {newsArticles.length} news articles) | Last Updated: {today}
+            Total Pages: {pages.length} | Last Updated: {today}
           </p>
         </div>
       </div>
