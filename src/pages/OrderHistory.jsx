@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Package, Loader2, Calendar, DollarSign, MapPin, Truck, Eye, ChevronDown, ChevronUp } from "lucide-react";
 import SEOHead from "../components/SEOHead";
 import { motion, AnimatePresence } from "framer-motion";
+import OrderTracker from "../components/order/OrderTracker";
 
 export default function OrderHistory() {
   const [user, setUser] = useState(null);
@@ -24,17 +25,25 @@ export default function OrderHistory() {
     }
   };
 
-  const { data: orders = [], isLoading } = useQuery({
+  const { data: orders = [], isLoading, error } = useQuery({
     queryKey: ['orders', user?.email],
     queryFn: async () => {
       if (!user?.email) return [];
-      const allOrders = await base44.entities.Order.filter(
-        { customerEmail: user.email },
-        '-created_date'
-      );
-      return allOrders;
+      try {
+        const allOrders = await base44.entities.Order.filter(
+          { customerEmail: user.email },
+          '-created_date'
+        );
+        return allOrders;
+      } catch (err) {
+        console.error('Orders fetch error:', err);
+        return [];
+      }
     },
-    enabled: !!user?.email
+    enabled: !!user?.email,
+    retry: 2,
+    retryDelay: 1000,
+    staleTime: 60000
   });
 
   const statusColors = {
@@ -69,18 +78,44 @@ export default function OrderHistory() {
       
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Order History</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">Order History & Tracking</h1>
           <p className="text-gray-600">Track and review your past orders</p>
         </div>
 
-        {orders.length === 0 ? (
+        {/* Order Tracker */}
+        <OrderTracker />
+
+        {error && (
+          <Card className="mb-6 border-red-200 bg-red-50">
+            <CardContent className="py-6 text-center">
+              <p className="text-red-600 mb-3">Unable to load your order history at this time.</p>
+              <Button onClick={() => window.location.reload()} variant="outline">
+                Retry
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+
+        {!user && !isLoading && (
+          <Card className="mb-6">
+            <CardContent className="py-8 text-center">
+              <Package className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+              <p className="text-gray-600 mb-4">Please log in to view your order history</p>
+              <Button onClick={() => base44.auth.redirectToLogin()} className="bg-amber-600 hover:bg-amber-700">
+                Login
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+
+        {user && orders.length === 0 && !isLoading && !error ? (
           <Card>
             <CardContent className="py-12 text-center">
               <Package className="w-16 h-16 text-gray-300 mx-auto mb-4" />
               <p className="text-gray-500 text-lg">No orders yet</p>
             </CardContent>
           </Card>
-        ) : (
+        ) : user && orders.length > 0 && (
           <div className="space-y-4">
             {orders.map((order) => {
               const isExpanded = expandedOrders.includes(order.id);
