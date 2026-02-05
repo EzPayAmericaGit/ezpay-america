@@ -109,6 +109,9 @@ import UserManagement from './pages/UserManagement';
 import VapeStorePOS from './pages/VapeStorePOS';
 import WebPaymentPages from './pages/WebPaymentPages';
 import CustomerPortal from './pages/CustomerPortal';
+import AnalyticsDashboard from './pages/AnalyticsDashboard';
+import AgentManagement from './pages/AgentManagement';
+import TemplateManagement from './pages/TemplateManagement';
 import __Layout from './Layout.jsx';
 
 
@@ -175,6 +178,9 @@ export const PAGES = {
     "VapeStorePOS": VapeStorePOS,
     "WebPaymentPages": WebPaymentPages,
     "CustomerPortal": CustomerPortal,
+    "AnalyticsDashboard": AnalyticsDashboard,
+    "AgentManagement": AgentManagement,
+    "TemplateManagement": TemplateManagement,
 }
 
 export const pagesConfig = {
