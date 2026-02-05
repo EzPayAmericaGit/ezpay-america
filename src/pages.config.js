@@ -112,6 +112,7 @@ import CustomerPortal from './pages/CustomerPortal';
 import AnalyticsDashboard from './pages/AnalyticsDashboard';
 import AgentManagement from './pages/AgentManagement';
 import TemplateManagement from './pages/TemplateManagement';
+import ApplicationsAdmin from './pages/ApplicationsAdmin';
 import __Layout from './Layout.jsx';
 
 
@@ -181,6 +182,7 @@ export const PAGES = {
     "AnalyticsDashboard": AnalyticsDashboard,
     "AgentManagement": AgentManagement,
     "TemplateManagement": TemplateManagement,
+    "ApplicationsAdmin": ApplicationsAdmin,
 }
 
 export const pagesConfig = {
