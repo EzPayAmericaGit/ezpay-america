@@ -50,8 +50,11 @@
 import ACHPayments from './pages/ACHPayments';
 import Admin from './pages/Admin';
 import AdminDashboard from './pages/AdminDashboard';
+import AgentManagement from './pages/AgentManagement';
 import Analytics from './pages/Analytics';
+import AnalyticsDashboard from './pages/AnalyticsDashboard';
 import ApplicationTracker from './pages/ApplicationTracker';
+import ApplicationsAdmin from './pages/ApplicationsAdmin';
 import ApplyOnline from './pages/ApplyOnline';
 import BacklinkOutreach from './pages/BacklinkOutreach';
 import BagelShopPOS from './pages/BagelShopPOS';
@@ -65,6 +68,7 @@ import Contact from './pages/Contact';
 import ContentBot from './pages/ContentBot';
 import CountertopTerminal from './pages/CountertopTerminal';
 import CustomerOnboarding from './pages/CustomerOnboarding';
+import CustomerPortal from './pages/CustomerPortal';
 import DeliShopPOS from './pages/DeliShopPOS';
 import ECommerce from './pages/ECommerce';
 import EmailMarketing from './pages/EmailMarketing';
@@ -104,15 +108,11 @@ import SettingsAdmin from './pages/SettingsAdmin';
 import Shop from './pages/Shop';
 import Sitemap from './pages/Sitemap';
 import Support from './pages/Support';
+import TemplateManagement from './pages/TemplateManagement';
 import TransactionHistory from './pages/TransactionHistory';
 import UserManagement from './pages/UserManagement';
 import VapeStorePOS from './pages/VapeStorePOS';
 import WebPaymentPages from './pages/WebPaymentPages';
-import CustomerPortal from './pages/CustomerPortal';
-import AnalyticsDashboard from './pages/AnalyticsDashboard';
-import AgentManagement from './pages/AgentManagement';
-import TemplateManagement from './pages/TemplateManagement';
-import ApplicationsAdmin from './pages/ApplicationsAdmin';
 import __Layout from './Layout.jsx';
 
 
@@ -120,8 +120,11 @@ export const PAGES = {
     "ACHPayments": ACHPayments,
     "Admin": Admin,
     "AdminDashboard": AdminDashboard,
+    "AgentManagement": AgentManagement,
     "Analytics": Analytics,
+    "AnalyticsDashboard": AnalyticsDashboard,
     "ApplicationTracker": ApplicationTracker,
+    "ApplicationsAdmin": ApplicationsAdmin,
     "ApplyOnline": ApplyOnline,
     "BacklinkOutreach": BacklinkOutreach,
     "BagelShopPOS": BagelShopPOS,
@@ -135,6 +138,7 @@ export const PAGES = {
     "ContentBot": ContentBot,
     "CountertopTerminal": CountertopTerminal,
     "CustomerOnboarding": CustomerOnboarding,
+    "CustomerPortal": CustomerPortal,
     "DeliShopPOS": DeliShopPOS,
     "ECommerce": ECommerce,
     "EmailMarketing": EmailMarketing,
@@ -174,15 +178,11 @@ export const PAGES = {
     "Shop": Shop,
     "Sitemap": Sitemap,
     "Support": Support,
+    "TemplateManagement": TemplateManagement,
     "TransactionHistory": TransactionHistory,
     "UserManagement": UserManagement,
     "VapeStorePOS": VapeStorePOS,
     "WebPaymentPages": WebPaymentPages,
-    "CustomerPortal": CustomerPortal,
-    "AnalyticsDashboard": AnalyticsDashboard,
-    "AgentManagement": AgentManagement,
-    "TemplateManagement": TemplateManagement,
-    "ApplicationsAdmin": ApplicationsAdmin,
 }
 
 export const pagesConfig = {

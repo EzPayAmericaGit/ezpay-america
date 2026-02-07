@@ -45,7 +45,7 @@ export default function SEOHead({ title, description, keywords, image, url }) {
       metaDescription.name = "description";
       document.head.insertBefore(metaDescription, document.head.firstChild);
     }
-    const finalDescription = description || "EzPay America offers zero-fee payment processing, POS systems, and merchant services for retail and restaurant businesses across the USA.";
+    const finalDescription = description || "EzPay America offers zero-fee credit card processing, merchant services, and POS systems for retail and restaurant businesses. Free equipment, no contracts, 24/7 support across the USA.";
     // Ensure description is 150-160 characters for best SERP display
     metaDescription.setAttribute('content', finalDescription.length > 160 ? finalDescription.substring(0, 157) + '...' : finalDescription);
     
@@ -56,7 +56,7 @@ export default function SEOHead({ title, description, keywords, image, url }) {
       metaKeywords.name = "keywords";
       document.head.appendChild(metaKeywords);
     }
-    metaKeywords.content = keywords || "payment processing, merchant services, POS system, credit card processing, zero fee processing, EzPay America";
+    metaKeywords.content = keywords || "payment processing, merchant services, POS system, credit card processing, payment gateway, merchant account, online payment solutions, zero fee processing, point of sale, mobile payments, contactless payments, credit card terminal, payment solutions, small business payment processing, retail POS, restaurant POS, EMV chip reader, NFC payments, Apple Pay, Google Pay, payment processor, card reader, wireless payment, e-commerce payments, secure payment processing, merchant services provider, EzPay America";
     
     // Canonical URL
     let canonical = document.querySelector('link[rel="canonical"]');
