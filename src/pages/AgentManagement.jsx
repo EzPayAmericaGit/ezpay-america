@@ -8,13 +8,15 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { UserCircle, Plus, TrendingUp, Clock } from "lucide-react";
+import { UserCircle, Plus, TrendingUp, Clock, Wrench, BookOpen, Search, DollarSign, Archive } from "lucide-react";
 import { toast } from "sonner";
 import SEOHead from "../components/SEOHead";
 
 export default function AgentManagement() {
   const [user, setUser] = useState(null);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const [showToolDialog, setShowToolDialog] = useState(false);
+  const [selectedAgent, setSelectedAgent] = useState(null);
   const [formData, setFormData] = useState({
     agentEmail: "",
     agentName: "",
@@ -22,6 +24,12 @@ export default function AgentManagement() {
     maxActiveTickets: 10,
     priority: 5,
     isAvailable: true
+  });
+  const [toolFormData, setToolFormData] = useState({
+    toolName: "",
+    toolType: "knowledge_base",
+    description: "",
+    isActive: true
   });
 
   const queryClient = useQueryClient();
@@ -38,6 +46,12 @@ export default function AgentManagement() {
   const { data: agents = [] } = useQuery({
     queryKey: ['agents'],
     queryFn: () => base44.entities.TicketAssignment.list(),
+    enabled: !!user
+  });
+
+  const { data: agentTools = [] } = useQuery({
+    queryKey: ['agentTools'],
+    queryFn: () => base44.entities.AgentTool.list(),
     enabled: !!user
   });
 
@@ -66,7 +80,40 @@ export default function AgentManagement() {
     }
   });
 
+  const createToolMutation = useMutation({
+    mutationFn: (data) => base44.entities.AgentTool.create(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['agentTools']);
+      setShowToolDialog(false);
+      setToolFormData({
+        toolName: "",
+        toolType: "knowledge_base",
+        description: "",
+        isActive: true
+      });
+      toast.success('Tool added successfully');
+    }
+  });
+
+  const updateToolMutation = useMutation({
+    mutationFn: ({ id, data }) => base44.entities.AgentTool.update(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['agentTools']);
+      toast.success('Tool updated');
+    }
+  });
+
   const categories = ["technical", "billing", "general", "feature_request", "bug_report"];
+  
+  const toolTypes = [
+    { value: "knowledge_base", icon: BookOpen, label: "Knowledge Base" },
+    { value: "faq_lookup", icon: Search, label: "FAQ Lookup" },
+    { value: "policy_search", icon: Archive, label: "Policy Search" },
+    { value: "customer_history", icon: UserCircle, label: "Customer History" },
+    { value: "order_lookup", icon: Search, label: "Order Lookup" },
+    { value: "refund_calculator", icon: DollarSign, label: "Refund Calculator" },
+    { value: "escalation_guide", icon: TrendingUp, label: "Escalation Guide" }
+  ];
 
   const toggleSpecialization = (category) => {
     const current = formData.specialization || [];
@@ -85,13 +132,106 @@ export default function AgentManagement() {
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Agent Management</h1>
-          <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
-            <DialogTrigger asChild>
-              <Button className="bg-amber-600 hover:bg-amber-700">
-                <Plus className="w-4 h-4 mr-2" />
-                Add Agent
-              </Button>
-            </DialogTrigger>
+          <div className="flex gap-2">
+            <Dialog open={showToolDialog} onOpenChange={setShowToolDialog}>
+              <DialogTrigger asChild>
+                <Button variant="outline">
+                  <Wrench className="w-4 h-4 mr-2" />
+                  Manage Tools
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                  <DialogTitle>Agent Tools</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div className="space-y-3 max-h-96 overflow-y-auto">
+                    {agentTools.map((tool) => {
+                      const ToolIcon = toolTypes.find(t => t.value === tool.toolType)?.icon || Wrench;
+                      return (
+                        <div key={tool.id} className="flex items-center justify-between p-3 border rounded-lg">
+                          <div className="flex items-center gap-3">
+                            <ToolIcon className="w-5 h-5 text-amber-600" />
+                            <div>
+                              <p className="font-medium">{tool.toolName}</p>
+                              <p className="text-xs text-gray-500">{tool.description}</p>
+                              <Badge variant="outline" className="text-xs mt-1">
+                                {tool.toolType.replace('_', ' ')}
+                              </Badge>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Badge variant={tool.isActive ? "default" : "secondary"}>
+                              {tool.isActive ? 'Active' : 'Inactive'}
+                            </Badge>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => updateToolMutation.mutate({
+                                id: tool.id,
+                                data: { isActive: !tool.isActive }
+                              })}
+                            >
+                              Toggle
+                            </Button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="border-t pt-4">
+                    <p className="text-sm font-medium mb-3">Add New Tool</p>
+                    <div className="space-y-3">
+                      <Input
+                        placeholder="Tool Name"
+                        value={toolFormData.toolName}
+                        onChange={(e) => setToolFormData({ ...toolFormData, toolName: e.target.value })}
+                      />
+                      <Select
+                        value={toolFormData.toolType}
+                        onValueChange={(value) => setToolFormData({ ...toolFormData, toolType: value })}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {toolTypes.map((type) => (
+                            <SelectItem key={type.value} value={type.value}>
+                              {type.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <Input
+                        placeholder="Description"
+                        value={toolFormData.description}
+                        onChange={(e) => setToolFormData({ ...toolFormData, description: e.target.value })}
+                      />
+                      <Input
+                        placeholder="Agent Email"
+                        value={toolFormData.agentEmail}
+                        onChange={(e) => setToolFormData({ ...toolFormData, agentEmail: e.target.value })}
+                      />
+                      <Button
+                        onClick={() => createToolMutation.mutate(toolFormData)}
+                        disabled={!toolFormData.toolName || !toolFormData.agentEmail}
+                        className="w-full bg-amber-600 hover:bg-amber-700"
+                      >
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add Tool
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
+            <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
+              <DialogTrigger asChild>
+                <Button className="bg-amber-600 hover:bg-amber-700">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Agent
+                </Button>
+              </DialogTrigger>
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Add New Agent</DialogTitle>
@@ -201,6 +341,21 @@ export default function AgentManagement() {
                   </div>
                 </div>
 
+                <div>
+                  <p className="text-xs text-gray-500 mb-2">Assigned Tools:</p>
+                  <div className="flex flex-wrap gap-1">
+                    {agentTools.filter(t => t.agentEmail === agent.agentEmail && t.isActive).map((tool) => {
+                      const ToolIcon = toolTypes.find(t => t.value === tool.toolType)?.icon || Wrench;
+                      return (
+                        <Badge key={tool.id} variant="outline" className="text-xs flex items-center gap-1">
+                          <ToolIcon className="w-3 h-3" />
+                          {tool.toolName}
+                        </Badge>
+                      );
+                    })}
+                  </div>
+                </div>
+
                 <div className="pt-4 border-t flex gap-2">
                   <Button
                     size="sm"
@@ -212,6 +367,16 @@ export default function AgentManagement() {
                     className="flex-1"
                   >
                     {agent.isAvailable ? 'Set Unavailable' : 'Set Available'}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => {
+                      setSelectedAgent(agent);
+                      setShowToolDialog(true);
+                    }}
+                  >
+                    <Wrench className="w-4 h-4" />
                   </Button>
                 </div>
               </CardContent>
