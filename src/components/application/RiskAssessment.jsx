@@ -4,7 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ShieldAlert, Loader2, AlertTriangle, CheckCircle } from "lucide-react";
+import { ShieldAlert, Loader2, AlertTriangle, CheckCircle, Sparkles } from "lucide-react";
 
 export default function RiskAssessment({ application }) {
   const [assessment, setAssessment] = React.useState(null);
@@ -31,14 +31,19 @@ export default function RiskAssessment({ application }) {
         variant="outline"
         onClick={() => assessMutation.mutate()}
         disabled={assessMutation.isPending}
-        className="gap-2"
+        className="gap-2 border-amber-300 hover:bg-amber-50"
       >
         {assessMutation.isPending ? (
-          <Loader2 className="w-4 h-4 animate-spin" />
+          <>
+            <Loader2 className="w-4 h-4 animate-spin" />
+            Analyzing...
+          </>
         ) : (
-          <ShieldAlert className="w-4 h-4" />
+          <>
+            <Sparkles className="w-4 h-4 text-amber-600" />
+            Run AI Risk Assessment
+          </>
         )}
-        AI Risk Assessment
       </Button>
     );
   }
@@ -46,11 +51,11 @@ export default function RiskAssessment({ application }) {
   const colors = riskColors[assessment.risk_level] || riskColors.medium;
 
   return (
-    <Card className={`${colors.bg} border-2 ${colors.border}`}>
+    <Card className={`${colors.bg} border-2 ${colors.border} shadow-lg`}>
       <CardHeader>
         <CardTitle className={`flex items-center gap-2 ${colors.text}`}>
-          <ShieldAlert className="w-5 h-5" />
-          Risk Assessment
+          <Sparkles className="w-5 h-5 text-amber-600" />
+          AI Risk Assessment
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -59,6 +64,12 @@ export default function RiskAssessment({ application }) {
           <span className="font-semibold text-gray-700">Risk Score:</span>
           <Badge className={`${colors.bg} ${colors.text} text-lg px-4 py-1`}>
             {assessment.risk_score}/100
+          </Badge>
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="font-semibold text-gray-700">Risk Level:</span>
+          <Badge className={`${colors.bg} ${colors.text} text-base px-3 py-1 uppercase`}>
+            {assessment.risk_level}
           </Badge>
         </div>
 
