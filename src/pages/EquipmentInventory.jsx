@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Package, Plus, Search, DollarSign, Calendar, AlertTriangle } from "lucide-react";
+import { Package, Plus, Search, DollarSign, Calendar, AlertTriangle, Upload, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { Checkbox } from "@/components/ui/checkbox";
 import SEOHead from "../components/SEOHead";
@@ -26,6 +26,7 @@ export default function EquipmentInventory() {
     businessContactName: "",
     businessPhoneNumber: "",
     ownerCellNumber: "",
+    emailAddress: "",
     streetAddress: "",
     city: "",
     state: "",
@@ -33,10 +34,12 @@ export default function EquipmentInventory() {
     dateReturned: "",
     terminalCost: "",
     agentAssigned: "",
+    warrantyDocumentUrl: "",
     status: "in_stock",
     isActive: true,
     hasBeenReturned: false
   });
+  const [uploadingWarranty, setUploadingWarranty] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -84,6 +87,7 @@ export default function EquipmentInventory() {
       businessContactName: "",
       businessPhoneNumber: "",
       ownerCellNumber: "",
+      emailAddress: "",
       streetAddress: "",
       city: "",
       state: "",
@@ -91,6 +95,7 @@ export default function EquipmentInventory() {
       dateReturned: "",
       terminalCost: "",
       agentAssigned: "",
+      warrantyDocumentUrl: "",
       status: "in_stock",
       isActive: true,
       hasBeenReturned: false
@@ -116,6 +121,7 @@ export default function EquipmentInventory() {
       businessContactName: item.businessContactName || "",
       businessPhoneNumber: item.businessPhoneNumber || "",
       ownerCellNumber: item.ownerCellNumber || "",
+      emailAddress: item.emailAddress || "",
       streetAddress: item.streetAddress || "",
       city: item.city || "",
       state: item.state || "",
@@ -123,11 +129,28 @@ export default function EquipmentInventory() {
       dateReturned: item.dateReturned || "",
       terminalCost: item.terminalCost || "",
       agentAssigned: item.agentAssigned || "",
+      warrantyDocumentUrl: item.warrantyDocumentUrl || "",
       status: item.status || "in_stock",
       isActive: item.isActive ?? true,
       hasBeenReturned: item.hasBeenReturned ?? false
     });
     setShowDialog(true);
+  };
+
+  const handleWarrantyUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingWarranty(true);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      setFormData({ ...formData, warrantyDocumentUrl: file_url });
+      toast.success("Warranty document uploaded successfully");
+    } catch (error) {
+      toast.error("Failed to upload warranty document");
+    } finally {
+      setUploadingWarranty(false);
+    }
   };
 
   const filteredEquipment = equipment.filter(item => {
@@ -237,6 +260,15 @@ export default function EquipmentInventory() {
                   />
                 </div>
                 <div className="col-span-2">
+                  <label className="text-sm font-medium mb-1 block">Email Address</label>
+                  <Input
+                    type="email"
+                    placeholder="email@example.com"
+                    value={formData.emailAddress}
+                    onChange={(e) => setFormData({ ...formData, emailAddress: e.target.value })}
+                  />
+                </div>
+                <div className="col-span-2">
                   <label className="text-sm font-medium mb-1 block">Street Address</label>
                   <Input
                     placeholder="Street Address"
@@ -327,6 +359,39 @@ export default function EquipmentInventory() {
                     />
                     <span className="text-sm font-medium">Terminal Has Been Returned</span>
                   </label>
+                </div>
+                <div className="col-span-2 pt-2 border-t">
+                  <label className="text-sm font-medium mb-2 block">Equipment Warranty Document</label>
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="file"
+                      id="warranty-upload"
+                      className="hidden"
+                      onChange={handleWarrantyUpload}
+                      accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => document.getElementById('warranty-upload').click()}
+                      disabled={uploadingWarranty}
+                      className="gap-2"
+                    >
+                      <Upload className="w-4 h-4" />
+                      {uploadingWarranty ? "Uploading..." : "Upload Equipment Warranty"}
+                    </Button>
+                    {formData.warrantyDocumentUrl && (
+                      <a 
+                        href={formData.warrantyDocumentUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-sm text-blue-600 hover:underline flex items-center gap-1"
+                      >
+                        <FileText className="w-4 h-4" />
+                        View Document
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
               <Button
