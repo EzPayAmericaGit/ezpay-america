@@ -7,8 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Package, Plus, Search, DollarSign, Calendar } from "lucide-react";
+import { Package, Plus, Search, DollarSign, Calendar, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
+import { Checkbox } from "@/components/ui/checkbox";
 import SEOHead from "../components/SEOHead";
 
 export default function EquipmentInventory() {
@@ -26,7 +27,9 @@ export default function EquipmentInventory() {
     dateReturned: "",
     terminalCost: "",
     agentAssigned: "",
-    status: "in_stock"
+    status: "in_stock",
+    isActive: true,
+    hasBeenReturned: false
   });
 
   const queryClient = useQueryClient();
@@ -76,7 +79,9 @@ export default function EquipmentInventory() {
       dateReturned: "",
       terminalCost: "",
       agentAssigned: "",
-      status: "in_stock"
+      status: "in_stock",
+      isActive: true,
+      hasBeenReturned: false
     });
     setEditingEquipment(null);
   };
@@ -100,7 +105,9 @@ export default function EquipmentInventory() {
       dateReturned: item.dateReturned || "",
       terminalCost: item.terminalCost || "",
       agentAssigned: item.agentAssigned || "",
-      status: item.status || "in_stock"
+      status: item.status || "in_stock",
+      isActive: item.isActive ?? true,
+      hasBeenReturned: item.hasBeenReturned ?? false
     });
     setShowDialog(true);
   };
@@ -239,6 +246,22 @@ export default function EquipmentInventory() {
                     </SelectContent>
                   </Select>
                 </div>
+                <div className="col-span-2 space-y-3 pt-2 border-t">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <Checkbox
+                      checked={formData.isActive}
+                      onCheckedChange={(checked) => setFormData({ ...formData, isActive: checked })}
+                    />
+                    <span className="text-sm font-medium">Active Terminal</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <Checkbox
+                      checked={formData.hasBeenReturned}
+                      onCheckedChange={(checked) => setFormData({ ...formData, hasBeenReturned: checked })}
+                    />
+                    <span className="text-sm font-medium">Terminal Has Been Returned</span>
+                  </label>
+                </div>
               </div>
               <Button
                 onClick={handleSubmit}
@@ -282,6 +305,52 @@ export default function EquipmentInventory() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Unreturned Inactive Terminals Report */}
+        {equipment.filter(item => !item.isActive && !item.hasBeenReturned).length > 0 && (
+          <Card className="mb-6 border-red-200 bg-red-50">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-red-700">
+                <AlertTriangle className="w-5 h-5" />
+                Inactive Terminals Not Returned ({equipment.filter(item => !item.isActive && !item.hasBeenReturned).length})
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {equipment.filter(item => !item.isActive && !item.hasBeenReturned).map((item) => (
+                  <div key={item.id} className="bg-white rounded-lg p-4 border border-red-200">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                      <div>
+                        <p className="text-xs text-gray-500 mb-1">Terminal</p>
+                        <p className="font-semibold text-red-700">{item.terminalType}</p>
+                        <p className="text-xs text-gray-600">SN: {item.serialNumber}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500 mb-1">Merchant</p>
+                        <p className="font-medium">{item.merchantName || '-'}</p>
+                        <p className="text-xs text-gray-600">MID: {item.merchantMID || '-'}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500 mb-1">Shipped</p>
+                        <p className="text-sm">{item.dateShipped || '-'}</p>
+                      </div>
+                      <div className="flex items-center justify-end">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleEdit(item)}
+                          className="border-red-300 text-red-700 hover:bg-red-100"
+                        >
+                          Edit
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Equipment List */}
         {isLoading ? (
@@ -340,6 +409,14 @@ export default function EquipmentInventory() {
                       <Badge className={statusColors[item.status]}>
                         {item.status?.replace('_', ' ')}
                       </Badge>
+                      <div className="flex gap-2">
+                        <Badge variant={item.isActive ? "default" : "secondary"} className="text-xs">
+                          {item.isActive ? 'Active' : 'Inactive'}
+                        </Badge>
+                        <Badge variant={item.hasBeenReturned ? "default" : "outline"} className="text-xs">
+                          {item.hasBeenReturned ? 'Returned' : 'Not Returned'}
+                        </Badge>
+                      </div>
                       <Button
                         size="sm"
                         variant="outline"
