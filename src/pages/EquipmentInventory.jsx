@@ -23,6 +23,12 @@ export default function EquipmentInventory() {
     serialNumber: "",
     merchantName: "",
     merchantMID: "",
+    businessContactName: "",
+    businessPhoneNumber: "",
+    ownerCellNumber: "",
+    streetAddress: "",
+    city: "",
+    state: "",
     dateShipped: "",
     dateReturned: "",
     terminalCost: "",
@@ -75,6 +81,12 @@ export default function EquipmentInventory() {
       serialNumber: "",
       merchantName: "",
       merchantMID: "",
+      businessContactName: "",
+      businessPhoneNumber: "",
+      ownerCellNumber: "",
+      streetAddress: "",
+      city: "",
+      state: "",
       dateShipped: "",
       dateReturned: "",
       terminalCost: "",
@@ -101,6 +113,12 @@ export default function EquipmentInventory() {
       serialNumber: item.serialNumber || "",
       merchantName: item.merchantName || "",
       merchantMID: item.merchantMID || "",
+      businessContactName: item.businessContactName || "",
+      businessPhoneNumber: item.businessPhoneNumber || "",
+      ownerCellNumber: item.ownerCellNumber || "",
+      streetAddress: item.streetAddress || "",
+      city: item.city || "",
+      state: item.state || "",
       dateShipped: item.dateShipped || "",
       dateReturned: item.dateReturned || "",
       terminalCost: item.terminalCost || "",
@@ -157,7 +175,7 @@ export default function EquipmentInventory() {
                 Add Equipment
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl">
+            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>{editingEquipment ? 'Edit Equipment' : 'Add New Equipment'}</DialogTitle>
               </DialogHeader>
@@ -192,6 +210,54 @@ export default function EquipmentInventory() {
                     placeholder="MID Number"
                     value={formData.merchantMID}
                     onChange={(e) => setFormData({ ...formData, merchantMID: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium mb-1 block">Business Contact Name</label>
+                  <Input
+                    placeholder="Contact Name"
+                    value={formData.businessContactName}
+                    onChange={(e) => setFormData({ ...formData, businessContactName: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium mb-1 block">Business Phone Number</label>
+                  <Input
+                    placeholder="(555) 555-5555"
+                    value={formData.businessPhoneNumber}
+                    onChange={(e) => setFormData({ ...formData, businessPhoneNumber: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium mb-1 block">Owner Cell Number</label>
+                  <Input
+                    placeholder="(555) 555-5555"
+                    value={formData.ownerCellNumber}
+                    onChange={(e) => setFormData({ ...formData, ownerCellNumber: e.target.value })}
+                  />
+                </div>
+                <div className="col-span-2">
+                  <label className="text-sm font-medium mb-1 block">Street Address</label>
+                  <Input
+                    placeholder="Street Address"
+                    value={formData.streetAddress}
+                    onChange={(e) => setFormData({ ...formData, streetAddress: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium mb-1 block">City</label>
+                  <Input
+                    placeholder="City"
+                    value={formData.city}
+                    onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium mb-1 block">State</label>
+                  <Input
+                    placeholder="State"
+                    value={formData.state}
+                    onChange={(e) => setFormData({ ...formData, state: e.target.value })}
                   />
                 </div>
                 <div>
@@ -319,11 +385,16 @@ export default function EquipmentInventory() {
               <div className="space-y-3">
                 {equipment.filter(item => !item.isActive && !item.hasBeenReturned).map((item) => (
                   <div key={item.id} className="bg-white rounded-lg p-4 border border-red-200">
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                       <div>
                         <p className="text-xs text-gray-500 mb-1">Terminal</p>
                         <p className="font-semibold text-red-700">{item.terminalType}</p>
                         <p className="text-xs text-gray-600">SN: {item.serialNumber}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500 mb-1">Contact</p>
+                        <p className="font-medium text-sm">{item.businessContactName || '-'}</p>
+                        <p className="text-xs text-gray-600">{item.businessPhoneNumber || '-'}</p>
                       </div>
                       <div>
                         <p className="text-xs text-gray-500 mb-1">Merchant</p>
@@ -382,9 +453,20 @@ export default function EquipmentInventory() {
                         <p className="text-xs text-gray-600 mt-1">SN: {item.serialNumber}</p>
                       </div>
                       <div>
+                        <p className="text-xs text-gray-500 mb-1">Contact</p>
+                        <p className="font-medium">{item.businessContactName || '-'}</p>
+                        <p className="text-xs text-gray-600">Bus: {item.businessPhoneNumber || '-'}</p>
+                        <p className="text-xs text-gray-600">Cell: {item.ownerCellNumber || '-'}</p>
+                      </div>
+                      <div>
                         <p className="text-xs text-gray-500 mb-1">Merchant</p>
                         <p className="font-medium">{item.merchantName || '-'}</p>
                         <p className="text-xs text-gray-600">MID: {item.merchantMID || '-'}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500 mb-1">Address</p>
+                        <p className="text-sm">{item.streetAddress || '-'}</p>
+                        <p className="text-xs text-gray-600">{item.city ? `${item.city}, ${item.state || ''}` : '-'}</p>
                       </div>
                       <div>
                         <p className="text-xs text-gray-500 mb-1 flex items-center gap-1">
