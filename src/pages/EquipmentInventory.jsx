@@ -129,7 +129,10 @@ export default function EquipmentInventory() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-24 px-4">
-      <SEOHead title="Equipment Inventory" />
+      <SEOHead 
+        title="Equipment Inventory" 
+        robots="noindex, nofollow"
+      />
       
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
