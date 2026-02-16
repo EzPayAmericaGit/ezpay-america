@@ -28,7 +28,8 @@ import {
   Bot,
   Users,
   Wand2,
-  Package
+  Package,
+  Trash2
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -70,6 +71,43 @@ export default function AdminDashboard() {
     queryKey: ['adminApplications'],
     queryFn: () => base44.entities.MerchantApplication.list('-created_date')
   });
+
+  const deleteMutation = useMutation({
+    mutationFn: async ({ id, application }) => {
+      const user = await base44.auth.me();
+      
+      // Log deletion in audit trail
+      await base44.entities.AuditLog.create({
+        userEmail: user.email,
+        userName: user.full_name,
+        action: `Deleted merchant application: ${application.legalBusinessName}`,
+        entityType: 'MerchantApplication',
+        entityId: id,
+        changes: {
+          deletedApplication: {
+            legalBusinessName: application.legalBusinessName,
+            businessEmail: application.businessEmail,
+            status: application.status,
+            deletedAt: new Date().toISOString()
+          }
+        },
+        severity: 'high',
+        status: 'success'
+      });
+
+      await base44.entities.MerchantApplication.delete(id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['adminApplications']);
+      setExpandedApp(null);
+    }
+  });
+
+  const handleDeleteApplication = (application) => {
+    if (window.confirm(`Are you sure you want to delete the application for "${application.legalBusinessName}"?\n\nThis action cannot be undone.`)) {
+      deleteMutation.mutate({ id: application.id, application });
+    }
+  };
 
   const updateMutation = useMutation({
     mutationFn: async ({ id, data, sendEmail, application, autoOnboard }) => {
@@ -773,6 +811,29 @@ Provide a complete article with all metadata.`,
                                   <SelectItem value="declined">Declined</SelectItem>
                                 </SelectContent>
                               </Select>
+                            </div>
+
+                            {/* Delete Application */}
+                            <div className="pt-4 border-t">
+                              <Button 
+                                variant="destructive" 
+                                size="sm" 
+                                onClick={() => handleDeleteApplication(app)}
+                                disabled={deleteMutation.isPending}
+                                className="w-full"
+                              >
+                                {deleteMutation.isPending ? (
+                                  <>
+                                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                    Deleting...
+                                  </>
+                                ) : (
+                                  <>
+                                    <Trash2 className="w-4 h-4 mr-2" />
+                                    Delete Application
+                                  </>
+                                )}
+                              </Button>
                             </div>
                           </div>
 
