@@ -115,13 +115,23 @@ export default function Helpdesk() {
           {/* Ticket Details */}
           <div className="lg:col-span-2">
             {selectedTicket ? (
-              <TicketDetails 
-                ticket={selectedTicket}
-                user={user}
-                isAdmin={isAdmin}
-                onUpdate={refetch}
-                onClose={() => setSelectedTicket(null)}
-              />
+              // Security: Validate ticket access before rendering
+              (!isAdmin && selectedTicket.customerEmail !== user?.email) ? (
+                <div className="bg-white rounded-lg border border-red-200 h-full flex items-center justify-center p-12">
+                  <div className="text-center text-red-600">
+                    <p className="text-lg font-semibold mb-2">Access Denied</p>
+                    <p className="text-sm">You can only view your own tickets.</p>
+                  </div>
+                </div>
+              ) : (
+                <TicketDetails 
+                  ticket={selectedTicket}
+                  user={user}
+                  isAdmin={isAdmin}
+                  onUpdate={refetch}
+                  onClose={() => setSelectedTicket(null)}
+                />
+              )
             ) : (
               <div className="bg-white rounded-lg border border-gray-200 h-full flex items-center justify-center p-12">
                 <div className="text-center text-gray-400">
