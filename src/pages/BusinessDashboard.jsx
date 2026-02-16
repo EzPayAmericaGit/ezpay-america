@@ -17,7 +17,7 @@ export default function BusinessDashboard() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    if (username === "EzPayAmerica" && password === "JaxonDog1955#!") {
+    if (username === "mail@ezpayamerica.com" && password === "JaxonDog1955#!") {
       setIsAuthenticated(true);
       setError("");
     } else {
