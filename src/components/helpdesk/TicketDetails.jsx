@@ -6,7 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { X, Send, User, Calendar, Tag, Loader2, Paperclip } from "lucide-react";
+import { X, Send, User, Calendar, Tag, Loader2, Paperclip, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import { motion } from "framer-motion";
 import AgentAssignment from "./AgentAssignment";
 import TemplateSelector from "./TemplateSelector";
@@ -41,6 +42,43 @@ export default function TicketDetails({ ticket, user, isAdmin, onUpdate, onClose
       onUpdate();
     }
   });
+
+  const deleteTicketMutation = useMutation({
+    mutationFn: async (ticketId) => {
+      // Log deletion in audit trail
+      await base44.entities.AuditLog.create({
+        userEmail: user.email,
+        userName: user.full_name,
+        action: `Deleted ticket: ${ticket.title}`,
+        entityType: 'Ticket',
+        entityId: ticketId,
+        changes: {
+          deletedTicket: {
+            ticketNumber: ticket.ticketNumber,
+            title: ticket.title,
+            customerEmail: ticket.customerEmail,
+            status: ticket.status,
+            deletedAt: new Date().toISOString()
+          }
+        },
+        severity: 'high',
+        status: 'success'
+      });
+
+      await base44.entities.Ticket.delete(ticketId);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tickets'] });
+      toast.success('Ticket deleted successfully');
+      onClose?.();
+    }
+  });
+
+  const handleDeleteTicket = () => {
+    if (window.confirm(`Are you sure you want to delete ticket "${ticket.title}"?\n\nThis action cannot be undone.`)) {
+      deleteTicketMutation.mutate(ticket.id);
+    }
+  };
 
   const handleSendMessage = async () => {
     if (!newMessage.trim()) return;
@@ -120,9 +158,22 @@ export default function TicketDetails({ ticket, user, isAdmin, onUpdate, onClose
               {isAdmin && <TicketSummary ticket={ticket} />}
             </div>
           </div>
-          <Button variant="ghost" size="icon" onClick={onClose}>
-            <X className="w-5 h-5" />
-          </Button>
+          <div className="flex gap-2">
+            {isAdmin && (
+              <Button 
+                variant="destructive" 
+                size="sm"
+                onClick={handleDeleteTicket}
+                disabled={deleteTicketMutation.isPending}
+              >
+                <Trash2 className="w-4 h-4 mr-2" />
+                Delete
+              </Button>
+            )}
+            <Button variant="ghost" size="icon" onClick={onClose}>
+              <X className="w-5 h-5" />
+            </Button>
+          </div>
         </div>
 
         {/* Admin Controls */}
