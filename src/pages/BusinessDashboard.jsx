@@ -20,7 +20,7 @@ export default function BusinessDashboard() {
       try {
         const user = await base44.auth.me();
         if (user?.role === 'admin') {
-          setAuthStatus({ loading: false, isAdmin: true, isAuthorized: true });
+          setAuthStatus({ loading: false, isAdmin: true, isAuthorized: false });
         } else {
           setAuthStatus({ loading: false, isAdmin: false, isAuthorized: false });
         }
