@@ -42,12 +42,13 @@ export default function BusinessDashboard() {
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
-                <label className="text-sm font-medium mb-1 block">Username</label>
+                <label className="text-sm font-medium mb-1 block">Email</label>
                 <Input
-                  type="text"
+                  type="email"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  placeholder="Enter username"
+                  placeholder="mail@ezpayamerica.com"
+                  autoComplete="email"
                 />
               </div>
               <div>
@@ -57,6 +58,7 @@ export default function BusinessDashboard() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter password"
+                  autoComplete="current-password"
                 />
               </div>
               {error && <p className="text-sm text-red-600">{error}</p>}
