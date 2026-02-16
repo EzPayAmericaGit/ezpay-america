@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { UserCircle, Plus, TrendingUp, Clock, Wrench, BookOpen, Search, DollarSign, Archive } from "lucide-react";
+import { UserCircle, Plus, TrendingUp, Clock, Wrench, BookOpen, Search, DollarSign, Archive, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import SEOHead from "../components/SEOHead";
 
@@ -102,6 +102,43 @@ export default function AgentManagement() {
       toast.success('Tool updated');
     }
   });
+
+  const deleteAgentMutation = useMutation({
+    mutationFn: async ({ id, agent }) => {
+      const currentUser = await base44.auth.me();
+      
+      // Log deletion in audit trail
+      await base44.entities.AuditLog.create({
+        userEmail: currentUser.email,
+        userName: currentUser.full_name,
+        action: `Deleted agent: ${agent.agentName}`,
+        entityType: 'TicketAssignment',
+        entityId: id,
+        changes: {
+          deletedAgent: {
+            agentName: agent.agentName,
+            agentEmail: agent.agentEmail,
+            specialization: agent.specialization,
+            deletedAt: new Date().toISOString()
+          }
+        },
+        severity: 'high',
+        status: 'success'
+      });
+
+      await base44.entities.TicketAssignment.delete(id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['agents']);
+      toast.success('Agent deleted successfully');
+    }
+  });
+
+  const handleDeleteAgent = (agent) => {
+    if (window.confirm(`Are you sure you want to delete agent "${agent.agentName}"?\n\nThis action cannot be undone.`)) {
+      deleteAgentMutation.mutate({ id: agent.id, agent });
+    }
+  };
 
   const categories = ["technical", "billing", "general", "feature_request", "bug_report"];
   
@@ -357,27 +394,39 @@ export default function AgentManagement() {
                   </div>
                 </div>
 
-                <div className="pt-4 border-t flex gap-2">
+                <div className="pt-4 border-t space-y-2">
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => updateAgentMutation.mutate({
+                        id: agent.id,
+                        data: { isAvailable: !agent.isAvailable }
+                      })}
+                      className="flex-1"
+                    >
+                      {agent.isAvailable ? 'Set Unavailable' : 'Set Available'}
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => {
+                        setSelectedAgent(agent);
+                        setShowToolDialog(true);
+                      }}
+                    >
+                      <Wrench className="w-4 h-4" />
+                    </Button>
+                  </div>
                   <Button
                     size="sm"
-                    variant="outline"
-                    onClick={() => updateAgentMutation.mutate({
-                      id: agent.id,
-                      data: { isAvailable: !agent.isAvailable }
-                    })}
-                    className="flex-1"
+                    variant="destructive"
+                    onClick={() => handleDeleteAgent(agent)}
+                    disabled={deleteAgentMutation.isPending}
+                    className="w-full"
                   >
-                    {agent.isAvailable ? 'Set Unavailable' : 'Set Available'}
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => {
-                      setSelectedAgent(agent);
-                      setShowToolDialog(true);
-                    }}
-                  >
-                    <Wrench className="w-4 h-4" />
+                    <Trash2 className="w-3 h-3 mr-2" />
+                    Delete Agent
                   </Button>
                 </div>
               </CardContent>
