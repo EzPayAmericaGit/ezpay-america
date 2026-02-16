@@ -1,31 +1,80 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { DollarSign, TrendingUp, Users, FileText, Package, ShoppingCart, Lock } from "lucide-react";
+import { DollarSign, TrendingUp, Users, FileText, Package, ShoppingCart, Lock, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import SEOHead from "../components/SEOHead";
 
 export default function BusinessDashboard() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [username, setUsername] = useState("");
+  const [authStatus, setAuthStatus] = useState({ loading: true, isAdmin: false, isAuthorized: false });
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const user = await base44.auth.me();
+        if (user?.role === 'admin') {
+          setAuthStatus({ loading: false, isAdmin: true, isAuthorized: true });
+        } else {
+          setAuthStatus({ loading: false, isAdmin: false, isAuthorized: false });
+        }
+      } catch (e) {
+        setAuthStatus({ loading: false, isAdmin: false, isAuthorized: false });
+      }
+    };
+    checkAuth();
+  }, []);
+
   const handleLogin = (e) => {
     e.preventDefault();
-    if (username === "mail@ezpayamerica.com" && password === "JaxonDog1955#!") {
-      setIsAuthenticated(true);
+    if (email === "mail@ezpayamerica.com" && password === "JaxonDog1955#!") {
+      setAuthStatus(prev => ({ ...prev, isAuthorized: true }));
       setError("");
     } else {
-      setError("Invalid credentials");
+      setError("Invalid email or password");
     }
   };
 
-  if (!isAuthenticated) {
+  if (authStatus.loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <SEOHead 
+          title="Business Dashboard"
+          robots="noindex, nofollow"
+        />
+        <Loader2 className="w-8 h-8 animate-spin text-amber-500" />
+      </div>
+    );
+  }
+
+  if (!authStatus.isAdmin) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <SEOHead 
+          title="Business Dashboard"
+          robots="noindex, nofollow"
+        />
+        <Card className="max-w-md">
+          <CardContent className="p-8 text-center">
+            <Lock className="w-16 h-16 text-red-500 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h2>
+            <p className="text-gray-600 mb-4">You must be an admin to access this dashboard.</p>
+            <Button onClick={() => base44.auth.redirectToLogin()}>
+              Login as Admin
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (!authStatus.isAuthorized) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center py-12 px-4">
         <SEOHead 
@@ -45,8 +94,8 @@ export default function BusinessDashboard() {
                 <label className="text-sm font-medium mb-1 block">Email</label>
                 <Input
                   type="email"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="mail@ezpayamerica.com"
                   autoComplete="email"
                 />
@@ -71,6 +120,7 @@ export default function BusinessDashboard() {
       </div>
     );
   }
+
   const { data: orders = [] } = useQuery({
     queryKey: ['orders'],
     queryFn: () => base44.entities.Order.list('-created_date', 100)
