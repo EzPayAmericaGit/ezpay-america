@@ -1,12 +1,74 @@
-import React from "react";
+import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { DollarSign, TrendingUp, Users, FileText, Package, ShoppingCart } from "lucide-react";
+import { DollarSign, TrendingUp, Users, FileText, Package, ShoppingCart, Lock } from "lucide-react";
 import { motion } from "framer-motion";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import SEOHead from "../components/SEOHead";
 
 export default function BusinessDashboard() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (username === "EzPayAmerica" && password === "JaxonDog1955#!") {
+      setIsAuthenticated(true);
+      setError("");
+    } else {
+      setError("Invalid credentials");
+    }
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center py-12 px-4">
+        <SEOHead 
+          title="Business Dashboard"
+          robots="noindex, nofollow"
+        />
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle className="text-2xl text-center flex items-center justify-center gap-2">
+              <Lock className="w-6 h-6 text-amber-600" />
+              Dashboard Login
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <label className="text-sm font-medium mb-1 block">Username</label>
+                <Input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Enter username"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium mb-1 block">Password</label>
+                <Input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter password"
+                />
+              </div>
+              {error && <p className="text-sm text-red-600">{error}</p>}
+              <Button type="submit" className="w-full bg-amber-600 hover:bg-amber-700">
+                Login
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
   const { data: orders = [] } = useQuery({
     queryKey: ['orders'],
     queryFn: () => base44.entities.Order.list('-created_date', 100)
@@ -90,6 +152,10 @@ export default function BusinessDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
+      <SEOHead 
+        title="Business Dashboard"
+        robots="noindex, nofollow"
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Business Dashboard</h1>
 
