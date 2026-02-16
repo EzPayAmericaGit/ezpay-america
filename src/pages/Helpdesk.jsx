@@ -52,6 +52,7 @@ export default function Helpdesk() {
       <SEOHead 
         title="Helpdesk"
         description="Submit and track support tickets"
+        robots="noindex, nofollow"
       />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

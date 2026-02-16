@@ -53,6 +53,9 @@ export default function Sitemap() {
       { path: '/Quiz', priority: '0.7', changefreq: 'monthly', title: 'Business Type Quiz - Find Your Solution' },
       { path: '/Support', priority: '0.8', changefreq: 'weekly', title: 'Customer Support & Help Center' },
       
+      // Admin & Internal Pages (not in sitemap - noindex)
+      // Excluded: /Helpdesk, /Admin, /AdminDashboard, /ApplicationsAdmin, /AgentManagement, /EquipmentInventory, /SettingsAdmin, /ProductAdmin, /OrdersAdmin, /NewsAdmin, /UserManagement, /TemplateManagement, /AnalyticsDashboard, /BacklinkOutreach, /Invoicing
+      
       // Utility Pages
       { path: '/Sitemap', priority: '0.5', changefreq: 'monthly', title: 'Sitemap - All Pages' }
     ];

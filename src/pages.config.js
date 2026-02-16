@@ -72,6 +72,7 @@ import CustomerPortal from './pages/CustomerPortal';
 import DeliShopPOS from './pages/DeliShopPOS';
 import ECommerce from './pages/ECommerce';
 import EmailMarketing from './pages/EmailMarketing';
+import EquipmentInventory from './pages/EquipmentInventory';
 import EzPayPOS from './pages/EzPayPOS';
 import EzPayPOSHome from './pages/EzPayPOSHome';
 import FoodTruckPOS from './pages/FoodTruckPOS';
@@ -113,7 +114,6 @@ import TransactionHistory from './pages/TransactionHistory';
 import UserManagement from './pages/UserManagement';
 import VapeStorePOS from './pages/VapeStorePOS';
 import WebPaymentPages from './pages/WebPaymentPages';
-import EquipmentInventory from './pages/EquipmentInventory';
 import __Layout from './Layout.jsx';
 
 
@@ -143,6 +143,7 @@ export const PAGES = {
     "DeliShopPOS": DeliShopPOS,
     "ECommerce": ECommerce,
     "EmailMarketing": EmailMarketing,
+    "EquipmentInventory": EquipmentInventory,
     "EzPayPOS": EzPayPOS,
     "EzPayPOSHome": EzPayPOSHome,
     "FoodTruckPOS": FoodTruckPOS,
@@ -184,7 +185,6 @@ export const PAGES = {
     "UserManagement": UserManagement,
     "VapeStorePOS": VapeStorePOS,
     "WebPaymentPages": WebPaymentPages,
-    "EquipmentInventory": EquipmentInventory,
 }
 
 export const pagesConfig = {
