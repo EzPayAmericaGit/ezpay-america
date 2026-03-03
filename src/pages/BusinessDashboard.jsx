@@ -19,7 +19,6 @@ export default function BusinessDashboard() {
     twoFactorVerified: false
   });
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
   const [codeExpiry, setCodeExpiry] = useState(null);
   const [error, setError] = useState("");
