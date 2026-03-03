@@ -1,28 +1,24 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.4';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
 
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
     const { eventType, pagePath, pageTitle, referrer, utmParams, deviceInfo, duration, metadata } = await req.json();
 
-    // Generate or retrieve session ID
     const sessionId = metadata?.sessionId || crypto.randomUUID();
 
-    // Detect device type
     const userAgent = req.headers.get('user-agent') || '';
     let deviceType = 'desktop';
     if (/mobile|android|iphone|ipad|tablet/i.test(userAgent)) {
       deviceType = /tablet|ipad/i.test(userAgent) ? 'tablet' : 'mobile';
     }
 
-    // Basic browser detection
     let browser = 'Unknown';
     if (userAgent.includes('Chrome')) browser = 'Chrome';
     else if (userAgent.includes('Firefox')) browser = 'Firefox';
     else if (userAgent.includes('Safari')) browser = 'Safari';
     else if (userAgent.includes('Edge')) browser = 'Edge';
 
-    // Try to get user ID if authenticated
     let userId = null;
     try {
       const user = await base44.auth.me();
@@ -31,14 +27,13 @@ Deno.serve(async (req) => {
       // Not authenticated, that's fine
     }
 
-    // Create analytics event
     await base44.asServiceRole.entities.AnalyticsEvent.create({
       eventType,
       pagePath,
       pageTitle,
       userId,
       sessionId,
-      referrer: referrer || document.referrer,
+      referrer: referrer || '',  // Fixed: document.referrer doesn't exist in Deno
       utmSource: utmParams?.source,
       utmMedium: utmParams?.medium,
       utmCampaign: utmParams?.campaign,

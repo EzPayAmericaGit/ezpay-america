@@ -1,4 +1,4 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
 
 Deno.serve(async (req) => {
   try {
@@ -11,11 +11,29 @@ Deno.serve(async (req) => {
 
     const { phoneNumber } = await req.json();
 
+    if (!phoneNumber) {
+      return Response.json({ error: 'Phone number is required' }, { status: 400 });
+    }
+
     // Generate 6-digit code
     const code = Math.floor(100000 + Math.random() * 900000).toString();
-
-    // Store code with expiration (5 minutes)
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000).toISOString();
+
+    // Store code server-side in Settings entity (upsert)
+    const settingKey = `2fa_${user.email}`;
+    const existing = await base44.asServiceRole.entities.Settings.filter({ settingKey });
+    if (existing.length > 0) {
+      await base44.asServiceRole.entities.Settings.update(existing[0].id, {
+        settingValue: `${code}|${expiresAt}`,
+        description: '2FA temporary code - auto-expires'
+      });
+    } else {
+      await base44.asServiceRole.entities.Settings.create({
+        settingKey,
+        settingValue: `${code}|${expiresAt}`,
+        description: '2FA temporary code - auto-expires'
+      });
+    }
 
     // Send SMS via Twilio
     const accountSid = Deno.env.get('TWILIO_ACCOUNT_SID');
@@ -28,7 +46,7 @@ Deno.serve(async (req) => {
     const formData = new URLSearchParams();
     formData.append('To', phoneNumber);
     formData.append('From', twilioPhone);
-    formData.append('Body', `Your EzPay America verification code is: ${code}. Valid for 5 minutes.`);
+    formData.append('Body', `Your EzPay America verification code is: ${code}. Valid for 5 minutes. Do not share this code.`);
 
     const twilioResponse = await fetch(twilioUrl, {
       method: 'POST',
@@ -55,11 +73,8 @@ Deno.serve(async (req) => {
       status: 'success'
     });
 
-    return Response.json({ 
-      success: true, 
-      code, // In production, store this in a secure session/cache, not return it
-      expiresAt 
-    });
+    // IMPORTANT: Never return the code — verification is done server-side
+    return Response.json({ success: true, expiresAt });
 
   } catch (error) {
     console.error('Error:', error);

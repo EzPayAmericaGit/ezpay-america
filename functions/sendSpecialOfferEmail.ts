@@ -1,9 +1,20 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.4';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
 
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
+
+    // Require admin authentication
+    const user = await base44.auth.me();
+    if (!user || user.role !== 'admin') {
+      return Response.json({ error: 'Forbidden: Admin access required' }, { status: 403 });
+    }
+
     const { email } = await req.json();
+
+    if (!email || typeof email !== 'string' || !email.includes('@')) {
+      return Response.json({ error: 'Valid email address is required' }, { status: 400 });
+    }
 
     // Find the "special offer" campaign
     const campaigns = await base44.asServiceRole.entities.EmailCampaign.filter({ 
@@ -18,7 +29,6 @@ Deno.serve(async (req) => {
     const SENDGRID_API_KEY = Deno.env.get('SENDGRID_API_KEY');
     const FROM_EMAIL = Deno.env.get('SENDGRID_FROM_EMAIL');
 
-    // Send email
     const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
       method: 'POST',
       headers: {

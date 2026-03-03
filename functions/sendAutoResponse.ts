@@ -1,9 +1,15 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
 
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    
+
+    // Require admin authentication
+    const user = await base44.auth.me();
+    if (!user || user.role !== 'admin') {
+      return Response.json({ error: 'Forbidden: Admin access required' }, { status: 403 });
+    }
+
     const { ticketId, templateId } = await req.json();
 
     if (!ticketId) {
@@ -21,11 +27,9 @@ Deno.serve(async (req) => {
     let template;
     
     if (templateId) {
-      // Use specific template
       const templates = await base44.asServiceRole.entities.TicketTemplate.filter({ id: templateId });
       template = templates[0];
     } else {
-      // Auto-select template based on category
       const templates = await base44.asServiceRole.entities.TicketTemplate.filter({ 
         category: ticket.category,
         isActive: true
