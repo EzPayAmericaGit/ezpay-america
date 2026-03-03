@@ -21,7 +21,6 @@ export default function BusinessDashboard() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
-  const [sentCode, setSentCode] = useState(null);
   const [codeExpiry, setCodeExpiry] = useState(null);
   const [error, setError] = useState("");
   const [sending, setSending] = useState(false);
