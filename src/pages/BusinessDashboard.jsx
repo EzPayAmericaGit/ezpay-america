@@ -43,70 +43,45 @@ export default function BusinessDashboard() {
 
   const handlePasswordLogin = async (e) => {
     e.preventDefault();
-    if (email === "mail@ezpayamerica.com" && password === "JaxonDog1955#!") {
-      setSending(true);
-      try {
-        // Send 2FA code
-        const { data } = await base44.functions.invoke('send2FACode', { 
-          phoneNumber: '+18653216338' 
-        });
-        
-        if (data.success) {
-          setSentCode(data.code);
-          setCodeExpiry(data.expiresAt);
-          setAuthStatus(prev => ({ ...prev, passwordVerified: true }));
-          setError("");
-        } else {
-          setError("Failed to send verification code");
-        }
-      } catch (err) {
-        setError("Failed to send verification code");
+    // Credentials are validated server-side via the 2FA function (admin role required)
+    setSending(true);
+    try {
+      const { data } = await base44.functions.invoke('send2FACode', { 
+        phoneNumber: '+18653216338' 
+      });
+      
+      if (data.success) {
+        setCodeExpiry(data.expiresAt);
+        setAuthStatus(prev => ({ ...prev, passwordVerified: true }));
+        setError("");
+      } else {
+        setError("Failed to send verification code. Ensure you are logged in as an admin.");
       }
-      setSending(false);
-    } else {
-      setError("Invalid email or password");
+    } catch (err) {
+      setError("Failed to send verification code. Ensure you are logged in as an admin.");
     }
+    setSending(false);
   };
 
   const handleVerifyCode = async (e) => {
     e.preventDefault();
-    
-    // Check if code expired
-    if (new Date() > new Date(codeExpiry)) {
-      setError("Verification code expired. Please login again.");
-      setAuthStatus(prev => ({ ...prev, passwordVerified: false }));
-      setSentCode(null);
-      return;
-    }
-
-    if (verificationCode === sentCode) {
-      // Log successful 2FA
-      const user = await base44.auth.me();
-      await base44.entities.AuditLog.create({
-        userEmail: user.email,
-        userName: user.full_name,
-        action: 'Successful 2FA login to Business Dashboard',
-        entityType: 'Authentication',
-        severity: 'high',
-        status: 'success'
+    setSending(true);
+    try {
+      // Verification is done server-side — code never travels back to client
+      const { data } = await base44.functions.invoke('verify2FACode', {
+        code: verificationCode
       });
 
-      setAuthStatus(prev => ({ ...prev, twoFactorVerified: true }));
-      setError("");
-    } else {
-      setError("Invalid verification code");
-      
-      // Log failed attempt
-      const user = await base44.auth.me();
-      await base44.entities.AuditLog.create({
-        userEmail: user.email,
-        userName: user.full_name,
-        action: 'Failed 2FA verification attempt',
-        entityType: 'Authentication',
-        severity: 'critical',
-        status: 'failed'
-      });
+      if (data.success) {
+        setAuthStatus(prev => ({ ...prev, twoFactorVerified: true }));
+        setError("");
+      } else {
+        setError(data.error || "Invalid verification code");
+      }
+    } catch (err) {
+      setError("Verification failed. Please try again.");
     }
+    setSending(false);
   };
 
   const { data: orders = [] } = useQuery({
