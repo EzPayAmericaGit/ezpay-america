@@ -168,27 +168,10 @@ export default function BusinessDashboard() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handlePasswordLogin} className="space-y-4">
-              <div>
-                <label className="text-sm font-medium mb-1 block">Email</label>
-                <Input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="mail@ezpayamerica.com"
-                  autoComplete="email"
-                  disabled={sending}
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium mb-1 block">Password</label>
-                <Input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter password"
-                  autoComplete="current-password"
-                  disabled={sending}
-                />
+              <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-sm text-blue-800">
+                  You must be logged in as an admin to access this dashboard. Click below to send a 2FA code to the registered admin phone.
+                </p>
               </div>
               {error && <p className="text-sm text-red-600">{error}</p>}
               <Button 
@@ -202,7 +185,7 @@ export default function BusinessDashboard() {
                     Sending Code...
                   </>
                 ) : (
-                  'Continue'
+                  'Send Verification Code'
                 )}
               </Button>
             </form>
