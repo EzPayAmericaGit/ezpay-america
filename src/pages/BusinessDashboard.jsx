@@ -228,8 +228,8 @@ export default function BusinessDashboard() {
                 />
               </div>
               {error && <p className="text-sm text-red-600">{error}</p>}
-              <Button type="submit" className="w-full bg-amber-600 hover:bg-amber-700">
-                Verify & Login
+              <Button type="submit" className="w-full bg-amber-600 hover:bg-amber-700" disabled={sending}>
+                {sending ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Verifying...</> : 'Verify & Login'}
               </Button>
             </form>
           </CardContent>
