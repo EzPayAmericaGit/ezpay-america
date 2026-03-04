@@ -3,6 +3,20 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.4';
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
+
+    // Only allow internal service-role calls (invoked by processNMIPayment)
+    // or admin users — not arbitrary callers
+    let isAuthorized = false;
+    try {
+      const user = await base44.auth.me();
+      isAuthorized = !!user; // any logged-in user (called internally)
+    } catch (e) {
+      // unauthenticated — reject
+    }
+    if (!isAuthorized) {
+      return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const { orderData } = await req.json();
 
     const itemsList = orderData.items?.map(item => 

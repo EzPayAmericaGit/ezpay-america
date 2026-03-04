@@ -3,7 +3,19 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.4';
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
+
+    // Require authentication — anonymous users cannot submit orders
+    const user = await base44.auth.me();
+    if (!user) {
+      return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const { orderData, paymentData } = await req.json();
+
+    // Prevent order spoofing — customerEmail must match the logged-in user
+    if (orderData?.customerEmail && orderData.customerEmail !== user.email) {
+      return Response.json({ error: 'Forbidden: Cannot place orders for other users' }, { status: 403 });
+    }
 
     // Build NMI request
     const nmiParams = new URLSearchParams({

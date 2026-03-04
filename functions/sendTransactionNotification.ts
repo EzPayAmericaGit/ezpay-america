@@ -6,8 +6,19 @@ sgMail.setApiKey(Deno.env.get('SENDGRID_API_KEY'));
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    
+
+    // Require authentication
+    const user = await base44.auth.me();
+    if (!user) {
+      return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const { orderId, customerEmail, customerName, orderTotal, orderNumber } = await req.json();
+
+    // Verify the order belongs to this user (or they are admin)
+    if (user.role !== 'admin' && customerEmail !== user.email) {
+      return Response.json({ error: 'Forbidden' }, { status: 403 });
+    }
 
     if (!orderId || !customerEmail) {
       return Response.json({ error: 'Missing required fields' }, { status: 400 });
