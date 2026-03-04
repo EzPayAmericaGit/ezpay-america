@@ -24,7 +24,8 @@ Deno.serve(async (req) => {
     const SENDGRID_API_KEY = Deno.env.get("SENDGRID_API_KEY");
     const FROM_EMAIL = Deno.env.get("SENDGRID_FROM_EMAIL");
 
-    // Sanitize all user-provided fields
+    // Sanitize ONLY non-sensitive fields for the email notification
+    // NEVER include SSN, bank account numbers, routing numbers, or Tax ID in emails
     const safeLegalBusinessName = escapeHtml(applicationData.legalBusinessName);
     const safeDbaName = escapeHtml(applicationData.dbaName);
     const safeOwnerFullName = escapeHtml(applicationData.ownerFullName);
@@ -56,6 +57,7 @@ Deno.serve(async (req) => {
             <li>Voided Check: ${applicationData.voidedCheckUrl ? 'Uploaded' : 'Not provided'}</li>
             <li>Additional Documents: ${parseInt(applicationData.additionalDocuments?.length) || 0}</li>
           </ul>
+          <p style="color:#b91c1c;"><strong>⚠ Sensitive data (SSN, bank details, Tax ID) is NOT included in this email for security. Please review the full application securely in the admin dashboard.</strong></p>
           <p>Please review the application in the admin dashboard.</p>
         `
       }]
