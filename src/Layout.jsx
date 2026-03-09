@@ -361,6 +361,8 @@ export default function Layout({ children }) {
       <main className="pt-0">
         {children}
       </main>
+
+      <HelpWidget />
     </div>
   );
 }
