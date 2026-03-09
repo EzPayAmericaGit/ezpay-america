@@ -5,6 +5,7 @@ import { Phone, Menu, X, ChevronDown, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { base44 } from "@/api/base44Client";
 import AnalyticsTracker from "@/components/AnalyticsTracker";
+import HelpWidget from "@/components/HelpWidget";
 
 export default function Layout({ children }) {
   const location = useLocation();
