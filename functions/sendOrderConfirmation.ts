@@ -1,27 +1,44 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.4';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
+
+const escapeHtml = (str) => String(str || '')
+  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+const isValidEmail = (email) =>
+  typeof email === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && email.length <= 254;
 
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
 
-    // Only allow internal service-role calls (invoked by processNMIPayment)
-    // or admin users — not arbitrary callers
-    let isAuthorized = false;
-    try {
-      const user = await base44.auth.me();
-      isAuthorized = !!user; // any logged-in user (called internally)
-    } catch (e) {
-      // unauthenticated — reject
-    }
-    if (!isAuthorized) {
+    // Require authentication — no anonymous order confirmations
+    const user = await base44.auth.me();
+    if (!user) {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { orderData } = await req.json();
 
-    const itemsList = orderData.items?.map(item => 
-      `• ${item.name} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}`
-    ).join('\n') || '';
+    if (!orderData || !orderData.customerEmail) {
+      return Response.json({ error: 'Missing order data' }, { status: 400 });
+    }
+
+    // Enforce: the authenticated user's email must match the order
+    if (user.role !== 'admin' && orderData.customerEmail.toLowerCase() !== user.email.toLowerCase()) {
+      return Response.json({ error: 'Forbidden: Cannot send confirmations for other users' }, { status: 403 });
+    }
+
+    if (!isValidEmail(orderData.customerEmail)) {
+      return Response.json({ error: 'Invalid customer email' }, { status: 400 });
+    }
+
+    const safeName = escapeHtml(orderData.customerName);
+    const safeOrderNum = escapeHtml(orderData.orderNumber);
+
+    const itemsList = (orderData.items || [])
+      .slice(0, 50) // cap items to prevent abuse
+      .map(item => `• ${escapeHtml(item.name)} x${parseInt(item.quantity) || 0} - $${(parseFloat(item.price) * parseInt(item.quantity)).toFixed(2)}`)
+      .join('\n');
 
     const emailBody = `
 Dear ${orderData.customerName},
@@ -39,16 +56,11 @@ ${itemsList}
 
 ORDER SUMMARY
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Subtotal:        $${orderData.subtotal?.toFixed(2)}
-Tax:             $${orderData.tax?.toFixed(2)}
-Shipping:        $${orderData.shipping?.toFixed(2)}
+Subtotal:        $${parseFloat(orderData.subtotal || 0).toFixed(2)}
+Tax:             $${parseFloat(orderData.tax || 0).toFixed(2)}
+Shipping:        $${parseFloat(orderData.shipping || 0).toFixed(2)}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Total:           $${orderData.total?.toFixed(2)}
-
-SHIPPING ADDRESS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${orderData.shippingAddress?.address}
-${orderData.shippingAddress?.city}, ${orderData.shippingAddress?.state} ${orderData.shippingAddress?.zip}
+Total:           $${parseFloat(orderData.total || 0).toFixed(2)}
 
 WHAT'S NEXT?
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -61,7 +73,6 @@ This purchase requires a new approved merchant application with EzPay America In
 
 Questions? Contact us:
 📞 Phone: (865) 316-9625
-📧 Email: ${orderData.customerEmail}
 
 Thank you for choosing EzPay America!
 
@@ -69,33 +80,22 @@ Best regards,
 The EzPay America Team
     `.trim();
 
-    await base44.integrations.Core.SendEmail({
+    await base44.asServiceRole.integrations.Core.SendEmail({
       to: orderData.customerEmail,
       subject: `Order Confirmation #${orderData.orderNumber} - EzPay America`,
       body: emailBody
     });
 
-    // Send notification to admin
-    await base44.integrations.Core.SendEmail({
+    // Admin notification — minimal info only
+    await base44.asServiceRole.integrations.Core.SendEmail({
       to: Deno.env.get("SENDGRID_FROM_EMAIL"),
       subject: `New Order: #${orderData.orderNumber}`,
-      body: `
-New order received!
-
-Customer: ${orderData.customerName}
-Email: ${orderData.customerEmail}
-Order Total: $${orderData.total?.toFixed(2)}
-
-Login to admin dashboard to view details.
-      `.trim()
+      body: `New order received!\n\nCustomer: ${orderData.customerName}\nOrder Total: $${parseFloat(orderData.total || 0).toFixed(2)}\n\nLogin to admin dashboard to view details.`
     });
 
     return Response.json({ success: true });
   } catch (error) {
-    console.error('Email error:', error);
-    return Response.json({ 
-      success: false, 
-      error: error.message 
-    }, { status: 500 });
+    console.error('Order confirmation email error:', error);
+    return Response.json({ error: 'Failed to send confirmation' }, { status: 500 });
   }
 });

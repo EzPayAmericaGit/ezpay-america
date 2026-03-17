@@ -1,18 +1,27 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.4';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
+
+const isValidEmail = (email) =>
+  typeof email === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && email.length <= 254;
+
+const VALID_AUDIENCES = new Set([
+  'all', 'pending_applications', 'approved_merchants', 'demo_requests', 'website_visitors', 'custom'
+]);
 
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    
-    // Verify admin user
     const user = await base44.auth.me();
+
     if (!user || user.role !== 'admin') {
-      return Response.json({ error: 'Unauthorized' }, { status: 401 });
+      return Response.json({ error: 'Forbidden: Admin access required' }, { status: 403 });
     }
 
     const { campaignId } = await req.json();
 
-    // Get campaign details
+    if (!campaignId || typeof campaignId !== 'string' || campaignId.length > 100) {
+      return Response.json({ error: 'Valid campaign ID required' }, { status: 400 });
+    }
+
     const campaign = await base44.asServiceRole.entities.EmailCampaign.filter({ id: campaignId });
     if (!campaign || campaign.length === 0) {
       return Response.json({ error: 'Campaign not found' }, { status: 404 });
@@ -20,12 +29,17 @@ Deno.serve(async (req) => {
 
     const campaignData = campaign[0];
 
-    // Get recipient list based on target audience
+    if (!VALID_AUDIENCES.has(campaignData.targetAudience)) {
+      return Response.json({ error: 'Invalid target audience' }, { status: 400 });
+    }
+
     let recipients = [];
-    
+
     if (campaignData.targetAudience === 'all') {
-      const apps = await base44.asServiceRole.entities.MerchantApplication.list();
-      const demos = await base44.asServiceRole.entities.DemoRequest.list();
+      const [apps, demos] = await Promise.all([
+        base44.asServiceRole.entities.MerchantApplication.list(),
+        base44.asServiceRole.entities.DemoRequest.list()
+      ]);
       recipients = [...apps.map(a => a.businessEmail), ...demos.map(d => d.email)];
     } else if (campaignData.targetAudience === 'pending_applications') {
       const apps = await base44.asServiceRole.entities.MerchantApplication.filter({ status: 'submitted' });
@@ -37,13 +51,17 @@ Deno.serve(async (req) => {
       const demos = await base44.asServiceRole.entities.DemoRequest.list();
       recipients = demos.map(d => d.email);
     } else if (campaignData.targetAudience === 'custom') {
-      recipients = campaignData.customEmailList || [];
+      recipients = (campaignData.customEmailList || []);
     }
 
-    // Remove duplicates
-    recipients = [...new Set(recipients)];
+    // Deduplicate and validate all emails — never send to invalid addresses
+    recipients = [...new Set(recipients)].filter(isValidEmail);
 
-    // Update campaign status
+    // Hard cap to prevent runaway sends
+    if (recipients.length > 5000) {
+      return Response.json({ error: 'Recipient list too large (max 5000)' }, { status: 400 });
+    }
+
     await base44.asServiceRole.entities.EmailCampaign.update(campaignId, {
       status: 'sending',
       totalRecipients: recipients.length
@@ -55,7 +73,6 @@ Deno.serve(async (req) => {
     let sent = 0;
     let bounced = 0;
 
-    // Send emails in batches
     for (const email of recipients) {
       try {
         const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
@@ -65,30 +82,18 @@ Deno.serve(async (req) => {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            personalizations: [{
-              to: [{ email }]
-            }],
+            personalizations: [{ to: [{ email }] }],
             from: { email: FROM_EMAIL, name: 'EzPay America' },
             subject: campaignData.subject,
-            content: [{
-              type: 'text/html',
-              value: campaignData.content
-            }]
+            content: [{ type: 'text/html', value: campaignData.content }]
           })
         });
-
-        if (response.ok) {
-          sent++;
-        } else {
-          bounced++;
-        }
-      } catch (error) {
-        console.error(`Failed to send to ${email}:`, error);
+        response.ok ? sent++ : bounced++;
+      } catch {
         bounced++;
       }
     }
 
-    // Update campaign with results
     await base44.asServiceRole.entities.EmailCampaign.update(campaignId, {
       status: 'sent',
       sentDate: new Date().toISOString(),
@@ -96,14 +101,9 @@ Deno.serve(async (req) => {
       bounced
     });
 
-    return Response.json({ 
-      success: true, 
-      sent, 
-      bounced,
-      total: recipients.length 
-    });
+    return Response.json({ success: true, sent, bounced, total: recipients.length });
   } catch (error) {
     console.error('Campaign send error:', error);
-    return Response.json({ error: error.message }, { status: 500 });
+    return Response.json({ error: 'Failed to send campaign' }, { status: 500 });
   }
 });

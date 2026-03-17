@@ -1,20 +1,15 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
 
-// Escape HTML entities to prevent XSS in email content
 const escapeHtml = (text) => {
   if (!text || typeof text !== 'string') return '';
   return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 };
 
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    
     const { applicationData } = await req.json();
 
     if (!applicationData) {
@@ -24,15 +19,18 @@ Deno.serve(async (req) => {
     const SENDGRID_API_KEY = Deno.env.get("SENDGRID_API_KEY");
     const FROM_EMAIL = Deno.env.get("SENDGRID_FROM_EMAIL");
 
-    // Sanitize ONLY non-sensitive fields for the email notification
-    // NEVER include SSN, bank account numbers, routing numbers, or Tax ID in emails
-    const safeLegalBusinessName = escapeHtml(applicationData.legalBusinessName);
-    const safeDbaName = escapeHtml(applicationData.dbaName);
-    const safeOwnerFullName = escapeHtml(applicationData.ownerFullName);
-    const safeBusinessEmail = escapeHtml(applicationData.businessEmail);
-    const safeBusinessPhone = escapeHtml(applicationData.businessPhone);
-    const safeMonthlyVolume = escapeHtml(String(applicationData.monthlyVolume || ''));
-    const safeBusinessMarketType = escapeHtml(applicationData.businessMarketType);
+    if (!SENDGRID_API_KEY || !FROM_EMAIL) {
+      return Response.json({ error: 'Email service not configured' }, { status: 500 });
+    }
+
+    // NEVER include SSN, bank account numbers, routing numbers, Tax ID, or card data in emails
+    const safeLegalBusinessName = escapeHtml(String(applicationData.legalBusinessName || '').substring(0, 200));
+    const safeDbaName = escapeHtml(String(applicationData.dbaName || '').substring(0, 200));
+    const safeOwnerFullName = escapeHtml(String(applicationData.ownerFullName || '').substring(0, 100));
+    const safeBusinessEmail = escapeHtml(String(applicationData.businessEmail || '').substring(0, 254));
+    const safeBusinessPhone = escapeHtml(String(applicationData.businessPhone || '').substring(0, 30));
+    const safeMonthlyVolume = escapeHtml(String(applicationData.monthlyVolume || '').substring(0, 20));
+    const safeBusinessMarketType = escapeHtml(String(applicationData.businessMarketType || '').substring(0, 50));
 
     const emailBody = {
       personalizations: [{
@@ -58,7 +56,6 @@ Deno.serve(async (req) => {
             <li>Additional Documents: ${parseInt(applicationData.additionalDocuments?.length) || 0}</li>
           </ul>
           <p style="color:#b91c1c;"><strong>⚠ Sensitive data (SSN, bank details, Tax ID) is NOT included in this email for security. Please review the full application securely in the admin dashboard.</strong></p>
-          <p>Please review the application in the admin dashboard.</p>
         `
       }]
     };
@@ -73,12 +70,13 @@ Deno.serve(async (req) => {
     });
 
     if (!response.ok) {
-      const error = await response.text();
-      throw new Error(`SendGrid error: ${error}`);
+      console.error('SendGrid error:', await response.text());
+      return Response.json({ error: 'Failed to send notification' }, { status: 500 });
     }
 
     return Response.json({ success: true });
   } catch (error) {
-    return Response.json({ error: error.message }, { status: 500 });
+    console.error('Application notification error:', error);
+    return Response.json({ error: 'Failed to send notification' }, { status: 500 });
   }
 });
