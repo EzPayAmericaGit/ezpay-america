@@ -8,9 +8,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Building2, User, DollarSign, FileText, Search, Download, Eye, Landmark } from "lucide-react";
+import { Building2, User, DollarSign, FileText, Search, Download, Eye, Landmark, Bell } from "lucide-react";
 import SEOHead from "../components/SEOHead";
 import RiskAssessment from "../components/application/RiskAssessment";
+import ApplicationStats from "../components/application/ApplicationStats";
+import DocumentPreview from "../components/application/DocumentPreview";
 
 export default function ApplicationsAdmin() {
   const [user, setUser] = useState(null);
