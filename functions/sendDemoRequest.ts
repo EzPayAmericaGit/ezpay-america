@@ -1,6 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
 
-// Escape HTML entities to prevent XSS in email content
 const escapeHtml = (text) => {
   if (!text || typeof text !== 'string') return '';
   return text
@@ -11,29 +10,40 @@ const escapeHtml = (text) => {
     .replace(/'/g, '&#039;');
 };
 
+const isValidEmail = (email) => {
+  if (typeof email !== 'string') return false;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && email.length <= 254;
+};
+
+const isValidPhone = (phone) => /^[\d\s\-\+\(\)]{7,20}$/.test(String(phone || ''));
+
 Deno.serve(async (req) => {
   try {
-    const { contactName, email, phone, businessName, businessAddress, timeZone } = await req.json();
+    const body = await req.json();
+    const { contactName, email, phone, businessName, businessAddress, timeZone } = body;
 
-    // Basic input validation
     if (!contactName || !email || !phone || !businessName) {
       return Response.json({ error: 'Required fields are missing' }, { status: 400 });
     }
-
-    if (typeof email !== 'string' || !email.includes('@')) {
+    if (!isValidEmail(email)) {
       return Response.json({ error: 'Invalid email address' }, { status: 400 });
+    }
+    if (!isValidPhone(phone)) {
+      return Response.json({ error: 'Invalid phone number' }, { status: 400 });
+    }
+    if (String(contactName).length > 100 || String(businessName).length > 200) {
+      return Response.json({ error: 'Field value too long' }, { status: 400 });
     }
 
     const SENDGRID_API_KEY = Deno.env.get("SENDGRID_API_KEY");
     const FROM_EMAIL = Deno.env.get("SENDGRID_FROM_EMAIL");
 
-    // Sanitize all user inputs before embedding in HTML
-    const safeContactName = escapeHtml(contactName);
-    const safeEmail = escapeHtml(email);
-    const safePhone = escapeHtml(phone);
-    const safeBusinessName = escapeHtml(businessName);
-    const safeBusinessAddress = escapeHtml(businessAddress || '');
-    const safeTimeZone = escapeHtml(timeZone || '');
+    const safeContactName = escapeHtml(String(contactName).substring(0, 100));
+    const safeEmail = escapeHtml(String(email).substring(0, 254));
+    const safePhone = escapeHtml(String(phone).substring(0, 20));
+    const safeBusinessName = escapeHtml(String(businessName).substring(0, 200));
+    const safeBusinessAddress = escapeHtml(String(businessAddress || '').substring(0, 300));
+    const safeTimeZone = escapeHtml(String(timeZone || '').substring(0, 50));
 
     const emailBody = {
       personalizations: [{
@@ -41,6 +51,7 @@ Deno.serve(async (req) => {
         subject: `New Demo Request: ${safeBusinessName}`
       }],
       from: { email: FROM_EMAIL },
+      reply_to: { email: safeEmail },
       content: [{
         type: "text/html",
         value: `
@@ -66,12 +77,13 @@ Deno.serve(async (req) => {
     });
 
     if (!response.ok) {
-      const error = await response.text();
-      throw new Error(`SendGrid error: ${error}`);
+      console.error('SendGrid error:', await response.text());
+      return Response.json({ error: 'Failed to send demo request' }, { status: 500 });
     }
 
     return Response.json({ success: true });
   } catch (error) {
-    return Response.json({ error: error.message }, { status: 500 });
+    console.error('Demo request error:', error);
+    return Response.json({ error: 'Failed to send demo request' }, { status: 500 });
   }
 });

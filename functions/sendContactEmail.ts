@@ -1,6 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
 
-// Escape HTML entities to prevent XSS in email content
 const escapeHtml = (text) => {
   if (!text || typeof text !== 'string') return '';
   return text
@@ -11,27 +10,36 @@ const escapeHtml = (text) => {
     .replace(/'/g, '&#039;');
 };
 
+const isValidEmail = (email) => {
+  if (typeof email !== 'string') return false;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && email.length <= 254;
+};
+
 Deno.serve(async (req) => {
   try {
-    const { name, email, phone, message } = await req.json();
+    const body = await req.json();
+    const { name, email, phone, message } = body;
 
-    // Basic input validation
     if (!name || !email || !message) {
       return Response.json({ error: 'Name, email, and message are required' }, { status: 400 });
     }
-
-    if (typeof email !== 'string' || !email.includes('@')) {
+    if (!isValidEmail(email)) {
       return Response.json({ error: 'Invalid email address' }, { status: 400 });
+    }
+    if (String(name).length > 100) {
+      return Response.json({ error: 'Name too long' }, { status: 400 });
+    }
+    if (String(message).length > 2000) {
+      return Response.json({ error: 'Message too long (max 2000 characters)' }, { status: 400 });
     }
 
     const SENDGRID_API_KEY = Deno.env.get("SENDGRID_API_KEY");
     const FROM_EMAIL = Deno.env.get("SENDGRID_FROM_EMAIL");
 
-    // Sanitize all user inputs before embedding in HTML
-    const safeName = escapeHtml(name);
-    const safeEmail = escapeHtml(email);
-    const safePhone = escapeHtml(phone || 'Not provided');
-    const safeMessage = escapeHtml(message).replace(/\n/g, '<br>');
+    const safeName = escapeHtml(String(name).substring(0, 100));
+    const safeEmail = escapeHtml(String(email).substring(0, 254));
+    const safePhone = escapeHtml(String(phone || 'Not provided').substring(0, 20));
+    const safeMessage = escapeHtml(String(message).substring(0, 2000)).replace(/\n/g, '<br>');
 
     const emailBody = {
       personalizations: [{
@@ -39,6 +47,7 @@ Deno.serve(async (req) => {
         subject: `Contact Form: ${safeName}`
       }],
       from: { email: FROM_EMAIL },
+      reply_to: { email: safeEmail },
       content: [{
         type: "text/html",
         value: `
@@ -62,12 +71,13 @@ Deno.serve(async (req) => {
     });
 
     if (!response.ok) {
-      const error = await response.text();
-      throw new Error(`SendGrid error: ${error}`);
+      console.error('SendGrid error:', await response.text());
+      return Response.json({ error: 'Failed to send message' }, { status: 500 });
     }
 
     return Response.json({ success: true });
   } catch (error) {
-    return Response.json({ error: error.message }, { status: 500 });
+    console.error('Contact email error:', error);
+    return Response.json({ error: 'Failed to send message' }, { status: 500 });
   }
 });

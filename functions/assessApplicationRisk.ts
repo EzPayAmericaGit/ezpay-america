@@ -1,4 +1,4 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
 
 Deno.serve(async (req) => {
   try {
@@ -11,12 +11,12 @@ Deno.serve(async (req) => {
 
     const { applicationId } = await req.json();
 
-    if (!applicationId) {
-      return Response.json({ error: 'Application ID is required' }, { status: 400 });
+    if (!applicationId || typeof applicationId !== 'string' || applicationId.length > 100) {
+      return Response.json({ error: 'Valid Application ID is required' }, { status: 400 });
     }
 
-    const applications = await base44.asServiceRole.entities.MerchantApplication.filter({ 
-      id: applicationId 
+    const applications = await base44.asServiceRole.entities.MerchantApplication.filter({
+      id: applicationId
     });
     const app = applications[0];
 
@@ -26,33 +26,36 @@ Deno.serve(async (req) => {
 
     const data = app.applicationData || {};
 
+    // Sanitize all data fields before passing to LLM (prevent prompt injection)
+    const safe = (val, max = 200) => String(val || 'N/A').replace(/[\r\n<>"'`]/g, ' ').substring(0, max);
+
     const prompt = `Analyze this merchant application for payment processing risk assessment:
 
 Business Information:
-- Legal Name: ${data.legalBusinessName}
-- DBA: ${data.dbaName}
-- Business Type: ${data.businessMarketType}
-- Formation: ${data.businessFormationType}
-- Date Started: ${data.dateBusinessStarted}
-- Location Type: ${data.businessLocationType}
-- Number of Locations: ${data.numberOfLocations}
+- Legal Name: ${safe(data.legalBusinessName)}
+- DBA: ${safe(data.dbaName)}
+- Business Type: ${safe(data.businessMarketType, 50)}
+- Formation: ${safe(data.businessFormationType, 50)}
+- Date Started: ${safe(data.dateBusinessStarted, 20)}
+- Location Type: ${safe(data.businessLocationType, 50)}
+- Number of Locations: ${safe(data.numberOfLocations, 10)}
 
 Processing Information:
-- Monthly Volume: $${data.monthlyVolume}
-- Annual Volume: $${data.annualVolume}
-- Average Ticket: $${data.averageTicket}
-- Largest Ticket: $${data.largestTicket}
-- % Swiped (Face to Face): ${data.percentageSwiped}%
-- % Keyed (Not Present): ${data.percentageKeyed}%
-- % Internet: ${data.percentageInternet}%
+- Monthly Volume: $${safe(data.monthlyVolume, 20)}
+- Annual Volume: $${safe(data.annualVolume, 20)}
+- Average Ticket: $${safe(data.averageTicket, 20)}
+- Largest Ticket: $${safe(data.largestTicket, 20)}
+- % Swiped: ${safe(data.percentageSwiped, 10)}%
+- % Keyed: ${safe(data.percentageKeyed, 10)}%
+- % Internet: ${safe(data.percentageInternet, 10)}%
 
 Sales & Delivery:
-- Products: ${data.productsDescription}
-- Order Methods: ${data.orderMethod?.join(', ')}
-- Delivery Timeframe: ${data.deliveryTimeframe}
-- Payment Timing: ${data.paymentTiming}
-- Geographic Areas: ${data.geographicAreas}
-- International Card %: ${data.internationalCardPercentage}%
+- Products: ${safe(data.productsDescription, 300)}
+- Order Methods: ${safe(Array.isArray(data.orderMethod) ? data.orderMethod.join(', ') : data.orderMethod, 100)}
+- Delivery Timeframe: ${safe(data.deliveryTimeframe, 100)}
+- Payment Timing: ${safe(data.paymentTiming, 50)}
+- Geographic Areas: ${safe(data.geographicAreas, 100)}
+- International Card %: ${safe(data.internationalCardPercentage, 10)}%
 
 Provide a comprehensive risk assessment with:
 1. Overall risk score (1-100, where 100 is highest risk)
@@ -64,7 +67,7 @@ Provide a comprehensive risk assessment with:
 7. Suggested monitoring requirements if approved`;
 
     const response = await base44.asServiceRole.integrations.Core.InvokeLLM({
-      prompt: prompt,
+      prompt,
       response_json_schema: {
         type: "object",
         properties: {
@@ -80,12 +83,10 @@ Provide a comprehensive risk assessment with:
       }
     });
 
-    return Response.json({ 
-      success: true, 
-      assessment: response
-    });
+    return Response.json({ success: true, assessment: response });
 
   } catch (error) {
-    return Response.json({ error: error.message }, { status: 500 });
+    console.error('Risk assessment error:', error);
+    return Response.json({ error: 'Failed to assess application risk' }, { status: 500 });
   }
 });

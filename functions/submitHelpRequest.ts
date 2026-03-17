@@ -1,25 +1,49 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
 
+const escapeHtml = (str) => String(str || '')
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+  .replace(/'/g, '&#39;')
+  .trim();
+
+const isValidEmail = (email) => {
+  if (typeof email !== 'string') return false;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && email.length <= 254;
+};
+
+const sanitize = (str, maxLen = 500) => escapeHtml(String(str || '').substring(0, maxLen));
+
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    const { name, email, phone, message } = await req.json();
+    const body = await req.json();
+    const { name, email, phone, message } = body;
 
+    // Validate required fields
     if (!name || !email || !message) {
-      return Response.json({ error: 'Missing required fields' }, { status: 400 });
+      return Response.json({ error: 'Name, email, and message are required' }, { status: 400 });
+    }
+    if (!isValidEmail(email)) {
+      return Response.json({ error: 'Invalid email address' }, { status: 400 });
+    }
+    if (String(message).length > 2000) {
+      return Response.json({ error: 'Message too long (max 2000 chars)' }, { status: 400 });
+    }
+    if (String(name).length > 100) {
+      return Response.json({ error: 'Name too long' }, { status: 400 });
     }
 
-    const sanitize = (str) => String(str || '').replace(/[<>&"']/g, (c) => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[c])).trim();
-    const safeName = sanitize(name);
-    const safeEmail = sanitize(email);
-    const safePhone = sanitize(phone);
-    const safeMessage = sanitize(message);
+    const safeName = sanitize(name, 100);
+    const safeEmail = sanitize(email, 254);
+    const safePhone = sanitize(phone, 20);
+    const safeMessage = sanitize(message, 2000);
 
     const SENDGRID_API_KEY = Deno.env.get('SENDGRID_API_KEY');
     const FROM_EMAIL = Deno.env.get('SENDGRID_FROM_EMAIL');
 
-    // Send email to mail@ezpayamerica.com
-    await fetch('https://api.sendgrid.com/v3/mail/send', {
+    const emailResp = await fetch('https://api.sendgrid.com/v3/mail/send', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${SENDGRID_API_KEY}`,
@@ -39,7 +63,7 @@ Deno.serve(async (req) => {
               </div>
               <div style="background: #ffffff; padding: 30px; border: 1px solid #e5e7eb;">
                 <p><strong>Name:</strong> ${safeName}</p>
-                <p><strong>Email:</strong> <a href="mailto:${safeEmail}">${safeEmail}</a></p>
+                <p><strong>Email:</strong> ${safeEmail}</p>
                 <p><strong>Phone:</strong> ${safePhone || 'Not provided'}</p>
                 <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;" />
                 <p><strong>Message:</strong></p>
@@ -51,13 +75,25 @@ Deno.serve(async (req) => {
       })
     });
 
-    // Send SMS via Twilio to notify the team
+    if (!emailResp.ok) {
+      console.error('SendGrid error:', await emailResp.text());
+      return Response.json({ error: 'Failed to send message' }, { status: 500 });
+    }
+
+    // SMS via Twilio — use sanitized plain-text values (no HTML)
     const TWILIO_SID = Deno.env.get('TWILIO_ACCOUNT_SID');
     const TWILIO_TOKEN = Deno.env.get('TWILIO_AUTH_TOKEN');
     const TWILIO_FROM = Deno.env.get('TWILIO_PHONE_NUMBER');
 
     if (TWILIO_SID && TWILIO_TOKEN && TWILIO_FROM) {
-      const smsBody = `New EzPay help request!\nName: ${name}\nPhone: ${phone || 'N/A'}\nEmail: ${email}\nMsg: ${message.substring(0, 120)}`;
+      // Use raw (not HTML-escaped) values for SMS, but still length-limited
+      const plainName = String(name).replace(/[^\w\s\-.,]/g, '').substring(0, 50);
+      const plainPhone = String(phone || 'N/A').replace(/[^\d\+\-\(\)\s]/g, '').substring(0, 20);
+      const plainEmail = String(email).substring(0, 80);
+      const plainMsg = String(message).replace(/[^\w\s\-.,!?@#]/g, '').substring(0, 120);
+
+      const smsBody = `New EzPay help request!\nName: ${plainName}\nPhone: ${plainPhone}\nEmail: ${plainEmail}\nMsg: ${plainMsg}`;
+
       await fetch(`https://api.twilio.com/2010-04-01/Accounts/${TWILIO_SID}/Messages.json`, {
         method: 'POST',
         headers: {
@@ -74,6 +110,7 @@ Deno.serve(async (req) => {
 
     return Response.json({ success: true });
   } catch (error) {
-    return Response.json({ error: error.message }, { status: 500 });
+    console.error('Help request error:', error);
+    return Response.json({ error: 'Failed to send message' }, { status: 500 });
   }
 });

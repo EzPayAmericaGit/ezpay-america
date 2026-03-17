@@ -1,4 +1,4 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
 
 Deno.serve(async (req) => {
   try {
@@ -11,8 +11,8 @@ Deno.serve(async (req) => {
 
     const { ticketId } = await req.json();
 
-    if (!ticketId) {
-      return Response.json({ error: 'Ticket ID is required' }, { status: 400 });
+    if (!ticketId || typeof ticketId !== 'string' || ticketId.length > 100) {
+      return Response.json({ error: 'Valid Ticket ID is required' }, { status: 400 });
     }
 
     const tickets = await base44.asServiceRole.entities.Ticket.filter({ id: ticketId });
@@ -22,23 +22,31 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Ticket not found' }, { status: 404 });
     }
 
-    const messages = await base44.asServiceRole.entities.TicketMessage.filter({ 
-      ticketId: ticket.id 
+    const messages = await base44.asServiceRole.entities.TicketMessage.filter({
+      ticketId: ticket.id
     });
 
+    // Sanitize ticket content before sending to LLM to prevent prompt injection
+    const safeTitle = String(ticket.title || '').substring(0, 200);
+    const safeCategory = String(ticket.category || '').substring(0, 50);
+    const safePriority = String(ticket.priority || '').substring(0, 20);
+    const safeStatus = String(ticket.status || '').substring(0, 20);
+    const safeDescription = String(ticket.description || '').substring(0, 2000);
+
     const conversationText = messages
-      .map(m => `${m.senderName}: ${m.message}`)
+      .slice(0, 50) // Limit to 50 messages to prevent token abuse
+      .map(m => `${String(m.senderName || 'Unknown').substring(0, 50)}: ${String(m.message || '').substring(0, 1000)}`)
       .join('\n\n');
 
     const prompt = `Analyze this support ticket and provide a concise summary:
 
-Ticket: ${ticket.title}
-Category: ${ticket.category}
-Priority: ${ticket.priority}
-Status: ${ticket.status}
+Ticket: ${safeTitle}
+Category: ${safeCategory}
+Priority: ${safePriority}
+Status: ${safeStatus}
 
 Initial Description:
-${ticket.description}
+${safeDescription}
 
 Conversation:
 ${conversationText}
@@ -50,7 +58,7 @@ Provide a summary with:
 4. Recommended Next Actions`;
 
     const response = await base44.asServiceRole.integrations.Core.InvokeLLM({
-      prompt: prompt,
+      prompt,
       response_json_schema: {
         type: "object",
         properties: {
@@ -62,12 +70,10 @@ Provide a summary with:
       }
     });
 
-    return Response.json({ 
-      success: true, 
-      summary: response
-    });
+    return Response.json({ success: true, summary: response });
 
   } catch (error) {
-    return Response.json({ error: error.message }, { status: 500 });
+    console.error('Summarize ticket error:', error);
+    return Response.json({ error: 'Failed to summarize ticket' }, { status: 500 });
   }
 });
