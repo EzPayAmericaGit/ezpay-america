@@ -134,10 +134,11 @@ export default function HelpWidget() {
               <div className="p-3 border-t border-gray-200 flex gap-2 shrink-0">
                 <Input
                   value={input}
-                  onChange={(e) => setInput(e.target.value)}
+                  onChange={(e) => setInput(e.target.value.substring(0, 500))}
                   onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                   placeholder="Ask a question..."
                   className="flex-1 text-sm"
+                  maxLength={500}
                 />
                 <Button
                   onClick={sendMessage}
@@ -171,10 +172,10 @@ export default function HelpWidget() {
               ) : (
                 <div className="space-y-3">
                   <p className="text-sm text-gray-600 mb-1">Fill out the form and our team will contact you!</p>
-                  <Input placeholder="Your Name *" value={form.name} onChange={(e) => setForm({...form, name: e.target.value})} className="text-sm" />
-                  <Input placeholder="Email Address *" type="email" value={form.email} onChange={(e) => setForm({...form, email: e.target.value})} className="text-sm" />
-                  <Input placeholder="Phone Number" type="tel" value={form.phone} onChange={(e) => setForm({...form, phone: e.target.value})} className="text-sm" />
-                  <Textarea placeholder="How can we help you? *" value={form.message} onChange={(e) => setForm({...form, message: e.target.value})} rows={3} className="text-sm resize-none" />
+                  <Input placeholder="Your Name *" value={form.name} onChange={(e) => setForm({...form, name: e.target.value.substring(0, 100)})} maxLength={100} className="text-sm" />
+                  <Input placeholder="Email Address *" type="email" value={form.email} onChange={(e) => setForm({...form, email: e.target.value.substring(0, 254)})} maxLength={254} className="text-sm" />
+                  <Input placeholder="Phone Number" type="tel" value={form.phone} onChange={(e) => setForm({...form, phone: e.target.value.replace(/[^\d\s\-\+\(\)]/g, '').substring(0, 20)})} maxLength={20} className="text-sm" />
+                  <Textarea placeholder="How can we help you? *" value={form.message} onChange={(e) => setForm({...form, message: e.target.value.substring(0, 2000)})} rows={3} className="text-sm resize-none" maxLength={2000} />
                   <Button
                     onClick={handleSubmit}
                     disabled={submitting || !form.name || !form.email || !form.message}
