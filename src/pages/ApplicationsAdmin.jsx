@@ -70,7 +70,22 @@ export default function ApplicationsAdmin() {
       <SEOHead title="Applications Management" />
       
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Merchant Applications</h1>
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-3xl font-bold text-gray-900">Merchant Applications</h1>
+          <Button
+            variant="outline"
+            className="gap-2 border-amber-300 text-amber-700 hover:bg-amber-50"
+            onClick={async () => {
+              await base44.functions.invoke('sendApplicationReminders', {});
+              alert('Reminders sent to eligible applicants.');
+            }}
+          >
+            <Bell className="w-4 h-4" />
+            Send Reminders Now
+          </Button>
+        </div>
+
+        <ApplicationStats applications={applications} />
 
         {/* Filters */}
         <Card className="mb-6">
