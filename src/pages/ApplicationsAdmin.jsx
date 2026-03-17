@@ -345,38 +345,12 @@ export default function ApplicationsAdmin() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  {selectedApp.driversLicenseUrl && (
-                    <a 
-                      href={selectedApp.driversLicenseUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="block p-3 bg-gray-50 rounded border hover:bg-gray-100"
-                    >
-                      📄 Driver's License
-                    </a>
-                  )}
-                  {selectedApp.voidedCheckUrl && (
-                    <a 
-                      href={selectedApp.voidedCheckUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="block p-3 bg-gray-50 rounded border hover:bg-gray-100"
-                    >
-                      📄 Voided Check
-                    </a>
-                  )}
+                  <DocumentPreview url={selectedApp.driversLicenseUrl} label="Driver's License" />
+                  <DocumentPreview url={selectedApp.voidedCheckUrl} label="Voided Check" />
                   {selectedApp.additionalDocuments?.map((doc, idx) => (
-                    <a 
-                      key={idx}
-                      href={doc.url} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="block p-3 bg-gray-50 rounded border hover:bg-gray-100"
-                    >
-                      📄 {doc.name}
-                    </a>
+                    <DocumentPreview key={idx} url={doc.url} label={doc.name || `Document ${idx + 1}`} />
                   ))}
-                  {!selectedApp.driversLicenseUrl && !selectedApp.voidedCheckUrl && selectedApp.additionalDocuments?.length === 0 && (
+                  {!selectedApp.driversLicenseUrl && !selectedApp.voidedCheckUrl && (!selectedApp.additionalDocuments || selectedApp.additionalDocuments.length === 0) && (
                     <p className="text-gray-500 text-center py-4">No documents uploaded</p>
                   )}
                 </CardContent>
