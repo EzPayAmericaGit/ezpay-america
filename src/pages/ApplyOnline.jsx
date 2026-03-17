@@ -581,17 +581,18 @@ export default function ApplyOnline() {
 
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Owner Social Security Number *
+                           Owner Social Security Number *
                           </label>
                           <Input
-                                                            type="text"
-                                                            value={formData.ownerSSN}
-                                                            onChange={(e) => setFormData({...formData, ownerSSN: e.target.value})}
-                                                            placeholder="XXX-XX-XXXX"
-                                                            className={`h-12 ${errors.ownerSSN ? 'border-red-500' : ''}`}
-                                                          />
+                            type="password"
+                            autoComplete="off"
+                            value={formData.ownerSSN}
+                            onChange={(e) => setFormData({...formData, ownerSSN: e.target.value.replace(/[^\d\-]/g, '').substring(0, 11)})}
+                            placeholder="XXX-XX-XXXX"
+                            className={`h-12 ${errors.ownerSSN ? 'border-red-500' : ''}`}
+                          />
                           {errors.ownerSSN && <p className="text-red-500 text-sm mt-1">{errors.ownerSSN}</p>}
-                          <p className="text-xs text-gray-500 mt-1">Required for identity verification</p>
+                          <p className="text-xs text-gray-500 mt-1">Required for identity verification. Transmitted securely and never emailed.</p>
                         </div>
 
                       <div>
@@ -1284,7 +1285,7 @@ export default function ApplyOnline() {
                             <div><span className="font-semibold">DBA:</span> {formData.dbaName}</div>
                             <div><span className="font-semibold">Market Type:</span> {formData.businessMarketType}</div>
                             <div><span className="font-semibold">Formation:</span> {formData.businessFormationType}</div>
-                            <div><span className="font-semibold">Tax ID:</span> {formData.taxId}</div>
+                            <div><span className="font-semibold">Tax ID:</span> ***-**-{String(formData.taxId || '').slice(-4)}</div>
                             <div><span className="font-semibold">Started:</span> {formData.dateBusinessStarted}</div>
                             <div><span className="font-semibold">Phone:</span> {formData.businessPhone}</div>
                             <div><span className="font-semibold">Email:</span> {formData.businessEmail}</div>
@@ -1307,7 +1308,7 @@ export default function ApplyOnline() {
                             <div><span className="font-semibold">SSN:</span> ***-**-{formData.ownerSSN?.slice(-4)}</div>
                             <div><span className="font-semibold">Personal Phone:</span> {formData.ownerPersonalPhone}</div>
                             <div><span className="font-semibold">Personal Email:</span> {formData.ownerPersonalEmail}</div>
-                            <div><span className="font-semibold">DL #:</span> {formData.ownerDriversLicense} ({formData.ownerDLState})</div>
+                            <div><span className="font-semibold">DL #:</span> ****{String(formData.ownerDriversLicense || '').slice(-4)} ({formData.ownerDLState})</div>
                             <div className="md:col-span-2"><span className="font-semibold">Home Address:</span> {formData.ownerHomeAddress}</div>
                           </div>
                         </div>
@@ -1339,7 +1340,7 @@ export default function ApplyOnline() {
                           <div className="grid md:grid-cols-2 gap-3 text-sm">
                             <div><span className="font-semibold">Bank:</span> {formData.bankName}</div>
                             <div><span className="font-semibold">Account Type:</span> {formData.accountType?.replace('_', ' ')}</div>
-                            <div><span className="font-semibold">Routing #:</span> {formData.routingNumber}</div>
+                            <div><span className="font-semibold">Routing #:</span> ****{String(formData.routingNumber || '').slice(-4)}</div>
                             <div><span className="font-semibold">Account #:</span> ****{formData.accountNumber?.slice(-4)}</div>
                             <div><span className="font-semibold">Driver's License:</span> {formData.driversLicenseUrl ? "✓ Uploaded" : "Not uploaded"}</div>
                             <div><span className="font-semibold">Voided Check:</span> {formData.voidedCheckUrl ? "✓ Uploaded" : "Not uploaded"}</div>
