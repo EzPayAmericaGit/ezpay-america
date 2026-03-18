@@ -48,6 +48,23 @@
  * The mainPage value must match a key in the PAGES object exactly.
  */
 import ACHPayments from './pages/ACHPayments';
+import AutomatedInvoicing from './pages/AutomatedInvoicing';
+import ChargebackManagement from './pages/ChargebackManagement';
+import CRMPage from './pages/CRMPage';
+import DeveloperAPI from './pages/DeveloperAPI';
+import FraudDetection from './pages/FraudDetection';
+import InstantPayouts from './pages/InstantPayouts';
+import Integrations from './pages/Integrations';
+import InventoryManagement from './pages/InventoryManagement';
+import MarketingTools from './pages/MarketingTools';
+import OnlineCheckout from './pages/OnlineCheckout';
+import PaymentLinks from './pages/PaymentLinks';
+import PCICompliance from './pages/PCICompliance';
+import RecurringBilling from './pages/RecurringBilling';
+import ThreeDSecure from './pages/ThreeDSecure';
+import TokenizationSecurity from './pages/TokenizationSecurity';
+import UsageBasedBilling from './pages/UsageBasedBilling';
+import VirtualTerminal from './pages/VirtualTerminal';
 import Admin from './pages/Admin';
 import AdminDashboard from './pages/AdminDashboard';
 import AgentManagement from './pages/AgentManagement';
@@ -119,6 +136,23 @@ import __Layout from './Layout.jsx';
 
 export const PAGES = {
     "ACHPayments": ACHPayments,
+    "AutomatedInvoicing": AutomatedInvoicing,
+    "ChargebackManagement": ChargebackManagement,
+    "CRMPage": CRMPage,
+    "DeveloperAPI": DeveloperAPI,
+    "FraudDetection": FraudDetection,
+    "InstantPayouts": InstantPayouts,
+    "Integrations": Integrations,
+    "InventoryManagement": InventoryManagement,
+    "MarketingTools": MarketingTools,
+    "OnlineCheckout": OnlineCheckout,
+    "PaymentLinks": PaymentLinks,
+    "PCICompliance": PCICompliance,
+    "RecurringBilling": RecurringBilling,
+    "ThreeDSecure": ThreeDSecure,
+    "TokenizationSecurity": TokenizationSecurity,
+    "UsageBasedBilling": UsageBasedBilling,
+    "VirtualTerminal": VirtualTerminal,
     "Admin": Admin,
     "AdminDashboard": AdminDashboard,
     "AgentManagement": AgentManagement,
