@@ -45,7 +45,7 @@ export default function SEOHead({ title, description, keywords, image, url }) {
       metaDescription.name = "description";
       document.head.insertBefore(metaDescription, document.head.firstChild);
     }
-    const finalDescription = description || "EzPay America offers zero-fee credit card processing, merchant services, and POS systems for retail and restaurant businesses. Free equipment, no contracts, 24/7 support across the USA.";
+    const finalDescription = description || "EzPay America: zero-fee credit card processing & merchant services for small business. No monthly fees, no contracts, free POS equipment. Best Square & PayPal alternative. Apply online today.";
     // Ensure description is 150-160 characters for best SERP display
     metaDescription.setAttribute('content', finalDescription.length > 160 ? finalDescription.substring(0, 157) + '...' : finalDescription);
     
@@ -56,7 +56,7 @@ export default function SEOHead({ title, description, keywords, image, url }) {
       metaKeywords.name = "keywords";
       document.head.appendChild(metaKeywords);
     }
-    metaKeywords.content = keywords || "payment processing, merchant services, POS system, credit card processing, payment gateway, merchant account, online payment solutions, zero fee processing, point of sale, mobile payments, contactless payments, credit card terminal, payment solutions, small business payment processing, retail POS, restaurant POS, EMV chip reader, NFC payments, Apple Pay, Google Pay, payment processor, card reader, wireless payment, e-commerce payments, secure payment processing, merchant services provider, EzPay America";
+    metaKeywords.content = keywords || "payment processing, merchant services, credit card processing, payment gateway, online payment processing, best payment processor for small business, affordable credit card processing for small business, no monthly fee payment processing, lowest cost credit card processing, restaurant payment processing, retail payment solutions, mobile payment processing for small business, ACH payment processing, recurring payment processing, payment processing no setup fee, same day deposit payment processing, virtual terminal payment processor, PCI compliant payment processing, no contract payment processing, zero fee credit card processing, transparent pricing payment processor, no hidden fees payment processing, high risk merchant account, cbd payment processing, chargeback protection services, merchant services near me, how much does credit card processing cost, what is interchange plus pricing, alternative to Square for small business, PayPal alternative for merchants, Square alternative high volume, best payment processor comparison, EzPay America, point of sale system, POS system small business, retail POS, restaurant POS, food truck payment processing, grocery store POS, EMV chip reader, NFC payments, Apple Pay Google Pay, interchange plus pricing, merchant cash advance, payment processing USA";
     
     // Canonical URL
     let canonical = document.querySelector('link[rel="canonical"]');
@@ -247,16 +247,24 @@ export default function SEOHead({ title, description, keywords, image, url }) {
                 "@type": "Offer",
                 "itemOffered": {
                   "@type": "Service",
-                  "name": "Zero-Fee Payment Processing",
-                  "description": "Credit card processing with zero transaction fees for merchants"
+                  "name": "Zero-Fee Credit Card Processing",
+                  "description": "No-fee credit card processing for small businesses — merchants pay $0 in transaction fees with no monthly or setup charges"
                 }
               },
               {
                 "@type": "Offer",
                 "itemOffered": {
                   "@type": "Service",
-                  "name": "POS Systems",
-                  "description": "Cloud-based point of sale systems for retail and restaurants"
+                  "name": "Restaurant POS System",
+                  "description": "Cloud-based POS system for restaurants, cafes, food trucks, bars, and delis with integrated payment processing"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Retail POS System",
+                  "description": "Point of sale system for retail stores, grocery stores, liquor stores, and specialty shops"
                 }
               },
               {
@@ -264,7 +272,23 @@ export default function SEOHead({ title, description, keywords, image, url }) {
                 "itemOffered": {
                   "@type": "Service",
                   "name": "Merchant Account Services",
-                  "description": "Complete merchant account setup and support"
+                  "description": "Complete merchant account setup, ACH processing, virtual terminal, and recurring payment solutions"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Merchant Cash Advance",
+                  "description": "Fast business funding through merchant cash advance programs for qualifying merchants"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Mobile Payment Processing",
+                  "description": "Mobile payment processing solutions for small businesses, food trucks, and on-the-go merchants"
                 }
               }
             ]
@@ -293,7 +317,23 @@ export default function SEOHead({ title, description, keywords, image, url }) {
           "name": "What is zero-fee payment processing?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Zero-fee payment processing allows merchants to accept credit card payments without paying transaction fees. The processing cost is passed to the customer as a service fee."
+            "text": "Zero-fee payment processing allows merchants to accept credit card payments without paying any transaction fees themselves. The small processing cost is passed to the customer as a transparent service fee, saving the business owner hundreds or thousands of dollars per year."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How much does credit card processing cost with EzPay America?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "With EzPay America's zero-fee program, merchants pay $0 in credit card processing fees. There are no monthly fees, no setup fees, and no long-term contracts. The processing cost is covered by a small customer service fee, making EzPay America the most affordable payment processor for small businesses."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is EzPay America a good alternative to Square or PayPal?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Unlike Square or PayPal which charge 2.6–3.5% per transaction, EzPay America offers zero-fee processing with no contracts, free POS equipment, and dedicated personal support. It is an ideal Square alternative for high-volume businesses and a better PayPal alternative for merchants who want lower rates and no monthly fees."
           }
         },
         {
@@ -301,7 +341,15 @@ export default function SEOHead({ title, description, keywords, image, url }) {
           "name": "What types of businesses does EzPay America serve?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "EzPay America serves retail stores, restaurants, cafes, bars, food trucks, grocery stores, and various specialty shops across the United States with tailored POS and payment solutions."
+            "text": "EzPay America serves retail stores, restaurants, cafes, bars, food trucks, grocery stores, liquor stores, CBD stores, vape shops, bagel shops, delis, gift shops, and various specialty businesses across the United States with tailored POS systems and payment processing solutions."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does EzPay America offer ACH payment processing?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. EzPay America supports ACH payment processing, recurring payments, and virtual terminal solutions in addition to in-person credit and debit card processing. Contact us at (865) 316-9625 to learn more."
           }
         },
         {
@@ -309,7 +357,23 @@ export default function SEOHead({ title, description, keywords, image, url }) {
           "name": "How do I get started with EzPay America?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "You can get started by applying online, taking our business quiz, or calling (865) 316-9625 to speak with a payment specialist."
+            "text": "Getting started is simple. Apply online in minutes, take our business quiz to find the right solution, or call (865) 316-9625 to speak with a payment specialist. There are no contracts and free equipment is included."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the cheapest payment processor for small business?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EzPay America is one of the cheapest payment processors for small businesses because merchants pay zero transaction fees. With no monthly fees, no setup fees, and no contracts, it offers transparent pricing that saves small businesses significantly compared to Square, Stripe, or PayPal."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does EzPay America offer payment processing without a contract?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. EzPay America offers no-contract payment processing. You are never locked in, and there are no cancellation fees, giving small business owners complete flexibility."
           }
         }
       ]
