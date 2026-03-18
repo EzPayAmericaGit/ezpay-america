@@ -1,45 +1,78 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { CheckCircle2, Loader2 } from "lucide-react";
+import { CheckCircle2, Loader2, AlertCircle } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { sanitizeForm, isValidEmail, isValidPhone, checkRateLimit } from "@/lib/security";
 
 export default function GetStartedForm({ service = "General Inquiry", bgDark = false }) {
   const [form, setForm] = useState({ firstName: "", lastName: "", businessName: "", phone: "", email: "" });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+
+    // Rate limit: max 3 submits per minute per form/service
+    if (!checkRateLimit(`getstarted_${service}`, 3, 60000)) {
+      setError("Too many submissions. Please wait a moment before trying again.");
+      return;
+    }
+
+    // Sanitize all inputs
+    const clean = sanitizeForm(form);
+
+    // Validate email
+    if (!isValidEmail(clean.email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    // Validate phone
+    if (!isValidPhone(clean.phone)) {
+      setError("Please enter a valid phone number.");
+      return;
+    }
+
+    // Validate required text fields are not empty after sanitization
+    if (!clean.firstName || !clean.lastName || !clean.businessName) {
+      setError("Please fill in all required fields.");
+      return;
+    }
+
     setLoading(true);
     try {
+      const safeService = service.replace(/[<>"'`]/g, "").slice(0, 100);
+
       await base44.integrations.Core.SendEmail({
         to: "mail@ezpayamerica.com",
-        subject: `New Lead: ${service} – ${form.businessName}`,
+        subject: `New Lead: ${safeService} – ${clean.businessName}`,
         body: `
           <div style="font-family:Arial,sans-serif;max-width:600px">
             <h2 style="color:#f59e0b">New Get Started Request</h2>
-            <p><strong>Service Interest:</strong> ${service}</p>
-            <p><strong>Name:</strong> ${form.firstName} ${form.lastName}</p>
-            <p><strong>Business:</strong> ${form.businessName}</p>
-            <p><strong>Phone:</strong> ${form.phone}</p>
-            <p><strong>Email:</strong> ${form.email}</p>
+            <p><strong>Service Interest:</strong> ${safeService}</p>
+            <p><strong>Name:</strong> ${clean.firstName} ${clean.lastName}</p>
+            <p><strong>Business:</strong> ${clean.businessName}</p>
+            <p><strong>Phone:</strong> ${clean.phone}</p>
+            <p><strong>Email:</strong> ${clean.email}</p>
           </div>
         `
       });
 
-      // Also save as a demo request
+      // Also save as a demo request (sanitized data only)
       await base44.entities.DemoRequest.create({
-        contactName: `${form.firstName} ${form.lastName}`,
-        email: form.email,
-        phone: form.phone,
-        businessName: form.businessName,
+        contactName: `${clean.firstName} ${clean.lastName}`,
+        email: clean.email,
+        phone: clean.phone,
+        businessName: clean.businessName,
         status: "pending"
       });
 
       setSubmitted(true);
     } catch (err) {
-      console.error(err);
+      setError("Something went wrong. Please try again or call us at (865) 316-9625.");
     }
     setLoading(false);
   };
