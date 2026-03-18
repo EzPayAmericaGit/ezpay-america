@@ -1,237 +1,46 @@
 import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import SEOHead from "../components/SEOHead";
-import { CheckCircle2, ArrowRight, CreditCard, Wifi, Shield, Zap, Clock, DollarSign } from "lucide-react";
-import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import { createPageUrl } from "@/utils";
+import LandingHero from "../components/landing/LandingHero";
+import LandingFeatures from "../components/landing/LandingFeatures";
+import LandingCTA from "../components/landing/LandingCTA";
+import { CreditCard, Shield, Zap, Lock, BarChart3, Smartphone, RefreshCw, Clock, HeadphonesIcon } from "lucide-react";
 
 const features = [
-  {
-    icon: CreditCard,
-    title: "Accept All Payment Types",
-    description: "Credit cards, debit cards, contactless payments, and mobile wallets",
-    color: "from-blue-500 to-blue-600"
-  },
-  {
-    icon: Wifi,
-    title: "Wireless Connectivity",
-    description: "WiFi and Ethernet connectivity for reliable transactions",
-    color: "from-purple-500 to-purple-600"
-  },
-  {
-    icon: Shield,
-    title: "PCI Compliant & Secure",
-    description: "End-to-end encryption and tokenization for maximum security",
-    color: "from-green-500 to-green-600"
-  },
-  {
-    icon: Zap,
-    title: "Fast Processing",
-    description: "Lightning-fast transaction processing for shorter checkout times",
-    color: "from-amber-500 to-orange-600"
-  },
-  {
-    icon: Clock,
-    title: "24/7 Support",
-    description: "Round-the-clock technical support whenever you need it",
-    color: "from-red-500 to-red-600"
-  },
-  {
-    icon: DollarSign,
-    title: "Competitive Rates",
-    description: "Low processing fees with transparent pricing",
-    color: "from-indigo-500 to-indigo-600"
-  }
+  { icon: CreditCard, title: "All Payment Types", description: "Accept chip, swipe, tap, Apple Pay, Google Pay, and all major credit & debit cards.", color: "from-amber-500 to-orange-600" },
+  { icon: Shield, title: "EMV & NFC Ready", description: "Fully compliant EMV chip reader with NFC contactless payment capability built in.", color: "from-blue-500 to-blue-600" },
+  { icon: Zap, title: "3-Second Transactions", description: "Ultra-fast processing speeds keep your checkout line moving and customers happy.", color: "from-green-500 to-green-600" },
+  { icon: Lock, title: "PCI DSS Compliant", description: "End-to-end encryption and tokenization protect every transaction at your counter.", color: "from-purple-500 to-purple-600" },
+  { icon: BarChart3, title: "Built-In Reporting", description: "View daily batch totals, transaction history, and sales summaries directly on device.", color: "from-teal-500 to-teal-600" },
+  { icon: Clock, title: "Free Setup", description: "We remotely program and configure your terminal — plug in and start processing.", color: "from-yellow-500 to-amber-600" },
+  { icon: RefreshCw, title: "Zero Processing Fees", description: "Every terminal comes paired with our zero-fee processing program — no transaction costs.", color: "from-pink-500 to-pink-600" },
+  { icon: Smartphone, title: "Tip & Signature Screen", description: "Customer-facing display for tip prompts, signatures, and receipt options.", color: "from-red-500 to-red-600" },
+  { icon: HeadphonesIcon, title: "Lifetime Support", description: "Every terminal comes with lifetime US-based technical support at no additional cost.", color: "from-indigo-500 to-indigo-600" },
 ];
 
 export default function CountertopTerminal() {
   return (
     <div className="min-h-screen bg-white">
-      <SEOHead 
-        title="Countertop Payment Terminal - Accept Payments Anywhere"
-        description="Professional countertop payment terminal with support for all payment types. Fast, secure, and reliable payment processing for your business."
-        keywords="countertop terminal, payment terminal, credit card terminal, POS terminal, card reader, payment processing terminal"
+      <SEOHead
+        title="Countertop Payment Terminal – Free with Zero Fees | EzPay America"
+        description="Get a free countertop credit card terminal with zero transaction fees. EMV, NFC, Apple Pay ready. Fast 3-second processing. Free setup. Apply today. (865) 316-9625."
+        keywords="countertop payment terminal, credit card terminal, countertop card reader, payment terminal free, EMV terminal, NFC payment terminal, contactless payment terminal, best credit card terminal, free credit card machine, countertop POS terminal"
+        url="https://ezpayamerica.com/CountertopTerminal"
       />
-
-      {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-                Countertop Payment Terminal
-              </h1>
-              <p className="text-xl text-gray-800 mb-8">
-                Professional payment terminal for your business. Accept all payment types with fast, secure processing.
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <Link to={createPageUrl("FreeDemo")}>
-                  <Button className="bg-gray-900 hover:bg-gray-800 text-white px-8 py-6 text-lg shadow-xl">
-                    Get a Free Demo
-                    <ArrowRight className="w-5 h-5 ml-2" />
-                  </Button>
-                </Link>
-                <Link to={createPageUrl("ApplyOnline")}>
-                  <Button variant="outline" className="border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white px-8 py-6 text-lg">
-                    Apply Online
-                  </Button>
-                </Link>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="relative mt-16"
-            >
-              <img
-                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/53db22971_desktoppaymentterminal.jpg"
-                alt="Modern countertop payment terminal processing transactions"
-                className="rounded-2xl shadow-2xl"
-                loading="eager"
-                width="600"
-                height="600"
-              />
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Everything You Need in a Payment Terminal
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Modern, reliable, and secure payment processing for your business
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <Card className="h-full border-none shadow-lg hover:shadow-xl transition-shadow">
-                  <CardContent className="p-6">
-                    <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4`}>
-                      <feature.icon className="w-7 h-7 text-white" />
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">
-                      {feature.title}
-                    </h3>
-                    <p className="text-gray-600">
-                      {feature.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Benefits Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              <img
-                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/14e7432f1_desktoppaymentterminal.jpg"
-                alt="Business owner using countertop payment terminal"
-                className="rounded-2xl shadow-xl"
-                loading="lazy"
-                width="600"
-                height="400"
-              />
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">
-                Why Choose Our Countertop Terminal?
-              </h2>
-              <div className="space-y-4">
-                {[
-                  "No monthly fees or hidden charges",
-                  "Free terminal with approved account",
-                  "Accept EMV chip cards and contactless payments",
-                  "Built-in receipt printer",
-                  "Real-time reporting and analytics",
-                  "Next-day funding available",
-                  "PCI-compliant and secure",
-                  "Easy setup and training included"
-                ].map((benefit, index) => (
-                  <div key={index} className="flex items-start gap-3">
-                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <CheckCircle2 className="w-4 h-4 text-white" />
-                    </div>
-                    <span className="text-gray-700 text-lg">{benefit}</span>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-gray-900 to-gray-800 text-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="space-y-6"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold">
-              Ready to Upgrade Your Payment Processing?
-            </h2>
-            <p className="text-xl text-gray-300">
-              Get started today with a free demo or apply online in minutes.
-            </p>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <Link to={createPageUrl("FreeDemo")}>
-                <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg shadow-xl">
-                  Schedule Free Demo
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
-              <Link to={createPageUrl("ApplyOnline")}>
-                <Button variant="outline" className="border-2 border-orange-500 text-orange-500 hover:bg-gray-900 hover:text-white hover:border-gray-900 px-8 py-6 text-lg">
-                  Apply Online Now
-                </Button>
-              </Link>
-            </div>
-            <p className="text-gray-400 pt-4">
-              Questions? Call us at <a href="tel:8653169625" className="text-amber-400 font-bold hover:underline">(865) 316-9625</a>
-            </p>
-          </motion.div>
-        </div>
-      </section>
+      <LandingHero
+        badge="Countertop Payment Terminal"
+        headline="Free Countertop Terminal + Zero Transaction Fees"
+        subheadline="Get the industry's best countertop payment terminal at no cost. EMV chip, NFC contactless, and Apple Pay ready — with zero transaction fees on every sale."
+        bullets={[
+          "Free terminal — no purchase required",
+          "EMV chip, NFC, & Apple/Google Pay",
+          "Zero transaction fees",
+          "3-second processing speed",
+          "Free remote setup & programming"
+        ]}
+        service="Countertop Payment Terminal"
+      />
+      <LandingFeatures title="The Most Advanced Countertop Terminal — Free" subtitle="Professional-grade payment hardware with zero-fee processing included." features={features} />
+      <LandingCTA headline="Get Your Free Countertop Terminal Today" subtext="Apply now and receive your pre-programmed terminal with zero transaction fees — ready to process in 48 hours." service="Countertop Payment Terminal" />
     </div>
   );
 }

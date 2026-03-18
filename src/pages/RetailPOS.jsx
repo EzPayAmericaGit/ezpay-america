@@ -1,229 +1,46 @@
 import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import SEOHead from "../components/SEOHead";
-import { Link } from "react-router-dom";
-import { createPageUrl } from "@/utils";
-import { 
-  Package, 
-  BarChart3, 
-  Users, 
-  CreditCard, 
-  Shield,
-  Smartphone,
-  ArrowRight 
-} from "lucide-react";
-import { motion } from "framer-motion";
+import LandingHero from "../components/landing/LandingHero";
+import LandingFeatures from "../components/landing/LandingFeatures";
+import LandingCTA from "../components/landing/LandingCTA";
+import { Store, BarChart3, Package, CreditCard, Zap, Shield, Smartphone, RefreshCw, HeadphonesIcon } from "lucide-react";
 
 const features = [
-  {
-    icon: Package,
-    title: "Inventory Management",
-    description: "Track stock levels, manage suppliers, and automate reordering with real-time inventory updates.",
-    color: "from-blue-500 to-blue-600"
-  },
-  {
-    icon: BarChart3,
-    title: "Advanced Reporting",
-    description: "Get detailed insights into sales trends, employee performance, and customer behavior.",
-    color: "from-green-500 to-green-600"
-  },
-  {
-    icon: Users,
-    title: "Customer Management",
-    description: "Build customer profiles, track purchase history, and create targeted loyalty programs.",
-    color: "from-purple-500 to-purple-600"
-  },
-  {
-    icon: CreditCard,
-    title: "Integrated Payments",
-    description: "Accept all payment types including credit cards, mobile payments, and contactless transactions.",
-    color: "from-amber-500 to-orange-600"
-  },
-  {
-    icon: Shield,
-    title: "Secure & Compliant",
-    description: "PCI-compliant system with advanced security features to protect your business data.",
-    color: "from-red-500 to-red-600"
-  },
-  {
-    icon: Smartphone,
-    title: "Mobile Ready",
-    description: "Run your business from anywhere with mobile apps for iOS and Android devices.",
-    color: "from-indigo-500 to-indigo-600"
-  }
+  { icon: Store, title: "Cloud-Based POS", description: "Run your entire retail store from a cloud system — access sales data from anywhere, anytime.", color: "from-amber-500 to-orange-600" },
+  { icon: Package, title: "Inventory Management", description: "Real-time stock tracking, low-stock alerts, and purchase order management built in.", color: "from-blue-500 to-blue-600" },
+  { icon: CreditCard, title: "Zero-Fee Processing", description: "Accept all payment types with zero transaction fees — keep 100% of your retail revenue.", color: "from-green-500 to-green-600" },
+  { icon: BarChart3, title: "Sales Reporting", description: "Daily, weekly, and monthly reports with customer purchase history and product performance.", color: "from-purple-500 to-purple-600" },
+  { icon: Zap, title: "Fast Checkout", description: "Barcode scanning, quick-key items, and tap-to-pay reduce checkout time to seconds.", color: "from-yellow-500 to-amber-600" },
+  { icon: Shield, title: "Employee Management", description: "Set permissions, track hours, and monitor individual staff sales performance.", color: "from-teal-500 to-teal-600" },
+  { icon: Smartphone, title: "Mobile POS", description: "Accept payments anywhere in your store with mobile tablets and wireless card readers.", color: "from-pink-500 to-pink-600" },
+  { icon: RefreshCw, title: "Customer Loyalty", description: "Built-in loyalty rewards and gift card programs to bring customers back again and again.", color: "from-red-500 to-red-600" },
+  { icon: HeadphonesIcon, title: "24/7 US Support", description: "Get help any time from our dedicated US-based retail POS support specialists.", color: "from-indigo-500 to-indigo-600" },
 ];
 
 export default function RetailPOS() {
   return (
     <div className="min-h-screen bg-white">
-      <SEOHead 
-        title="Retail POS System - Point of Sale Software for Retail Stores"
-        description="Complete retail POS system with inventory management, customer tracking, barcode scanning, integrated payments, and mobile apps. Free equipment program available. Perfect for boutiques, convenience stores, and specialty retail."
-        keywords="retail POS system, retail point of sale, retail POS software, store POS system, shop POS, boutique POS, retail management software, inventory management system, stock management, barcode scanning, SKU management, UPC scanning, multi-location retail POS, convenience store POS, gift shop POS, clothing store POS, apparel retail POS, specialty retail software, customer management, loyalty programs, retail analytics, sales reporting, employee tracking, retail checkout system, integrated payments, contactless retail payments, mobile retail POS, tablet POS system, cloud retail POS, real-time inventory, purchase orders, vendor management, price management, retail tax management"
+      <SEOHead
+        title="Retail POS System – Free Cloud POS for Retail Stores | EzPay America"
+        description="Best retail POS system with zero transaction fees. Cloud-based, free equipment, inventory management, and loyalty programs for retail stores. Apply free today."
+        keywords="retail POS system, retail point of sale, cloud POS retail, free retail POS, best retail POS, retail store POS, POS system for retail store, retail POS software, small business retail POS, retail management system"
+        url="https://ezpayamerica.com/RetailPOS"
       />
-      {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="max-w-3xl"
-          >
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-              Retail POS System
-            </h1>
-            <p className="text-xl text-gray-800 mb-8">
-              Complete point-of-sale solution designed specifically for retail businesses. Manage inventory, track sales, and grow your business with EzPay POS.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link to={createPageUrl("FreeDemo")}>
-                <Button className="bg-gray-900 hover:bg-gray-800 text-white px-8 py-6 text-lg shadow-xl">
-                  Get a Free Demo
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
-              <Link to={createPageUrl("ApplyOnline")}>
-                <Button variant="outline" className="border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white px-8 py-6 text-lg">
-                  Apply Online
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Features Grid */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Everything Your Retail Store Needs
-            </h2>
-            <p className="text-xl text-gray-600">
-              Powerful features to help you run your retail business more efficiently
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <Card className="h-full border-none shadow-lg hover:shadow-2xl transition-all duration-300 group">
-                  <CardContent className="p-8 space-y-4">
-                    <div className={`w-16 h-16 bg-gradient-to-br ${feature.color} rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
-                      <feature.icon className="w-8 h-8 text-white" />
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900">
-                      {feature.title}
-                    </h3>
-                    <p className="text-gray-600 leading-relaxed">
-                      {feature.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Image and Content Section */}
-      <section className="py-20 bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              className="text-white"
-            >
-              <h2 className="text-4xl font-bold mb-6">
-                Built for Modern Retail
-              </h2>
-              <p className="text-xl text-gray-300 leading-relaxed mb-8">
-                EzPay POS for Retail offers a variety of retail-specific add-ons, including inventory management, age verification, gift card integration, UPC-based item tracking, and support for weight, length, and size-based products. Additionally, EzPay POS provides loyalty programs to enhance customer retention and engagement.
-              </p>
-              <ul className="space-y-4">
-                {[
-                  "Barcode scanning and label printing",
-                  "Multi-location support",
-                  "Employee time tracking",
-                  "Customer loyalty programs",
-                  "Gift card management",
-                  "Real-time reporting and analytics"
-                ].map((item, index) => (
-                  <li key={index} className="flex items-center gap-3">
-                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-white text-sm">✓</span>
-                    </div>
-                    <span className="text-lg">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              className="relative"
-            >
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl">
-                <img
-                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/3887a616c_AGoldEZPayPOS.png"
-                  alt="EzPay retail POS system with inventory management and customer loyalty features"
-                  className="w-full h-auto"
-                  loading="lazy"
-                  width="800"
-                  height="600"
-                />
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-gray-100">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="space-y-6"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900">
-              Ready to Upgrade Your Retail POS?
-            </h2>
-            <p className="text-xl text-gray-600">
-              Start your free trial today. No credit card required.
-            </p>
-            <Link to={createPageUrl("FreeDemo")}>
-              <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg shadow-xl">
-                Get Started Now
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </Link>
-          </motion.div>
-        </div>
-      </section>
+      <LandingHero
+        badge="EzPay Retail POS"
+        headline="The #1 Retail POS System With Zero Transaction Fees"
+        subheadline="EzPay America's cloud-based retail POS gives you everything to run your store — inventory, loyalty, reporting, and payments — with no processing fees and free equipment."
+        bullets={[
+          "Full cloud-based retail POS — free",
+          "Real-time inventory management",
+          "Zero transaction fees on all payments",
+          "Loyalty programs & gift cards included",
+          "Multi-location & multi-register support"
+        ]}
+        service="Retail POS System"
+      />
+      <LandingFeatures title="Everything Your Retail POS Should Do" subtitle="A complete retail management system — not just a payment terminal." features={features} />
+      <LandingCTA headline="Get Your Free Retail POS System Today" subtext="No monthly POS fees. No transaction fees. Free hardware. The best retail POS deal in the USA." service="Retail POS System" />
     </div>
   );
 }
