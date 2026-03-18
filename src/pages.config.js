@@ -53,6 +53,8 @@ import ChargebackManagement from './pages/ChargebackManagement';
 import CRMPage from './pages/CRMPage';
 import DeveloperAPI from './pages/DeveloperAPI';
 import FraudDetection from './pages/FraudDetection';
+import FraudRules from './pages/FraudRules';
+import WebhookManagement from './pages/WebhookManagement';
 import InstantPayouts from './pages/InstantPayouts';
 import Integrations from './pages/Integrations';
 import InventoryManagement from './pages/InventoryManagement';
@@ -141,6 +143,8 @@ export const PAGES = {
     "CRMPage": CRMPage,
     "DeveloperAPI": DeveloperAPI,
     "FraudDetection": FraudDetection,
+    "FraudRules": FraudRules,
+    "WebhookManagement": WebhookManagement,
     "InstantPayouts": InstantPayouts,
     "Integrations": Integrations,
     "InventoryManagement": InventoryManagement,
