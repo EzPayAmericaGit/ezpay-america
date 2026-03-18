@@ -125,6 +125,12 @@ export default function GetStartedForm({ service = "General Inquiry", bgDark = f
       <Button type="submit" disabled={loading} className="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold py-3 text-base">
         {loading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Sending...</> : "Get My Free Quote →"}
       </Button>
+      {error && (
+        <div className="flex items-center gap-2 p-3 rounded-lg bg-red-500/10 border border-red-500/30">
+          <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0" />
+          <p className="text-sm text-red-400">{error}</p>
+        </div>
+      )}
       <p className={`text-xs text-center ${bgDark ? "text-white/50" : "text-gray-400"}`}>By submitting, you agree to be contacted by EzPay America.</p>
     </form>
   );
