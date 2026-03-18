@@ -1,276 +1,54 @@
 import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { DollarSign, Zap, FileText, TrendingUp, ArrowRight } from "lucide-react";
-import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import { createPageUrl } from "@/utils";
 import SEOHead from "../components/SEOHead";
+import LandingHero from "../components/landing/LandingHero";
+import LandingFeatures from "../components/landing/LandingFeatures";
+import LandingCTA from "../components/landing/LandingCTA";
+import { DollarSign, Zap, Clock, Shield, BarChart3, RefreshCw, CheckCircle2, TrendingUp, Building2 } from "lucide-react";
 
-const benefits = [
-  {
-    icon: Zap,
-    title: "Fast Approval",
-    description: "Get approved in as little as 24 hours with minimal paperwork required.",
-    color: "from-blue-500 to-blue-600"
-  },
-  {
-    icon: DollarSign,
-    title: "Flexible Repayment",
-    description: "Payments are automatically deducted from your daily credit card sales.",
-    color: "from-green-500 to-green-600"
-  },
-  {
-    icon: FileText,
-    title: "No Credit Check",
-    description: "Your approval is based on your sales history, not your credit score.",
-    color: "from-purple-500 to-purple-600"
-  },
-  {
-    icon: TrendingUp,
-    title: "Grow Your Business",
-    description: "Use funds for inventory, equipment, marketing, or any business need.",
-    color: "from-amber-500 to-orange-600"
-  }
+const features = [
+  { icon: DollarSign, title: "Up to $500K Funding", description: "Access working capital from $5,000 to $500,000 based on your monthly processing volume.", color: "from-amber-500 to-orange-600" },
+  { icon: Zap, title: "Funding in 24–72 Hours", description: "Get approved and funded fast — no waiting weeks for traditional bank loan approvals.", color: "from-green-500 to-green-600" },
+  { icon: BarChart3, title: "Revenue-Based Repayment", description: "Repay a small percentage of daily sales. Pay more on busy days, less on slower days.", color: "from-blue-500 to-blue-600" },
+  { icon: Shield, title: "No Collateral Required", description: "Merchant cash advances are unsecured — no personal assets or property on the line.", color: "from-purple-500 to-purple-600" },
+  { icon: Clock, title: "Simple Application", description: "Apply in minutes with just 3 months of bank statements. Minimal paperwork, fast decisions.", color: "from-teal-500 to-teal-600" },
+  { icon: CheckCircle2, title: "All Credit Types Welcome", description: "We work with business owners of all credit backgrounds including those with past challenges.", color: "from-pink-500 to-pink-600" },
+  { icon: RefreshCw, title: "Renew & Grow", description: "After repaying 50% of your advance, you may qualify for additional funding to keep growing.", color: "from-yellow-500 to-amber-600" },
+  { icon: TrendingUp, title: "Grow Your Business", description: "Use funds for inventory, equipment, staff, marketing, renovations — no restrictions on use.", color: "from-red-500 to-red-600" },
+  { icon: Building2, title: "No Bank Required", description: "Approval is based on your sales history, not bank relationships or lengthy credit reviews.", color: "from-indigo-500 to-indigo-600" },
 ];
 
 export default function MerchantCashAdvance() {
   return (
     <div className="min-h-screen bg-white">
-      <SEOHead 
-        title="Merchant Cash Advance - Fast Business Funding"
-        description="Get fast business funding with a merchant cash advance from EzPay America. 24-hour approval, no credit check required, flexible repayment based on your daily credit card sales. Funds deposited directly into your account."
-        keywords="merchant cash advance, MCA, business funding, small business loan, working capital, business cash advance, fast business funding, quick business capital, instant business loan, no credit check business loan, bad credit business funding, alternative business financing, merchant financing, credit card advance, sales-based financing, revenue-based financing, business line of credit, short-term business loan, emergency business funding, same-day business funding, 24-hour approval, fast approval business loan, easy business funding, simple business loan, online business loan, business loan application, merchant advance, cash advance for business, advance on credit card sales, future receivables financing, small business capital, startup funding, business expansion loan, inventory financing, equipment financing, seasonal business funding, bridge financing, business growth capital, restaurant funding, retail business loan, franchise financing, multi-location funding, business acquisition loan, renovation loan, marketing campaign funding, payroll financing, business emergency fund, business opportunity funding, no collateral business loan, unsecured business loan, flexible repayment loan, automatic payment deduction, daily payment deduction, percentage-based repayment, sales-based repayment, no fixed payment, cash flow friendly, business-friendly financing, merchant services financing, payment processor funding, POS system financing, credit card processor advance"
+      <SEOHead
+        title="Merchant Cash Advance – Fast Business Funding | EzPay America"
+        description="Get a merchant cash advance up to $500K in 24–72 hours. Revenue-based repayment, no collateral, all credit types. Fast small business funding. Apply free."
+        keywords="merchant cash advance, small business funding, business cash advance, fast business loan, working capital advance, merchant funding, revenue based financing, no collateral business loan, merchant cash advance small business, quick business funding"
+        url="https://ezpayamerica.com/MerchantCashAdvance"
       />
-      {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="max-w-3xl"
-          >
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-              Merchant Cash Advance
-            </h1>
-            <p className="text-xl text-gray-800 mb-8">
-              Quick access to working capital for your business. Get funded fast based on your future credit card sales - no collateral required.
-            </p>
-            <Link to={createPageUrl("ApplyOnline")}>
-              <Button className="bg-gray-900 hover:bg-gray-800 text-white px-8 py-6 text-lg shadow-xl">
-                Apply Now
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </Link>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Benefits Grid */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Fast Capital When You Need It
-            </h2>
-            <p className="text-xl text-gray-600">
-              A merchant cash advance isn't a loan - it's an advance on your future sales
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {benefits.map((benefit, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <Card className="h-full border-none shadow-lg hover:shadow-2xl transition-all duration-300 group">
-                  <CardContent className="p-8 space-y-4 text-center">
-                    <div className={`w-16 h-16 bg-gradient-to-br ${benefit.color} rounded-2xl flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300`}>
-                      <benefit.icon className="w-8 h-8 text-white" />
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900">
-                      {benefit.title}
-                    </h3>
-                    <p className="text-gray-600 leading-relaxed">
-                      {benefit.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works Section */}
-      <section className="py-20 bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              className="text-white"
-            >
-              <h2 className="text-4xl font-bold mb-6">
-                How It Works
-              </h2>
-              <p className="text-xl text-gray-300 leading-relaxed mb-8">
-                A merchant cash advance lets you convert future credit card sales into immediate working capital. It's designed specifically for businesses with consistent card transactions.
-              </p>
-              <div className="space-y-6">
-                {[
-                  {
-                    step: "1",
-                    title: "Apply Online",
-                    description: "Complete our simple application with basic business information"
-                  },
-                  {
-                    step: "2",
-                    title: "Get Approved",
-                    description: "Receive approval within 24 hours based on your credit card sales"
-                  },
-                  {
-                    step: "3",
-                    title: "Receive Funds",
-                    description: "Money is deposited directly into your business bank account"
-                  },
-                  {
-                    step: "4",
-                    title: "Automatic Repayment",
-                    description: "A small percentage is deducted from your daily card sales"
-                  }
-                ].map((item, index) => (
-                  <div key={index} className="flex gap-4">
-                    <div className="flex-shrink-0">
-                      <div className="w-12 h-12 bg-amber-500 rounded-full flex items-center justify-center">
-                        <span className="text-white font-bold text-lg">{item.step}</span>
-                      </div>
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-bold mb-1">{item.title}</h3>
-                      <p className="text-gray-300">{item.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              
-              <div className="mt-8">
-                <Link to={createPageUrl("ApplyOnline")}>
-                  <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg shadow-xl">
-                    Apply Online
-                    <ArrowRight className="w-5 h-5 ml-2" />
-                  </Button>
-                </Link>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              className="relative"
-            >
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl">
-                <img
-                  src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&h=600&fit=crop&q=80&auto=format"
-                  alt="Business owner reviewing merchant cash advance funding options for growth and expansion with EzPay America"
-                  className="w-full h-auto"
-                  loading="lazy"
-                  width="800"
-                  height="600"
-                />
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Use Cases Section */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              What Can You Use It For?
-            </h2>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              "Purchase new inventory",
-              "Upgrade equipment",
-              "Marketing campaigns",
-              "Seasonal expenses",
-              "Hiring staff",
-              "Emergency repairs",
-              "Business expansion",
-              "Renovations",
-              "Any business need"
-            ].map((useCase, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.05 }}
-                viewport={{ once: true }}
-                className="bg-white rounded-xl p-6 shadow-lg"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-white text-sm">✓</span>
-                  </div>
-                  <span className="text-lg font-medium text-gray-900">{useCase}</span>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="space-y-6"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900">
-              Get the Capital You Need Today
-            </h2>
-            <p className="text-xl text-gray-600">
-              Apply in minutes and get approved within 24 hours. No hidden fees, no surprises.
-            </p>
-            <Link to={createPageUrl("ApplyOnline")}>
-              <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg shadow-xl">
-                Apply for Merchant Cash Advance
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </Link>
-          </motion.div>
-        </div>
-      </section>
+      <LandingHero
+        badge="Merchant Cash Advance"
+        headline="Fast Business Funding — Up to $500K in 72 Hours"
+        subheadline="When your business needs capital fast, EzPay America delivers. Get a merchant cash advance based on your sales — no collateral, no lengthy bank process."
+        bullets={[
+          "Up to $500,000 in working capital",
+          "Approved and funded in 24–72 hours",
+          "Revenue-based repayment — flexible by design",
+          "No collateral required",
+          "All credit types considered"
+        ]}
+        service="Merchant Cash Advance"
+      />
+      <LandingFeatures
+        title="The Fastest Way to Fund Your Business"
+        subtitle="Thousands of business owners have grown with EzPay America's merchant cash advance program."
+        features={features}
+      />
+      <LandingCTA
+        headline="Get the Funding Your Business Deserves"
+        subtext="Apply in minutes, get approved fast, and have capital in your account within days — not weeks."
+        service="Merchant Cash Advance"
+      />
     </div>
   );
 }
