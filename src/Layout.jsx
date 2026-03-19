@@ -29,7 +29,8 @@ export default function Layout({ children }) {
           { title: "Web Payment Pages", url: createPageUrl("WebPaymentPages") },
           { title: "Get A Merchant Cash Advance", url: createPageUrl("MerchantCashAdvance") },
           { title: "Retail Payment Solutions", url: createPageUrl("RetailPaymentSolutions") },
-          { title: "Payment Processing Hardware", url: createPageUrl("Shop") }
+          { title: "Payment Processing Hardware", url: createPageUrl("Shop") },
+          { title: "Branded Payment Gateway", url: createPageUrl("BrandedPaymentGateway") }
         ]
       },
       { 

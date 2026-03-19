@@ -77,6 +77,7 @@ import ApplicationsAdmin from './pages/ApplicationsAdmin';
 import ApplyOnline from './pages/ApplyOnline';
 import BacklinkOutreach from './pages/BacklinkOutreach';
 import BagelShopPOS from './pages/BagelShopPOS';
+import BrandedPaymentGateway from './pages/BrandedPaymentGateway';
 import BarTavernPOS from './pages/BarTavernPOS';
 import BusinessDashboard from './pages/BusinessDashboard';
 import CBDStorePOS from './pages/CBDStorePOS';
