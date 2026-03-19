@@ -17,6 +17,7 @@ const isValidEmail = (email) => {
 
 Deno.serve(async (req) => {
   try {
+    const base44 = createClientFromRequest(req);
     const body = await req.json();
     const { name, email, phone, message, firstName, lastName, businessName, service } = body;
 
