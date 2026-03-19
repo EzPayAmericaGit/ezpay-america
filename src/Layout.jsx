@@ -358,7 +358,7 @@ export default function Layout({ children }) {
       </header>
 
       {/* Main Content */}
-      <main className="pt-0">
+      <main className="pt-20">
         {children}
       </main>
 
