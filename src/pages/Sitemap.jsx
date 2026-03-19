@@ -126,10 +126,12 @@ ${pages.map(page => `  <url>
               <li><a href="/RestaurantMerchants" className="text-blue-700 hover:text-blue-900 hover:underline">Restaurant Merchants</a></li>
               <li><a href="/WebPaymentPages" className="text-blue-700 hover:text-blue-900 hover:underline">Web Payment Pages</a></li>
               <li><a href="/MerchantCashAdvance" className="text-blue-700 hover:text-blue-900 hover:underline">Merchant Cash Advance</a></li>
+              <li><a href="/MerchantCapital" className="text-blue-700 hover:text-blue-900 hover:underline">Merchant Capital</a></li>
               <li><a href="/RetailPaymentSolutions" className="text-blue-700 hover:text-blue-900 hover:underline">Retail Payment Solutions</a></li>
               <li><a href="/ACHPayments" className="text-blue-700 hover:text-blue-900 hover:underline">ACH Payments</a></li>
               <li><a href="/MobilePayments" className="text-blue-700 hover:text-blue-900 hover:underline">Mobile Payments</a></li>
               <li><a href="/ECommerce" className="text-blue-700 hover:text-blue-900 hover:underline">E-Commerce Gateway</a></li>
+              <li><a href="/FraudDetection" className="text-blue-700 hover:text-blue-900 hover:underline">Fraud Detection</a></li>
             </ul>
           </div>
 
