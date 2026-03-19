@@ -168,6 +168,7 @@ export const PAGES = {
     "ApplyOnline": ApplyOnline,
     "BacklinkOutreach": BacklinkOutreach,
     "BagelShopPOS": BagelShopPOS,
+    "BrandedPaymentGateway": BrandedPaymentGateway,
     "BarTavernPOS": BarTavernPOS,
     "BusinessDashboard": BusinessDashboard,
     "CBDStorePOS": CBDStorePOS,
