@@ -62,23 +62,13 @@ export default function HeroSection() {
             </div>
 
             {/* Trust signals */}
-            <div className="flex flex-wrap gap-4 pt-2">
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <span className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-bold text-xs">✓</span>
-                15,000+ merchants served
-              </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <span className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-bold text-xs">✓</span>
-                No contracts ever
-              </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <span className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-bold text-xs">✓</span>
-                24-hour approval
-              </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <span className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-bold text-xs">✓</span>
-                PCI DSS Compliant
-              </div>
+            <div className="flex flex-col gap-2 pt-2">
+              {["15,000+ merchants served", "No contracts ever", "24-hour approval", "PCI DSS Compliant"].map((item) => (
+                <div key={item} className="flex items-center gap-2 text-sm text-gray-600">
+                  <span className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-bold text-xs flex-shrink-0">✓</span>
+                  {item}
+                </div>
+              ))}
             </div>
           </motion.div>
 
