@@ -65,7 +65,7 @@ export default function HeroSection() {
             <div className="flex flex-wrap gap-4 pt-2">
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <span className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-bold text-xs">✓</span>
-                500+ merchants served
+                15,000+ merchants served
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <span className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-bold text-xs">✓</span>
