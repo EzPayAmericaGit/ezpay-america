@@ -83,6 +83,15 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Failed to send message' }, { status: 500 });
     }
 
+    // Save lead to database using service role (works for unauthenticated users)
+    base44.asServiceRole.entities.DemoRequest.create({
+      contactName: resolvedName,
+      email: String(email).substring(0, 254),
+      phone: String(resolvedPhone || '').substring(0, 20),
+      businessName: String(businessName || '').substring(0, 200),
+      status: "pending"
+    }).catch(err => console.error('DemoRequest save error:', err));
+
     return Response.json({ success: true });
   } catch (error) {
     console.error('Contact email error:', error);
