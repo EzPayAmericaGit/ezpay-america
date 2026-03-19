@@ -46,19 +46,13 @@ export default function GetStartedForm({ service = "General Inquiry", bgDark = f
     try {
       const safeService = service.replace(/[<>"'`]/g, "").slice(0, 100);
 
-      await base44.integrations.Core.SendEmail({
-        to: "mail@ezpayamerica.com",
-        subject: `New Lead: ${safeService} – ${clean.businessName}`,
-        body: `
-          <div style="font-family:Arial,sans-serif;max-width:600px">
-            <h2 style="color:#f59e0b">New Get Started Request</h2>
-            <p><strong>Service Interest:</strong> ${safeService}</p>
-            <p><strong>Name:</strong> ${clean.firstName} ${clean.lastName}</p>
-            <p><strong>Business:</strong> ${clean.businessName}</p>
-            <p><strong>Phone:</strong> ${clean.phone}</p>
-            <p><strong>Email:</strong> ${clean.email}</p>
-          </div>
-        `
+      await base44.functions.invoke('sendContactEmail', {
+        firstName: clean.firstName,
+        lastName: clean.lastName,
+        businessName: clean.businessName,
+        phone: clean.phone,
+        email: clean.email,
+        service: safeService
       });
 
       // Also save as a demo request (sanitized data only)
