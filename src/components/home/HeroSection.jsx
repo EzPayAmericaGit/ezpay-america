@@ -62,10 +62,10 @@ export default function HeroSection() {
             </div>
 
             {/* Trust signals */}
-            <div className="flex flex-wrap items-center gap-4 pt-2">
+            <div className="flex flex-nowrap items-center gap-3 pt-2 overflow-x-auto">
               {["15,000+ merchants served", "No contracts ever", "24-hour approval", "PCI DSS Compliant"].map((item) => (
-                <div key={item} className="flex items-center gap-1.5 text-sm text-gray-600 whitespace-nowrap">
-                  <span className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-bold text-xs flex-shrink-0">✓</span>
+                <div key={item} className="flex items-center gap-1 text-xs text-gray-600 whitespace-nowrap flex-shrink-0">
+                  <span className="w-4 h-4 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-bold text-xs flex-shrink-0">✓</span>
                   {item}
                 </div>
               ))}
