@@ -72,9 +72,10 @@ export default function Support() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <SEOHead 
-        title="Support Center"
-        description="Get 24/7 support for your EzPay America merchant account. Phone, email, and live chat support available. Call (865) 316-9625 for immediate assistance."
-        keywords="EzPay support, merchant support, payment processing help, 24/7 customer service, credit card processing support"
+        title="Support Center - 24/7 Merchant Services Help & Customer Support"
+        description="24/7 US-based support for EzPay America merchants. Phone, email, and live chat available. Get help with payment terminals, POS systems, account setup, and more. Call (865) 316-9625 anytime."
+        keywords="EzPay support, merchant support, 24/7 payment processing support, credit card processing help, POS system support, merchant services customer service, payment terminal help, merchant account support, EzPay America phone number, technical support, payment processing FAQ, merchant help desk, small business payment support, live chat merchant support, US based merchant support"
+        url="https://ezpayamerica.com/Support"
       />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-500 to-orange-600 text-white">
