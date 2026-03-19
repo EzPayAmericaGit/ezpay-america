@@ -45,25 +45,40 @@ export default function HeroSection() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <a
-                href="https://ezpayamerica.com/quiz/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <Link to={createPageUrl("ApplyOnline")}>
                 <Button className="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg shadow-xl hover:shadow-2xl transition-all">
-                  Take Our Quiz
+                  Get Your Free Quote
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
-              </a>
-              <Link to={createPageUrl("ApplyOnline")}>
+              </Link>
+              <a href="tel:8653169625">
                 <Button 
                   variant="outline" 
                   className="w-full sm:w-auto border-2 border-amber-600 text-amber-600 hover:bg-amber-50 px-8 py-6 text-lg shadow-lg"
                 >
-                  Apply Online
-                  <ArrowRight className="w-5 h-5 ml-2" />
+                  Call (865) 316-9625
                 </Button>
-              </Link>
+              </a>
+            </div>
+
+            {/* Trust signals */}
+            <div className="flex flex-wrap gap-4 pt-2">
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <span className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-bold text-xs">✓</span>
+                500+ merchants served
+              </div>
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <span className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-bold text-xs">✓</span>
+                No contracts ever
+              </div>
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <span className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-bold text-xs">✓</span>
+                24-hour approval
+              </div>
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <span className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-bold text-xs">✓</span>
+                PCI DSS Compliant
+              </div>
             </div>
           </motion.div>
 
