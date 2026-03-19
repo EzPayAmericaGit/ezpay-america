@@ -55,15 +55,6 @@ export default function GetStartedForm({ service = "General Inquiry", bgDark = f
         service: safeService
       });
 
-      // Also save as a demo request (sanitized data only)
-      await base44.entities.DemoRequest.create({
-        contactName: `${clean.firstName} ${clean.lastName}`,
-        email: clean.email,
-        phone: clean.phone,
-        businessName: clean.businessName,
-        status: "pending"
-      });
-
       setSubmitted(true);
     } catch (err) {
       setError("Something went wrong. Please try again or call us at (865) 316-9625.");
