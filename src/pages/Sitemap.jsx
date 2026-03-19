@@ -44,14 +44,18 @@ export default function Sitemap() {
       { path: '/GiftShopPOS', priority: '0.75', changefreq: 'weekly', title: 'Gift Shop & Boutique POS' },
       
       // Additional Payment Services
-      { path: '/ACHPayments', priority: '0.7', changefreq: 'monthly', title: 'ACH Payment Processing & Bank Transfers' },
-      { path: '/MobilePayments', priority: '0.7', changefreq: 'monthly', title: 'Mobile Payment Solutions' },
-      { path: '/MerchantCapital', priority: '0.7', changefreq: 'monthly', title: 'Merchant Capital & Business Financing' },
-      { path: '/ECommerce', priority: '0.7', changefreq: 'monthly', title: 'E-Commerce Payment Gateway Integration' },
-      
+      { path: '/ACHPayments', priority: '0.75', changefreq: 'monthly', title: 'ACH Payment Processing & Bank Transfers' },
+      { path: '/MobilePayments', priority: '0.75', changefreq: 'monthly', title: 'Mobile Payment Solutions' },
+      { path: '/MerchantCapital', priority: '0.75', changefreq: 'monthly', title: 'Merchant Capital & Business Financing' },
+      { path: '/MerchantCashAdvance', priority: '0.75', changefreq: 'monthly', title: 'Merchant Cash Advance Program' },
+      { path: '/ECommerce', priority: '0.75', changefreq: 'monthly', title: 'E-Commerce Payment Gateway Integration' },
+      { path: '/FraudDetection', priority: '0.7', changefreq: 'monthly', title: 'Fraud Detection & Prevention' },
+
       // Tools & Resources
-      { path: '/Quiz', priority: '0.7', changefreq: 'monthly', title: 'Business Type Quiz - Find Your Solution' },
+      { path: '/Quiz', priority: '0.75', changefreq: 'monthly', title: 'Business Type Quiz - Find Your Perfect POS Solution' },
+      { path: '/FreeDemo', priority: '0.95', changefreq: 'weekly', title: 'Schedule a Free Demo - EzPay America' },
       { path: '/Support', priority: '0.8', changefreq: 'weekly', title: 'Customer Support & Help Center' },
+      { path: '/Helpdesk', priority: '0.7', changefreq: 'weekly', title: 'Help Desk & Support Tickets' },
       
       // Admin & Internal Pages (not in sitemap - noindex)
       // Excluded: /Helpdesk, /Admin, /AdminDashboard, /ApplicationsAdmin, /AgentManagement, /EquipmentInventory, /SettingsAdmin, /ProductAdmin, /OrdersAdmin, /NewsAdmin, /UserManagement, /TemplateManagement, /AnalyticsDashboard, /BacklinkOutreach, /Invoicing
