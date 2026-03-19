@@ -33,15 +33,15 @@ export default function HeroSection() {
 
             <div className="space-y-4">
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 leading-tight">
-                EzPay America - Payment Processing Solutions
+                Simple Payment Processing Solutions for Growing Businesses
               </h1>
               <h2 className="text-3xl md:text-4xl font-semibold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
-                Zero-Fee Processing for Your Business
+                Zero-Fee Credit Card Processing — No Contracts, No Hidden Fees
               </h2>
             </div>
 
             <p className="text-xl text-gray-600 leading-relaxed">
-              Work smarter, automate for efficiency, and open up new revenue streams with our cutting-edge payment solutions.
+              Accept credit cards with transparent pricing, 24-hour approval, and free POS equipment. Trusted by 500+ small businesses nationwide — retail, restaurants, and more.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
