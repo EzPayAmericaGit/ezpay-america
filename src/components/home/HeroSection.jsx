@@ -80,6 +80,8 @@ export default function HeroSection() {
                 PCI DSS Compliant
               </div>
             </div>
+            <div className="flex flex-wrap gap-4">
+            </div>
           </motion.div>
 
           {/* Right Content - Image */}
