@@ -61,7 +61,8 @@ export default function Sitemap() {
       // Excluded: /Helpdesk, /Admin, /AdminDashboard, /ApplicationsAdmin, /AgentManagement, /EquipmentInventory, /SettingsAdmin, /ProductAdmin, /OrdersAdmin, /NewsAdmin, /UserManagement, /TemplateManagement, /AnalyticsDashboard, /BacklinkOutreach, /Invoicing
       
       // Utility Pages
-      { path: '/Sitemap', priority: '0.5', changefreq: 'monthly', title: 'Sitemap - All Pages' }
+      { path: '/Sitemap', priority: '0.5', changefreq: 'monthly', title: 'Sitemap - All Pages' },
+      { path: '/RobotsTxt', priority: '0.3', changefreq: 'monthly', title: 'Robots.txt' }
     ];
 
     const today = new Date().toISOString().split('T')[0];
