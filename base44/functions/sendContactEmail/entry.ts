@@ -25,7 +25,7 @@ Deno.serve(async (req) => {
     const resolvedMessage = message || `Service Interest: ${service || 'General Inquiry'}\nBusiness: ${businessName || ''}`;
     const resolvedPhone = phone;
 
-    if (!name || !email || !message) {
+    if (!resolvedName || !email || !resolvedMessage) {
       return Response.json({ error: 'Name, email, and message are required' }, { status: 400 });
     }
     if (!isValidEmail(email)) {
