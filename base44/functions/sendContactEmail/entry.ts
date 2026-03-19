@@ -57,11 +57,12 @@ Deno.serve(async (req) => {
       content: [{
         type: "text/html",
         value: `
-          <h2>New Contact Form Submission</h2>
+          <h2>New Lead / Contact Form Submission</h2>
           <p><strong>Name:</strong> ${safeName}</p>
           <p><strong>Email:</strong> ${safeEmail}</p>
           <p><strong>Phone:</strong> ${safePhone}</p>
-          <p><strong>Message:</strong></p>
+          ${safeBusiness ? `<p><strong>Business:</strong> ${safeBusiness}</p>` : ''}
+          <p><strong>Message / Details:</strong></p>
           <p>${safeMessage}</p>
         `
       }]
