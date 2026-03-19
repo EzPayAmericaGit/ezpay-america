@@ -18,7 +18,12 @@ const isValidEmail = (email) => {
 Deno.serve(async (req) => {
   try {
     const body = await req.json();
-    const { name, email, phone, message } = body;
+    const { name, email, phone, message, firstName, lastName, businessName, service } = body;
+
+    // Support both contact form and GetStarted form payloads
+    const resolvedName = name || `${firstName || ''} ${lastName || ''}`.trim();
+    const resolvedMessage = message || `Service Interest: ${service || 'General Inquiry'}\nBusiness: ${businessName || ''}`;
+    const resolvedPhone = phone;
 
     if (!name || !email || !message) {
       return Response.json({ error: 'Name, email, and message are required' }, { status: 400 });
