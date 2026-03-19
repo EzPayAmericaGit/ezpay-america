@@ -5,7 +5,7 @@ import GetStartedForm from "./GetStartedForm";
 
 export default function LandingHero({ headline, subheadline, bullets, badge, service }) {
   return (
-    <section className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 relative overflow-hidden pt-36 pb-20">
+    <section className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 relative overflow-hidden pt-20 pb-20" style={{marginTop: '80px'}}>
       {/* Background accent */}
       <div className="absolute inset-0 opacity-10 pointer-events-none">
         <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-amber-500 to-transparent" />
