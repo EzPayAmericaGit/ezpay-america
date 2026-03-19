@@ -136,6 +136,12 @@ ${pages.map(page => `  <url>
               <li><a href="/MerchantCapital" className="text-blue-700 hover:text-blue-900 hover:underline">Merchant Capital</a></li>
               <li><a href="/RetailPaymentSolutions" className="text-blue-700 hover:text-blue-900 hover:underline">Retail Payment Solutions</a></li>
               <li><a href="/BrandedPaymentGateway" className="text-blue-700 hover:text-blue-900 hover:underline font-medium">Branded Payment Gateway</a></li>
+              <li><a href="/GatewayRecurringBilling" className="text-blue-700 hover:text-blue-900 hover:underline">↳ Recurring Billing</a></li>
+              <li><a href="/GatewayFraudProtection" className="text-blue-700 hover:text-blue-900 hover:underline">↳ Fraud Protection</a></li>
+              <li><a href="/GatewayTokenization" className="text-blue-700 hover:text-blue-900 hover:underline">↳ Tokenization & Security</a></li>
+              <li><a href="/GatewayPaymentLinks" className="text-blue-700 hover:text-blue-900 hover:underline">↳ Payment Links</a></li>
+              <li><a href="/GatewayMobilePayments" className="text-blue-700 hover:text-blue-900 hover:underline">↳ Mobile & Tap-to-Pay</a></li>
+              <li><a href="/GatewayReporting" className="text-blue-700 hover:text-blue-900 hover:underline">↳ Reporting & Analytics</a></li>
               <li><a href="/ACHPayments" className="text-blue-700 hover:text-blue-900 hover:underline">ACH Payments</a></li>
               <li><a href="/MobilePayments" className="text-blue-700 hover:text-blue-900 hover:underline">Mobile Payments</a></li>
               <li><a href="/ECommerce" className="text-blue-700 hover:text-blue-900 hover:underline">E-Commerce Gateway</a></li>
