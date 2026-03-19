@@ -99,31 +99,14 @@ export default function Quiz() {
     e.preventDefault();
     setIsSubmitting(true);
     
-    await base44.integrations.Core.SendEmail({
-      to: "contact@ezpayamerica.com",
-      subject: `Quiz Lead: ${formData.businessName || 'New Lead'}`,
-      body: `
-New quiz completion and contact form submission.
-
-CONTACT INFORMATION:
-- Name: ${formData.firstName} ${formData.lastName}
-- Email: ${formData.email}
-- Phone: ${formData.phone}
-- Business Name: ${formData.businessName}
-- State: ${formData.state}
-
-QUIZ RESPONSES:
-- Business Type: ${formData.businessType === 'existing' ? 'Existing Business' : 'New Business'}
-- Industry: ${formData.industry} - ${formData.subSector}
-- Current Provider: ${formData.currentProvider || 'N/A'}
-- Upgrade Reasons: ${formData.upgradeReasons.join(', ') || 'N/A'}
-- Systems Needed: ${formData.systems.join(', ') || 'N/A'}
-- Monthly Sales: $${formData.monthlySales.toLocaleString()}
-- Timeline: ${formData.timeline}
-
-MESSAGE:
-${formData.message || 'No additional message'}
-      `.trim()
+    await base44.functions.invoke('sendContactEmail', {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      phone: formData.phone,
+      businessName: formData.businessName,
+      service: 'Quiz Lead',
+      message: `Business Type: ${formData.businessType === 'existing' ? 'Existing' : 'New'} | Industry: ${formData.industry} - ${formData.subSector} | Provider: ${formData.currentProvider || 'N/A'} | Upgrade: ${formData.upgradeReasons.join(', ') || 'N/A'} | Systems: ${formData.systems.join(', ') || 'N/A'} | Sales: $${formData.monthlySales.toLocaleString()} | Timeline: ${formData.timeline} | State: ${formData.state} | Message: ${formData.message || 'None'}`
     });
     
     setIsSubmitting(false);
