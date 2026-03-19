@@ -31,25 +31,26 @@ Deno.serve(async (req) => {
     if (!isValidEmail(email)) {
       return Response.json({ error: 'Invalid email address' }, { status: 400 });
     }
-    if (String(name).length > 100) {
+    if (String(resolvedName).length > 100) {
       return Response.json({ error: 'Name too long' }, { status: 400 });
     }
-    if (String(message).length > 2000) {
+    if (String(resolvedMessage).length > 2000) {
       return Response.json({ error: 'Message too long (max 2000 characters)' }, { status: 400 });
     }
 
     const SENDGRID_API_KEY = Deno.env.get("SENDGRID_API_KEY");
     const FROM_EMAIL = Deno.env.get("SENDGRID_FROM_EMAIL");
 
-    const safeName = escapeHtml(String(name).substring(0, 100));
+    const safeName = escapeHtml(String(resolvedName).substring(0, 100));
     const safeEmail = escapeHtml(String(email).substring(0, 254));
-    const safePhone = escapeHtml(String(phone || 'Not provided').substring(0, 20));
-    const safeMessage = escapeHtml(String(message).substring(0, 2000)).replace(/\n/g, '<br>');
+    const safePhone = escapeHtml(String(resolvedPhone || 'Not provided').substring(0, 20));
+    const safeMessage = escapeHtml(String(resolvedMessage).substring(0, 2000)).replace(/\n/g, '<br>');
+    const safeBusiness = escapeHtml(String(businessName || '').substring(0, 200));
 
     const emailBody = {
       personalizations: [{
         to: [{ email: "mail@ezpayamerica.com" }],
-        subject: `Contact Form: ${safeName}`
+        subject: service ? `New Lead: ${service} – ${safeBusiness}` : `Contact Form: ${safeName}`
       }],
       from: { email: FROM_EMAIL },
       reply_to: { email: safeEmail },
