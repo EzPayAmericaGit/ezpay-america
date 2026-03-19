@@ -22,6 +22,7 @@ export default function Sitemap() {
       { path: '/WebPaymentPages', priority: '0.8', changefreq: 'weekly', title: 'Web Payment Pages & Virtual Terminal' },
       { path: '/MerchantCashAdvance', priority: '0.8', changefreq: 'weekly', title: 'Merchant Cash Advance & Business Funding' },
       { path: '/RetailPaymentSolutions', priority: '0.8', changefreq: 'weekly', title: 'Retail Payment Solutions' },
+      { path: '/BrandedPaymentGateway', priority: '0.85', changefreq: 'weekly', title: 'Branded Payment Gateway - EzPay America' },
       
       // POS Systems - Main Categories
       { path: '/RetailPOS', priority: '0.85', changefreq: 'weekly', title: 'Retail POS System - Inventory & Sales' },

@@ -96,10 +96,10 @@ export default function BrandedPaymentGateway() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead
-        title="Branded Payment Gateway | EzPay America"
-        description="EzPay America's Branded Payment Gateway delivers enterprise-grade payment processing with tokenization, recurring billing, fraud protection, and omnichannel acceptance — all under your brand."
-        keywords="branded payment gateway, white label payment gateway, payment processing, merchant payment gateway, secure payment gateway, EzPay gateway, recurring billing, tokenization, fraud protection"
-        canonicalUrl="/BrandedPaymentGateway"
+        title="Branded Payment Gateway"
+        description="EzPay America's Branded Payment Gateway delivers secure, zero-fee payment processing with tokenization, recurring billing, fraud protection, and omnichannel acceptance. Free setup, no contracts."
+        keywords="branded payment gateway, white label payment gateway, EzPay America payment gateway, secure payment gateway, zero fee payment gateway, payment processing gateway, merchant payment gateway, omnichannel payment processing, tokenization payment security, recurring billing gateway, fraud protection payment processing, ACH gateway, mobile payments gateway, tap to pay, payment links, PCI compliant gateway, same day funding, no fee credit card gateway, best payment gateway small business, payment gateway no monthly fee"
+        url="https://ezpayamerica.com/BrandedPaymentGateway"
       />
 
       {/* Hero */}
