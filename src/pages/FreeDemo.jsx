@@ -120,9 +120,10 @@ export default function FreeDemo() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Free Demo"
-        description="Schedule a free demo of EzPay America payment processing and POS systems. No credit card required. See how we can transform your business."
-        keywords="free demo, payment processing demo, POS demo, merchant services trial, EzPay demo"
+        title="Free Demo - Schedule Your Free Payment Processing Consultation"
+        description="Schedule a free demo of EzPay America's zero-fee payment processing and POS systems. No credit card required. 24-hour setup, no contracts, free equipment. Call (865) 316-9625 or book online."
+        keywords="free demo, payment processing demo, POS system demo, merchant services trial, free consultation, EzPay America demo, zero fee processing demo, schedule demo, free payment terminal demo, POS software trial, payment processing consultation, merchant account demo, free merchant services consultation, credit card processing demo, no contract payment processing, retail POS demo, restaurant POS demo"
+        url="https://ezpayamerica.com/FreeDemo"
       />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500">
