@@ -41,7 +41,7 @@ export default function HeroSection() {
             </div>
 
             <p className="text-xl text-gray-600 leading-relaxed">
-              Accept credit cards with transparent pricing, 24-hour approval, and free POS equipment. Trusted by 500+ small businesses nationwide — retail, restaurants, and more.
+              Accept credit cards with transparent pricing, 24-hour approval, and free POS equipment. Trusted by 15,000+ small businesses nationwide — retail, restaurants, and more.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
