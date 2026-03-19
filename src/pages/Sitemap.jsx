@@ -23,6 +23,12 @@ export default function Sitemap() {
       { path: '/MerchantCashAdvance', priority: '0.8', changefreq: 'weekly', title: 'Merchant Cash Advance & Business Funding' },
       { path: '/RetailPaymentSolutions', priority: '0.8', changefreq: 'weekly', title: 'Retail Payment Solutions' },
       { path: '/BrandedPaymentGateway', priority: '0.85', changefreq: 'weekly', title: 'Branded Payment Gateway - EzPay America' },
+      { path: '/GatewayRecurringBilling', priority: '0.8', changefreq: 'weekly', title: 'Recurring Billing & Subscription Payments' },
+      { path: '/GatewayFraudProtection', priority: '0.8', changefreq: 'weekly', title: 'Payment Fraud Protection & Prevention' },
+      { path: '/GatewayTokenization', priority: '0.8', changefreq: 'weekly', title: 'Payment Tokenization & Card Security' },
+      { path: '/GatewayPaymentLinks', priority: '0.8', changefreq: 'weekly', title: 'Instant Payment Links for Businesses' },
+      { path: '/GatewayMobilePayments', priority: '0.8', changefreq: 'weekly', title: 'Mobile & Tap-to-Pay Payment Processing' },
+      { path: '/GatewayReporting', priority: '0.8', changefreq: 'weekly', title: 'Payment Reporting & Analytics Dashboard' },
       
       // POS Systems - Main Categories
       { path: '/RetailPOS', priority: '0.85', changefreq: 'weekly', title: 'Retail POS System - Inventory & Sales' },

@@ -78,6 +78,12 @@ import ApplyOnline from './pages/ApplyOnline';
 import BacklinkOutreach from './pages/BacklinkOutreach';
 import BagelShopPOS from './pages/BagelShopPOS';
 import BrandedPaymentGateway from './pages/BrandedPaymentGateway';
+import GatewayRecurringBilling from './pages/GatewayRecurringBilling';
+import GatewayFraudProtection from './pages/GatewayFraudProtection';
+import GatewayTokenization from './pages/GatewayTokenization';
+import GatewayPaymentLinks from './pages/GatewayPaymentLinks';
+import GatewayMobilePayments from './pages/GatewayMobilePayments';
+import GatewayReporting from './pages/GatewayReporting';
 import BarTavernPOS from './pages/BarTavernPOS';
 import BusinessDashboard from './pages/BusinessDashboard';
 import CBDStorePOS from './pages/CBDStorePOS';
@@ -169,6 +175,12 @@ export const PAGES = {
     "BacklinkOutreach": BacklinkOutreach,
     "BagelShopPOS": BagelShopPOS,
     "BrandedPaymentGateway": BrandedPaymentGateway,
+    "GatewayRecurringBilling": GatewayRecurringBilling,
+    "GatewayFraudProtection": GatewayFraudProtection,
+    "GatewayTokenization": GatewayTokenization,
+    "GatewayPaymentLinks": GatewayPaymentLinks,
+    "GatewayMobilePayments": GatewayMobilePayments,
+    "GatewayReporting": GatewayReporting,
     "BarTavernPOS": BarTavernPOS,
     "BusinessDashboard": BusinessDashboard,
     "CBDStorePOS": CBDStorePOS,

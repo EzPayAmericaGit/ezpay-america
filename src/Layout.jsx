@@ -30,7 +30,13 @@ export default function Layout({ children }) {
           { title: "Get A Merchant Cash Advance", url: createPageUrl("MerchantCashAdvance") },
           { title: "Retail Payment Solutions", url: createPageUrl("RetailPaymentSolutions") },
           { title: "Payment Processing Hardware", url: createPageUrl("Shop") },
-          { title: "Branded Payment Gateway", url: createPageUrl("BrandedPaymentGateway") }
+          { title: "Branded Payment Gateway", url: createPageUrl("BrandedPaymentGateway") },
+          { title: "Recurring Billing & Subscriptions", url: createPageUrl("GatewayRecurringBilling") },
+          { title: "Fraud Protection", url: createPageUrl("GatewayFraudProtection") },
+          { title: "Tokenization & Card Security", url: createPageUrl("GatewayTokenization") },
+          { title: "Payment Links", url: createPageUrl("GatewayPaymentLinks") },
+          { title: "Mobile & Tap-to-Pay", url: createPageUrl("GatewayMobilePayments") },
+          { title: "Reporting & Analytics", url: createPageUrl("GatewayReporting") }
         ]
       },
       { 
