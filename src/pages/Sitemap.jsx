@@ -58,7 +58,74 @@ export default function Sitemap() {
     { path: '/Support', priority: '0.8', changefreq: 'weekly', title: 'Customer Support & Help Center' },
     { path: '/Helpdesk', priority: '0.7', changefreq: 'weekly', title: 'Help Desk & Support Tickets' },
     { path: '/Sitemap', priority: '0.5', changefreq: 'monthly', title: 'Sitemap - All Pages' },
-    { path: '/RobotsTxt', priority: '0.3', changefreq: 'monthly', title: 'Robots.txt' }
+    { path: '/RobotsTxt', priority: '0.3', changefreq: 'monthly', title: 'Robots.txt' },
+    // Retail
+    { path: '/ClothingBoutiquePOS', priority: '0.75', changefreq: 'weekly', title: 'Clothing Boutique POS & Payment Processing' },
+    { path: '/ShoeStorePOS', priority: '0.75', changefreq: 'weekly', title: 'Shoe Store POS & Payment Processing' },
+    { path: '/JewelryStorePOS', priority: '0.75', changefreq: 'weekly', title: 'Jewelry Store POS & Payment Processing' },
+    { path: '/SpecialtyFoodStorePOS', priority: '0.75', changefreq: 'weekly', title: 'Specialty Food Store POS & Payment Processing' },
+    { path: '/FurnitureStorePOS', priority: '0.75', changefreq: 'weekly', title: 'Furniture Store POS & Payment Processing' },
+    { path: '/ElectronicsStorePOS', priority: '0.75', changefreq: 'weekly', title: 'Electronics Store POS & Payment Processing' },
+    { path: '/SportingGoodsStorePOS', priority: '0.75', changefreq: 'weekly', title: 'Sporting Goods Store POS & Payment Processing' },
+    { path: '/PetStorePOS', priority: '0.75', changefreq: 'weekly', title: 'Pet Store POS & Payment Processing' },
+    { path: '/FloristPOS', priority: '0.75', changefreq: 'weekly', title: 'Florist POS & Payment Processing' },
+    { path: '/ThriftStorePOS', priority: '0.75', changefreq: 'weekly', title: 'Thrift Store POS & Payment Processing' },
+    { path: '/PopUpRetailPOS', priority: '0.75', changefreq: 'weekly', title: 'Pop-Up Retail Shop POS & Payment Processing' },
+    // Personal Services
+    { path: '/HairSalonPOS', priority: '0.75', changefreq: 'weekly', title: 'Hair Salon POS & Payment Processing' },
+    { path: '/BarberShopPOS', priority: '0.75', changefreq: 'weekly', title: 'Barber Shop POS & Payment Processing' },
+    { path: '/NailSalonPOS', priority: '0.75', changefreq: 'weekly', title: 'Nail Salon POS & Payment Processing' },
+    { path: '/SpaPOS', priority: '0.75', changefreq: 'weekly', title: 'Spa POS & Payment Processing' },
+    { path: '/MassageTherapyPOS', priority: '0.75', changefreq: 'weekly', title: 'Massage Therapy POS & Payment Processing' },
+    { path: '/TanningSalonPOS', priority: '0.75', changefreq: 'weekly', title: 'Tanning Salon POS & Payment Processing' },
+    { path: '/TattooShopPOS', priority: '0.75', changefreq: 'weekly', title: 'Tattoo Shop POS & Payment Processing' },
+    { path: '/BeautyClinicPOS', priority: '0.75', changefreq: 'weekly', title: 'Beauty Clinic POS & Payment Processing' },
+    { path: '/MedSpaPOS', priority: '0.75', changefreq: 'weekly', title: 'Med Spa POS & Payment Processing' },
+    { path: '/PersonalTrainerPOS', priority: '0.75', changefreq: 'weekly', title: 'Personal Trainer POS & Payment Processing' },
+    { path: '/YogaStudioPOS', priority: '0.75', changefreq: 'weekly', title: 'Yoga Studio POS & Payment Processing' },
+    { path: '/FitnessGymPOS', priority: '0.75', changefreq: 'weekly', title: 'Fitness Gym POS & Payment Processing' },
+    { path: '/DanceStudioPOS', priority: '0.75', changefreq: 'weekly', title: 'Dance Studio POS & Payment Processing' },
+    { path: '/CoachingBusinessPOS', priority: '0.75', changefreq: 'weekly', title: 'Coaching Business POS & Payment Processing' },
+    // Healthcare
+    { path: '/DentalOfficePOS', priority: '0.8', changefreq: 'weekly', title: 'Dental Office POS & Payment Processing' },
+    { path: '/ChiropractorPOS', priority: '0.8', changefreq: 'weekly', title: 'Chiropractic Clinic POS & Payment Processing' },
+    { path: '/PhysicalTherapyPOS', priority: '0.8', changefreq: 'weekly', title: 'Physical Therapy Clinic POS & Payment Processing' },
+    { path: '/UrgentCarePOS', priority: '0.8', changefreq: 'weekly', title: 'Urgent Care Center POS & Payment Processing' },
+    { path: '/PrivateMedicalPOS', priority: '0.8', changefreq: 'weekly', title: 'Private Medical Practice POS & Payment Processing' },
+    { path: '/MentalHealthClinicPOS', priority: '0.75', changefreq: 'weekly', title: 'Mental Health Clinic POS & Payment Processing' },
+    { path: '/VeterinaryClinicPOS', priority: '0.75', changefreq: 'weekly', title: 'Veterinary Clinic POS & Payment Processing' },
+    { path: '/HomeHealthcarePOS', priority: '0.75', changefreq: 'weekly', title: 'Home Healthcare POS & Payment Processing' },
+    { path: '/MedicalLabPOS', priority: '0.75', changefreq: 'weekly', title: 'Medical Lab POS & Payment Processing' },
+    // Home Services
+    { path: '/HVACCompanyPOS', priority: '0.75', changefreq: 'weekly', title: 'HVAC Company POS & Payment Processing' },
+    { path: '/PlumbingServicesPOS', priority: '0.75', changefreq: 'weekly', title: 'Plumbing Services POS & Payment Processing' },
+    { path: '/ElectricalContractorPOS', priority: '0.75', changefreq: 'weekly', title: 'Electrical Contractor POS & Payment Processing' },
+    { path: '/RoofingCompanyPOS', priority: '0.75', changefreq: 'weekly', title: 'Roofing Company POS & Payment Processing' },
+    { path: '/LandscapingPOS', priority: '0.75', changefreq: 'weekly', title: 'Landscaping Business POS & Payment Processing' },
+    { path: '/PestControlPOS', priority: '0.75', changefreq: 'weekly', title: 'Pest Control Company POS & Payment Processing' },
+    { path: '/ResidentialCleaningPOS', priority: '0.75', changefreq: 'weekly', title: 'Residential Cleaning POS & Payment Processing' },
+    { path: '/CommercialCleaningPOS', priority: '0.75', changefreq: 'weekly', title: 'Commercial Cleaning POS & Payment Processing' },
+    { path: '/RestorationCompanyPOS', priority: '0.75', changefreq: 'weekly', title: 'Restoration Company POS & Payment Processing' },
+    { path: '/HandymanServicesPOS', priority: '0.75', changefreq: 'weekly', title: 'Handyman Services POS & Payment Processing' },
+    { path: '/PoolMaintenancePOS', priority: '0.75', changefreq: 'weekly', title: 'Pool Maintenance POS & Payment Processing' },
+    { path: '/SecurityInstallerPOS', priority: '0.75', changefreq: 'weekly', title: 'Security System Installer POS & Payment Processing' },
+    { path: '/MovingCompanyPOS', priority: '0.75', changefreq: 'weekly', title: 'Moving Company POS & Payment Processing' },
+    { path: '/ApplianceRepairPOS', priority: '0.75', changefreq: 'weekly', title: 'Appliance Repair POS & Payment Processing' },
+    { path: '/DryCleanersPOS', priority: '0.75', changefreq: 'weekly', title: 'Dry Cleaners POS & Payment Processing' },
+    // Professional Services
+    { path: '/LawFirmPOS', priority: '0.8', changefreq: 'weekly', title: 'Law Firm POS & Payment Processing' },
+    { path: '/AccountingFirmPOS', priority: '0.8', changefreq: 'weekly', title: 'Accounting Firm POS & Payment Processing' },
+    { path: '/BookkeepingServicesPOS', priority: '0.75', changefreq: 'weekly', title: 'Bookkeeping Services POS & Payment Processing' },
+    { path: '/MarketingAgencyPOS', priority: '0.75', changefreq: 'weekly', title: 'Marketing Agency POS & Payment Processing' },
+    { path: '/ConsultingFirmPOS', priority: '0.75', changefreq: 'weekly', title: 'Consulting Firm POS & Payment Processing' },
+    { path: '/ITServicesPOS', priority: '0.75', changefreq: 'weekly', title: 'IT Services & MSP POS & Payment Processing' },
+    { path: '/WebDesignAgencyPOS', priority: '0.75', changefreq: 'weekly', title: 'Web Design Agency POS & Payment Processing' },
+    { path: '/SoftwareDeveloperPOS', priority: '0.75', changefreq: 'weekly', title: 'Software Developer POS & Payment Processing' },
+    { path: '/ArchitectureFirmPOS', priority: '0.75', changefreq: 'weekly', title: 'Architecture Firm POS & Payment Processing' },
+    { path: '/EngineeringFirmPOS', priority: '0.75', changefreq: 'weekly', title: 'Engineering Firm POS & Payment Processing' },
+    { path: '/StaffingAgencyPOS', priority: '0.75', changefreq: 'weekly', title: 'Staffing Agency POS & Payment Processing' },
+    { path: '/TranslationServicesPOS', priority: '0.75', changefreq: 'weekly', title: 'Translation Services POS & Payment Processing' },
+    { path: '/PRFirmPOS', priority: '0.75', changefreq: 'weekly', title: 'PR Firm POS & Payment Processing' }
   ];
 
   useEffect(() => {
@@ -73,9 +140,7 @@ export default function Sitemap() {
     ).join('\n');
 
     const xml = '<?xml version="1.0" encoding="UTF-8"?>\n' +
-      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n' +
-      '        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"\n' +
-      '        xmlns:xhtml="http://www.w3.org/1999/xhtml">\n' +
+      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
       urlEntries + '\n' +
       '</urlset>';
 
@@ -87,13 +152,11 @@ export default function Sitemap() {
       <div className="max-w-6xl mx-auto">
         <h1 className="text-4xl font-bold mb-4 text-gray-900">EzPay America Sitemap</h1>
         <p className="text-gray-600 mb-8">Complete directory of all pages and services</p>
-        
+
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
           <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-lg border border-amber-200">
-            <h2 className="text-xl font-bold mb-4 text-gray-900 flex items-center gap-2">
-              <span className="w-2 h-2 bg-amber-500 rounded-full"></span>
-              Main Pages
-            </h2>
+            <h2 className="text-xl font-bold mb-4 text-gray-900">Main Pages</h2>
             <ul className="space-y-2">
               <li><a href="/" className="text-amber-700 hover:text-amber-900 hover:underline font-medium">Home</a></li>
               <li><a href="/Services" className="text-amber-700 hover:text-amber-900 hover:underline font-medium">Services</a></li>
@@ -101,14 +164,14 @@ export default function Sitemap() {
               <li><a href="/FreeDemo" className="text-amber-700 hover:text-amber-900 hover:underline font-medium">Schedule Free Demo</a></li>
               <li><a href="/Contact" className="text-amber-700 hover:text-amber-900 hover:underline font-medium">Contact Us</a></li>
               <li><a href="/Shop" className="text-amber-700 hover:text-amber-900 hover:underline font-medium">Shop Equipment</a></li>
+              <li><a href="/News" className="text-amber-700 hover:text-amber-900 hover:underline font-medium">News & Insights</a></li>
+              <li><a href="/Quiz" className="text-amber-700 hover:text-amber-900 hover:underline font-medium">Business Quiz</a></li>
+              <li><a href="/Support" className="text-amber-700 hover:text-amber-900 hover:underline font-medium">Support Center</a></li>
             </ul>
           </div>
 
           <div className="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-lg border border-blue-200">
-            <h2 className="text-xl font-bold mb-4 text-gray-900 flex items-center gap-2">
-              <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-              Merchant Services
-            </h2>
+            <h2 className="text-xl font-bold mb-4 text-gray-900">Merchant Services</h2>
             <ul className="space-y-2">
               <li><a href="/RetailMerchants" className="text-blue-700 hover:text-blue-900 hover:underline">Retail Merchants</a></li>
               <li><a href="/RestaurantMerchants" className="text-blue-700 hover:text-blue-900 hover:underline">Restaurant Merchants</a></li>
@@ -116,13 +179,13 @@ export default function Sitemap() {
               <li><a href="/MerchantCashAdvance" className="text-blue-700 hover:text-blue-900 hover:underline">Merchant Cash Advance</a></li>
               <li><a href="/MerchantCapital" className="text-blue-700 hover:text-blue-900 hover:underline">Merchant Capital</a></li>
               <li><a href="/RetailPaymentSolutions" className="text-blue-700 hover:text-blue-900 hover:underline">Retail Payment Solutions</a></li>
-              <li><a href="/BrandedPaymentGateway" className="text-blue-700 hover:text-blue-900 hover:underline font-medium">Branded Payment Gateway</a></li>
-              <li><a href="/GatewayRecurringBilling" className="text-blue-700 hover:text-blue-900 hover:underline">↳ Recurring Billing</a></li>
-              <li><a href="/GatewayFraudProtection" className="text-blue-700 hover:text-blue-900 hover:underline">↳ Fraud Protection</a></li>
-              <li><a href="/GatewayTokenization" className="text-blue-700 hover:text-blue-900 hover:underline">↳ Tokenization & Security</a></li>
-              <li><a href="/GatewayPaymentLinks" className="text-blue-700 hover:text-blue-900 hover:underline">↳ Payment Links</a></li>
-              <li><a href="/GatewayMobilePayments" className="text-blue-700 hover:text-blue-900 hover:underline">↳ Mobile & Tap-to-Pay</a></li>
-              <li><a href="/GatewayReporting" className="text-blue-700 hover:text-blue-900 hover:underline">↳ Reporting & Analytics</a></li>
+              <li><a href="/BrandedPaymentGateway" className="text-blue-700 hover:text-blue-900 hover:underline">Branded Payment Gateway</a></li>
+              <li><a href="/GatewayRecurringBilling" className="text-blue-700 hover:text-blue-900 hover:underline">Recurring Billing</a></li>
+              <li><a href="/GatewayFraudProtection" className="text-blue-700 hover:text-blue-900 hover:underline">Fraud Protection</a></li>
+              <li><a href="/GatewayTokenization" className="text-blue-700 hover:text-blue-900 hover:underline">Tokenization & Security</a></li>
+              <li><a href="/GatewayPaymentLinks" className="text-blue-700 hover:text-blue-900 hover:underline">Payment Links</a></li>
+              <li><a href="/GatewayMobilePayments" className="text-blue-700 hover:text-blue-900 hover:underline">Mobile & Tap-to-Pay</a></li>
+              <li><a href="/GatewayReporting" className="text-blue-700 hover:text-blue-900 hover:underline">Reporting & Analytics</a></li>
               <li><a href="/ACHPayments" className="text-blue-700 hover:text-blue-900 hover:underline">ACH Payments</a></li>
               <li><a href="/MobilePayments" className="text-blue-700 hover:text-blue-900 hover:underline">Mobile Payments</a></li>
               <li><a href="/ECommerce" className="text-blue-700 hover:text-blue-900 hover:underline">E-Commerce Gateway</a></li>
@@ -131,10 +194,7 @@ export default function Sitemap() {
           </div>
 
           <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-lg border border-green-200">
-            <h2 className="text-xl font-bold mb-4 text-gray-900 flex items-center gap-2">
-              <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-              POS Systems
-            </h2>
+            <h2 className="text-xl font-bold mb-4 text-gray-900">POS Systems</h2>
             <ul className="space-y-2">
               <li><a href="/EzPayPOSHome" className="text-green-700 hover:text-green-900 hover:underline font-medium">EzPay POS Overview</a></li>
               <li><a href="/RetailPOS" className="text-green-700 hover:text-green-900 hover:underline">Retail POS</a></li>
@@ -144,18 +204,13 @@ export default function Sitemap() {
           </div>
 
           <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-lg border border-purple-200">
-            <h2 className="text-xl font-bold mb-4 text-gray-900 flex items-center gap-2">
-              <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
-              Food & Beverage
-            </h2>
+            <h2 className="text-xl font-bold mb-4 text-gray-900">Food & Beverage</h2>
             <ul className="space-y-2">
-              <li><a href="/CoffeePOS" className="text-purple-700 hover:text-purple-900 hover:underline">Coffee Shop POS</a></li>
-              <li><a href="/BagelShopPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Bagel Shop POS</a></li>
-              <li><a href="/FoodTruckPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Food Truck POS</a></li>
-              <li><a href="/DeliShopPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Deli Shop POS</a></li>
-              <li><a href="/BarTavernPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Bar & Tavern POS</a></li>
               <li><a href="/FullServiceRestaurantPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Full Service Restaurant POS</a></li>
               <li><a href="/QuickServicePOS" className="text-purple-700 hover:text-purple-900 hover:underline">Quick Service / Fast Food POS</a></li>
+              <li><a href="/CoffeePOS" className="text-purple-700 hover:text-purple-900 hover:underline">Coffee Shop POS</a></li>
+              <li><a href="/FoodTruckPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Food Truck POS</a></li>
+              <li><a href="/BarTavernPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Bar & Tavern POS</a></li>
               <li><a href="/BakeryPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Bakery POS</a></li>
               <li><a href="/CateringPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Catering Company POS</a></li>
               <li><a href="/IceCreamShopPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Ice Cream Shop POS</a></li>
@@ -166,14 +221,13 @@ export default function Sitemap() {
               <li><a href="/NightclubPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Nightclub POS</a></li>
               <li><a href="/HotelRestaurantPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Hotel Restaurant POS</a></li>
               <li><a href="/CafeteriaPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Cafeteria POS</a></li>
+              <li><a href="/BagelShopPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Bagel Shop POS</a></li>
+              <li><a href="/DeliShopPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Deli Shop POS</a></li>
             </ul>
           </div>
 
           <div className="bg-gradient-to-br from-red-50 to-rose-50 p-6 rounded-lg border border-red-200">
-            <h2 className="text-xl font-bold mb-4 text-gray-900 flex items-center gap-2">
-              <span className="w-2 h-2 bg-red-500 rounded-full"></span>
-              Specialty Retail
-            </h2>
+            <h2 className="text-xl font-bold mb-4 text-gray-900">Specialty Retail</h2>
             <ul className="space-y-2">
               <li><a href="/GroceryStorePOS" className="text-red-700 hover:text-red-900 hover:underline">Grocery Store POS</a></li>
               <li><a href="/MiniMarketPOS" className="text-red-700 hover:text-red-900 hover:underline">Convenience Store POS</a></li>
@@ -184,11 +238,100 @@ export default function Sitemap() {
             </ul>
           </div>
 
+          <div className="bg-gradient-to-br from-teal-50 to-cyan-50 p-6 rounded-lg border border-teal-200">
+            <h2 className="text-xl font-bold mb-4 text-gray-900">Personal Services</h2>
+            <ul className="space-y-2">
+              <li><a href="/HairSalonPOS" className="text-teal-700 hover:text-teal-900 hover:underline">Hair Salon</a></li>
+              <li><a href="/BarberShopPOS" className="text-teal-700 hover:text-teal-900 hover:underline">Barber Shop</a></li>
+              <li><a href="/NailSalonPOS" className="text-teal-700 hover:text-teal-900 hover:underline">Nail Salon</a></li>
+              <li><a href="/SpaPOS" className="text-teal-700 hover:text-teal-900 hover:underline">Spa</a></li>
+              <li><a href="/MassageTherapyPOS" className="text-teal-700 hover:text-teal-900 hover:underline">Massage Therapy</a></li>
+              <li><a href="/TanningSalonPOS" className="text-teal-700 hover:text-teal-900 hover:underline">Tanning Salon</a></li>
+              <li><a href="/TattooShopPOS" className="text-teal-700 hover:text-teal-900 hover:underline">Tattoo Shop</a></li>
+              <li><a href="/BeautyClinicPOS" className="text-teal-700 hover:text-teal-900 hover:underline">Beauty Clinic</a></li>
+              <li><a href="/MedSpaPOS" className="text-teal-700 hover:text-teal-900 hover:underline">Med Spa</a></li>
+              <li><a href="/PersonalTrainerPOS" className="text-teal-700 hover:text-teal-900 hover:underline">Personal Trainers</a></li>
+              <li><a href="/YogaStudioPOS" className="text-teal-700 hover:text-teal-900 hover:underline">Yoga Studios</a></li>
+              <li><a href="/FitnessGymPOS" className="text-teal-700 hover:text-teal-900 hover:underline">Fitness Gyms</a></li>
+              <li><a href="/DanceStudioPOS" className="text-teal-700 hover:text-teal-900 hover:underline">Dance Studios</a></li>
+              <li><a href="/CoachingBusinessPOS" className="text-teal-700 hover:text-teal-900 hover:underline">Coaching Businesses</a></li>
+            </ul>
+          </div>
+
+          <div className="bg-gradient-to-br from-indigo-50 to-blue-50 p-6 rounded-lg border border-indigo-200">
+            <h2 className="text-xl font-bold mb-4 text-gray-900">Retail</h2>
+            <ul className="space-y-2">
+              <li><a href="/ClothingBoutiquePOS" className="text-indigo-700 hover:text-indigo-900 hover:underline">Clothing Boutiques</a></li>
+              <li><a href="/ShoeStorePOS" className="text-indigo-700 hover:text-indigo-900 hover:underline">Shoe Stores</a></li>
+              <li><a href="/JewelryStorePOS" className="text-indigo-700 hover:text-indigo-900 hover:underline">Jewelry Stores</a></li>
+              <li><a href="/SpecialtyFoodStorePOS" className="text-indigo-700 hover:text-indigo-900 hover:underline">Specialty Food Stores</a></li>
+              <li><a href="/FurnitureStorePOS" className="text-indigo-700 hover:text-indigo-900 hover:underline">Furniture Stores</a></li>
+              <li><a href="/ElectronicsStorePOS" className="text-indigo-700 hover:text-indigo-900 hover:underline">Electronics Stores</a></li>
+              <li><a href="/SportingGoodsStorePOS" className="text-indigo-700 hover:text-indigo-900 hover:underline">Sporting Goods Stores</a></li>
+              <li><a href="/PetStorePOS" className="text-indigo-700 hover:text-indigo-900 hover:underline">Pet Stores</a></li>
+              <li><a href="/FloristPOS" className="text-indigo-700 hover:text-indigo-900 hover:underline">Florists</a></li>
+              <li><a href="/ThriftStorePOS" className="text-indigo-700 hover:text-indigo-900 hover:underline">Thrift Stores</a></li>
+              <li><a href="/PopUpRetailPOS" className="text-indigo-700 hover:text-indigo-900 hover:underline">Pop-Up Retail</a></li>
+            </ul>
+          </div>
+
+          <div className="bg-gradient-to-br from-rose-50 to-pink-50 p-6 rounded-lg border border-rose-200">
+            <h2 className="text-xl font-bold mb-4 text-gray-900">Healthcare</h2>
+            <ul className="space-y-2">
+              <li><a href="/DentalOfficePOS" className="text-rose-700 hover:text-rose-900 hover:underline">Dental Offices</a></li>
+              <li><a href="/ChiropractorPOS" className="text-rose-700 hover:text-rose-900 hover:underline">Chiropractic Clinics</a></li>
+              <li><a href="/PhysicalTherapyPOS" className="text-rose-700 hover:text-rose-900 hover:underline">Physical Therapy</a></li>
+              <li><a href="/UrgentCarePOS" className="text-rose-700 hover:text-rose-900 hover:underline">Urgent Care Centers</a></li>
+              <li><a href="/PrivateMedicalPOS" className="text-rose-700 hover:text-rose-900 hover:underline">Private Medical Practices</a></li>
+              <li><a href="/MentalHealthClinicPOS" className="text-rose-700 hover:text-rose-900 hover:underline">Mental Health Clinics</a></li>
+              <li><a href="/VeterinaryClinicPOS" className="text-rose-700 hover:text-rose-900 hover:underline">Veterinary Clinics</a></li>
+              <li><a href="/HomeHealthcarePOS" className="text-rose-700 hover:text-rose-900 hover:underline">Home Healthcare</a></li>
+              <li><a href="/MedicalLabPOS" className="text-rose-700 hover:text-rose-900 hover:underline">Medical Labs</a></li>
+            </ul>
+          </div>
+
+          <div className="bg-gradient-to-br from-orange-50 to-amber-50 p-6 rounded-lg border border-orange-200">
+            <h2 className="text-xl font-bold mb-4 text-gray-900">Home Services</h2>
+            <ul className="space-y-2">
+              <li><a href="/HVACCompanyPOS" className="text-orange-700 hover:text-orange-900 hover:underline">HVAC Companies</a></li>
+              <li><a href="/PlumbingServicesPOS" className="text-orange-700 hover:text-orange-900 hover:underline">Plumbing Services</a></li>
+              <li><a href="/ElectricalContractorPOS" className="text-orange-700 hover:text-orange-900 hover:underline">Electrical Contractors</a></li>
+              <li><a href="/RoofingCompanyPOS" className="text-orange-700 hover:text-orange-900 hover:underline">Roofing Companies</a></li>
+              <li><a href="/LandscapingPOS" className="text-orange-700 hover:text-orange-900 hover:underline">Landscaping</a></li>
+              <li><a href="/PestControlPOS" className="text-orange-700 hover:text-orange-900 hover:underline">Pest Control</a></li>
+              <li><a href="/ResidentialCleaningPOS" className="text-orange-700 hover:text-orange-900 hover:underline">Residential Cleaning</a></li>
+              <li><a href="/CommercialCleaningPOS" className="text-orange-700 hover:text-orange-900 hover:underline">Commercial Cleaning</a></li>
+              <li><a href="/RestorationCompanyPOS" className="text-orange-700 hover:text-orange-900 hover:underline">Restoration Companies</a></li>
+              <li><a href="/HandymanServicesPOS" className="text-orange-700 hover:text-orange-900 hover:underline">Handyman Services</a></li>
+              <li><a href="/PoolMaintenancePOS" className="text-orange-700 hover:text-orange-900 hover:underline">Pool Maintenance</a></li>
+              <li><a href="/SecurityInstallerPOS" className="text-orange-700 hover:text-orange-900 hover:underline">Security Installers</a></li>
+              <li><a href="/MovingCompanyPOS" className="text-orange-700 hover:text-orange-900 hover:underline">Moving Companies</a></li>
+              <li><a href="/ApplianceRepairPOS" className="text-orange-700 hover:text-orange-900 hover:underline">Appliance Repair</a></li>
+              <li><a href="/DryCleanersPOS" className="text-orange-700 hover:text-orange-900 hover:underline">Dry Cleaners</a></li>
+            </ul>
+          </div>
+
+          <div className="bg-gradient-to-br from-violet-50 to-purple-50 p-6 rounded-lg border border-violet-200">
+            <h2 className="text-xl font-bold mb-4 text-gray-900">Professional Services</h2>
+            <ul className="space-y-2">
+              <li><a href="/LawFirmPOS" className="text-violet-700 hover:text-violet-900 hover:underline">Law Firms</a></li>
+              <li><a href="/AccountingFirmPOS" className="text-violet-700 hover:text-violet-900 hover:underline">Accounting Firms</a></li>
+              <li><a href="/BookkeepingServicesPOS" className="text-violet-700 hover:text-violet-900 hover:underline">Bookkeeping Services</a></li>
+              <li><a href="/MarketingAgencyPOS" className="text-violet-700 hover:text-violet-900 hover:underline">Marketing Agencies</a></li>
+              <li><a href="/ConsultingFirmPOS" className="text-violet-700 hover:text-violet-900 hover:underline">Consulting Firms</a></li>
+              <li><a href="/ITServicesPOS" className="text-violet-700 hover:text-violet-900 hover:underline">IT Services & MSPs</a></li>
+              <li><a href="/WebDesignAgencyPOS" className="text-violet-700 hover:text-violet-900 hover:underline">Web Design Agencies</a></li>
+              <li><a href="/SoftwareDeveloperPOS" className="text-violet-700 hover:text-violet-900 hover:underline">Software Developers</a></li>
+              <li><a href="/ArchitectureFirmPOS" className="text-violet-700 hover:text-violet-900 hover:underline">Architecture Firms</a></li>
+              <li><a href="/EngineeringFirmPOS" className="text-violet-700 hover:text-violet-900 hover:underline">Engineering Firms</a></li>
+              <li><a href="/StaffingAgencyPOS" className="text-violet-700 hover:text-violet-900 hover:underline">Staffing Agencies</a></li>
+              <li><a href="/TranslationServicesPOS" className="text-violet-700 hover:text-violet-900 hover:underline">Translation Services</a></li>
+              <li><a href="/PRFirmPOS" className="text-violet-700 hover:text-violet-900 hover:underline">PR Firms</a></li>
+            </ul>
+          </div>
+
           <div className="bg-gradient-to-br from-gray-50 to-slate-50 p-6 rounded-lg border border-gray-200">
-            <h2 className="text-xl font-bold mb-4 text-gray-900 flex items-center gap-2">
-              <span className="w-2 h-2 bg-gray-500 rounded-full"></span>
-              Resources
-            </h2>
+            <h2 className="text-xl font-bold mb-4 text-gray-900">Resources</h2>
             <ul className="space-y-2">
               <li><a href="/News" className="text-gray-700 hover:text-gray-900 hover:underline">News & Insights</a></li>
               <li><a href="/Quiz" className="text-gray-700 hover:text-gray-900 hover:underline">Business Quiz</a></li>
@@ -196,12 +339,13 @@ export default function Sitemap() {
               <li><a href="/Sitemap" className="text-gray-700 hover:text-gray-900 hover:underline">Sitemap</a></li>
             </ul>
           </div>
+
         </div>
 
         <div className="mt-12 bg-amber-50 border-l-4 border-amber-500 p-6 rounded">
           <h3 className="text-lg font-bold text-gray-900 mb-2">For Search Engines</h3>
           <p className="text-sm text-gray-700">
-            This sitemap follows Google's XML sitemap protocol with priorities, change frequencies, and last modification dates. 
+            This sitemap follows Google's XML sitemap protocol with priorities, change frequencies, and last modification dates.
             All pages are optimized for search engines with proper meta tags, structured data, and semantic HTML.
           </p>
           <p className="text-sm text-gray-600 mt-3">

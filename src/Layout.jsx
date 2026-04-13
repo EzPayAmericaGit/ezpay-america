@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { base44 } from "@/api/base44Client";
 import AnalyticsTracker from "@/components/AnalyticsTracker";
 import HelpWidget from "@/components/HelpWidget";
+import Footer from "@/components/home/Footer";
 
 export default function Layout({ children }) {
   const location = useLocation();
@@ -448,6 +449,7 @@ export default function Layout({ children }) {
         {children}
       </main>
 
+      <Footer />
       <HelpWidget />
     </div>
   );
