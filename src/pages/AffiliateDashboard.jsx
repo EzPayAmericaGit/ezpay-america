@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { DollarSign, Users, TrendingUp, Copy, CheckCircle2, Clock, ExternalLink, Link2, AlertCircle, Loader2 } from "lucide-react";
+import { DollarSign, Users, TrendingUp, Copy, CheckCircle2, Clock, ExternalLink, Link2, AlertCircle, Loader2, BarChart2 } from "lucide-react";
+import ReferralAnalytics from "../components/affiliate/ReferralAnalytics";
 import { motion } from "framer-motion";
 import SEOHead from "../components/SEOHead";
 import { Link } from "react-router-dom";
@@ -132,7 +133,7 @@ export default function AffiliateDashboard() {
     </div>
   );
 
-  const tabs = ["overview", "referrals", "payouts", "leaderboard", "settings"];
+  const tabs = ["overview", "referrals", "analytics", "payouts", "leaderboard", "settings"];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -199,7 +200,8 @@ export default function AffiliateDashboard() {
         <div className="flex gap-1 bg-gray-200 rounded-xl p-1 mb-8 w-fit">
           {tabs.map(t => (
             <button key={t} onClick={() => setActiveTab(t)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium capitalize transition-all ${activeTab === t ? "bg-white shadow text-gray-900" : "text-gray-600 hover:text-gray-900"}`}>
+              className={`px-4 py-2 rounded-lg text-sm font-medium capitalize transition-all flex items-center gap-1.5 ${activeTab === t ? "bg-white shadow text-gray-900" : "text-gray-600 hover:text-gray-900"}`}>
+              {t === "analytics" && <BarChart2 className="w-3.5 h-3.5" />}
               {t}
             </button>
           ))}
@@ -377,6 +379,11 @@ export default function AffiliateDashboard() {
               )}
             </CardContent>
           </Card>
+        )}
+
+        {/* Analytics Tab */}
+        {activeTab === "analytics" && (
+          <ReferralAnalytics referrals={referrals} payouts={payouts} affiliate={affiliate} />
         )}
 
         {/* Payouts Tab */}

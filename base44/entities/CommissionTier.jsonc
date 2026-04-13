@@ -1,0 +1,50 @@
+{
+  "name": "CommissionTier",
+  "type": "object",
+  "properties": {
+    "tier": {
+      "type": "string",
+      "enum": [
+        "bronze",
+        "silver",
+        "gold",
+        "platinum"
+      ],
+      "description": "Tier name"
+    },
+    "minConversions": {
+      "type": "number",
+      "description": "Minimum conversions to reach this tier"
+    },
+    "commissionRate": {
+      "type": "number",
+      "description": "Commission percentage for this tier"
+    },
+    "bonusPerConversion": {
+      "type": "number",
+      "default": 0,
+      "description": "Flat bonus $ per conversion on top of percentage"
+    },
+    "description": {
+      "type": "string",
+      "description": "Public-facing tier description"
+    },
+    "perks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "List of tier perks shown to affiliates"
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "tier",
+    "minConversions",
+    "commissionRate"
+  ]
+}

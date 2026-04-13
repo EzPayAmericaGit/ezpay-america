@@ -13,6 +13,7 @@ import { createPageUrl } from "@/utils";
 import AffiliateAnalytics from "../components/affiliate/AffiliateAnalytics";
 import BatchPayoutPanel from "../components/affiliate/BatchPayoutPanel";
 import EmailTemplateManager from "../components/affiliate/EmailTemplateManager";
+import CommissionTierManager from "../components/affiliate/CommissionTierManager";
 
 const STATUS_BADGE = {
   pending: "bg-yellow-100 text-yellow-800",
@@ -78,17 +79,32 @@ export default function AffiliateAdmin() {
     if (selectedAffiliate?.id === id) setSelectedAffiliate(prev => ({ ...prev, status }));
   };
 
-  // Recalculate tier & commission rate for all approved affiliates
+  // Recalculate tier & commission rate for all approved affiliates using DB-configured tiers
   const runTierUpgrades = async () => {
+    // Load tier rules from DB (fall back to defaults if none configured)
+    let tierRules = await base44.entities.CommissionTier.list("minConversions").catch(() => []);
+    if (!tierRules.length) {
+      tierRules = [
+        { tier: "bronze", minConversions: 0, commissionRate: 10 },
+        { tier: "silver", minConversions: 5, commissionRate: 12 },
+        { tier: "gold", minConversions: 10, commissionRate: 15 },
+        { tier: "platinum", minConversions: 20, commissionRate: 20 },
+      ];
+    }
+    const getTierForConversions = (conversions) => {
+      const sorted = [...tierRules].sort((a, b) => b.minConversions - a.minConversions);
+      return sorted.find(r => conversions >= r.minConversions) || sorted[sorted.length - 1];
+    };
+
     const approved = affiliates.filter(a => a.status === "approved");
     let upgrades = 0;
     for (const a of approved) {
-      const newTier = computeTier(a.totalConversions || 0);
-      const newRate = computeCommissionRate(newTier);
+      const rule = getTierForConversions(a.totalConversions || 0);
+      const newTier = rule.tier;
+      const newRate = rule.commissionRate;
       if (newTier !== a.tier || newRate !== a.commissionRate) {
         await base44.entities.Affiliate.update(a.id, { tier: newTier, commissionRate: newRate });
         if (newTier !== a.tier) {
-          // Notify affiliate of upgrade
           base44.functions.invoke("sendContactEmail", {
             name: `${a.firstName} ${a.lastName}`,
             email: a.email,
@@ -101,8 +117,8 @@ export default function AffiliateAdmin() {
     }
     setAffiliates(prev => prev.map(a => {
       if (a.status !== "approved") return a;
-      const newTier = computeTier(a.totalConversions || 0);
-      return { ...a, tier: newTier, commissionRate: computeCommissionRate(newTier) };
+      const rule = getTierForConversions(a.totalConversions || 0);
+      return { ...a, tier: rule.tier, commissionRate: rule.commissionRate };
     }));
     alert(`Tier check complete. ${upgrades} affiliate(s) upgraded.`);
   };
@@ -228,17 +244,19 @@ export default function AffiliateAdmin() {
 
         {/* Tabs */}
         <div className="flex gap-1 bg-gray-200 rounded-xl p-1 mb-6 flex-wrap">
-          {["affiliates", "referrals", "payouts", "batch-payout", "analytics", "email-templates"].map(t => (
+          {["affiliates", "referrals", "payouts", "batch-payout", "analytics", "email-templates", "tier-rules"].map(t => (
             <button key={t} onClick={() => setActiveTab(t)}
               className={`px-4 py-2 rounded-lg text-sm font-medium capitalize transition-all flex items-center gap-1.5 ${activeTab === t ? "bg-white shadow text-gray-900" : "text-gray-600 hover:text-gray-900"}`}>
               {t === "analytics" && <BarChart2 className="w-3.5 h-3.5" />}
               {t === "batch-payout" && <Send className="w-3.5 h-3.5" />}
               {t === "email-templates" && <Mail className="w-3.5 h-3.5" />}
+              {t === "tier-rules" && <ArrowUp className="w-3.5 h-3.5" />}
               {t === "affiliates" ? `Affiliates (${affiliates.length})` :
                t === "referrals" ? `Referrals (${referrals.length})` :
                t === "payouts" ? `Payouts (${payouts.length})` :
                t === "batch-payout" ? "Batch Payout" :
-               t === "email-templates" ? "Email Templates" : "Analytics"}
+               t === "email-templates" ? "Email Templates" :
+               t === "tier-rules" ? "Tier Rules" : "Analytics"}
             </button>
           ))}
         </div>
@@ -459,6 +477,11 @@ export default function AffiliateAdmin() {
         {/* Email Templates Tab */}
         {activeTab === "email-templates" && (
           <EmailTemplateManager />
+        )}
+
+        {/* Tier Rules Tab */}
+        {activeTab === "tier-rules" && (
+          <CommissionTierManager />
         )}
       </div>
 
