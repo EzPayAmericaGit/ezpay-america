@@ -11,7 +11,7 @@ const AdditionalOffersSection = React.lazy(() => import("../components/home/Addi
 const TestimonialsSection = React.lazy(() => import("../components/home/TestimonialsSection"));
 const RestaurantTypesSection = React.lazy(() => import("../components/home/RestaurantTypesSection"));
 const ContactFormSection = React.lazy(() => import("../components/home/ContactFormSection"));
-const Footer = React.lazy(() => import("../components/home/Footer"));
+
 
 export default function Home() {
   return (
@@ -31,7 +31,6 @@ export default function Home() {
         <TestimonialsSection />
         <RestaurantTypesSection />
         <ContactFormSection />
-        <Footer />
       </Suspense>
     </div>
   );
