@@ -7,8 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { DollarSign, Users, TrendingUp, Search, CheckCircle2, XCircle, Clock, Send, RefreshCw, ExternalLink, Loader2, Eye } from "lucide-react";
-import { motion } from "framer-motion";
+import { DollarSign, Users, TrendingUp, Search, CheckCircle2, Clock, RefreshCw, ExternalLink, Loader2, Eye, BarChart2, Send, ArrowUp } from "lucide-react";
+import AffiliateAnalytics from "../components/affiliate/AffiliateAnalytics";
+import BatchPayoutPanel from "../components/affiliate/BatchPayoutPanel";
 
 const STATUS_BADGE = {
   pending: "bg-yellow-100 text-yellow-800",
@@ -55,10 +56,52 @@ export default function AffiliateAdmin() {
     setLoading(false);
   };
 
+  // Tier logic: auto-upgrade based on totalConversions
+  const computeTier = (conversions) => {
+    if (conversions >= 20) return "platinum";
+    if (conversions >= 10) return "gold";
+    if (conversions >= 5) return "silver";
+    return "bronze";
+  };
+
+  const computeCommissionRate = (tier) => {
+    const rates = { bronze: 10, silver: 12, gold: 15, platinum: 20 };
+    return rates[tier] || 10;
+  };
+
   const updateAffiliateStatus = async (id, status) => {
     await base44.entities.Affiliate.update(id, { status });
     setAffiliates(prev => prev.map(a => a.id === id ? { ...a, status } : a));
     if (selectedAffiliate?.id === id) setSelectedAffiliate(prev => ({ ...prev, status }));
+  };
+
+  // Recalculate tier & commission rate for all approved affiliates
+  const runTierUpgrades = async () => {
+    const approved = affiliates.filter(a => a.status === "approved");
+    let upgrades = 0;
+    for (const a of approved) {
+      const newTier = computeTier(a.totalConversions || 0);
+      const newRate = computeCommissionRate(newTier);
+      if (newTier !== a.tier || newRate !== a.commissionRate) {
+        await base44.entities.Affiliate.update(a.id, { tier: newTier, commissionRate: newRate });
+        if (newTier !== a.tier) {
+          // Notify affiliate of upgrade
+          base44.functions.invoke("sendContactEmail", {
+            name: `${a.firstName} ${a.lastName}`,
+            email: a.email,
+            message: `Congratulations! You've been upgraded to ${newTier.toUpperCase()} tier! Your commission rate is now ${newRate}%. Keep referring merchants to keep climbing the ranks!`,
+            service: "Affiliate Tier Upgrade"
+          }).catch(() => {});
+          upgrades++;
+        }
+      }
+    }
+    setAffiliates(prev => prev.map(a => {
+      if (a.status !== "approved") return a;
+      const newTier = computeTier(a.totalConversions || 0);
+      return { ...a, tier: newTier, commissionRate: computeCommissionRate(newTier) };
+    }));
+    alert(`Tier check complete. ${upgrades} affiliate(s) upgraded.`);
   };
 
   const updateReferralStatus = async (id, status, commissionStatus) => {
@@ -148,7 +191,8 @@ export default function AffiliateAdmin() {
             <h1 className="text-3xl font-bold text-gray-900">Affiliate Program Admin</h1>
             <p className="text-gray-500 mt-1">Manage affiliates, referrals, and PayPal payouts</p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-3 flex-wrap">
+            <Button onClick={runTierUpgrades} variant="outline" className="border-purple-400 text-purple-700"><ArrowUp className="w-4 h-4 mr-1" />Run Tier Upgrades</Button>
             <Button onClick={() => setAddReferralDialog(true)} variant="outline" className="border-amber-400 text-amber-700">Add Referral</Button>
             <Button onClick={loadAll} variant="outline"><RefreshCw className="w-4 h-4 mr-2" />Refresh</Button>
           </div>
@@ -174,11 +218,16 @@ export default function AffiliateAdmin() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 bg-gray-200 rounded-xl p-1 mb-6 w-fit">
-          {["affiliates", "referrals", "payouts"].map(t => (
+        <div className="flex gap-1 bg-gray-200 rounded-xl p-1 mb-6 flex-wrap">
+          {["affiliates", "referrals", "payouts", "batch-payout", "analytics"].map(t => (
             <button key={t} onClick={() => setActiveTab(t)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium capitalize transition-all ${activeTab === t ? "bg-white shadow text-gray-900" : "text-gray-600 hover:text-gray-900"}`}>
-              {t} {t === "affiliates" ? `(${affiliates.length})` : t === "referrals" ? `(${referrals.length})` : `(${payouts.length})`}
+              className={`px-4 py-2 rounded-lg text-sm font-medium capitalize transition-all flex items-center gap-1.5 ${activeTab === t ? "bg-white shadow text-gray-900" : "text-gray-600 hover:text-gray-900"}`}>
+              {t === "analytics" && <BarChart2 className="w-3.5 h-3.5" />}
+              {t === "batch-payout" && <Send className="w-3.5 h-3.5" />}
+              {t === "affiliates" ? `Affiliates (${affiliates.length})` :
+               t === "referrals" ? `Referrals (${referrals.length})` :
+               t === "payouts" ? `Payouts (${payouts.length})` :
+               t === "batch-payout" ? "Batch Payout" : "Analytics"}
             </button>
           ))}
         </div>
@@ -375,6 +424,25 @@ export default function AffiliateAdmin() {
               </div>
             </CardContent>
           </Card>
+        )}
+
+        {/* Batch Payout Tab */}
+        {activeTab === "batch-payout" && (
+          <BatchPayoutPanel
+            affiliates={affiliates}
+            referrals={referrals}
+            payouts={payouts}
+            onPayoutsUpdated={loadAll}
+          />
+        )}
+
+        {/* Analytics Tab */}
+        {activeTab === "analytics" && (
+          <AffiliateAnalytics
+            affiliates={affiliates}
+            referrals={referrals}
+            payouts={payouts}
+          />
         )}
       </div>
 

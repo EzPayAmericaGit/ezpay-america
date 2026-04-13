@@ -219,6 +219,52 @@ export default function AffiliateDashboard() {
               ))}
             </div>
 
+            {/* Tier Progress */}
+            <Card className="border-none shadow-lg overflow-hidden">
+              <CardContent className="p-0">
+                <div className={`bg-gradient-to-r ${TIER_COLORS[affiliate.tier]} p-6`}>
+                  <div className="flex items-center justify-between text-white">
+                    <div>
+                      <p className="text-white/80 text-sm">Your Current Tier</p>
+                      <h3 className="text-2xl font-black uppercase tracking-wide mt-1">
+                        {affiliate.tier === "bronze" ? "🥉" : affiliate.tier === "silver" ? "🥈" : affiliate.tier === "gold" ? "🥇" : "💎"} {affiliate.tier}
+                      </h3>
+                      <p className="text-white/80 text-sm mt-1">Commission Rate: <strong className="text-white">{affiliate.commissionRate || 10}%</strong></p>
+                    </div>
+                    <div className="text-right text-sm text-white/80">
+                      {affiliate.tier === "bronze" && <><p>5 conversions → Silver</p><p className="text-white font-bold">{affiliate.totalConversions || 0} / 5</p></>}
+                      {affiliate.tier === "silver" && <><p>10 conversions → Gold</p><p className="text-white font-bold">{affiliate.totalConversions || 0} / 10</p></>}
+                      {affiliate.tier === "gold" && <><p>20 conversions → Platinum</p><p className="text-white font-bold">{affiliate.totalConversions || 0} / 20</p></>}
+                      {affiliate.tier === "platinum" && <p className="text-white font-bold">Max Tier Reached! 💎</p>}
+                    </div>
+                  </div>
+                  {affiliate.tier !== "platinum" && (
+                    <div className="mt-4">
+                      <div className="w-full bg-white/20 rounded-full h-2">
+                        <div className="bg-white h-2 rounded-full transition-all" style={{
+                          width: `${Math.min(100, ((affiliate.totalConversions || 0) / (affiliate.tier === "bronze" ? 5 : affiliate.tier === "silver" ? 10 : 20)) * 100)}%`
+                        }} />
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className="grid grid-cols-4 divide-x divide-gray-100 bg-white">
+                  {[
+                    { tier: "Bronze", min: 0, rate: "10%", emoji: "🥉" },
+                    { tier: "Silver", min: 5, rate: "12%", emoji: "🥈" },
+                    { tier: "Gold", min: 10, rate: "15%", emoji: "🥇" },
+                    { tier: "Platinum", min: 20, rate: "20%", emoji: "💎" },
+                  ].map(t => (
+                    <div key={t.tier} className={`p-3 text-center ${affiliate.tier === t.tier.toLowerCase() ? "bg-amber-50" : ""}`}>
+                      <p className="text-lg">{t.emoji}</p>
+                      <p className={`text-xs font-semibold ${affiliate.tier === t.tier.toLowerCase() ? "text-amber-700" : "text-gray-500"}`}>{t.tier}</p>
+                      <p className="text-xs text-gray-400">{t.rate}</p>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
             {/* Commission info */}
             <Card className="border-none shadow-lg">
               <CardHeader><CardTitle>Your Commission Details</CardTitle></CardHeader>
