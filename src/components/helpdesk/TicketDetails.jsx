@@ -18,9 +18,6 @@ export default function TicketDetails({ ticket, user, isAdmin, onUpdate, onClose
   const [isSending, setIsSending] = useState(false);
   const queryClient = useQueryClient();
 
-  // Security: Non-admins can only view their own tickets - checked after hooks
-  const accessDenied = !isAdmin && ticket.customerEmail !== user?.email;
-
   const { data: messages = [], isLoading: messagesLoading } = useQuery({
     queryKey: ['ticketMessages', ticket.id],
     queryFn: async () => {
@@ -38,18 +35,6 @@ export default function TicketDetails({ ticket, user, isAdmin, onUpdate, onClose
     staleTime: 10000
   });
 
-  if (accessDenied) {
-    return (
-      <Card className="h-full flex items-center justify-center">
-        <CardContent className="text-center">
-          <X className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Access Denied</h3>
-          <p className="text-gray-600">You can only view your own tickets.</p>
-        </CardContent>
-      </Card>
-    );
-  }
-
   const updateTicketMutation = useMutation({
     mutationFn: ({ id, data }) => base44.entities.Ticket.update(id, data),
     onSuccess: () => {
@@ -60,7 +45,6 @@ export default function TicketDetails({ ticket, user, isAdmin, onUpdate, onClose
 
   const deleteTicketMutation = useMutation({
     mutationFn: async (ticketId) => {
-      // Log deletion in audit trail
       await base44.entities.AuditLog.create({
         userEmail: user.email,
         userName: user.full_name,
@@ -79,7 +63,6 @@ export default function TicketDetails({ ticket, user, isAdmin, onUpdate, onClose
         severity: 'high',
         status: 'success'
       });
-
       await base44.entities.Ticket.delete(ticketId);
     },
     onSuccess: () => {
@@ -88,6 +71,19 @@ export default function TicketDetails({ ticket, user, isAdmin, onUpdate, onClose
       onClose?.();
     }
   });
+
+  // Security: Non-admins can only view their own tickets
+  if (!isAdmin && ticket.customerEmail !== user?.email) {
+    return (
+      <Card className="h-full flex items-center justify-center">
+        <CardContent className="text-center">
+          <X className="w-16 h-16 text-red-500 mx-auto mb-4" />
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">Access Denied</h3>
+          <p className="text-gray-600">You can only view your own tickets.</p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   const handleDeleteTicket = () => {
     if (window.confirm(`Are you sure you want to delete ticket "${ticket.title}"?\n\nThis action cannot be undone.`)) {
@@ -108,7 +104,6 @@ export default function TicketDetails({ ticket, user, isAdmin, onUpdate, onClose
         isInternal: false
       });
 
-      // Update ticket status to open if it's new
       if (ticket.status === 'new') {
         await updateTicketMutation.mutateAsync({
           id: ticket.id,
@@ -191,7 +186,6 @@ export default function TicketDetails({ ticket, user, isAdmin, onUpdate, onClose
           </div>
         </div>
 
-        {/* Admin Controls */}
         {isAdmin && (
           <div className="flex gap-3 mt-4">
             <Select
@@ -231,13 +225,11 @@ export default function TicketDetails({ ticket, user, isAdmin, onUpdate, onClose
       </CardHeader>
 
       <CardContent className="flex-1 overflow-y-auto p-6">
-        {/* Initial Description */}
         <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
           <p className="text-sm font-semibold text-gray-500 mb-2">Initial Request</p>
           <p className="text-gray-700 whitespace-pre-wrap">{ticket.description}</p>
         </div>
 
-        {/* Messages */}
         <div className="space-y-4">
           {messagesLoading ? (
             <div className="text-center py-6">
@@ -246,7 +238,6 @@ export default function TicketDetails({ ticket, user, isAdmin, onUpdate, onClose
           ) : (
             messages.map((msg) => {
               const isCurrentUser = msg.senderEmail === user?.email;
-              
               return (
                 <motion.div
                   key={msg.id}
@@ -261,9 +252,7 @@ export default function TicketDetails({ ticket, user, isAdmin, onUpdate, onClose
                   } rounded-lg p-4`}>
                     <div className="flex items-center gap-2 mb-2">
                       <User className="w-4 h-4" />
-                      <span className="text-sm font-semibold">
-                        {msg.senderName}
-                      </span>
+                      <span className="text-sm font-semibold">{msg.senderName}</span>
                       <span className={`text-xs ${isCurrentUser ? 'text-amber-100' : 'text-gray-500'}`}>
                         {new Date(msg.created_date).toLocaleString()}
                       </span>
@@ -293,7 +282,6 @@ export default function TicketDetails({ ticket, user, isAdmin, onUpdate, onClose
         </div>
       </CardContent>
 
-      {/* Reply Box */}
       {ticket.status !== 'closed' && (
         <div className="border-t p-4 bg-gray-50">
           {isAdmin && (

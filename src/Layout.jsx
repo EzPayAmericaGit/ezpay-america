@@ -22,42 +22,11 @@ export default function Layout({ children }) {
       { title: "Home", url: createPageUrl("Home") },
       { 
         title: "Services", 
-        url: createPageUrl("Services"),
-        submenu: [
-          { title: "Retail Merchants", url: createPageUrl("RetailMerchants") },
-          { title: "Restaurant Merchants", url: createPageUrl("RestaurantMerchants") },
-          { title: "Web Payment Pages", url: createPageUrl("WebPaymentPages") },
-          { title: "Get A Merchant Cash Advance", url: createPageUrl("MerchantCashAdvance") },
-          { title: "Retail Payment Solutions", url: createPageUrl("RetailPaymentSolutions") },
-          { title: "Payment Processing Hardware", url: createPageUrl("Shop") },
-          { title: "Branded Payment Gateway", url: createPageUrl("BrandedPaymentGateway") },
-          { title: "Recurring Billing & Subscriptions", url: createPageUrl("GatewayRecurringBilling") },
-          { title: "Fraud Protection", url: createPageUrl("GatewayFraudProtection") },
-          { title: "Tokenization & Card Security", url: createPageUrl("GatewayTokenization") },
-          { title: "Payment Links", url: createPageUrl("GatewayPaymentLinks") },
-          { title: "Mobile & Tap-to-Pay", url: createPageUrl("GatewayMobilePayments") },
-          { title: "Reporting & Analytics", url: createPageUrl("GatewayReporting") }
-        ]
+        url: createPageUrl("Services")
       },
       { 
         title: "EzPay POS", 
-        url: createPageUrl("EzPayPOSHome"),
-        submenu: [
-          { title: "Retail POS", url: createPageUrl("RetailPOS") },
-          { title: "Restaurant POS", url: createPageUrl("RestaurantPOS") },
-          { title: "Countertop Payment Terminal", url: createPageUrl("CountertopTerminal") },
-          { title: "Cafe & Coffee Shops", url: createPageUrl("CoffeePOS") },
-          { title: "Bagel Shops", url: createPageUrl("BagelShopPOS") },
-          { title: "Food Trucks", url: createPageUrl("FoodTruckPOS") },
-          { title: "Deli Shops", url: createPageUrl("DeliShopPOS") },
-          { title: "Bars & Taverns", url: createPageUrl("BarTavernPOS") },
-          { title: "Grocery Stores", url: createPageUrl("GroceryStorePOS") },
-          { title: "CBD Stores", url: createPageUrl("CBDStorePOS") },
-          { title: "Vape Stores", url: createPageUrl("VapeStorePOS") },
-          { title: "Mini Markets", url: createPageUrl("MiniMarketPOS") },
-          { title: "Liquor Stores", url: createPageUrl("LiquorStorePOS") },
-          { title: "Gift Shops", url: createPageUrl("GiftShopPOS") }
-        ]
+        url: createPageUrl("EzPayPOSHome")
       },
       { title: "Quiz", url: createPageUrl("Quiz") },
       { title: "Apply Online", url: createPageUrl("ApplyOnline") },
