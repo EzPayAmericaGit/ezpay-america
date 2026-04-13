@@ -75,6 +75,7 @@ import PRFirmPOS from './pages/PRFirmPOS';
 import AffiliateSignup from './pages/AffiliateSignup';
 import AffiliateDashboard from './pages/AffiliateDashboard';
 import AffiliateAdmin from './pages/AffiliateAdmin';
+import AffiliateReferralPortal from './pages/AffiliateReferralPortal';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -182,6 +183,7 @@ const AuthenticatedApp = () => {
         <Route path="/AffiliateSignup" element={<LayoutWrapper currentPageName="AffiliateSignup"><AffiliateSignup /></LayoutWrapper>} />
         <Route path="/AffiliateDashboard" element={<LayoutWrapper currentPageName="AffiliateDashboard"><AffiliateDashboard /></LayoutWrapper>} />
         <Route path="/AffiliateAdmin" element={<LayoutWrapper currentPageName="AffiliateAdmin"><AffiliateAdmin /></LayoutWrapper>} />
+        <Route path="/AffiliateReferralPortal" element={<LayoutWrapper currentPageName="AffiliateReferralPortal"><AffiliateReferralPortal /></LayoutWrapper>} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </LayoutWrapper>

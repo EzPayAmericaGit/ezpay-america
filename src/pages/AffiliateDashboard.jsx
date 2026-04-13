@@ -171,15 +171,25 @@ export default function AffiliateDashboard() {
       {/* Referral Link Bar */}
       {affiliate.status === "approved" && (
         <div className="bg-amber-50 border-b border-amber-200 px-4 py-4">
-          <div className="max-w-7xl mx-auto">
-            <p className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-1"><Link2 className="w-4 h-4 text-amber-600" /> Your Unique Referral Link</p>
-            <div className="flex gap-2">
-              <Input value={referralLink} readOnly className="bg-white font-mono text-sm" />
-              <Button onClick={copyLink} variant="outline" className="border-amber-400 text-amber-700 hover:bg-amber-100 whitespace-nowrap">
-                {copied ? <><CheckCircle2 className="w-4 h-4 mr-1 text-green-600" />Copied!</> : <><Copy className="w-4 h-4 mr-1" />Copy Link</>}
-              </Button>
+          <div className="max-w-7xl mx-auto space-y-3">
+            <div>
+              <p className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-1"><Link2 className="w-4 h-4 text-amber-600" /> Your Unique Referral Link</p>
+              <div className="flex gap-2">
+                <Input value={referralLink} readOnly className="bg-white font-mono text-sm" />
+                <Button onClick={copyLink} variant="outline" className="border-amber-400 text-amber-700 hover:bg-amber-100 whitespace-nowrap">
+                  {copied ? <><CheckCircle2 className="w-4 h-4 mr-1 text-green-600" />Copied!</> : <><Copy className="w-4 h-4 mr-1" />Copy Link</>}
+                </Button>
+              </div>
+              <p className="text-xs text-gray-500 mt-1">Share this link. Anyone who applies using this link will be tracked as your referral.</p>
             </div>
-            <p className="text-xs text-gray-500 mt-1">Share this link. Anyone who applies using this link will be tracked as your referral.</p>
+            <div className="flex items-center gap-3">
+              <Link to={`${createPageUrl("AffiliateReferralPortal")}?code=${affiliate.referralCode}`}>
+                <Button size="sm" className="bg-gray-900 hover:bg-gray-800 text-white text-xs gap-1.5">
+                  <Users className="w-3.5 h-3.5" /> Submit a Referral Directly →
+                </Button>
+              </Link>
+              <p className="text-xs text-gray-500">Know a business? Submit their info and we'll handle the rest.</p>
+            </div>
           </div>
         </div>
       )}
