@@ -1,0 +1,81 @@
+{
+  "name": "AffiliateReferral",
+  "type": "object",
+  "properties": {
+    "affiliateId": {
+      "type": "string",
+      "description": "Affiliate ID"
+    },
+    "affiliateCode": {
+      "type": "string",
+      "description": "Referral code used"
+    },
+    "referredName": {
+      "type": "string",
+      "description": "Name of referred business"
+    },
+    "referredEmail": {
+      "type": "string",
+      "description": "Email of referred business"
+    },
+    "referredPhone": {
+      "type": "string",
+      "description": "Phone of referred business"
+    },
+    "referredBusiness": {
+      "type": "string",
+      "description": "Business name"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "clicked",
+        "lead",
+        "applied",
+        "approved",
+        "processing",
+        "converted",
+        "rejected"
+      ],
+      "default": "lead",
+      "description": "Referral status"
+    },
+    "commissionAmount": {
+      "type": "number",
+      "default": 0,
+      "description": "Commission earned $"
+    },
+    "commissionStatus": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "paid",
+        "cancelled"
+      ],
+      "default": "pending",
+      "description": "Commission payment status"
+    },
+    "conversionDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date converted to merchant"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Notes on this referral"
+    },
+    "source": {
+      "type": "string",
+      "description": "Traffic source (utm_source)"
+    },
+    "monthlyVolume": {
+      "type": "number",
+      "description": "Referred merchant monthly volume"
+    }
+  },
+  "required": [
+    "affiliateId",
+    "affiliateCode"
+  ]
+}

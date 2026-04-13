@@ -72,6 +72,9 @@ import EngineeringFirmPOS from './pages/EngineeringFirmPOS';
 import StaffingAgencyPOS from './pages/StaffingAgencyPOS';
 import TranslationServicesPOS from './pages/TranslationServicesPOS';
 import PRFirmPOS from './pages/PRFirmPOS';
+import AffiliateSignup from './pages/AffiliateSignup';
+import AffiliateDashboard from './pages/AffiliateDashboard';
+import AffiliateAdmin from './pages/AffiliateAdmin';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -176,6 +179,9 @@ const AuthenticatedApp = () => {
         <Route path="/StaffingAgencyPOS" element={<StaffingAgencyPOS />} />
         <Route path="/TranslationServicesPOS" element={<TranslationServicesPOS />} />
         <Route path="/PRFirmPOS" element={<PRFirmPOS />} />
+        <Route path="/AffiliateSignup" element={<LayoutWrapper currentPageName="AffiliateSignup"><AffiliateSignup /></LayoutWrapper>} />
+        <Route path="/AffiliateDashboard" element={<LayoutWrapper currentPageName="AffiliateDashboard"><AffiliateDashboard /></LayoutWrapper>} />
+        <Route path="/AffiliateAdmin" element={<LayoutWrapper currentPageName="AffiliateAdmin"><AffiliateAdmin /></LayoutWrapper>} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </LayoutWrapper>

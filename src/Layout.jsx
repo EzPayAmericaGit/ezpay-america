@@ -139,7 +139,7 @@ export default function Layout({ children }) {
       },
       { title: "Quiz", url: createPageUrl("Quiz") },
       { title: "Apply Online", url: createPageUrl("ApplyOnline") },
-      { title: "Shop", url: createPageUrl("Shop") },
+      { title: "Affiliates", url: createPageUrl("AffiliateSignup") },
       { title: "News", url: createPageUrl("News") },
       { title: "Helpdesk", url: createPageUrl("Helpdesk") }
     ];

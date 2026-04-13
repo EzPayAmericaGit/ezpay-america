@@ -40,7 +40,7 @@ export default function Footer() {
               <li><Link to={createPageUrl("Home")} className="hover:text-amber-400 transition-colors">Home</Link></li>
               <li><Link to={createPageUrl("Services")} className="hover:text-amber-400 transition-colors">Services</Link></li>
               <li><Link to={createPageUrl("EzPayPOSHome")} className="hover:text-amber-400 transition-colors">EzPay POS</Link></li>
-              <li><Link to={createPageUrl("Shop")} className="hover:text-amber-400 transition-colors">Shop Equipment</Link></li>
+              <li><Link to={createPageUrl("AffiliateSignup")} className="hover:text-amber-400 transition-colors">Affiliate Program</Link></li>
               <li><Link to={createPageUrl("News")} className="hover:text-amber-400 transition-colors">News & Insights</Link></li>
               <li><Link to={createPageUrl("Quiz")} className="hover:text-amber-400 transition-colors">Business Quiz</Link></li>
               <li><Link to={createPageUrl("ApplyOnline")} className="hover:text-amber-400 transition-colors">Apply Online</Link></li>

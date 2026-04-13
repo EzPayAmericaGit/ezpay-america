@@ -1,0 +1,63 @@
+{
+  "name": "AffiliatePayout",
+  "type": "object",
+  "properties": {
+    "affiliateId": {
+      "type": "string",
+      "description": "Affiliate ID"
+    },
+    "affiliateName": {
+      "type": "string",
+      "description": "Affiliate full name"
+    },
+    "affiliateEmail": {
+      "type": "string",
+      "description": "Affiliate email"
+    },
+    "paypalEmail": {
+      "type": "string",
+      "description": "PayPal email for payout"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Payout amount $"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "processing",
+        "completed",
+        "failed"
+      ],
+      "default": "pending",
+      "description": "Payout status"
+    },
+    "referralIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "IDs of referrals included"
+    },
+    "paypalTransactionId": {
+      "type": "string",
+      "description": "PayPal transaction ID"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Admin notes"
+    },
+    "paidDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date paid"
+    }
+  },
+  "required": [
+    "affiliateId",
+    "amount",
+    "paypalEmail"
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "name": "Affiliate",
+  "type": "object",
+  "properties": {
+    "firstName": {
+      "type": "string",
+      "description": "First name"
+    },
+    "lastName": {
+      "type": "string",
+      "description": "Last name"
+    },
+    "email": {
+      "type": "string",
+      "description": "Email address"
+    },
+    "paypalEmail": {
+      "type": "string",
+      "description": "PayPal email for payouts"
+    },
+    "company": {
+      "type": "string",
+      "description": "Company name (optional)"
+    },
+    "website": {
+      "type": "string",
+      "description": "Website or social media URL"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Phone number"
+    },
+    "marketingStrategy": {
+      "type": "string",
+      "description": "How they plan to promote"
+    },
+    "referralCode": {
+      "type": "string",
+      "description": "Unique referral code"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "suspended",
+        "rejected"
+      ],
+      "default": "pending",
+      "description": "Affiliate status"
+    },
+    "commissionRate": {
+      "type": "number",
+      "default": 10,
+      "description": "Commission rate %"
+    },
+    "totalEarned": {
+      "type": "number",
+      "default": 0,
+      "description": "Total commissions earned $"
+    },
+    "totalPaid": {
+      "type": "number",
+      "default": 0,
+      "description": "Total paid out $"
+    },
+    "totalReferrals": {
+      "type": "number",
+      "default": 0,
+      "description": "Total referrals sent"
+    },
+    "totalConversions": {
+      "type": "number",
+      "default": 0,
+      "description": "Total converted referrals"
+    },
+    "totalClicks": {
+      "type": "number",
+      "default": 0,
+      "description": "Total link clicks"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Admin notes"
+    },
+    "tier": {
+      "type": "string",
+      "enum": [
+        "bronze",
+        "silver",
+        "gold",
+        "platinum"
+      ],
+      "default": "bronze",
+      "description": "Affiliate tier"
+    }
+  },
+  "required": [
+    "firstName",
+    "lastName",
+    "email",
+    "paypalEmail"
+  ]
+}
