@@ -132,7 +132,7 @@ export default function AffiliateDashboard() {
     </div>
   );
 
-  const tabs = ["overview", "referrals", "payouts", "settings"];
+  const tabs = ["overview", "referrals", "payouts", "leaderboard", "settings"];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -413,6 +413,28 @@ export default function AffiliateDashboard() {
             </Card>
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-800">
               <p><strong>💡 Payout Policy:</strong> Commissions are approved once referred merchants complete their first 30 days of processing. Payouts are sent to your PayPal within 30 days of approval. Minimum payout is $50.</p>
+            </div>
+          </div>
+        )}
+
+        {/* Leaderboard Tab */}
+        {activeTab === "leaderboard" && (
+          <div className="space-y-4">
+            <Card className="border-none shadow-lg overflow-hidden">
+              <CardContent className="p-0">
+                <div className="bg-gradient-to-r from-gray-900 to-gray-800 p-6 text-white text-center">
+                  <p className="text-4xl mb-2">🏆</p>
+                  <h2 className="text-xl font-bold mb-1">Affiliate Leaderboard</h2>
+                  <p className="text-gray-400 text-sm">See how you rank among all EzPay affiliates</p>
+                </div>
+              </CardContent>
+            </Card>
+            <div className="text-center">
+              <Link to={createPageUrl("AffiliateLeaderboard")} target="_blank">
+                <Button className="bg-gradient-to-r from-amber-500 to-orange-600 text-white px-8 py-3 text-base font-bold">
+                  View Full Leaderboard →
+                </Button>
+              </Link>
             </div>
           </div>
         )}

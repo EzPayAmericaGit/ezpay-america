@@ -7,9 +7,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { DollarSign, Users, TrendingUp, Search, CheckCircle2, Clock, RefreshCw, ExternalLink, Loader2, Eye, BarChart2, Send, ArrowUp } from "lucide-react";
+import { DollarSign, Users, TrendingUp, Search, CheckCircle2, Clock, RefreshCw, ExternalLink, Loader2, Eye, BarChart2, Send, ArrowUp, Mail, ShieldCheck, Trophy } from "lucide-react";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
 import AffiliateAnalytics from "../components/affiliate/AffiliateAnalytics";
 import BatchPayoutPanel from "../components/affiliate/BatchPayoutPanel";
+import EmailTemplateManager from "../components/affiliate/EmailTemplateManager";
 
 const STATUS_BADGE = {
   pending: "bg-yellow-100 text-yellow-800",
@@ -192,6 +195,12 @@ export default function AffiliateAdmin() {
             <p className="text-gray-500 mt-1">Manage affiliates, referrals, and PayPal payouts</p>
           </div>
           <div className="flex gap-3 flex-wrap">
+            <Link to={createPageUrl("AffiliateLeaderboard")} target="_blank">
+              <Button variant="outline" className="border-amber-400 text-amber-700"><Trophy className="w-4 h-4 mr-1" />Leaderboard</Button>
+            </Link>
+            <Button onClick={async () => { await base44.functions.invoke("validateReferral", {}); alert("Validation complete. Check referral notes for results."); loadAll(); }} variant="outline" className="border-green-400 text-green-700">
+              <ShieldCheck className="w-4 h-4 mr-1" />Validate All Referrals
+            </Button>
             <Button onClick={runTierUpgrades} variant="outline" className="border-purple-400 text-purple-700"><ArrowUp className="w-4 h-4 mr-1" />Run Tier Upgrades</Button>
             <Button onClick={() => setAddReferralDialog(true)} variant="outline" className="border-amber-400 text-amber-700">Add Referral</Button>
             <Button onClick={loadAll} variant="outline"><RefreshCw className="w-4 h-4 mr-2" />Refresh</Button>
@@ -219,15 +228,17 @@ export default function AffiliateAdmin() {
 
         {/* Tabs */}
         <div className="flex gap-1 bg-gray-200 rounded-xl p-1 mb-6 flex-wrap">
-          {["affiliates", "referrals", "payouts", "batch-payout", "analytics"].map(t => (
+          {["affiliates", "referrals", "payouts", "batch-payout", "analytics", "email-templates"].map(t => (
             <button key={t} onClick={() => setActiveTab(t)}
               className={`px-4 py-2 rounded-lg text-sm font-medium capitalize transition-all flex items-center gap-1.5 ${activeTab === t ? "bg-white shadow text-gray-900" : "text-gray-600 hover:text-gray-900"}`}>
               {t === "analytics" && <BarChart2 className="w-3.5 h-3.5" />}
               {t === "batch-payout" && <Send className="w-3.5 h-3.5" />}
+              {t === "email-templates" && <Mail className="w-3.5 h-3.5" />}
               {t === "affiliates" ? `Affiliates (${affiliates.length})` :
                t === "referrals" ? `Referrals (${referrals.length})` :
                t === "payouts" ? `Payouts (${payouts.length})` :
-               t === "batch-payout" ? "Batch Payout" : "Analytics"}
+               t === "batch-payout" ? "Batch Payout" :
+               t === "email-templates" ? "Email Templates" : "Analytics"}
             </button>
           ))}
         </div>
@@ -443,6 +454,11 @@ export default function AffiliateAdmin() {
             referrals={referrals}
             payouts={payouts}
           />
+        )}
+
+        {/* Email Templates Tab */}
+        {activeTab === "email-templates" && (
+          <EmailTemplateManager />
         )}
       </div>
 

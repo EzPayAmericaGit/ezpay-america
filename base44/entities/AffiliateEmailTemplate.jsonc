@@ -1,0 +1,48 @@
+{
+  "name": "AffiliateEmailTemplate",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Template name (e.g. Drip Email 1 - Welcome)"
+    },
+    "dripStep": {
+      "type": "number",
+      "description": "Drip sequence step (0=immediate, 1=48h, 2=5d, 3=10d)"
+    },
+    "subject": {
+      "type": "string",
+      "description": "Email subject line (supports {{leadName}}, {{businessName}}, {{affiliateName}} placeholders)"
+    },
+    "bodyHtml": {
+      "type": "string",
+      "description": "Full HTML email body with placeholder support"
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this template is used in the drip"
+    },
+    "triggerEvent": {
+      "type": "string",
+      "enum": [
+        "referral_submitted",
+        "referral_converted",
+        "affiliate_approved",
+        "affiliate_tier_upgrade",
+        "payout_sent"
+      ],
+      "description": "Event that triggers this email"
+    },
+    "delayHours": {
+      "type": "number",
+      "default": 0,
+      "description": "Hours after trigger to send"
+    }
+  },
+  "required": [
+    "name",
+    "subject",
+    "bodyHtml"
+  ]
+}
