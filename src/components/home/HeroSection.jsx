@@ -33,7 +33,7 @@ export default function HeroSection() {
 
             <div className="space-y-4">
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 leading-tight">
-                Simple Payment Processing Solutions for Growing Businesses
+                Payment Processing Solutions for Growing Businesses
               </h1>
               <h2 className="text-3xl md:text-4xl font-semibold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
                 Zero-Fee Credit Card Processing — No Contracts, No Hidden Fees
