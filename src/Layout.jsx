@@ -23,12 +23,10 @@ export default function Layout({ children }) {
       { title: "Home", url: createPageUrl("Home") },
       { 
         title: "Services", 
-        url: createPageUrl("Services")
-      },
-      { 
-        title: "Additional Services", 
         url: createPageUrl("Services"),
         submenu: [
+          { title: "Services Overview", url: createPageUrl("Services") },
+          { title: "── Additional Services ──", url: createPageUrl("Services") },
           { title: "Retail Merchants", url: createPageUrl("RetailMerchants") },
           { title: "Restaurant Merchants", url: createPageUrl("RestaurantMerchants") },
           { title: "Web Payment Pages", url: createPageUrl("WebPaymentPages") },
