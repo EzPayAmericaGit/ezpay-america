@@ -1,22 +1,17 @@
 import { useEffect } from "react";
 
 export default function Sitemap() {
-  useEffect(() => {
-    const baseUrl = window.location.origin;
-    const pages = [
+  const today = new Date().toISOString().split('T')[0];
+  const pages = [
       // Core Pages - Highest Priority (Primary conversion paths)
       { path: '/', priority: '1.0', changefreq: 'daily', title: 'Home - EzPay America Zero-Fee Payment Processing' },
       { path: '/ApplyOnline', priority: '1.0', changefreq: 'weekly', title: 'Apply Online - Merchant Account Application' },
       { path: '/FreeDemo', priority: '0.95', changefreq: 'weekly', title: 'Free Demo - Schedule Consultation' },
-      
-      // Main Category Pages
       { path: '/Services', priority: '0.9', changefreq: 'weekly', title: 'Payment Processing Services' },
       { path: '/EzPayPOSHome', priority: '0.9', changefreq: 'weekly', title: 'EzPay POS - Cloud Point of Sale System' },
       { path: '/Shop', priority: '0.9', changefreq: 'daily', title: 'Shop Payment Equipment & POS Hardware' },
       { path: '/News', priority: '0.85', changefreq: 'daily', title: 'Payment Processing News & Industry Insights' },
       { path: '/Contact', priority: '0.9', changefreq: 'monthly', title: 'Contact EzPay America' },
-      
-      // Services Submenu - High Priority
       { path: '/RetailMerchants', priority: '0.85', changefreq: 'weekly', title: 'Retail Merchant Payment Services' },
       { path: '/RestaurantMerchants', priority: '0.85', changefreq: 'weekly', title: 'Restaurant Merchant Services' },
       { path: '/WebPaymentPages', priority: '0.8', changefreq: 'weekly', title: 'Web Payment Pages & Virtual Terminal' },
@@ -29,52 +24,47 @@ export default function Sitemap() {
       { path: '/GatewayPaymentLinks', priority: '0.8', changefreq: 'weekly', title: 'Instant Payment Links for Businesses' },
       { path: '/GatewayMobilePayments', priority: '0.8', changefreq: 'weekly', title: 'Mobile & Tap-to-Pay Payment Processing' },
       { path: '/GatewayReporting', priority: '0.8', changefreq: 'weekly', title: 'Payment Reporting & Analytics Dashboard' },
-      
-      // POS Systems - Main Categories
       { path: '/RetailPOS', priority: '0.85', changefreq: 'weekly', title: 'Retail POS System - Inventory & Sales' },
       { path: '/RestaurantPOS', priority: '0.85', changefreq: 'weekly', title: 'Restaurant POS - Table & Kitchen Management' },
       { path: '/CountertopTerminal', priority: '0.8', changefreq: 'weekly', title: 'Countertop Payment Terminal' },
-      
-      // Food & Beverage POS - Industry Specific
       { path: '/CoffeePOS', priority: '0.75', changefreq: 'weekly', title: 'Coffee Shop & Cafe POS System' },
       { path: '/BagelShopPOS', priority: '0.75', changefreq: 'weekly', title: 'Bagel Shop & Bakery POS' },
       { path: '/FoodTruckPOS', priority: '0.75', changefreq: 'weekly', title: 'Food Truck Mobile POS System' },
       { path: '/DeliShopPOS', priority: '0.75', changefreq: 'weekly', title: 'Deli & Sandwich Shop POS' },
       { path: '/BarTavernPOS', priority: '0.75', changefreq: 'weekly', title: 'Bar & Tavern POS System' },
-      
-      // Specialty Retail POS
+      { path: '/FullServiceRestaurantPOS', priority: '0.8', changefreq: 'weekly', title: 'Full Service Restaurant POS & Payment Processing' },
+      { path: '/QuickServicePOS', priority: '0.8', changefreq: 'weekly', title: 'Quick Service & Fast Food POS System' },
+      { path: '/BakeryPOS', priority: '0.75', changefreq: 'weekly', title: 'Bakery POS System & Payment Processing' },
+      { path: '/CateringPOS', priority: '0.75', changefreq: 'weekly', title: 'Catering Company POS & Payment Processing' },
+      { path: '/IceCreamShopPOS', priority: '0.75', changefreq: 'weekly', title: 'Ice Cream Shop POS & Payment Processing' },
+      { path: '/JuiceSmoothieBarPOS', priority: '0.75', changefreq: 'weekly', title: 'Juice Bar & Smoothie Shop POS System' },
+      { path: '/GhostKitchenPOS', priority: '0.75', changefreq: 'weekly', title: 'Ghost Kitchen POS & Payment Processing' },
+      { path: '/BreweryPOS', priority: '0.75', changefreq: 'weekly', title: 'Brewery & Taproom POS System' },
+      { path: '/WineryPOS', priority: '0.75', changefreq: 'weekly', title: 'Winery POS & Tasting Room Payment Processing' },
+      { path: '/NightclubPOS', priority: '0.75', changefreq: 'weekly', title: 'Nightclub POS & Bar Payment Processing' },
+      { path: '/HotelRestaurantPOS', priority: '0.75', changefreq: 'weekly', title: 'Hotel Restaurant POS & F&B Payment Processing' },
+      { path: '/CafeteriaPOS', priority: '0.75', changefreq: 'weekly', title: 'Cafeteria POS & Meal Plan Payment Processing' },
       { path: '/GroceryStorePOS', priority: '0.75', changefreq: 'weekly', title: 'Grocery Store POS System' },
       { path: '/MiniMarketPOS', priority: '0.75', changefreq: 'weekly', title: 'Convenience Store & Mini Market POS' },
       { path: '/LiquorStorePOS', priority: '0.75', changefreq: 'weekly', title: 'Liquor Store POS - Age Verification' },
       { path: '/CBDStorePOS', priority: '0.75', changefreq: 'weekly', title: 'CBD & Hemp Store POS System' },
       { path: '/VapeStorePOS', priority: '0.75', changefreq: 'weekly', title: 'Vape & Smoke Shop POS' },
       { path: '/GiftShopPOS', priority: '0.75', changefreq: 'weekly', title: 'Gift Shop & Boutique POS' },
-      
-      // Additional Payment Services
       { path: '/ACHPayments', priority: '0.75', changefreq: 'monthly', title: 'ACH Payment Processing & Bank Transfers' },
       { path: '/MobilePayments', priority: '0.75', changefreq: 'monthly', title: 'Mobile Payment Solutions' },
       { path: '/MerchantCapital', priority: '0.75', changefreq: 'monthly', title: 'Merchant Capital & Business Financing' },
-      { path: '/MerchantCashAdvance', priority: '0.75', changefreq: 'monthly', title: 'Merchant Cash Advance Program' },
       { path: '/ECommerce', priority: '0.75', changefreq: 'monthly', title: 'E-Commerce Payment Gateway Integration' },
       { path: '/FraudDetection', priority: '0.7', changefreq: 'monthly', title: 'Fraud Detection & Prevention' },
-
-      // Tools & Resources
       { path: '/Quiz', priority: '0.75', changefreq: 'monthly', title: 'Business Type Quiz - Find Your Perfect POS Solution' },
-      { path: '/FreeDemo', priority: '0.95', changefreq: 'weekly', title: 'Schedule a Free Demo - EzPay America' },
       { path: '/Support', priority: '0.8', changefreq: 'weekly', title: 'Customer Support & Help Center' },
       { path: '/Helpdesk', priority: '0.7', changefreq: 'weekly', title: 'Help Desk & Support Tickets' },
-      
-      // Admin & Internal Pages (not in sitemap - noindex)
-      // Excluded: /Helpdesk, /Admin, /AdminDashboard, /ApplicationsAdmin, /AgentManagement, /EquipmentInventory, /SettingsAdmin, /ProductAdmin, /OrdersAdmin, /NewsAdmin, /UserManagement, /TemplateManagement, /AnalyticsDashboard, /BacklinkOutreach, /Invoicing
-      
-      // Utility Pages
       { path: '/Sitemap', priority: '0.5', changefreq: 'monthly', title: 'Sitemap - All Pages' },
       { path: '/RobotsTxt', priority: '0.3', changefreq: 'monthly', title: 'Robots.txt' }
     ];
 
-    const today = new Date().toISOString().split('T')[0];
-
-    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+  useEffect(() => {
+    const baseUrl = window.location.origin;
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>`
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
@@ -175,6 +165,18 @@ ${pages.map(page => `  <url>
               <li><a href="/FoodTruckPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Food Truck POS</a></li>
               <li><a href="/DeliShopPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Deli Shop POS</a></li>
               <li><a href="/BarTavernPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Bar & Tavern POS</a></li>
+              <li><a href="/FullServiceRestaurantPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Full Service Restaurant POS</a></li>
+              <li><a href="/QuickServicePOS" className="text-purple-700 hover:text-purple-900 hover:underline">Quick Service / Fast Food POS</a></li>
+              <li><a href="/BakeryPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Bakery POS</a></li>
+              <li><a href="/CateringPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Catering Company POS</a></li>
+              <li><a href="/IceCreamShopPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Ice Cream Shop POS</a></li>
+              <li><a href="/JuiceSmoothieBarPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Juice & Smoothie Bar POS</a></li>
+              <li><a href="/GhostKitchenPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Ghost Kitchen POS</a></li>
+              <li><a href="/BreweryPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Brewery & Taproom POS</a></li>
+              <li><a href="/WineryPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Winery & Tasting Room POS</a></li>
+              <li><a href="/NightclubPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Nightclub POS</a></li>
+              <li><a href="/HotelRestaurantPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Hotel Restaurant POS</a></li>
+              <li><a href="/CafeteriaPOS" className="text-purple-700 hover:text-purple-900 hover:underline">Cafeteria POS</a></li>
             </ul>
           </div>
 

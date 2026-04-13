@@ -18,18 +18,8 @@ export default function TicketDetails({ ticket, user, isAdmin, onUpdate, onClose
   const [isSending, setIsSending] = useState(false);
   const queryClient = useQueryClient();
 
-  // Security: Non-admins can only view their own tickets
-  if (!isAdmin && ticket.customerEmail !== user?.email) {
-    return (
-      <Card className="h-full flex items-center justify-center">
-        <CardContent className="text-center">
-          <X className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Access Denied</h3>
-          <p className="text-gray-600">You can only view your own tickets.</p>
-        </CardContent>
-      </Card>
-    );
-  }
+  // Security: Non-admins can only view their own tickets - checked after hooks
+  const accessDenied = !isAdmin && ticket.customerEmail !== user?.email;
 
   const { data: messages = [], isLoading: messagesLoading } = useQuery({
     queryKey: ['ticketMessages', ticket.id],
@@ -47,6 +37,18 @@ export default function TicketDetails({ ticket, user, isAdmin, onUpdate, onClose
     retry: 2,
     staleTime: 10000
   });
+
+  if (accessDenied) {
+    return (
+      <Card className="h-full flex items-center justify-center">
+        <CardContent className="text-center">
+          <X className="w-16 h-16 text-red-500 mx-auto mb-4" />
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">Access Denied</h3>
+          <p className="text-gray-600">You can only view your own tickets.</p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   const updateTicketMutation = useMutation({
     mutationFn: ({ id, data }) => base44.entities.Ticket.update(id, data),

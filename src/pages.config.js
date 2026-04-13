@@ -78,6 +78,18 @@ import ApplyOnline from './pages/ApplyOnline';
 import BacklinkOutreach from './pages/BacklinkOutreach';
 import BagelShopPOS from './pages/BagelShopPOS';
 import BrandedPaymentGateway from './pages/BrandedPaymentGateway';
+import FullServiceRestaurantPOS from './pages/FullServiceRestaurantPOS';
+import QuickServicePOS from './pages/QuickServicePOS';
+import BakeryPOS from './pages/BakeryPOS';
+import CateringPOS from './pages/CateringPOS';
+import IceCreamShopPOS from './pages/IceCreamShopPOS';
+import JuiceSmoothieBarPOS from './pages/JuiceSmoothieBarPOS';
+import GhostKitchenPOS from './pages/GhostKitchenPOS';
+import BreweryPOS from './pages/BreweryPOS';
+import WineryPOS from './pages/WineryPOS';
+import NightclubPOS from './pages/NightclubPOS';
+import HotelRestaurantPOS from './pages/HotelRestaurantPOS';
+import CafeteriaPOS from './pages/CafeteriaPOS';
 import GatewayRecurringBilling from './pages/GatewayRecurringBilling';
 import GatewayFraudProtection from './pages/GatewayFraudProtection';
 import GatewayTokenization from './pages/GatewayTokenization';
@@ -175,6 +187,18 @@ export const PAGES = {
     "BacklinkOutreach": BacklinkOutreach,
     "BagelShopPOS": BagelShopPOS,
     "BrandedPaymentGateway": BrandedPaymentGateway,
+    "FullServiceRestaurantPOS": FullServiceRestaurantPOS,
+    "QuickServicePOS": QuickServicePOS,
+    "BakeryPOS": BakeryPOS,
+    "CateringPOS": CateringPOS,
+    "IceCreamShopPOS": IceCreamShopPOS,
+    "JuiceSmoothieBarPOS": JuiceSmoothieBarPOS,
+    "GhostKitchenPOS": GhostKitchenPOS,
+    "BreweryPOS": BreweryPOS,
+    "WineryPOS": WineryPOS,
+    "NightclubPOS": NightclubPOS,
+    "HotelRestaurantPOS": HotelRestaurantPOS,
+    "CafeteriaPOS": CafeteriaPOS,
     "GatewayRecurringBilling": GatewayRecurringBilling,
     "GatewayFraudProtection": GatewayFraudProtection,
     "GatewayTokenization": GatewayTokenization,
