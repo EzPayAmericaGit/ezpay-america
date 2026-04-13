@@ -25,6 +25,29 @@ export default function Layout({ children }) {
         url: createPageUrl("Services")
       },
       { 
+        title: "Additional Services", 
+        url: createPageUrl("Services"),
+        submenu: [
+          { title: "Retail Merchants", url: createPageUrl("RetailMerchants") },
+          { title: "Restaurant Merchants", url: createPageUrl("RestaurantMerchants") },
+          { title: "Web Payment Pages", url: createPageUrl("WebPaymentPages") },
+          { title: "Merchant Cash Advance", url: createPageUrl("MerchantCashAdvance") },
+          { title: "Retail Payment Solutions", url: createPageUrl("RetailPaymentSolutions") },
+          { title: "Branded Payment Gateway", url: createPageUrl("BrandedPaymentGateway") },
+          { title: "Recurring Billing & Subscriptions", url: createPageUrl("GatewayRecurringBilling") },
+          { title: "Fraud Protection", url: createPageUrl("GatewayFraudProtection") },
+          { title: "Tokenization & Card Security", url: createPageUrl("GatewayTokenization") },
+          { title: "Payment Links", url: createPageUrl("GatewayPaymentLinks") },
+          { title: "Mobile & Tap-to-Pay", url: createPageUrl("GatewayMobilePayments") },
+          { title: "Reporting & Analytics", url: createPageUrl("GatewayReporting") },
+          { title: "ACH Payments", url: createPageUrl("ACHPayments") },
+          { title: "Mobile Payments", url: createPageUrl("MobilePayments") },
+          { title: "E-Commerce", url: createPageUrl("ECommerce") },
+          { title: "Merchant Capital", url: createPageUrl("MerchantCapital") },
+          { title: "Fraud Detection", url: createPageUrl("FraudDetection") }
+        ]
+      },
+      { 
         title: "EzPay POS", 
         url: createPageUrl("EzPayPOSHome")
       },
