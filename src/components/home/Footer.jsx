@@ -46,7 +46,6 @@ export default function Footer() {
               <li><Link to={createPageUrl("ApplyOnline")} className="hover:text-amber-400 transition-colors">Apply Online</Link></li>
               <li><Link to={createPageUrl("Contact")} className="hover:text-amber-400 transition-colors">Contact Us</Link></li>
               <li><Link to={createPageUrl("Helpdesk")} className="hover:text-amber-400 transition-colors">Support / Helpdesk</Link></li>
-              <li><Link to={createPageUrl("Sitemap")} className="hover:text-amber-400 transition-colors">Sitemap</Link></li>
             </ul>
           </div>
 
