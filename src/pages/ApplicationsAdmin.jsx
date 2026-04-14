@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Building2, User, DollarSign, FileText, Search, Download, Eye, Landmark, Bell } from "lucide-react";
+import { Building2, User, DollarSign, FileText, Search, Download, Eye, Landmark, Bell, Trash2 } from "lucide-react";
 import SEOHead from "../components/SEOHead";
 import RiskAssessment from "../components/application/RiskAssessment";
 import ApplicationStats from "../components/application/ApplicationStats";
@@ -43,6 +43,19 @@ export default function ApplicationsAdmin() {
       queryClient.invalidateQueries(['applications']);
     }
   });
+
+  const deleteApplicationMutation = useMutation({
+    mutationFn: (id) => base44.entities.MerchantApplication.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['applications']);
+    }
+  });
+
+  const handleDelete = (app) => {
+    if (window.confirm(`Delete application for "${app.legalBusinessName}"? This cannot be undone.`)) {
+      deleteApplicationMutation.mutate(app.id);
+    }
+  };
 
   const filteredApplications = applications.filter(app => {
     const matchesSearch = !searchQuery || 
@@ -154,6 +167,14 @@ export default function ApplicationsAdmin() {
                       >
                         <Eye className="w-4 h-4 mr-1" />
                         View
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="text-red-600 border-red-200 hover:bg-red-50"
+                        onClick={() => handleDelete(app)}
+                      >
+                        <Trash2 className="w-4 h-4" />
                       </Button>
                     </div>
                   </div>
