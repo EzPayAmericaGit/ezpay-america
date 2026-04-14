@@ -2,7 +2,8 @@ import React from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Calendar, Tag } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { ArrowLeft, Calendar, Tag, ArrowRight } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
@@ -32,6 +33,13 @@ export default function NewsArticlePage() {
       return null;
     },
     enabled: !!(articleId || slug)
+  });
+
+  const { data: relatedArticles = [] } = useQuery({
+    queryKey: ['relatedArticles', article?.category, article?.id],
+    queryFn: () => base44.entities.NewsArticle.filter({ published: true, category: article.category }, '-created_date', 4),
+    enabled: !!article?.category,
+    select: (data) => data.filter(a => a.id !== article?.id).slice(0, 3)
   });
 
   if (isLoading) {
@@ -149,6 +157,31 @@ export default function NewsArticlePage() {
           </motion.div>
         </div>
       </section>
+
+      {/* Related Articles */}
+      {relatedArticles.length > 0 && (
+        <section className="py-14 bg-gray-50">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Related Articles</h2>
+            <div className="grid sm:grid-cols-3 gap-6">
+              {relatedArticles.map(rel => (
+                <Link key={rel.id} to={rel.slug ? `/news/${rel.slug}` : `${createPageUrl("NewsArticle")}?id=${rel.id}`} className="block group">
+                  <Card className="h-full border-none shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
+                    {rel.image && (
+                      <img src={rel.image} alt={rel.title} className="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+                    )}
+                    <CardContent className="p-4">
+                      <span className="text-xs bg-amber-100 text-amber-700 font-semibold px-2 py-0.5 rounded-full">{rel.category}</span>
+                      <h3 className="text-sm font-bold text-gray-900 mt-2 line-clamp-2 group-hover:text-amber-600 transition-colors">{rel.title}</h3>
+                      <span className="text-amber-600 text-xs font-semibold mt-2 inline-flex items-center gap-1">Read More <ArrowRight className="w-3 h-3" /></span>
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* CTA Section */}
       <section className="py-16 bg-gray-900">

@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState, useMemo } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Calendar } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { ArrowRight, Calendar, Search, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { format } from "date-fns";
@@ -67,16 +68,28 @@ const defaultArticles = [
   }
 ];
 
+const ALL_CATEGORIES = ["Mobile Payments", "Restaurant Tips", "POS Systems", "Merchant Services", "Business News", "Industry Insights", "Technology", "Industry News", "Future Trends"];
+
 export default function News() {
+  const [search, setSearch] = useState("");
+  const [activeCategory, setActiveCategory] = useState("All");
+
   const { data: dbArticles = [] } = useQuery({
     queryKey: ['publishedNews'],
     queryFn: () => base44.entities.NewsArticle.filter({ published: true }, '-created_date')
   });
 
-  // Combine database articles with defaults, database articles first
-  const newsArticles = dbArticles.length > 0 
-    ? [...dbArticles, ...defaultArticles] 
-    : defaultArticles;
+  const allArticles = dbArticles.length > 0 ? [...dbArticles, ...defaultArticles] : defaultArticles;
+
+  const filteredArticles = useMemo(() => {
+    return allArticles.filter(a => {
+      const matchesCategory = activeCategory === "All" || a.category === activeCategory;
+      const q = search.toLowerCase();
+      const matchesSearch = !q || a.title?.toLowerCase().includes(q) || a.excerpt?.toLowerCase().includes(q) || a.category?.toLowerCase().includes(q);
+      return matchesCategory && matchesSearch;
+    });
+  }, [allArticles, search, activeCategory]);
+
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
@@ -126,15 +139,51 @@ export default function News() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-10"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              EzPay America Also <span className="text-amber-600">Offers</span>
+              Latest <span className="text-amber-600">News & Insights</span>
             </h2>
           </motion.div>
 
+          {/* Search + Category Filter */}
+          <div className="mb-10 space-y-4">
+            <div className="relative max-w-md mx-auto">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Input
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                placeholder="Search articles..."
+                className="pl-9 pr-9 h-11"
+              />
+              {search && (
+                <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+            <div className="flex flex-wrap justify-center gap-2">
+              {["All", ...ALL_CATEGORIES].map(cat => (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                    activeCategory === cat
+                      ? "bg-amber-500 text-white"
+                      : "bg-white text-gray-600 border border-gray-200 hover:border-amber-400 hover:text-amber-600"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+            {(search || activeCategory !== "All") && (
+              <p className="text-center text-sm text-gray-500">{filteredArticles.length} article{filteredArticles.length !== 1 ? "s" : ""} found</p>
+            )}
+          </div>
+
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {newsArticles.map((article, index) => (
+            {filteredArticles.map((article, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
