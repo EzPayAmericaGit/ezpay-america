@@ -7,8 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Plus, Pencil, Trash2, Eye, EyeOff, Upload, Loader2, Sparkles, RefreshCw, Tags, BarChart3, Wand2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Eye, EyeOff, Upload, Loader2, Sparkles, RefreshCw, Tags, BarChart3, Wand2, Share2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import SocialShareDialog from "../components/news/SocialShareDialog";
 
 const categories = [
   "Mobile Payments",
@@ -52,6 +53,7 @@ export default function NewsAdmin() {
   const [seoRecommendations, setSeoRecommendations] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
+  const [shareArticle, setShareArticle] = useState(null);
 
   const queryClient = useQueryClient();
 
@@ -356,6 +358,7 @@ Optimize for:
   });
 
   return (
+    <>
     <div className="min-h-screen bg-gray-50 py-24 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-8">
@@ -958,6 +961,10 @@ Optimize for:
                     <Button size="sm" variant="ghost" onClick={() => handleEdit(article)}>
                       <Pencil className="w-4 h-4" />
                     </Button>
+                    <Button size="sm" variant="ghost" className="text-blue-500 hover:text-blue-600" title="Share to Social Media"
+                      onClick={() => setShareArticle(article)}>
+                      <Share2 className="w-4 h-4" />
+                    </Button>
                     <Button 
                       size="sm" 
                       variant="ghost" 
@@ -974,5 +981,14 @@ Optimize for:
         </div>
       </div>
     </div>
+
+    {shareArticle && (
+      <SocialShareDialog
+        article={shareArticle}
+        open={!!shareArticle}
+        onClose={() => setShareArticle(null)}
+      />
+    )}
+    </>
   );
 }
