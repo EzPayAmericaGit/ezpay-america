@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { DollarSign, Users, TrendingUp, Copy, CheckCircle2, Clock, ExternalLink, Link2, AlertCircle, Loader2, BarChart2 } from "lucide-react";
+import { DollarSign, Users, TrendingUp, Copy, CheckCircle2, Clock, ExternalLink, Link2, AlertCircle, Loader2, BarChart2, Code, ListChecks } from "lucide-react";
 import ReferralAnalytics from "../components/affiliate/ReferralAnalytics";
+import ReferralWidgetEmbed from "../components/affiliate/ReferralWidgetEmbed";
+import OnboardingChecklist from "../components/affiliate/OnboardingChecklist";
 import { motion } from "framer-motion";
 import SEOHead from "../components/SEOHead";
 import { Link } from "react-router-dom";
@@ -133,7 +135,7 @@ export default function AffiliateDashboard() {
     </div>
   );
 
-  const tabs = ["overview", "referrals", "analytics", "payouts", "leaderboard", "settings"];
+  const tabs = ["overview", "referrals", "analytics", "payouts", "embed", "leaderboard", "checklist", "settings"];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -202,7 +204,9 @@ export default function AffiliateDashboard() {
             <button key={t} onClick={() => setActiveTab(t)}
               className={`px-4 py-2 rounded-lg text-sm font-medium capitalize transition-all flex items-center gap-1.5 ${activeTab === t ? "bg-white shadow text-gray-900" : "text-gray-600 hover:text-gray-900"}`}>
               {t === "analytics" && <BarChart2 className="w-3.5 h-3.5" />}
-              {t}
+              {t === "embed" && <Code className="w-3.5 h-3.5" />}
+              {t === "checklist" && <ListChecks className="w-3.5 h-3.5" />}
+              {t === "embed" ? "Widget Embed" : t === "checklist" ? "Checklist" : t}
             </button>
           ))}
         </div>
@@ -384,6 +388,29 @@ export default function AffiliateDashboard() {
         {/* Analytics Tab */}
         {activeTab === "analytics" && (
           <ReferralAnalytics referrals={referrals} payouts={payouts} affiliate={affiliate} />
+        )}
+
+        {/* Widget Embed Tab */}
+        {activeTab === "embed" && affiliate.status === "approved" && (
+          <ReferralWidgetEmbed affiliate={affiliate} />
+        )}
+        {activeTab === "embed" && affiliate.status !== "approved" && (
+          <Card className="border-none shadow-lg">
+            <CardContent className="py-12 text-center">
+              <Clock className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+              <p className="text-gray-500">Widget embed is available once your account is approved.</p>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Checklist Tab */}
+        {activeTab === "checklist" && (
+          <OnboardingChecklist
+            affiliate={affiliate}
+            referrals={referrals}
+            referralLink={referralLink}
+            onTabSwitch={setActiveTab}
+          />
         )}
 
         {/* Payouts Tab */}

@@ -14,6 +14,7 @@ import AffiliateAnalytics from "../components/affiliate/AffiliateAnalytics";
 import BatchPayoutPanel from "../components/affiliate/BatchPayoutPanel";
 import EmailTemplateManager from "../components/affiliate/EmailTemplateManager";
 import CommissionTierManager from "../components/affiliate/CommissionTierManager";
+import DripCampaignManager from "../components/affiliate/DripCampaignManager";
 
 const STATUS_BADGE = {
   pending: "bg-yellow-100 text-yellow-800",
@@ -244,19 +245,21 @@ export default function AffiliateAdmin() {
 
         {/* Tabs */}
         <div className="flex gap-1 bg-gray-200 rounded-xl p-1 mb-6 flex-wrap">
-          {["affiliates", "referrals", "payouts", "batch-payout", "analytics", "email-templates", "tier-rules"].map(t => (
+          {["affiliates", "referrals", "payouts", "batch-payout", "analytics", "drip-campaigns", "email-templates", "tier-rules"].map(t => (
             <button key={t} onClick={() => setActiveTab(t)}
               className={`px-4 py-2 rounded-lg text-sm font-medium capitalize transition-all flex items-center gap-1.5 ${activeTab === t ? "bg-white shadow text-gray-900" : "text-gray-600 hover:text-gray-900"}`}>
               {t === "analytics" && <BarChart2 className="w-3.5 h-3.5" />}
               {t === "batch-payout" && <Send className="w-3.5 h-3.5" />}
               {t === "email-templates" && <Mail className="w-3.5 h-3.5" />}
               {t === "tier-rules" && <ArrowUp className="w-3.5 h-3.5" />}
+              {t === "drip-campaigns" && <Mail className="w-3.5 h-3.5" />}
               {t === "affiliates" ? `Affiliates (${affiliates.length})` :
                t === "referrals" ? `Referrals (${referrals.length})` :
                t === "payouts" ? `Payouts (${payouts.length})` :
                t === "batch-payout" ? "Batch Payout" :
                t === "email-templates" ? "Email Templates" :
-               t === "tier-rules" ? "Tier Rules" : "Analytics"}
+               t === "tier-rules" ? "Tier Rules" :
+               t === "drip-campaigns" ? "Drip Campaigns" : "Analytics"}
             </button>
           ))}
         </div>
@@ -482,6 +485,11 @@ export default function AffiliateAdmin() {
         {/* Tier Rules Tab */}
         {activeTab === "tier-rules" && (
           <CommissionTierManager />
+        )}
+
+        {/* Drip Campaigns Tab */}
+        {activeTab === "drip-campaigns" && (
+          <DripCampaignManager affiliates={affiliates} />
         )}
       </div>
 
