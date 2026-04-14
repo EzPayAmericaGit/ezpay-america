@@ -15,18 +15,19 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Message is required' }, { status: 400 });
     }
 
-    const accessToken = Deno.env.get('LINKEDIN_ACCESS_TOKEN');
-    const organizationId = Deno.env.get('LINKEDIN_ORGANIZATION_ID');
+    // Use the authorized LinkedIn OAuth connector
+    const { accessToken } = await base44.asServiceRole.connectors.getConnection('linkedin');
 
-    if (!accessToken || !organizationId) {
-      return Response.json({
-        error: 'LinkedIn credentials not configured. Please set LINKEDIN_ACCESS_TOKEN and LINKEDIN_ORGANIZATION_ID in secrets.'
-      }, { status: 500 });
-    }
+    // Get the authenticated member's profile to get their URN
+    const profileRes = await fetch('https://api.linkedin.com/v2/userinfo', {
+      headers: { 'Authorization': `Bearer ${accessToken}` }
+    });
+    const profile = await profileRes.json();
+    const authorUrn = `urn:li:person:${profile.sub}`;
 
-    // Build UGC Post payload
+    // Build UGC Post payload (posting as member)
     const postBody = {
-      author: `urn:li:organization:${organizationId}`,
+      author: authorUrn,
       lifecycleState: "PUBLISHED",
       specificContent: {
         "com.linkedin.ugc.ShareContent": {
@@ -59,7 +60,7 @@ Deno.serve(async (req) => {
     const result = await response.json();
 
     if (!response.ok) {
-      return Response.json({ error: 'LinkedIn API error', details: result }, { status: response.status });
+      return Response.json({ success: false, error: result?.message || 'LinkedIn API error', details: result }, { status: 200 });
     }
 
     return Response.json({ success: true, post_id: result.id, message: 'Posted to LinkedIn successfully' });
