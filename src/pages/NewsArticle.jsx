@@ -25,12 +25,18 @@ export default function NewsArticlePage() {
     queryKey: ['newsArticle', articleId, slug],
     queryFn: async () => {
       if (slug) {
+        // First try slug match
         const articles = await base44.entities.NewsArticle.filter({ slug: slug });
         if (articles[0]) return articles[0];
+        // Fallback: treat slug as an ID (for ?id= links shared as /news/:id)
+        try {
+          const byId = await base44.entities.NewsArticle.filter({ id: slug });
+          if (byId[0]) return byId[0];
+        } catch {}
       }
       if (articleId) {
         const articles = await base44.entities.NewsArticle.filter({ id: articleId });
-        return articles[0];
+        if (articles[0]) return articles[0];
       }
       return null;
     },
@@ -76,7 +82,7 @@ export default function NewsArticlePage() {
         description={article.meta_description || article.excerpt}
         keywords={article.meta_keywords || `${article.category}, EzPay America, payment processing, ${article.title.split(' ').slice(0, 3).join(', ')}`}
         image={article.image}
-        url={article.slug ? `https://ezpayamerica.com/news/${article.slug}` : `https://ezpayamerica.com/NewsArticle?id=${article.id}`}
+        url={`https://ezpayamerica.com/news/${article.slug || article.id}`}
         articleSchema={{
           headline: article.title,
           description: article.excerpt,
@@ -172,7 +178,7 @@ export default function NewsArticlePage() {
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Related Articles</h2>
             <div className="grid sm:grid-cols-3 gap-6">
               {relatedArticles.map(rel => (
-                <Link key={rel.id} to={rel.slug ? `/news/${rel.slug}` : `${createPageUrl("NewsArticle")}?id=${rel.id}`} className="block group">
+                <Link key={rel.id} to={`/news/${rel.slug || rel.id}`} className="block group">
                   <Card className="h-full border-none shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
                     {rel.image && (
                       <img src={rel.image} alt={rel.title} className="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />

@@ -37,7 +37,8 @@ const SITE_ORIGIN = "https://ezpayamerica.com";
 
 function buildArticleUrl(article) {
   if (article.slug) return `${SITE_ORIGIN}/news/${article.slug}`;
-  return `${SITE_ORIGIN}/NewsArticle?id=${article.id}`;
+  // Use the /news/:id route so it's always routable
+  return `${SITE_ORIGIN}/news/${article.id}`;
 }
 
 function buildDefaultMessage(article, platform) {
@@ -47,7 +48,8 @@ function buildDefaultMessage(article, platform) {
     const msg = `${article.title} ${link}`;
     return msg.length <= 280 ? msg : `${article.title.substring(0, 220)}... ${link}`;
   }
-  return `${base}\n\nRead more: ${link}`;
+  // For LinkedIn and Facebook: link is sent separately as a preview card, don't duplicate in text
+  return base;
 }
 
 export default function SocialShareDialog({ article, open, onClose }) {

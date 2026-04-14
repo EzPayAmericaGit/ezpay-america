@@ -193,7 +193,7 @@ export default function News() {
                 viewport={{ once: true }}
               >
                 <Link 
-                  to={article.slug ? `/news/${article.slug}` : article.id ? `${createPageUrl("NewsArticle")}?id=${article.id}` : "#"}
+                  to={article.slug ? `/news/${article.slug}` : article.id ? `/news/${article.id}` : "#"}
                   className="block h-full"
                 >
                   <Card className="h-full border-none shadow-lg hover:shadow-2xl transition-all duration-300 group overflow-hidden">
