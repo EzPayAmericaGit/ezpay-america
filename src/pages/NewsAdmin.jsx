@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -152,12 +152,28 @@ Provide:
     setAnalyzing(false);
   };
 
+  const generateSlug = (title) =>
+    title.toLowerCase().trim().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').slice(0, 60);
+
+  // Auto-patch all articles missing a slug on mount
+  React.useEffect(() => {
+    if (!articles.length) return;
+    const missing = articles.filter(a => !a.slug && a.title);
+    if (!missing.length) return;
+    missing.forEach(a => {
+      base44.entities.NewsArticle.update(a.id, { slug: generateSlug(a.title) });
+    });
+    if (missing.length) queryClient.invalidateQueries({ queryKey: ['newsArticles'] });
+  }, [articles.length]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    const slug = formData.slug || generateSlug(formData.title);
+    const data = { ...formData, slug };
     if (editingArticle) {
-      updateMutation.mutate({ id: editingArticle.id, data: formData });
+      updateMutation.mutate({ id: editingArticle.id, data });
     } else {
-      createMutation.mutate(formData);
+      createMutation.mutate(data);
     }
   };
 
@@ -469,7 +485,15 @@ Optimize for:
                   <label className="block text-sm font-medium mb-1">Title *</label>
                   <Input
                     value={formData.title}
-                    onChange={(e) => setFormData({...formData, title: e.target.value})}
+                    onChange={(e) => {
+                      const newTitle = e.target.value;
+                      const autoSlug = !formData.slug || formData.slug === generateSlug(formData.title);
+                      setFormData({
+                        ...formData,
+                        title: newTitle,
+                        slug: autoSlug ? generateSlug(newTitle) : formData.slug
+                      });
+                    }}
                     required
                   />
                 </div>
@@ -926,6 +950,11 @@ Optimize for:
                     <h3 className="font-semibold truncate">{article.title}</h3>
                     <div className="flex items-center gap-2 mt-1">
                       <span className="text-sm text-gray-500">{article.category}</span>
+                      {article.slug ? (
+                        <span className="text-xs text-green-600 bg-green-50 px-1.5 py-0.5 rounded font-mono">/{article.slug}</span>
+                      ) : (
+                        <span className="text-xs text-red-500 bg-red-50 px-1.5 py-0.5 rounded">no slug</span>
+                      )}
                       {article.content_score && (
                         <Badge variant="outline" className={`text-xs ${article.content_score >= 70 ? 'border-green-500 text-green-600' : article.content_score >= 40 ? 'border-amber-500 text-amber-600' : 'border-red-500 text-red-600'}`}>
                           Score: {article.content_score}
