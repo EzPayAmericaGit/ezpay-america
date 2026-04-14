@@ -156,7 +156,7 @@ Provide:
     title.toLowerCase().trim().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').slice(0, 60);
 
   // Auto-patch all articles missing a slug on mount
-  React.useEffect(() => {
+  useEffect(() => {
     if (!articles.length) return;
     const missing = articles.filter(a => !a.slug && a.title);
     if (!missing.length) return;
