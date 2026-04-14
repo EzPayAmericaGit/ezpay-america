@@ -72,6 +72,7 @@ import EngineeringFirmPOS from './pages/EngineeringFirmPOS';
 import StaffingAgencyPOS from './pages/StaffingAgencyPOS';
 import TranslationServicesPOS from './pages/TranslationServicesPOS';
 import PRFirmPOS from './pages/PRFirmPOS';
+import NewsArticle from './pages/NewsArticle';
 import AffiliateSignup from './pages/AffiliateSignup';
 import AffiliateDashboard from './pages/AffiliateDashboard';
 import AffiliateAdmin from './pages/AffiliateAdmin';
@@ -186,6 +187,7 @@ const AuthenticatedApp = () => {
         <Route path="/AffiliateAdmin" element={<LayoutWrapper currentPageName="AffiliateAdmin"><AffiliateAdmin /></LayoutWrapper>} />
         <Route path="/AffiliateReferralPortal" element={<LayoutWrapper currentPageName="AffiliateReferralPortal"><AffiliateReferralPortal /></LayoutWrapper>} />
         <Route path="/AffiliateLeaderboard" element={<LayoutWrapper currentPageName="AffiliateLeaderboard"><AffiliateLeaderboard /></LayoutWrapper>} />
+        <Route path="/news/:slug" element={<LayoutWrapper currentPageName="NewsArticle"><NewsArticle /></LayoutWrapper>} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </LayoutWrapper>

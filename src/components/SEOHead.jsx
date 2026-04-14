@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export default function SEOHead({ title, description, keywords, image, url }) {
+export default function SEOHead({ title, description, keywords, image, url, articleSchema }) {
   
   // Set document title immediately - Google recommends 50-60 characters
   if (typeof document !== 'undefined') {
@@ -299,6 +299,48 @@ export default function SEOHead({ title, description, keywords, image, url }) {
     
     structuredData.textContent = JSON.stringify(schema);
 
+    // Add Article/BlogPosting schema when articleSchema prop is provided
+    let articleStructuredData = document.querySelector('script[data-schema="article"]');
+    if (articleSchema) {
+      if (!articleStructuredData) {
+        articleStructuredData = document.createElement('script');
+        articleStructuredData.type = 'application/ld+json';
+        articleStructuredData.setAttribute('data-schema', 'article');
+        document.head.appendChild(articleStructuredData);
+      }
+      const articleUrl = articleSchema.slug
+        ? `https://ezpayamerica.com/news/${articleSchema.slug}`
+        : `https://ezpayamerica.com/NewsArticle?id=${articleSchema.id}`;
+      articleStructuredData.textContent = JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": articleSchema.headline,
+        "description": articleSchema.description,
+        "image": articleSchema.image ? [articleSchema.image] : [],
+        "datePublished": articleSchema.datePublished,
+        "dateModified": articleSchema.dateModified || articleSchema.datePublished,
+        "author": {
+          "@type": "Organization",
+          "name": "EzPay America",
+          "url": "https://ezpayamerica.com"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "EzPay America",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/8eb2dd274_EZSMALL.png"
+          }
+        },
+        "url": articleUrl,
+        "mainEntityOfPage": { "@type": "WebPage", "@id": articleUrl },
+        "articleSection": articleSchema.category,
+        "keywords": `${articleSchema.category}, EzPay America, payment processing`
+      });
+    } else if (articleStructuredData) {
+      articleStructuredData.remove();
+    }
+
     // Add FAQ Schema for common questions (helps with featured snippets)
     let faqSchema = document.querySelector('script[data-schema="faq"]');
     if (!faqSchema) {
@@ -466,7 +508,7 @@ export default function SEOHead({ title, description, keywords, image, url }) {
     }
 
     
-  }, [title, description, keywords, image, url]);
+  }, [title, description, keywords, image, url, articleSchema]);
 
   return null;
 }

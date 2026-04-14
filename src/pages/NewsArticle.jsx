@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar, Tag } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
@@ -13,16 +13,20 @@ import SEOHead from "../components/SEOHead";
 export default function NewsArticlePage() {
   const urlParams = new URLSearchParams(window.location.search);
   const articleId = urlParams.get("id");
-  const slug = urlParams.get("slug");
+  const slugFromQuery = urlParams.get("slug");
+  // Also support clean /news/:slug path param
+  const { slug: slugFromPath } = useParams();
+  const slug = slugFromPath || slugFromQuery;
 
   const { data: article, isLoading } = useQuery({
     queryKey: ['newsArticle', articleId, slug],
     queryFn: async () => {
+      if (slug) {
+        const articles = await base44.entities.NewsArticle.filter({ slug: slug });
+        if (articles[0]) return articles[0];
+      }
       if (articleId) {
         const articles = await base44.entities.NewsArticle.filter({ id: articleId });
-        return articles[0];
-      } else if (slug) {
-        const articles = await base44.entities.NewsArticle.filter({ slug: slug });
         return articles[0];
       }
       return null;
@@ -60,6 +64,18 @@ export default function NewsArticlePage() {
         title={article.meta_title || article.title}
         description={article.meta_description || article.excerpt}
         keywords={article.meta_keywords || `${article.category}, EzPay America, payment processing, ${article.title.split(' ').slice(0, 3).join(', ')}`}
+        image={article.image}
+        url={article.slug ? `https://ezpayamerica.com/news/${article.slug}` : `https://ezpayamerica.com/NewsArticle?id=${article.id}`}
+        articleSchema={{
+          headline: article.title,
+          description: article.excerpt,
+          image: article.image,
+          datePublished: article.created_date,
+          dateModified: article.updated_date || article.created_date,
+          category: article.category,
+          slug: article.slug,
+          id: article.id,
+        }}
       />
 
       {/* Hero with Image */}
