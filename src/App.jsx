@@ -188,8 +188,7 @@ const AuthenticatedApp = () => {
         <Route path="/AffiliateReferralPortal" element={<LayoutWrapper currentPageName="AffiliateReferralPortal"><AffiliateReferralPortal /></LayoutWrapper>} />
         <Route path="/AffiliateLeaderboard" element={<LayoutWrapper currentPageName="AffiliateLeaderboard"><AffiliateLeaderboard /></LayoutWrapper>} />
         <Route path="/news/:slug" element={<LayoutWrapper currentPageName="NewsArticle"><NewsArticle /></LayoutWrapper>} />
-        <Route path="/MyAccount" element={<LayoutWrapper currentPageName="MyAccount"><div className="min-h-screen flex items-center justify-center"><p className="text-gray-500">Page not available.</p></div></LayoutWrapper>} />
-        <Route path="/OrderHistory" element={<LayoutWrapper currentPageName="OrderHistory"><div className="min-h-screen flex items-center justify-center"><p className="text-gray-500">Page not available.</p></div></LayoutWrapper>} />
+
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </LayoutWrapper>
