@@ -979,13 +979,7 @@ Optimize for:
           )}
         </div>
       </div>
-      {shareArticle && (
-        <SocialShareDialog
-          article={shareArticle}
-          open={!!shareArticle}
-          onClose={() => setShareArticle(null)}
-        />
-      )}
+      {shareArticle && <SocialShareDialog article={shareArticle} open={!!shareArticle} onClose={() => setShareArticle(null)} />}
     </div>
   );
 }
