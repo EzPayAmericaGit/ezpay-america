@@ -56,6 +56,11 @@ Allow: /Checkout
 Allow: /ApplyOnline
 Allow: /Contact
 Allow: /News
+Allow: /news/
+
+# Sitemaps
+Sitemap: ${baseUrl}/Sitemap
+Sitemap: ${baseUrl}/news-sitemap
 `;
 
     document.body.innerHTML = `<pre style="font-family: monospace; white-space: pre-wrap; word-wrap: break-word; padding: 20px; background: #f5f5f5;">${robotsTxt}</pre>`;

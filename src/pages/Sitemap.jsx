@@ -1,4 +1,27 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { base44 } from "@/api/base44Client";
+
+function NewsArticlesSection({ today }) {
+  const [articles, setArticles] = useState([]);
+  useEffect(() => {
+    base44.entities.NewsArticle.filter({ published: true }, '-updated_date', 200).then(setArticles);
+  }, []);
+  if (!articles.length) return null;
+  return (
+    <div className="bg-gradient-to-br from-amber-50 to-yellow-50 p-6 rounded-lg border border-amber-200 col-span-full">
+      <h2 className="text-xl font-bold mb-4 text-gray-900">News Articles ({articles.length})</h2>
+      <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-2">
+        {articles.map(a => (
+          <li key={a.id}>
+            <a href={`/news/${a.slug || a.id}`} className="text-amber-700 hover:text-amber-900 hover:underline text-sm line-clamp-1">
+              {a.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 export default function Sitemap() {
   const today = new Date().toISOString().split('T')[0];
@@ -130,21 +153,44 @@ export default function Sitemap() {
 
   useEffect(() => {
     const baseUrl = window.location.origin;
-    const urlEntries = pages.map(page =>
-      '  <url>\n' +
-      '    <loc>' + baseUrl + page.path + '</loc>\n' +
-      '    <lastmod>' + today + '</lastmod>\n' +
-      '    <changefreq>' + page.changefreq + '</changefreq>\n' +
-      '    <priority>' + page.priority + '</priority>\n' +
-      '  </url>'
-    ).join('\n');
 
-    const xml = '<?xml version="1.0" encoding="UTF-8"?>\n' +
-      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-      urlEntries + '\n' +
-      '</urlset>';
+    base44.entities.NewsArticle.filter({ published: true }, '-updated_date', 200).then(articles => {
+      const staticEntries = pages.map(page =>
+        '  <url>\n' +
+        '    <loc>' + baseUrl + page.path + '</loc>\n' +
+        '    <lastmod>' + today + '</lastmod>\n' +
+        '    <changefreq>' + page.changefreq + '</changefreq>\n' +
+        '    <priority>' + page.priority + '</priority>\n' +
+        '  </url>'
+      ).join('\n');
 
-    document.body.innerHTML = '<pre style="font-family: monospace; white-space: pre-wrap; word-wrap: break-word; padding: 20px;">' + xml.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</pre>';
+      const newsEntries = articles.map(article => {
+        const slug = article.slug || article.id;
+        const lastmod = article.updated_date ? article.updated_date.split('T')[0] : today;
+        return '  <url>\n' +
+          '    <loc>' + baseUrl + '/news/' + slug + '</loc>\n' +
+          '    <lastmod>' + lastmod + '</lastmod>\n' +
+          '    <changefreq>weekly</changefreq>\n' +
+          '    <priority>0.8</priority>\n' +
+          '    <news:news xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">\n' +
+          '      <news:publication>\n' +
+          '        <news:name>EzPay America</news:name>\n' +
+          '        <news:language>en</news:language>\n' +
+          '      </news:publication>\n' +
+          '      <news:publication_date>' + lastmod + '</news:publication_date>\n' +
+          '      <news:title>' + (article.title || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</news:title>\n' +
+          '    </news:news>\n' +
+          '  </url>';
+      }).join('\n');
+
+      const xml = '<?xml version="1.0" encoding="UTF-8"?>\n' +
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n' +
+        '        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">\n' +
+        staticEntries + (newsEntries ? '\n' + newsEntries : '') + '\n' +
+        '</urlset>';
+
+      document.body.innerHTML = '<pre style="font-family: monospace; white-space: pre-wrap; word-wrap: break-word; padding: 20px;">' + xml.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</pre>';
+    });
   }, []);
 
   return (
@@ -340,6 +386,8 @@ export default function Sitemap() {
             </ul>
           </div>
 
+          <NewsArticlesSection today={today} />
+
         </div>
 
         <div className="mt-12 bg-amber-50 border-l-4 border-amber-500 p-6 rounded">
@@ -349,7 +397,7 @@ export default function Sitemap() {
             All pages are optimized for search engines with proper meta tags, structured data, and semantic HTML.
           </p>
           <p className="text-sm text-gray-600 mt-3">
-            Total Pages: {pages.length} | Last Updated: {today}
+            Static Pages: {pages.length} + dynamic news article URLs | Last Updated: {today}
           </p>
         </div>
       </div>
