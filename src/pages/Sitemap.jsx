@@ -152,7 +152,7 @@ export default function Sitemap() {
   ];
 
   useEffect(() => {
-    const baseUrl = window.location.origin;
+    const baseUrl = "https://ezpayamerica.com";
 
     base44.entities.NewsArticle.filter({ published: true }, '-updated_date', 200).then(articles => {
       const staticEntries = pages.map(page =>
@@ -196,8 +196,20 @@ export default function Sitemap() {
   return (
     <div className="min-h-screen bg-white p-8">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold mb-4 text-gray-900">EzPay America Sitemap</h1>
-        <p className="text-gray-600 mb-8">Complete directory of all pages and services</p>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+          <div>
+            <h1 className="text-4xl font-bold text-gray-900">EzPay America Sitemap</h1>
+            <p className="text-gray-600 mt-2">Complete directory of all pages and services</p>
+          </div>
+          <a
+            href="https://ezpayamerica.com/sitemap.xml"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white font-medium rounded-lg text-sm transition-colors"
+          >
+            📄 View XML Sitemap
+          </a>
+        </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
 
