@@ -70,8 +70,9 @@ Deno.serve(async (req) => {
 
     if (!apiKey || !apiSecret || !accessToken || !accessTokenSecret) {
       return Response.json({
+        success: false,
         error: 'X/Twitter credentials not configured. Please set X_API_KEY, X_API_SECRET, X_ACCESS_TOKEN, and X_ACCESS_TOKEN_SECRET in secrets.'
-      }, { status: 500 });
+      }, { status: 200 });
     }
 
     const url = 'https://api.twitter.com/2/tweets';
@@ -93,12 +94,12 @@ Deno.serve(async (req) => {
     const result = await response.json();
 
     if (!response.ok) {
-      return Response.json({ error: 'X/Twitter API error', details: result }, { status: response.status });
+      return Response.json({ success: false, error: result?.detail || 'X/Twitter API error', details: result }, { status: 200 });
     }
 
     return Response.json({ success: true, post_id: result.data?.id, message: 'Posted to X successfully' });
 
   } catch (error) {
-    return Response.json({ error: error.message }, { status: 500 });
+    return Response.json({ success: false, error: error.message }, { status: 200 });
   }
 });

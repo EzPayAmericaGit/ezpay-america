@@ -41,8 +41,9 @@ Deno.serve(async (req) => {
 
     if (!pageAccessToken || !pageId) {
       return Response.json({
-        error: 'Facebook credentials not configured. Please set FACEBOOK_PAGE_ACCESS_TOKEN and FACEBOOK_PAGE_ID.'
-      }, { status: 500 });
+        success: false,
+        error: 'Facebook credentials not configured. Please set FACEBOOK_PAGE_ACCESS_TOKEN and FACEBOOK_PAGE_ID in secrets.'
+      }, { status: 200 });
     }
 
     const formData = new FormData();
@@ -58,7 +59,7 @@ Deno.serve(async (req) => {
     const result = await response.json();
 
     if (!response.ok) {
-      return Response.json({ error: 'Facebook API error', details: result }, { status: response.status });
+      return Response.json({ success: false, error: result?.error?.message || 'Facebook API error', details: result }, { status: 200 });
     }
 
     if (image_url && result.id) {
@@ -76,7 +77,6 @@ Deno.serve(async (req) => {
     return Response.json({ success: true, post_id: result.id, message: 'Posted to Facebook successfully' });
 
   } catch (error) {
-    console.error('Facebook post error:', error);
-    return Response.json({ error: 'Failed to post to Facebook' }, { status: 500 });
+    return Response.json({ success: false, error: error.message }, { status: 200 });
   }
 });
