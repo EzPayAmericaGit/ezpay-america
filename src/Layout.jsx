@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Phone, Menu, X, ChevronDown, User } from "lucide-react";
+import { Phone, Menu, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { base44 } from "@/api/base44Client";
 import AnalyticsTracker from "@/components/AnalyticsTracker";
 import HelpWidget from "@/components/HelpWidget";
 import Footer from "@/components/home/Footer";
@@ -11,12 +10,7 @@ import Footer from "@/components/home/Footer";
 export default function Layout({ children }) {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [user, setUser] = useState(null);
-  const [accountMenuOpen, setAccountMenuOpen] = useState(false);
 
-  React.useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => setUser(null));
-  }, []);
 
   const navigationItems = React.useMemo(() => {
     const items = [
@@ -145,7 +139,7 @@ export default function Layout({ children }) {
     ];
 
     return items;
-  }, [user]);
+  }, []);
 
   // Live Chat - Opens Crisp chat or alternative
   const openLiveChat = () => {
@@ -227,84 +221,7 @@ export default function Layout({ children }) {
                   </Link>
                 )
               ))}
-              <div className="relative">
-                <Button
-                  variant="outline"
-                  onClick={() => setAccountMenuOpen(!accountMenuOpen)}
-                  className="flex items-center gap-1 text-xs lg:text-sm px-2 lg:px-4"
-                >
-                  <User className="w-3 h-3 lg:w-4 lg:h-4" />
-                  Account
-                </Button>
-                {accountMenuOpen && (
-                  <div className="absolute top-full right-0 mt-2 w-52 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
-                    {/* Account Menu Dropdown */}
-                    {user ? (
-                      <>
-                        <Link
-                          to={createPageUrl("MyAccount")}
-                          className="block px-4 py-2 text-gray-700 hover:bg-amber-50"
-                          onClick={() => setAccountMenuOpen(false)}
-                        >
-                          My Account
-                        </Link>
-                        <Link
-                          to={createPageUrl("OrderHistory")}
-                          className="block px-4 py-2 text-gray-700 hover:bg-amber-50"
-                          onClick={() => setAccountMenuOpen(false)}
-                        >
-                          Order History
-                        </Link>
-                        <button
-                          onClick={() => base44.auth.logout()}
-                          className="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50"
-                        >
-                          Logout
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <button
-                          onClick={() => {
-                            setAccountMenuOpen(false);
-                            base44.auth.redirectToLogin();
-                          }}
-                          className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-amber-50"
-                        >
-                          Login To My Account
-                        </button>
-                        <button
-                          onClick={() => {
-                            setAccountMenuOpen(false);
-                            base44.auth.redirectToLogin(createPageUrl("OrderHistory"));
-                          }}
-                          className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-amber-50"
-                        >
-                          Order History
-                        </button>
-                        <button
-                          onClick={() => {
-                            setAccountMenuOpen(false);
-                            base44.auth.redirectToLogin();
-                          }}
-                          className="block w-full text-left px-4 py-2 text-amber-600 hover:bg-amber-50 font-semibold"
-                        >
-                          No account? Signup
-                        </button>
-                        <button
-                          onClick={() => {
-                            setAccountMenuOpen(false);
-                            base44.auth.logout();
-                          }}
-                          className="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50"
-                        >
-                          Logout
-                        </button>
-                      </>
-                    )}
-                  </div>
-                )}
-              </div>
+
               <a href="tel:8653169625">
                 <Button className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-lg text-xs lg:text-sm px-2 lg:px-4">
                   <Phone className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
@@ -368,69 +285,7 @@ export default function Layout({ children }) {
                   )}
                 </div>
               ))}
-              {user ? (
-                <>
-                  <Link
-                    to={createPageUrl("MyAccount")}
-                    className="block px-4 py-2 text-gray-700 hover:bg-amber-50 hover:text-amber-600 rounded-lg transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    My Account
-                  </Link>
-                  <Link
-                    to={createPageUrl("OrderHistory")}
-                    className="block px-4 py-2 text-gray-700 hover:bg-amber-50 hover:text-amber-600 rounded-lg transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Order History
-                  </Link>
-                  <button
-                    onClick={() => base44.auth.logout()}
-                    className="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                  >
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      base44.auth.redirectToLogin();
-                    }}
-                    className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-amber-50 hover:text-amber-600 rounded-lg transition-colors"
-                  >
-                    Login To My Account
-                  </button>
-                  <button
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      base44.auth.redirectToLogin(createPageUrl("OrderHistory"));
-                    }}
-                    className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-amber-50 hover:text-amber-600 rounded-lg transition-colors"
-                  >
-                    Order History
-                  </button>
-                  <button
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      base44.auth.redirectToLogin();
-                    }}
-                    className="block w-full text-left px-4 py-2 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors font-semibold"
-                  >
-                    No account? Signup
-                  </button>
-                  <button
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      base44.auth.logout();
-                    }}
-                    className="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                  >
-                    Logout
-                  </button>
-                </>
-              )}
+
               <a href="tel:8653169625" className="block pt-2">
                 <Button className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white">
                   <Phone className="w-4 h-4 mr-2" />

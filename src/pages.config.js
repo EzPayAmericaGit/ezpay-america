@@ -125,13 +125,11 @@ import MerchantCapital from './pages/MerchantCapital';
 import MerchantCashAdvance from './pages/MerchantCashAdvance';
 import MiniMarketPOS from './pages/MiniMarketPOS';
 import MobilePayments from './pages/MobilePayments';
-import MyAccount from './pages/MyAccount';
 import News from './pages/News';
 import NewsAdmin from './pages/NewsAdmin';
 import NewsArticle from './pages/NewsArticle';
 import NotificationPreferences from './pages/NotificationPreferences';
 import Offers from './pages/Offers';
-import OrderHistory from './pages/OrderHistory';
 import OrdersAdmin from './pages/OrdersAdmin';
 import ProcessPayment from './pages/ProcessPayment';
 import ProductAdmin from './pages/ProductAdmin';
@@ -234,13 +232,11 @@ export const PAGES = {
     "MerchantCashAdvance": MerchantCashAdvance,
     "MiniMarketPOS": MiniMarketPOS,
     "MobilePayments": MobilePayments,
-    "MyAccount": MyAccount,
     "News": News,
     "NewsAdmin": NewsAdmin,
     "NewsArticle": NewsArticle,
     "NotificationPreferences": NotificationPreferences,
     "Offers": Offers,
-    "OrderHistory": OrderHistory,
     "OrdersAdmin": OrdersAdmin,
     "ProcessPayment": ProcessPayment,
     "ProductAdmin": ProductAdmin,
