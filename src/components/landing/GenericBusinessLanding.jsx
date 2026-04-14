@@ -84,16 +84,84 @@ const CONFIGS = {
   "pr-firm": { title: "PR Firms", badge: "PR Agency Payment Solutions", bullets: ["Accept retainers & campaign fees fee-free", "Zero transaction fees for your firm", "Virtual terminal for client billing", "Next-day deposits for your team"] }
 };
 
+const SLUG_TO_PATH = {
+  "clothing-boutique": "ClothingBoutiquePOS",
+  "shoe-store": "ShoeStorePOS",
+  "jewelry-store": "JewelryStorePOS",
+  "specialty-food-store": "SpecialtyFoodStorePOS",
+  "furniture-store": "FurnitureStorePOS",
+  "electronics-store": "ElectronicsStorePOS",
+  "sporting-goods-store": "SportingGoodsStorePOS",
+  "pet-store": "PetStorePOS",
+  "florist": "FloristPOS",
+  "thrift-store": "ThriftStorePOS",
+  "pop-up-retail": "PopUpRetailPOS",
+  "hair-salon": "HairSalonPOS",
+  "barber-shop": "BarberShopPOS",
+  "nail-salon": "NailSalonPOS",
+  "spa": "SpaPOS",
+  "massage-therapy": "MassageTherapyPOS",
+  "tanning-salon": "TanningSalonPOS",
+  "tattoo-shop": "TattooShopPOS",
+  "beauty-clinic": "BeautyClinicPOS",
+  "med-spa": "MedSpaPOS",
+  "personal-trainer": "PersonalTrainerPOS",
+  "yoga-studio": "YogaStudioPOS",
+  "fitness-gym": "FitnessGymPOS",
+  "dance-studio": "DanceStudioPOS",
+  "coaching-business": "CoachingBusinessPOS",
+  "dental-office": "DentalOfficePOS",
+  "chiropractor": "ChiropractorPOS",
+  "physical-therapy": "PhysicalTherapyPOS",
+  "urgent-care": "UrgentCarePOS",
+  "private-medical": "PrivateMedicalPOS",
+  "mental-health-clinic": "MentalHealthClinicPOS",
+  "veterinary-clinic": "VeterinaryClinicPOS",
+  "home-healthcare": "HomeHealthcarePOS",
+  "medical-lab": "MedicalLabPOS",
+  "hvac-company": "HVACCompanyPOS",
+  "plumbing-services": "PlumbingServicesPOS",
+  "electrical-contractor": "ElectricalContractorPOS",
+  "roofing-company": "RoofingCompanyPOS",
+  "landscaping": "LandscapingPOS",
+  "pest-control": "PestControlPOS",
+  "residential-cleaning": "ResidentialCleaningPOS",
+  "commercial-cleaning": "CommercialCleaningPOS",
+  "restoration-company": "RestorationCompanyPOS",
+  "handyman-services": "HandymanServicesPOS",
+  "pool-maintenance": "PoolMaintenancePOS",
+  "security-installer": "SecurityInstallerPOS",
+  "moving-company": "MovingCompanyPOS",
+  "appliance-repair": "ApplianceRepairPOS",
+  "dry-cleaners": "DryCleanersPOS",
+  "law-firm": "LawFirmPOS",
+  "accounting-firm": "AccountingFirmPOS",
+  "bookkeeping-services": "BookkeepingServicesPOS",
+  "marketing-agency": "MarketingAgencyPOS",
+  "consulting-firm": "ConsultingFirmPOS",
+  "it-services": "ITServicesPOS",
+  "web-design-agency": "WebDesignAgencyPOS",
+  "software-developer": "SoftwareDeveloperPOS",
+  "architecture-firm": "ArchitectureFirmPOS",
+  "engineering-firm": "EngineeringFirmPOS",
+  "staffing-agency": "StaffingAgencyPOS",
+  "translation-services": "TranslationServicesPOS",
+  "pr-firm": "PRFirmPOS",
+};
+
 export default function GenericBusinessLanding({ slug }) {
   const config = CONFIGS[slug] || { title: "Your Business", badge: "Payment Solutions", bullets: ["Zero transaction fees", "Free POS equipment", "No monthly fees", "Next-day deposits"] };
   const { title, badge, bullets } = config;
+  const pagePath = SLUG_TO_PATH[slug] || slug;
+  const canonicalUrl = `https://ezpayamerica.com/${pagePath}`;
 
   return (
     <>
       <SEOHead
         title={`${title} Payment Processing & POS System`}
         description={`EzPay America: zero-fee payment processing for ${title.toLowerCase()}. Free POS equipment, no monthly fees, no contracts. Apply online today.`}
-        keywords={`${title.toLowerCase()} payment processing, ${title.toLowerCase()} POS system, ${title.toLowerCase()} credit card processing, zero fee payment processing, merchant services`}
+        keywords={`${title.toLowerCase()} payment processing, ${title.toLowerCase()} POS system, ${title.toLowerCase()} credit card processing, zero fee payment processing, merchant services, best payment processor for ${title.toLowerCase()}, no fee credit card processing ${title.toLowerCase()}`}
+        url={canonicalUrl}
       />
       <LandingHero
         badge={badge}

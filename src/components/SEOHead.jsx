@@ -308,9 +308,7 @@ export default function SEOHead({ title, description, keywords, image, url, arti
         articleStructuredData.setAttribute('data-schema', 'article');
         document.head.appendChild(articleStructuredData);
       }
-      const articleUrl = articleSchema.slug
-        ? `https://ezpayamerica.com/news/${articleSchema.slug}`
-        : `https://ezpayamerica.com/NewsArticle?id=${articleSchema.id}`;
+      const articleUrl = `https://ezpayamerica.com/news/${articleSchema.slug || articleSchema.id}`;
       articleStructuredData.textContent = JSON.stringify({
         "@context": "https://schema.org",
         "@type": "BlogPosting",
