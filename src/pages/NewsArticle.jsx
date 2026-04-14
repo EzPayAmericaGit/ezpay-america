@@ -10,6 +10,8 @@ import { motion } from "framer-motion";
 import { format } from "date-fns";
 import ReactMarkdown from "react-markdown";
 import SEOHead from "../components/SEOHead";
+import ReadingProgress from "../components/news/ReadingProgress";
+import NewsletterSignup from "../components/news/NewsletterSignup";
 
 export default function NewsArticlePage() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -68,6 +70,7 @@ export default function NewsArticlePage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <ReadingProgress />
       <SEOHead 
         title={article.meta_title || article.title}
         description={article.meta_description || article.excerpt}
@@ -146,13 +149,17 @@ export default function NewsArticlePage() {
             )}
 
             {/* Back Button */}
-            <div className="mt-12 pt-8 border-t border-gray-200">
+            <div className="mt-12 pt-8 border-t border-gray-200 flex items-center justify-between flex-wrap gap-4">
               <Link to={createPageUrl("News")}>
                 <Button variant="outline" className="border-amber-500 text-amber-600 hover:bg-amber-50">
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back to All News
                 </Button>
               </Link>
+              <div>
+                <p className="text-sm text-gray-500 mb-2">Enjoy this article? Get more in your inbox:</p>
+                <NewsletterSignup variant="inline" />
+              </div>
             </div>
           </motion.div>
         </div>

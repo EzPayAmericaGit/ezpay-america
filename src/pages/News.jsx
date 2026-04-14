@@ -10,6 +10,7 @@ import { createPageUrl } from "@/utils";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
 import SEOHead from "../components/SEOHead";
+import NewsletterSignup from "../components/news/NewsletterSignup";
 
 const defaultArticles = [
   {
@@ -238,6 +239,8 @@ export default function News() {
           </div>
         </div>
       </section>
+
+      <NewsletterSignup />
 
       {/* CTA Section */}
       <section className="py-20 bg-gray-900">
