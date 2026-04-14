@@ -33,9 +33,11 @@ const PLATFORMS = [
   },
 ];
 
+const SITE_ORIGIN = "https://ezpayamerica.com";
+
 function buildArticleUrl(article) {
-  if (article.slug) return `${window.location.origin}/news/${article.slug}`;
-  return `${window.location.origin}/NewsArticle?id=${article.id}`;
+  if (article.slug) return `${SITE_ORIGIN}/news/${article.slug}`;
+  return `${SITE_ORIGIN}/NewsArticle?id=${article.id}`;
 }
 
 function buildDefaultMessage(article, platform) {
