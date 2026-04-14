@@ -33,11 +33,15 @@ const PLATFORMS = [
   },
 ];
 
+function buildArticleUrl(article) {
+  if (article.slug) return `${window.location.origin}/news/${article.slug}`;
+  return `${window.location.origin}/NewsArticle?id=${article.id}`;
+}
+
 function buildDefaultMessage(article, platform) {
-  const link = `${window.location.origin}/NewsArticle?slug=${article.slug || ""}`;
+  const link = buildArticleUrl(article);
   const base = `${article.title}\n\n${article.excerpt || ""}`;
   if (platform === "x") {
-    // Tight 280 char limit — use title + link
     const msg = `${article.title} ${link}`;
     return msg.length <= 280 ? msg : `${article.title.substring(0, 220)}... ${link}`;
   }
@@ -56,11 +60,12 @@ export default function SocialShareDialog({ article, open, onClose }) {
   const aiGenerate = async (platformId) => {
     setGenerating(platformId);
     const platform = PLATFORMS.find(p => p.id === platformId);
-    const link = `${window.location.origin}/NewsArticle?slug=${article.slug || ""}`;
+    const link = buildArticleUrl(article);
     const result = await base44.integrations.Core.InvokeLLM({
       prompt: `Write a compelling social media post for ${platform.label} about this article.
 Article title: "${article.title}"
 Article excerpt: "${article.excerpt || ""}"
+Article content: "${(article.content || "").substring(0, 1000)}"
 Link: ${link}
 ${platformId === "x" ? "CRITICAL: Must be under 280 characters including the link." : `Max ${platform.maxChars} characters.`}
 ${platformId === "linkedin" ? "Professional tone, add relevant hashtags." : ""}
@@ -74,7 +79,7 @@ Return only the post text, nothing else.`,
 
   const post = async (platform) => {
     setStatus(prev => ({ ...prev, [platform.id]: { state: "posting" } }));
-    const link = `${window.location.origin}/NewsArticle?slug=${article.slug || ""}`;
+    const link = buildArticleUrl(article);
     const res = await base44.functions.invoke(platform.fn, {
       message: messages[platform.id],
       link: platform.id !== "x" ? link : undefined,
