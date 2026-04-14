@@ -358,7 +358,6 @@ Optimize for:
   });
 
   return (
-    <>
     <div className="min-h-screen bg-gray-50 py-24 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-8">
@@ -980,15 +979,13 @@ Optimize for:
           )}
         </div>
       </div>
+      {shareArticle && (
+        <SocialShareDialog
+          article={shareArticle}
+          open={!!shareArticle}
+          onClose={() => setShareArticle(null)}
+        />
+      )}
     </div>
-
-    {shareArticle && (
-      <SocialShareDialog
-        article={shareArticle}
-        open={!!shareArticle}
-        onClose={() => setShareArticle(null)}
-      />
-    )}
-    </>
   );
 }
