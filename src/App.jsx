@@ -5,7 +5,7 @@ import { queryClientInstance } from '@/lib/query-client'
 import VisualEditAgent from '@/lib/VisualEditAgent'
 import NavigationTracker from '@/lib/NavigationTracker'
 import { pagesConfig } from './pages.config'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { setupIframeMessaging } from './lib/iframe-messaging';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
@@ -188,6 +188,28 @@ const AuthenticatedApp = () => {
         <Route path="/AffiliateReferralPortal" element={<LayoutWrapper currentPageName="AffiliateReferralPortal"><AffiliateReferralPortal /></LayoutWrapper>} />
         <Route path="/AffiliateLeaderboard" element={<LayoutWrapper currentPageName="AffiliateLeaderboard"><AffiliateLeaderboard /></LayoutWrapper>} />
         <Route path="/news/:slug" element={<LayoutWrapper currentPageName="NewsArticle"><NewsArticle /></LayoutWrapper>} />
+
+        {/* Legacy WordPress URL redirects → 301-equivalent client-side */}
+        <Route path="/restaurant-merchants" element={<Navigate to="/RestaurantMerchants" replace />} />
+        <Route path="/restaurant-merchants/" element={<Navigate to="/RestaurantMerchants" replace />} />
+        <Route path="/contact-us" element={<Navigate to="/Contact" replace />} />
+        <Route path="/contact-us/" element={<Navigate to="/Contact" replace />} />
+        <Route path="/apply-online" element={<Navigate to="/ApplyOnline" replace />} />
+        <Route path="/apply-online/" element={<Navigate to="/ApplyOnline" replace />} />
+        <Route path="/point-of-sale" element={<Navigate to="/EzPayPOSHome" replace />} />
+        <Route path="/point-of-sale/" element={<Navigate to="/EzPayPOSHome" replace />} />
+        <Route path="/ezpay-america-news" element={<Navigate to="/News" replace />} />
+        <Route path="/ezpay-america-news/" element={<Navigate to="/News" replace />} />
+        <Route path="/ezpay-news" element={<Navigate to="/News" replace />} />
+        <Route path="/ezpay-news/" element={<Navigate to="/News" replace />} />
+        <Route path="/get-ranked-on-google" element={<Navigate to="/" replace />} />
+        <Route path="/texting-privacy-policy" element={<Navigate to="/" replace />} />
+        <Route path="/texting-privacy-policy/" element={<Navigate to="/" replace />} />
+        <Route path="/es-mx" element={<Navigate to="/" replace />} />
+        <Route path="/es-mx/*" element={<Navigate to="/" replace />} />
+        <Route path="/brand/*" element={<Navigate to="/Shop" replace />} />
+        <Route path="/news/the-state-of-small-business-ownership-in-2024" element={<Navigate to="/News" replace />} />
+        <Route path="/news/7-mistakes-restaurant-owners-make" element={<Navigate to="/News" replace />} />
 
         <Route path="*" element={<PageNotFound />} />
       </Routes>

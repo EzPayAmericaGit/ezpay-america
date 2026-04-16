@@ -1,11 +1,101 @@
-import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 
+// Map of legacy WordPress URLs → new React routes
+const LEGACY_REDIRECTS = {
+  // Old news paths
+  '/ezpay-america-news': '/News',
+  '/ezpay-america-news/': '/News',
+  '/ezpay-news': '/News',
+  '/ezpay-news/': '/News',
+  '/news/the-state-of-small-business-ownership-in-2024': '/News',
+  '/news/7-mistakes-restaurant-owners-make': '/News',
+
+  // Services / Merchants
+  '/restaurant-merchants': '/RestaurantMerchants',
+  '/restaurant-merchants/': '/RestaurantMerchants',
+  '/point-of-sale': '/EzPayPOSHome',
+  '/point-of-sale/': '/EzPayPOSHome',
+
+  // Contact variations
+  '/contact-us': '/Contact',
+  '/contact-us/': '/Contact',
+
+  // Apply Online variations
+  '/apply-online': '/ApplyOnline',
+  '/apply-online/': '/ApplyOnline',
+
+  // Brand pages → Shop or Services
+  '/brand/authorize-net': '/Shop',
+  '/brand/authorize-net/': '/Shop',
+  '/brand/bbpos': '/Shop',
+  '/brand/bbpos/': '/Shop',
+  '/brand/charge-anywhere': '/Shop',
+  '/brand/charge-anywhere/': '/Shop',
+  '/brand/clover-go': '/Shop',
+  '/brand/clover-go/': '/Shop',
+  '/brand/clover': '/Shop',
+  '/brand/clover/': '/Shop',
+  '/brand/dejavoo': '/Shop',
+  '/brand/dejavoo/': '/Shop',
+  '/brand/linga': '/Shop',
+  '/brand/linga/': '/Shop',
+  '/brand/nmi-gateway': '/BrandedPaymentGateway',
+  '/brand/nmi-gateway/': '/BrandedPaymentGateway',
+  '/brand/page/2': '/Shop',
+  '/brand/page/2/': '/Shop',
+  '/brand/pax': '/Shop',
+  '/brand/pax/': '/Shop',
+  '/brand/payanywhere': '/Shop',
+  '/brand/payanywhere/': '/Shop',
+  '/brand/swipesimple': '/Shop',
+  '/brand/swipesimple/': '/Shop',
+
+  // Misc old paths
+  '/get-ranked-on-google': '/',
+  '/texting-privacy-policy': '/',
+  '/texting-privacy-policy/': '/',
+};
+
+// Handle locale prefixes like /es-mx, /es-mx/services → strip and redirect
+function resolveRedirect(pathname) {
+  // Direct match
+  if (LEGACY_REDIRECTS[pathname]) return LEGACY_REDIRECTS[pathname];
+
+  // Strip trailing slash variant
+  const noSlash = pathname.replace(/\/$/, '');
+  if (LEGACY_REDIRECTS[noSlash]) return LEGACY_REDIRECTS[noSlash];
+
+  // Strip locale prefix like /es-mx/...
+  const localeStripped = pathname.replace(/^\/(es-mx|en-us|fr|de|pt)(\/|$)/, '/');
+  if (localeStripped !== pathname) {
+    if (LEGACY_REDIRECTS[localeStripped] || LEGACY_REDIRECTS[localeStripped.replace(/\/$/, '')]) {
+      return LEGACY_REDIRECTS[localeStripped] || LEGACY_REDIRECTS[localeStripped.replace(/\/$/, '')] || '/';
+    }
+    return '/'; // Unknown locale path → home
+  }
+
+  // Strip query params like ?amp
+  const noQuery = pathname.split('?')[0];
+  if (noQuery !== pathname && LEGACY_REDIRECTS[noQuery]) return LEGACY_REDIRECTS[noQuery];
+
+  return null;
+}
 
 export default function PageNotFound({}) {
     const location = useLocation();
+    const navigate = useNavigate();
     const pageName = location.pathname.substring(1);
+
+    useEffect(() => {
+      const fullPath = location.pathname + location.search;
+      const redirect = resolveRedirect(location.pathname) || resolveRedirect(fullPath.split('?')[0]);
+      if (redirect) {
+        navigate(redirect, { replace: true });
+      }
+    }, [location.pathname]);
 
     const { data: authData, isFetched } = useQuery({
         queryKey: ['user'],
