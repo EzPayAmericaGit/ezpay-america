@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export default function SEOHead({ title, description, keywords, image, url, articleSchema }) {
+export default function SEOHead({ title, description, keywords, image, url, articleSchema, pageSchema }) {
   
   // Set document title immediately - Google recommends 50-60 characters
   if (typeof document !== 'undefined') {
@@ -297,6 +297,11 @@ export default function SEOHead({ title, description, keywords, image, url, arti
       ]
     };
     
+    // If a per-page schema override is provided, merge it into the @graph
+    if (pageSchema && Array.isArray(pageSchema)) {
+      schema["@graph"] = [...schema["@graph"], ...pageSchema];
+    }
+
     structuredData.textContent = JSON.stringify(schema);
 
     // Add Article/BlogPosting schema when articleSchema prop is provided

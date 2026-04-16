@@ -84,6 +84,34 @@ const CONFIGS = {
   "pr-firm": { title: "PR Firms", badge: "PR Agency Payment Solutions", bullets: ["Accept retainers & campaign fees fee-free", "Zero transaction fees for your firm", "Virtual terminal for client billing", "Next-day deposits for your team"] }
 };
 
+const SLUG_TO_CATEGORY = {
+  "clothing-boutique": "Retail", "shoe-store": "Retail", "jewelry-store": "Retail",
+  "specialty-food-store": "Retail", "furniture-store": "Retail", "electronics-store": "Retail",
+  "sporting-goods-store": "Retail", "pet-store": "Retail", "florist": "Retail",
+  "thrift-store": "Retail", "pop-up-retail": "Retail",
+  "hair-salon": "Personal Services", "barber-shop": "Personal Services", "nail-salon": "Personal Services",
+  "spa": "Personal Services", "massage-therapy": "Personal Services", "tanning-salon": "Personal Services",
+  "tattoo-shop": "Personal Services", "beauty-clinic": "Personal Services", "med-spa": "Personal Services",
+  "personal-trainer": "Personal Services", "yoga-studio": "Personal Services", "fitness-gym": "Personal Services",
+  "dance-studio": "Personal Services", "coaching-business": "Personal Services",
+  "dental-office": "Healthcare", "chiropractor": "Healthcare", "physical-therapy": "Healthcare",
+  "urgent-care": "Healthcare", "private-medical": "Healthcare", "mental-health-clinic": "Healthcare",
+  "veterinary-clinic": "Healthcare", "home-healthcare": "Healthcare", "medical-lab": "Healthcare",
+  "hvac-company": "Home Services", "plumbing-services": "Home Services", "electrical-contractor": "Home Services",
+  "roofing-company": "Home Services", "landscaping": "Home Services", "pest-control": "Home Services",
+  "residential-cleaning": "Home Services", "commercial-cleaning": "Home Services",
+  "restoration-company": "Home Services", "handyman-services": "Home Services",
+  "pool-maintenance": "Home Services", "security-installer": "Home Services",
+  "moving-company": "Home Services", "appliance-repair": "Home Services", "dry-cleaners": "Home Services",
+  "law-firm": "Professional Services", "accounting-firm": "Professional Services",
+  "bookkeeping-services": "Professional Services", "marketing-agency": "Professional Services",
+  "consulting-firm": "Professional Services", "it-services": "Professional Services",
+  "web-design-agency": "Professional Services", "software-developer": "Professional Services",
+  "architecture-firm": "Professional Services", "engineering-firm": "Professional Services",
+  "staffing-agency": "Professional Services", "translation-services": "Professional Services",
+  "pr-firm": "Professional Services",
+};
+
 const SLUG_TO_PATH = {
   "clothing-boutique": "ClothingBoutiquePOS",
   "shoe-store": "ShoeStorePOS",
@@ -154,6 +182,59 @@ export default function GenericBusinessLanding({ slug }) {
   const { title, badge, bullets } = config;
   const pagePath = SLUG_TO_PATH[slug] || slug;
   const canonicalUrl = `https://ezpayamerica.com/${pagePath}`;
+  const category = SLUG_TO_CATEGORY[slug] || "Services";
+  const categoryPath = category === "Retail" ? "RetailMerchants"
+    : category === "Healthcare" ? "Services"
+    : category === "Home Services" ? "Services"
+    : category === "Personal Services" ? "Services"
+    : "Services";
+
+  const pageSchema = [
+    {
+      "@type": "LocalBusiness",
+      "@id": `${canonicalUrl}#localbusiness`,
+      "name": "EzPay America",
+      "image": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/8eb2dd274_EZSMALL.png",
+      "url": canonicalUrl,
+      "telephone": "+1-865-316-9625",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "US"
+      },
+      "areaServed": { "@type": "Country", "name": "United States" },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        "opens": "09:00",
+        "closes": "17:00"
+      },
+      "sameAs": [
+        "https://www.facebook.com/ezpayamerica",
+        "https://www.linkedin.com/company/ezpay-america"
+      ]
+    },
+    {
+      "@type": "Service",
+      "@id": `${canonicalUrl}#service`,
+      "serviceType": `${title} Payment Processing`,
+      "provider": {
+        "@type": "LocalBusiness",
+        "name": "EzPay America",
+        "url": "https://ezpayamerica.com"
+      },
+      "areaServed": { "@type": "Country", "name": "United States" },
+      "description": `Zero-fee payment processing and POS systems for ${title.toLowerCase()}. No monthly fees, no contracts, free equipment.`,
+      "url": canonicalUrl
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://ezpayamerica.com" },
+        { "@type": "ListItem", "position": 2, "name": category, "item": `https://ezpayamerica.com/${categoryPath}` },
+        { "@type": "ListItem", "position": 3, "name": `${title} Payment Processing`, "item": canonicalUrl }
+      ]
+    }
+  ];
 
   return (
     <>
@@ -162,6 +243,7 @@ export default function GenericBusinessLanding({ slug }) {
         description={`EzPay America: zero-fee payment processing for ${title.toLowerCase()}. Free POS equipment, no monthly fees, no contracts. Apply online today.`}
         keywords={`${title.toLowerCase()} payment processing, ${title.toLowerCase()} POS system, ${title.toLowerCase()} credit card processing, zero fee payment processing, merchant services, best payment processor for ${title.toLowerCase()}, no fee credit card processing ${title.toLowerCase()}`}
         url={canonicalUrl}
+        pageSchema={pageSchema}
       />
       <LandingHero
         badge={badge}
