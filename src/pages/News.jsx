@@ -16,55 +16,55 @@ const defaultArticles = [
   {
     title: "Which Food Truck Mobile Solution Boosts Revenue by 30%?",
     excerpt: "The mobile payment revolution has fundamentally transformed how food service businesses operate and accept payments on the go.",
-    image: "https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?w=600&h=400&fit=crop",
+    image: "https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?w=600&h=400&fit=crop&fm=webp&q=80",
     category: "Mobile Payments"
   },
   {
     title: "Stop Wasting Money And Cut Processing Fees: 5 Quick Hacks Every Restaurant Owner Needs",
     excerpt: "Restaurant owners face relentless pressure on profit margins, with payment processing fees eating into every transaction.",
-    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop",
+    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop&fm=webp&q=80",
     category: "Restaurant Tips"
   },
   {
     title: "7 Mistakes Restaurant Owners Make With POS Systems",
     excerpt: "Restaurant point-of-sale systems represent one of the most critical investments for any food service business.",
-    image: "https://images.unsplash.com/photo-1556742111-a301076d9d18?w=600&h=400&fit=crop",
+    image: "https://images.unsplash.com/photo-1556742111-a301076d9d18?w=600&h=400&fit=crop&fm=webp&q=80",
     category: "POS Systems"
   },
   {
     title: "How to Choose the Right Merchant Services Provider",
     excerpt: "Selecting the right merchant services provider can make or break your business's payment processing experience.",
-    image: "https://images.unsplash.com/photo-1556742031-c6961e8560b0?w=600&h=400&fit=crop",
+    image: "https://images.unsplash.com/photo-1556742031-c6961e8560b0?w=600&h=400&fit=crop&fm=webp&q=80",
     category: "Merchant Services"
   },
   {
     title: "IRS Cuts Could Slow Refunds, But Not Audits: What You Need to Know",
     excerpt: "Let's just say it: When the IRS sneezes, taxpayers tend to catch a cold. Here's what business owners need to understand.",
-    image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&h=400&fit=crop",
+    image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&h=400&fit=crop&fm=webp&q=80",
     category: "Business News"
   },
   {
     title: "Payment Processing In Today's Marketplace",
     excerpt: "As a business owner, navigating the complexities of payment processing has never been more important or more challenging.",
-    image: "https://images.unsplash.com/photo-1556742044-3c52d6e88c62?w=600&h=400&fit=crop",
+    image: "https://images.unsplash.com/photo-1556742044-3c52d6e88c62?w=600&h=400&fit=crop&fm=webp&q=80",
     category: "Industry Insights"
   },
   {
     title: "Credit Card Processing Has Evolved",
     excerpt: "The Evolution of Credit Card Processing: From Traditional Pricing to modern zero-fee solutions that benefit merchants.",
-    image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=600&h=400&fit=crop",
+    image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=600&h=400&fit=crop&fm=webp&q=80",
     category: "Technology"
   },
   {
     title: "Politics And Payment Processing: It's Not Pretty",
     excerpt: "The current political landscape is having significant impacts on how payment processors operate and serve merchants.",
-    image: "https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=600&h=400&fit=crop",
+    image: "https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=600&h=400&fit=crop&fm=webp&q=80",
     category: "Industry News"
   },
   {
     title: "Social Media Payments – Are We Ready?",
     excerpt: "Social media platforms are rapidly integrating payment solutions. Is your business prepared for this new frontier?",
-    image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=600&h=400&fit=crop",
+    image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=600&h=400&fit=crop&fm=webp&q=80",
     category: "Future Trends"
   }
 ];
@@ -199,7 +199,7 @@ export default function News() {
                   <Card className="h-full border-none shadow-lg hover:shadow-2xl transition-all duration-300 group overflow-hidden">
                     <div className="relative overflow-hidden">
                       <img
-                        src={article.image ? `${article.image}${article.image.includes('unsplash') ? (article.image.includes('?') ? '&' : '?') + 'w=600&h=400&fit=crop&q=80&auto=format' : ''}` : "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop&q=80&auto=format"}
+                        src={article.image ? `${article.image}${article.image.includes('unsplash') && !article.image.includes('fm=webp') ? (article.image.includes('?') ? '&' : '?') + 'w=600&h=400&fit=crop&q=80&fm=webp' : ''}` : "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop&q=80&fm=webp"}
                         alt={`${article.title} - EzPay America payment processing news and insights`}
                         className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
                         loading="lazy"
