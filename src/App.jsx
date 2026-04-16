@@ -72,6 +72,7 @@ import EngineeringFirmPOS from './pages/EngineeringFirmPOS';
 import StaffingAgencyPOS from './pages/StaffingAgencyPOS';
 import TranslationServicesPOS from './pages/TranslationServicesPOS';
 import PRFirmPOS from './pages/PRFirmPOS';
+import LocationLanding from './pages/LocationLanding';
 import NewsArticle from './pages/NewsArticle';
 import AffiliateSignup from './pages/AffiliateSignup';
 import AffiliateDashboard from './pages/AffiliateDashboard';
@@ -222,6 +223,9 @@ const AuthenticatedApp = () => {
         <Route path="/news/7-mistakes-restaurant-owners-make/" element={<Navigate to="/News" replace />} />
         <Route path="/news/payment-processing-in-todays-marketplace" element={<Navigate to="/News" replace />} />
         <Route path="/news/payment-processing-in-todays-marketplace/" element={<Navigate to="/News" replace />} />
+
+        {/* Dynamic location landing pages: /:businessSlug/:state/:city */}
+        <Route path="/:businessSlug/:state/:city" element={<LocationLanding />} />
 
         <Route path="*" element={<PageNotFound />} />
       </Routes>

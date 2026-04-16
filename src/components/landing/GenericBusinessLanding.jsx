@@ -177,17 +177,43 @@ const SLUG_TO_PATH = {
   "pr-firm": "PRFirmPOS",
 };
 
-export default function GenericBusinessLanding({ slug }) {
+export default function GenericBusinessLanding({ slug, location = null, city = null, state = null }) {
   const config = CONFIGS[slug] || { title: "Your Business", badge: "Payment Solutions", bullets: ["Zero transaction fees", "Free POS equipment", "No monthly fees", "Next-day deposits"] };
   const { title, badge, bullets } = config;
   const pagePath = SLUG_TO_PATH[slug] || slug;
-  const canonicalUrl = `https://ezpayamerica.com/${pagePath}`;
+  const baseUrl = `https://ezpayamerica.com/${pagePath}`;
+  const locationSlug = location ? `/${slug}/${state ? state.toLowerCase().replace(/ /g, "-") : ""}/${city ? city.toLowerCase().replace(/ /g, "-") : ""}` : null;
+  const canonicalUrl = location ? `https://ezpayamerica.com${locationSlug}` : baseUrl;
   const category = SLUG_TO_CATEGORY[slug] || "Services";
-  const categoryPath = category === "Retail" ? "RetailMerchants"
-    : category === "Healthcare" ? "Services"
-    : category === "Home Services" ? "Services"
-    : category === "Personal Services" ? "Services"
-    : "Services";
+  const categoryPath = category === "Retail" ? "RetailMerchants" : "Services";
+
+  // Location-aware strings
+  const locationLabel = location ? ` in ${location}` : "";
+  const seoTitle = location
+    ? `${title} Payment Processing in ${location} | EzPay America`
+    : `${title} Payment Processing & POS System`;
+  const seoDesc = location
+    ? `EzPay America offers zero-fee payment processing for ${title.toLowerCase()} in ${location}. Free POS equipment, no monthly fees, no contracts. Apply online today.`
+    : `EzPay America: zero-fee payment processing for ${title.toLowerCase()}. Free POS equipment, no monthly fees, no contracts. Apply online today.`;
+  const seoKeywords = location
+    ? `${title.toLowerCase()} payment processing ${location}, ${title.toLowerCase()} POS ${city || ""}, merchant services ${location}, credit card processing ${city || ""} ${state || ""}, zero fee payment processing ${location}`
+    : `${title.toLowerCase()} payment processing, ${title.toLowerCase()} POS system, ${title.toLowerCase()} credit card processing, zero fee payment processing, merchant services, best payment processor for ${title.toLowerCase()}`;
+
+  // Schema
+  const areaServed = location
+    ? city
+      ? { "@type": "City", "name": city, ...(state ? { "containedInPlace": { "@type": "State", "name": state } } : {}) }
+      : { "@type": "State", "name": state }
+    : { "@type": "Country", "name": "United States" };
+
+  const breadcrumbs = [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://ezpayamerica.com" },
+    { "@type": "ListItem", "position": 2, "name": category, "item": `https://ezpayamerica.com/${categoryPath}` },
+    { "@type": "ListItem", "position": 3, "name": `${title} Payment Processing`, "item": baseUrl },
+  ];
+  if (location) {
+    breadcrumbs.push({ "@type": "ListItem", "position": 4, "name": `${title} Payment Processing in ${location}`, "item": canonicalUrl });
+  }
 
   const pageSchema = [
     {
@@ -197,70 +223,61 @@ export default function GenericBusinessLanding({ slug }) {
       "image": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/8eb2dd274_EZSMALL.png",
       "url": canonicalUrl,
       "telephone": "+1-865-316-9625",
-      "address": {
-        "@type": "PostalAddress",
-        "addressCountry": "US"
-      },
-      "areaServed": { "@type": "Country", "name": "United States" },
+      "address": { "@type": "PostalAddress", "addressCountry": "US", ...(city ? { "addressLocality": city } : {}), ...(state ? { "addressRegion": state } : {}) },
+      "areaServed": areaServed,
       "openingHoursSpecification": {
         "@type": "OpeningHoursSpecification",
         "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
         "opens": "09:00",
         "closes": "17:00"
       },
-      "sameAs": [
-        "https://www.facebook.com/ezpayamerica",
-        "https://www.linkedin.com/company/ezpay-america"
-      ]
+      "sameAs": ["https://www.facebook.com/ezpayamerica", "https://www.linkedin.com/company/ezpay-america"]
     },
     {
       "@type": "Service",
       "@id": `${canonicalUrl}#service`,
       "serviceType": `${title} Payment Processing`,
-      "provider": {
-        "@type": "LocalBusiness",
-        "name": "EzPay America",
-        "url": "https://ezpayamerica.com"
-      },
-      "areaServed": { "@type": "Country", "name": "United States" },
-      "description": `Zero-fee payment processing and POS systems for ${title.toLowerCase()}. No monthly fees, no contracts, free equipment.`,
+      "provider": { "@type": "LocalBusiness", "name": "EzPay America", "url": "https://ezpayamerica.com" },
+      "areaServed": areaServed,
+      "description": `Zero-fee payment processing and POS systems for ${title.toLowerCase()}${locationLabel}. No monthly fees, no contracts, free equipment.`,
       "url": canonicalUrl
     },
-    {
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://ezpayamerica.com" },
-        { "@type": "ListItem", "position": 2, "name": category, "item": `https://ezpayamerica.com/${categoryPath}` },
-        { "@type": "ListItem", "position": 3, "name": `${title} Payment Processing`, "item": canonicalUrl }
-      ]
-    }
+    { "@type": "BreadcrumbList", "itemListElement": breadcrumbs }
   ];
 
   return (
     <>
       <SEOHead
-        title={`${title} Payment Processing & POS System`}
-        description={`EzPay America: zero-fee payment processing for ${title.toLowerCase()}. Free POS equipment, no monthly fees, no contracts. Apply online today.`}
-        keywords={`${title.toLowerCase()} payment processing, ${title.toLowerCase()} POS system, ${title.toLowerCase()} credit card processing, zero fee payment processing, merchant services, best payment processor for ${title.toLowerCase()}, no fee credit card processing ${title.toLowerCase()}`}
+        title={seoTitle}
+        description={seoDesc}
+        keywords={seoKeywords}
         url={canonicalUrl}
         pageSchema={pageSchema}
       />
       <LandingHero
-        badge={badge}
-        headline={`Payment Processing for ${title}`}
-        subheadline={`EzPay America gives ${title.toLowerCase()} a smarter way to accept payments — with zero transaction fees, free equipment, and no long-term contracts.`}
+        badge={location ? `${badge} — ${location}` : badge}
+        headline={`Payment Processing for ${title}${locationLabel}`}
+        subheadline={
+          location
+            ? `EzPay America serves ${title.toLowerCase()} in ${location} with zero transaction fees, free equipment, and no long-term contracts.`
+            : `EzPay America gives ${title.toLowerCase()} a smarter way to accept payments — with zero transaction fees, free equipment, and no long-term contracts.`
+        }
         bullets={bullets}
-        service={`${title} payment processing`}
+        service={`${title} payment processing${locationLabel}`}
       />
       <LandingFeatures
-        title={`Everything ${title} Need`}
-        subtitle="Complete payment processing with no hidden fees or surprises"
+        title={`Everything ${title} Need${locationLabel}`}
+        subtitle={location ? `Serving ${location} businesses with no hidden fees or surprises` : "Complete payment processing with no hidden fees or surprises"}
         features={DEFAULT_FEATURES}
       />
       <LandingCTA
-        headline="Ready to Stop Paying Processing Fees?"
-        subtext={`Join hundreds of ${title.toLowerCase()} across America saving thousands every year with EzPay America's zero-fee payment processing.`}
-        service={`${title} payment processing`}
+        headline={location ? `Ready to Save on Processing Fees in ${location}?` : "Ready to Stop Paying Processing Fees?"}
+        subtext={
+          location
+            ? `Join ${title.toLowerCase()} in ${location} saving thousands every year with EzPay America's zero-fee payment processing.`
+            : `Join hundreds of ${title.toLowerCase()} across America saving thousands every year with EzPay America's zero-fee payment processing.`
+        }
+        service={`${title} payment processing${locationLabel}`}
       />
     </>
   );
