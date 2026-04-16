@@ -8,16 +8,30 @@ const LEGACY_REDIRECTS = {
   // Old news paths
   '/ezpay-america-news': '/News',
   '/ezpay-america-news/': '/News',
+  '/ezpay-america-news/page/1': '/News',
+  '/ezpay-america-news/page/1/': '/News',
+  '/ezpay-america-news/page/2': '/News',
+  '/ezpay-america-news/page/2/': '/News',
   '/ezpay-news': '/News',
   '/ezpay-news/': '/News',
   '/news/the-state-of-small-business-ownership-in-2024': '/News',
+  '/news/the-state-of-small-business-ownership-in-2024/': '/News',
   '/news/7-mistakes-restaurant-owners-make': '/News',
+  '/news/7-mistakes-restaurant-owners-make/': '/News',
+  '/news/payment-processing-in-todays-marketplace': '/News',
+  '/news/payment-processing-in-todays-marketplace/': '/News',
 
   // Services / Merchants
   '/restaurant-merchants': '/RestaurantMerchants',
   '/restaurant-merchants/': '/RestaurantMerchants',
   '/point-of-sale': '/EzPayPOSHome',
   '/point-of-sale/': '/EzPayPOSHome',
+  '/free-web-payment-pages': '/WebPaymentPages',
+  '/free-web-payment-pages/': '/WebPaymentPages',
+  '/merchant-cash-advance': '/MerchantCashAdvance',
+  '/merchant-cash-advance/': '/MerchantCashAdvance',
+  '/retail-payment-solutions': '/RetailPaymentSolutions',
+  '/retail-payment-solutions/': '/RetailPaymentSolutions',
 
   // Contact variations
   '/contact-us': '/Contact',
@@ -55,6 +69,7 @@ const LEGACY_REDIRECTS = {
 
   // Misc old paths
   '/get-ranked-on-google': '/',
+  '/get-ranked-on-google/': '/',
   '/texting-privacy-policy': '/',
   '/texting-privacy-policy/': '/',
 };

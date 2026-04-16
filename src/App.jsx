@@ -200,16 +200,28 @@ const AuthenticatedApp = () => {
         <Route path="/point-of-sale/" element={<Navigate to="/EzPayPOSHome" replace />} />
         <Route path="/ezpay-america-news" element={<Navigate to="/News" replace />} />
         <Route path="/ezpay-america-news/" element={<Navigate to="/News" replace />} />
+        <Route path="/ezpay-america-news/*" element={<Navigate to="/News" replace />} />
         <Route path="/ezpay-news" element={<Navigate to="/News" replace />} />
         <Route path="/ezpay-news/" element={<Navigate to="/News" replace />} />
+        <Route path="/free-web-payment-pages" element={<Navigate to="/WebPaymentPages" replace />} />
+        <Route path="/free-web-payment-pages/" element={<Navigate to="/WebPaymentPages" replace />} />
+        <Route path="/merchant-cash-advance" element={<Navigate to="/MerchantCashAdvance" replace />} />
+        <Route path="/merchant-cash-advance/" element={<Navigate to="/MerchantCashAdvance" replace />} />
+        <Route path="/retail-payment-solutions" element={<Navigate to="/RetailPaymentSolutions" replace />} />
+        <Route path="/retail-payment-solutions/" element={<Navigate to="/RetailPaymentSolutions" replace />} />
         <Route path="/get-ranked-on-google" element={<Navigate to="/" replace />} />
+        <Route path="/get-ranked-on-google/" element={<Navigate to="/" replace />} />
         <Route path="/texting-privacy-policy" element={<Navigate to="/" replace />} />
         <Route path="/texting-privacy-policy/" element={<Navigate to="/" replace />} />
         <Route path="/es-mx" element={<Navigate to="/" replace />} />
         <Route path="/es-mx/*" element={<Navigate to="/" replace />} />
         <Route path="/brand/*" element={<Navigate to="/Shop" replace />} />
         <Route path="/news/the-state-of-small-business-ownership-in-2024" element={<Navigate to="/News" replace />} />
+        <Route path="/news/the-state-of-small-business-ownership-in-2024/" element={<Navigate to="/News" replace />} />
         <Route path="/news/7-mistakes-restaurant-owners-make" element={<Navigate to="/News" replace />} />
+        <Route path="/news/7-mistakes-restaurant-owners-make/" element={<Navigate to="/News" replace />} />
+        <Route path="/news/payment-processing-in-todays-marketplace" element={<Navigate to="/News" replace />} />
+        <Route path="/news/payment-processing-in-todays-marketplace/" element={<Navigate to="/News" replace />} />
 
         <Route path="*" element={<PageNotFound />} />
       </Routes>
