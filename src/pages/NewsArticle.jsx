@@ -24,17 +24,13 @@ export default function NewsArticlePage() {
   const { data: article, isLoading } = useQuery({
     queryKey: ['newsArticle', articleId, slug],
     queryFn: async () => {
+      // Always fetch all and find client-side — most reliable approach
+      const all = await base44.entities.NewsArticle.list('-created_date', 500);
       if (slug) {
-        // Try slug match first
-        const bySlug = await base44.entities.NewsArticle.filter({ slug: slug });
-        if (bySlug[0]) return bySlug[0];
-        // Try fetching all and finding by slug client-side (handles edge cases)
-        const all = await base44.entities.NewsArticle.list('-created_date', 200);
         const found = all.find(a => a.slug === slug || a.id === slug);
         if (found) return found;
       }
       if (articleId) {
-        const all = await base44.entities.NewsArticle.list('-created_date', 200);
         const found = all.find(a => a.id === articleId);
         if (found) return found;
       }
@@ -45,9 +41,11 @@ export default function NewsArticlePage() {
 
   const { data: relatedArticles = [] } = useQuery({
     queryKey: ['relatedArticles', article?.category, article?.id],
-    queryFn: () => base44.entities.NewsArticle.filter({ published: true, category: article.category }, '-created_date', 4),
-    enabled: !!article?.category,
-    select: (data) => data.filter(a => a.id !== article?.id).slice(0, 3)
+    queryFn: async () => {
+      const all = await base44.entities.NewsArticle.list('-created_date', 100);
+      return all.filter(a => a.published && a.category === article.category && a.id !== article.id).slice(0, 3);
+    },
+    enabled: !!article?.category
   });
 
   if (isLoading) {
