@@ -1,0 +1,89 @@
+{
+  "name": "Appointment",
+  "type": "object",
+  "properties": {
+    "firstName": {
+      "type": "string",
+      "description": "First name"
+    },
+    "lastName": {
+      "type": "string",
+      "description": "Last name"
+    },
+    "email": {
+      "type": "string",
+      "description": "Email address"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Phone number"
+    },
+    "businessName": {
+      "type": "string",
+      "description": "Business name"
+    },
+    "businessType": {
+      "type": "string",
+      "description": "Type of business"
+    },
+    "monthlyVolume": {
+      "type": "string",
+      "description": "Estimated monthly processing volume"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Appointment date (YYYY-MM-DD)"
+    },
+    "time": {
+      "type": "string",
+      "description": "Appointment time slot (e.g. 10:00 AM)"
+    },
+    "timezone": {
+      "type": "string",
+      "description": "Customer timezone"
+    },
+    "meetingType": {
+      "type": "string",
+      "enum": [
+        "phone_call",
+        "video_call",
+        "in_person"
+      ],
+      "default": "phone_call",
+      "description": "Meeting type"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes from customer"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "scheduled",
+        "confirmed",
+        "completed",
+        "cancelled",
+        "no_show"
+      ],
+      "default": "scheduled",
+      "description": "Appointment status"
+    },
+    "confirmationSent": {
+      "type": "boolean",
+      "default": false
+    },
+    "reminderSent": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "firstName",
+    "lastName",
+    "email",
+    "phone",
+    "date",
+    "time"
+  ]
+}
