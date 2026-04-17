@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, CheckCircle2, AlertCircle, RefreshCw } from "lucide-react";
+import { Loader2, CheckCircle2, AlertCircle, RefreshCw, Copy, Check } from "lucide-react";
 
 const PLATFORMS = [
   {
@@ -58,8 +58,18 @@ export default function SocialShareDialog({ article, open, onClose }) {
     PLATFORMS.forEach(p => { m[p.id] = buildDefaultMessage(article, p.id); });
     return m;
   });
-  const [status, setStatus] = useState({}); // { platform: 'idle' | 'posting' | 'success' | 'error', msg }
+  const [status, setStatus] = useState({});
   const [generating, setGenerating] = useState(null);
+  const [tab, setTab] = useState("link"); // "link" | "full"
+  const [copied, setCopied] = useState(false);
+
+  const fullArticleText = `${article.title}\n\n${article.excerpt || ""}\n\n${article.content || ""}`.trim();
+
+  const copyFullArticle = () => {
+    navigator.clipboard.writeText(fullArticleText);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const aiGenerate = async (platformId) => {
     setGenerating(platformId);
@@ -106,7 +116,61 @@ Return only the post text, nothing else.`,
           <p className="text-sm text-gray-500 mt-1 font-normal">"{article.title}"</p>
         </DialogHeader>
 
-        <div className="space-y-5 mt-2">
+        {/* Tab switcher */}
+        <div className="flex gap-2 mt-2 border-b pb-2">
+          <button
+            onClick={() => setTab("link")}
+            className={`text-sm font-medium px-3 py-1.5 rounded-t transition-colors ${tab === "link" ? "bg-amber-50 text-amber-700 border border-amber-200" : "text-gray-500 hover:text-gray-800"}`}
+          >
+            Post Link
+          </button>
+          <button
+            onClick={() => setTab("full")}
+            className={`text-sm font-medium px-3 py-1.5 rounded-t transition-colors ${tab === "full" ? "bg-amber-50 text-amber-700 border border-amber-200" : "text-gray-500 hover:text-gray-800"}`}
+          >
+            Full Article Content
+          </button>
+        </div>
+
+        {/* Full Article Tab */}
+        {tab === "full" && (
+          <div className="space-y-4 mt-2">
+            {article.image && (
+              <div>
+                <p className="text-sm font-medium text-gray-700 mb-2">Article Image</p>
+                <img src={article.image} alt={article.title} className="w-full max-h-64 object-cover rounded-lg border" />
+                <a
+                  href={article.image}
+                  download
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block mt-2 text-xs text-amber-600 underline"
+                >
+                  Download Image
+                </a>
+              </div>
+            )}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-sm font-medium text-gray-700">Full Article Text</p>
+                <Button size="sm" variant="outline" onClick={copyFullArticle} className="h-7 text-xs gap-1">
+                  {copied ? <><Check className="w-3 h-3" />Copied!</> : <><Copy className="w-3 h-3" />Copy All Text</>}
+                </Button>
+              </div>
+              <Textarea
+                value={fullArticleText}
+                readOnly
+                rows={14}
+                className="text-sm text-gray-700 bg-gray-50 font-mono resize-none"
+              />
+            </div>
+            <p className="text-xs text-gray-500 bg-gray-50 rounded p-3 border">
+              💡 Copy the text and download the image above, then paste directly into Facebook, LinkedIn, or any platform to post without a web link.
+            </p>
+          </div>
+        )}
+
+        <div className={`space-y-5 mt-2 ${tab !== "link" ? "hidden" : ""}`}>
           {PLATFORMS.map(platform => {
             const s = status[platform.id];
             const msg = messages[platform.id] || "";
@@ -175,9 +239,11 @@ Return only the post text, nothing else.`,
           })}
         </div>
 
-        <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-800 mt-2">
-          <strong>Setup required:</strong> Facebook needs <code>FACEBOOK_PAGE_ACCESS_TOKEN</code> + <code>FACEBOOK_PAGE_ID</code>. LinkedIn needs <code>LINKEDIN_ACCESS_TOKEN</code> + <code>LINKEDIN_ORGANIZATION_ID</code>. X needs <code>X_API_KEY</code>, <code>X_API_SECRET</code>, <code>X_ACCESS_TOKEN</code>, <code>X_ACCESS_TOKEN_SECRET</code>. Set these in the app secrets.
-        </div>
+        {tab === "link" && (
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-800 mt-2">
+            <strong>Setup required:</strong> Facebook needs <code>FACEBOOK_PAGE_ACCESS_TOKEN</code> + <code>FACEBOOK_PAGE_ID</code>. LinkedIn needs <code>LINKEDIN_ACCESS_TOKEN</code> + <code>LINKEDIN_ORGANIZATION_ID</code>. X needs <code>X_API_KEY</code>, <code>X_API_SECRET</code>, <code>X_ACCESS_TOKEN</code>, <code>X_ACCESS_TOKEN_SECRET</code>. Set these in the app secrets.
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );
