@@ -59,10 +59,16 @@ export default function NewsArticlePage() {
   }
 
   if (!article) {
+    // If no slug/id provided at all, redirect to news listing
+    if (!slug && !articleId) {
+      window.location.replace('/News');
+      return null;
+    }
     return (
       <div className="min-h-screen bg-white py-24 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">Article Not Found</h1>
+          <p className="text-gray-500 mb-6">This article may have been moved or is no longer available.</p>
           <Link to={createPageUrl("News")}>
             <Button className="bg-amber-500 hover:bg-amber-600">
               <ArrowLeft className="w-4 h-4 mr-2" />

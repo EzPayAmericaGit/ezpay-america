@@ -127,7 +127,6 @@ import MiniMarketPOS from './pages/MiniMarketPOS';
 import MobilePayments from './pages/MobilePayments';
 import News from './pages/News';
 import NewsAdmin from './pages/NewsAdmin';
-import NewsArticle from './pages/NewsArticle';
 import NotificationPreferences from './pages/NotificationPreferences';
 import Offers from './pages/Offers';
 import OrdersAdmin from './pages/OrdersAdmin';
@@ -234,7 +233,6 @@ export const PAGES = {
     "MobilePayments": MobilePayments,
     "News": News,
     "NewsAdmin": NewsAdmin,
-    "NewsArticle": NewsArticle,
     "NotificationPreferences": NotificationPreferences,
     "Offers": Offers,
     "OrdersAdmin": OrdersAdmin,
