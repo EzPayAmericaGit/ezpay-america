@@ -77,7 +77,10 @@ export default function News() {
 
   const { data: dbArticles = [] } = useQuery({
     queryKey: ['publishedNews'],
-    queryFn: () => base44.entities.NewsArticle.filter({ published: true }, '-created_date')
+    queryFn: async () => {
+      const all = await base44.entities.NewsArticle.list('-created_date', 500);
+      return all.filter(a => a.published === true);
+    }
   });
 
   const allArticles = dbArticles.length > 0 ? [...dbArticles, ...defaultArticles] : defaultArticles;
