@@ -18,7 +18,6 @@ const AVAILABLE_TIMES = [
 const MEETING_TYPES = [
   { id: "phone_call", label: "Phone Call", icon: Phone, desc: "We call you at the scheduled time" },
   { id: "video_call", label: "Video Call", icon: Video, desc: "Google Meet or Zoom link sent via email" },
-  { id: "in_person", label: "In-Person", icon: MapPin, desc: "Visit our office or we come to you" },
 ];
 
 const VOLUME_OPTIONS = [
