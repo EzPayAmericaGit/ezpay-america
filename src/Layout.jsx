@@ -133,6 +133,7 @@ export default function Layout({ children }) {
       },
       { title: "Quiz", url: createPageUrl("Quiz") },
       { title: "Apply Online", url: createPageUrl("ApplyOnline") },
+      { title: "Book a Call", url: createPageUrl("BookAppointment") },
       { title: "Affiliates", url: createPageUrl("AffiliateSignup") },
       { title: "News", url: createPageUrl("News") },
       { title: "Helpdesk", url: createPageUrl("Helpdesk") }
