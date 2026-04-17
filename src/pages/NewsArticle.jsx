@@ -24,19 +24,8 @@ export default function NewsArticlePage() {
   const { data: article, isLoading } = useQuery({
     queryKey: ['newsArticle', articleId, slug],
     queryFn: async () => {
-      // Try direct DB filter by slug first (bypasses pagination limits)
-      if (slug) {
-        const bySlug = await base44.entities.NewsArticle.filter({ slug });
-        if (bySlug && bySlug[0]) return bySlug[0];
-        // Also try matching slug as an id
-        const byId = await base44.entities.NewsArticle.filter({ id: slug });
-        if (byId && byId[0]) return byId[0];
-      }
-      if (articleId) {
-        const byId = await base44.entities.NewsArticle.filter({ id: articleId });
-        if (byId && byId[0]) return byId[0];
-      }
-      return null;
+      const res = await base44.functions.invoke('getArticleBySlug', { slug, id: articleId });
+      return res?.data?.article || null;
     },
     enabled: !!(articleId || slug)
   });
@@ -44,8 +33,8 @@ export default function NewsArticlePage() {
   const { data: relatedArticles = [] } = useQuery({
     queryKey: ['relatedArticles', article?.category, article?.id],
     queryFn: async () => {
-      const all = await base44.entities.NewsArticle.list('-created_date', 100);
-      return all.filter(a => a.published && a.category === article.category && a.id !== article.id).slice(0, 3);
+      const listRes = await base44.entities.NewsArticle.list('-created_date', 50);
+      return listRes.filter(a => a.published && a.category === article.category && a.id !== article.id).slice(0, 3);
     },
     enabled: !!article?.category
   });
