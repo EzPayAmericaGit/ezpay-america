@@ -4,14 +4,30 @@ Deno.serve(async (req) => {
   const base44 = createClientFromRequest(req);
   const { slug, id } = await req.json();
 
-  // Fetch all articles and find by slug or id client-side (most reliable)
-  const all = await base44.asServiceRole.entities.NewsArticle.list('-created_date', 500);
-
   let article = null;
+
+  // 1. Try direct filter by slug (most efficient, no pagination limit)
   if (slug) {
-    article = all.find(a => a.slug === slug || a.id === slug) || null;
-  } else if (id) {
-    article = all.find(a => a.id === id) || null;
+    const bySlug = await base44.asServiceRole.entities.NewsArticle.filter({ slug }, '-created_date', 1);
+    if (bySlug && bySlug[0]) {
+      article = bySlug[0];
+    }
+  }
+
+  // 2. Try by id field
+  if (!article && id) {
+    const byId = await base44.asServiceRole.entities.NewsArticle.filter({ id }, '-created_date', 1);
+    if (byId && byId[0]) {
+      article = byId[0];
+    }
+  }
+
+  // 3. Fallback: if slug could be an id, try filtering by id using the slug value
+  if (!article && slug) {
+    const byIdSlug = await base44.asServiceRole.entities.NewsArticle.filter({ id: slug }, '-created_date', 1);
+    if (byIdSlug && byIdSlug[0]) {
+      article = byIdSlug[0];
+    }
   }
 
   return Response.json({ article });
