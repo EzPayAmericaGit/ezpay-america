@@ -25,18 +25,18 @@ export default function NewsArticlePage() {
     queryKey: ['newsArticle', articleId, slug],
     queryFn: async () => {
       if (slug) {
-        // First try slug match
-        const articles = await base44.entities.NewsArticle.filter({ slug: slug });
-        if (articles[0]) return articles[0];
-        // Fallback: treat slug as an ID (for ?id= links shared as /news/:id)
-        try {
-          const byId = await base44.entities.NewsArticle.filter({ id: slug });
-          if (byId[0]) return byId[0];
-        } catch {}
+        // Try slug match first
+        const bySlug = await base44.entities.NewsArticle.filter({ slug: slug });
+        if (bySlug[0]) return bySlug[0];
+        // Try fetching all and finding by slug client-side (handles edge cases)
+        const all = await base44.entities.NewsArticle.list('-created_date', 200);
+        const found = all.find(a => a.slug === slug || a.id === slug);
+        if (found) return found;
       }
       if (articleId) {
-        const articles = await base44.entities.NewsArticle.filter({ id: articleId });
-        if (articles[0]) return articles[0];
+        const all = await base44.entities.NewsArticle.list('-created_date', 200);
+        const found = all.find(a => a.id === articleId);
+        if (found) return found;
       }
       return null;
     },
