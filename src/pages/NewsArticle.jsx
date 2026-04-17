@@ -24,15 +24,17 @@ export default function NewsArticlePage() {
   const { data: article, isLoading } = useQuery({
     queryKey: ['newsArticle', articleId, slug],
     queryFn: async () => {
-      // Always fetch all and find client-side — most reliable approach
-      const all = await base44.entities.NewsArticle.list('-created_date', 500);
+      // Try direct DB filter by slug first (bypasses pagination limits)
       if (slug) {
-        const found = all.find(a => a.slug === slug || a.id === slug);
-        if (found) return found;
+        const bySlug = await base44.entities.NewsArticle.filter({ slug });
+        if (bySlug && bySlug[0]) return bySlug[0];
+        // Also try matching slug as an id
+        const byId = await base44.entities.NewsArticle.filter({ id: slug });
+        if (byId && byId[0]) return byId[0];
       }
       if (articleId) {
-        const found = all.find(a => a.id === articleId);
-        if (found) return found;
+        const byId = await base44.entities.NewsArticle.filter({ id: articleId });
+        if (byId && byId[0]) return byId[0];
       }
       return null;
     },
