@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calendar, Clock, Phone, Video, MapPin, CheckCircle2, ChevronLeft, ChevronRight, Loader2, User, Building2, DollarSign, MessageSquare } from "lucide-react";
+import { Calendar, Clock, Phone, Video, MapPin, CheckCircle2, ChevronLeft, ChevronRight, Loader2, User, Building2, DollarSign, MessageSquare, Mail, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { base44 } from "@/api/base44Client";
@@ -160,6 +160,83 @@ function StepIndicator({ currentStep, steps }) {
         </React.Fragment>
       ))}
     </div>
+  );
+}
+
+// ── Quick Email Form ─────────────────────────────────────────────────────────
+
+function QuickEmailForm() {
+  const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
+  const [loading, setLoading] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!form.name || !isValidEmail(form.email) || !form.message) {
+      setError("Please fill in all required fields with a valid email.");
+      return;
+    }
+    setError("");
+    setLoading(true);
+    try {
+      await base44.functions.invoke("sendContactEmail", {
+        firstName: form.name,
+        lastName: "",
+        businessName: "",
+        phone: form.phone || "N/A",
+        email: form.email,
+        service: `Direct Message: ${form.message}`
+      });
+      setSent(true);
+    } catch {
+      setError("Failed to send. Please email us directly at mail@ezpayamerica.com");
+    }
+    setLoading(false);
+  };
+
+  if (sent) {
+    return (
+      <div className="text-center py-8">
+        <CheckCircle2 className="w-12 h-12 text-green-500 mx-auto mb-3" />
+        <h3 className="text-lg font-bold text-gray-900 mb-1">Message Sent!</h3>
+        <p className="text-gray-500 text-sm">We'll get back to you within 24 hours.</p>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className="text-sm font-medium text-gray-700 mb-1 block">Your Name *</label>
+          <Input placeholder="John Smith" value={form.name} onChange={e => setForm({...form, name: e.target.value})} />
+        </div>
+        <div>
+          <label className="text-sm font-medium text-gray-700 mb-1 block">Email Address *</label>
+          <Input type="email" placeholder="john@business.com" value={form.email} onChange={e => setForm({...form, email: e.target.value})} />
+        </div>
+      </div>
+      <div>
+        <label className="text-sm font-medium text-gray-700 mb-1 block">Phone (optional)</label>
+        <Input type="tel" placeholder="(555) 000-0000" value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} />
+      </div>
+      <div>
+        <label className="text-sm font-medium text-gray-700 mb-1 block">Message *</label>
+        <textarea
+          placeholder="Tell us about your business and what you're looking for…"
+          value={form.message}
+          onChange={e => setForm({...form, message: e.target.value})}
+          rows={4}
+          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-400 resize-none"
+        />
+      </div>
+      {error && <p className="text-red-500 text-sm">{error}</p>}
+      <Button type="submit" disabled={loading} className="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold py-3">
+        {loading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Sending…</> : <><Send className="w-4 h-4 mr-2" />Send Message</>}
+      </Button>
+      <p className="text-xs text-gray-400 text-center">Forwarded to <a href="mailto:mail@ezpayamerica.com" className="text-amber-600 hover:underline">mail@ezpayamerica.com</a></p>
+    </form>
   );
 }
 
@@ -404,6 +481,21 @@ export default function BookAppointment() {
             {["Free consultation", "No contracts", "30-minute call", "US-based team"].map(b => (
               <span key={b} className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-green-500" />{b}</span>
             ))}
+          </div>
+
+          {/* Quick Email Contact Form */}
+          <div className="mt-12 bg-white rounded-3xl shadow-xl p-6 sm:p-8">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
+                <Mail className="w-5 h-5 text-amber-600" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-gray-900">Prefer to send a message?</h2>
+                <p className="text-gray-500 text-sm">We'll reply within 24 hours — usually much sooner.</p>
+              </div>
+            </div>
+            <hr className="border-gray-100 my-5" />
+            <QuickEmailForm />
           </div>
         </div>
       </div>
