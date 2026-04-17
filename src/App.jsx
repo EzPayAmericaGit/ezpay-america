@@ -75,6 +75,7 @@ import PRFirmPOS from './pages/PRFirmPOS';
 import LocationLanding from './pages/LocationLanding';
 import StatePaymentLanding from './pages/StatePaymentLanding';
 import BookAppointment from './pages/BookAppointment';
+import FAQ from './pages/FAQ';
 import NewsArticle from './pages/NewsArticle';
 import AffiliateSignup from './pages/AffiliateSignup';
 import AffiliateDashboard from './pages/AffiliateDashboard';
@@ -231,6 +232,7 @@ const AuthenticatedApp = () => {
 
         {/* Appointment booking page */}
         <Route path="/BookAppointment" element={<LayoutWrapper currentPageName="BookAppointment"><BookAppointment /></LayoutWrapper>} />
+        <Route path="/FAQ" element={<LayoutWrapper currentPageName="FAQ"><FAQ /></LayoutWrapper>} />
 
         {/* Dynamic location landing pages: /:businessSlug/:state/:city */}
         <Route path="/:businessSlug/:state/:city" element={<LocationLanding />} />

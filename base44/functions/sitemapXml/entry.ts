@@ -117,6 +117,7 @@ const STATIC_PAGES = [
   { path: '/PRFirmPOS', priority: '0.75', changefreq: 'weekly' },
   { path: '/AffiliateSignup', priority: '0.7', changefreq: 'monthly' },
   { path: '/BookAppointment', priority: '0.9', changefreq: 'weekly' },
+  { path: '/FAQ', priority: '0.85', changefreq: 'monthly' },
 ];
 
 function escapeXml(str) {

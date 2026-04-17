@@ -33,6 +33,8 @@ export default function Contact() {
     name: "",
     email: "",
     phone: "",
+    subject: "",
+    inquiryType: "",
     message: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -47,7 +49,7 @@ export default function Contact() {
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
-        message: formData.message
+        message: `Inquiry Type: ${formData.inquiryType || "General"}\nSubject: ${formData.subject}\n\n${formData.message}`
       });
       
       setSubmitted(true);
@@ -206,13 +208,44 @@ export default function Contact() {
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Inquiry Type
+                      </label>
+                      <select
+                        value={formData.inquiryType}
+                        onChange={(e) => setFormData({...formData, inquiryType: e.target.value})}
+                        className="w-full h-12 px-3 rounded-md border border-gray-300 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
+                      >
+                        <option value="">Select a topic...</option>
+                        <option value="New Account / Getting Started">New Account / Getting Started</option>
+                        <option value="Equipment & Setup">Equipment & Setup</option>
+                        <option value="Pricing & Fees">Pricing & Fees</option>
+                        <option value="Technical Support">Technical Support</option>
+                        <option value="Merchant Cash Advance">Merchant Cash Advance</option>
+                        <option value="General Question">General Question</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Subject
+                      </label>
+                      <Input
+                        value={formData.subject}
+                        onChange={(e) => setFormData({...formData, subject: e.target.value})}
+                        placeholder="Brief subject line"
+                        className="h-12 border-gray-300"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
                         Message
                       </label>
                       <Textarea
                         value={formData.message}
                         onChange={(e) => setFormData({...formData, message: e.target.value})}
                         required
-                        rows={6}
+                        rows={5}
                         className="border-gray-300"
                       />
                     </div>
