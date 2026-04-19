@@ -82,6 +82,7 @@ import AffiliateDashboard from './pages/AffiliateDashboard';
 import AffiliateAdmin from './pages/AffiliateAdmin';
 import AffiliateReferralPortal from './pages/AffiliateReferralPortal';
 import AffiliateLeaderboard from './pages/AffiliateLeaderboard';
+import SEOMonitor from './pages/SEOMonitor';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -191,6 +192,7 @@ const AuthenticatedApp = () => {
         <Route path="/AffiliateAdmin" element={<LayoutWrapper currentPageName="AffiliateAdmin"><AffiliateAdmin /></LayoutWrapper>} />
         <Route path="/AffiliateReferralPortal" element={<LayoutWrapper currentPageName="AffiliateReferralPortal"><AffiliateReferralPortal /></LayoutWrapper>} />
         <Route path="/AffiliateLeaderboard" element={<LayoutWrapper currentPageName="AffiliateLeaderboard"><AffiliateLeaderboard /></LayoutWrapper>} />
+        <Route path="/SEOMonitor" element={<LayoutWrapper currentPageName="SEOMonitor"><SEOMonitor /></LayoutWrapper>} />
         <Route path="/news/:slug" element={<LayoutWrapper currentPageName="NewsArticle"><NewsArticle /></LayoutWrapper>} />
 
         {/* Legacy WordPress URL redirects → 301-equivalent client-side */}

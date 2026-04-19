@@ -1,0 +1,124 @@
+{
+  "name": "SEOReport",
+  "type": "object",
+  "properties": {
+    "url": {
+      "type": "string",
+      "description": "URL that was audited"
+    },
+    "performance": {
+      "type": "number",
+      "description": "Lighthouse performance score 0-100"
+    },
+    "accessibility": {
+      "type": "number",
+      "description": "Lighthouse accessibility score 0-100"
+    },
+    "bestPractices": {
+      "type": "number",
+      "description": "Lighthouse best practices score 0-100"
+    },
+    "seo": {
+      "type": "number",
+      "description": "Lighthouse SEO score 0-100"
+    },
+    "fcp": {
+      "type": "number",
+      "description": "First Contentful Paint ms"
+    },
+    "lcp": {
+      "type": "number",
+      "description": "Largest Contentful Paint ms"
+    },
+    "tbt": {
+      "type": "number",
+      "description": "Total Blocking Time ms"
+    },
+    "cls": {
+      "type": "number",
+      "description": "Cumulative Layout Shift score"
+    },
+    "si": {
+      "type": "number",
+      "description": "Speed Index ms"
+    },
+    "brokenLinks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "status": {
+            "type": "number"
+          },
+          "text": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Broken links found on the page"
+    },
+    "keywordRankings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "keyword": {
+            "type": "string"
+          },
+          "position": {
+            "type": "number"
+          },
+          "trend": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Tracked keyword rankings"
+    },
+    "opportunities": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "description": "Lighthouse opportunities (audit items)"
+    },
+    "recommendations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "LLM-generated actionable recommendations"
+    },
+    "rawAudits": {
+      "type": "object",
+      "description": "Raw Lighthouse audit data"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "running",
+        "complete",
+        "error"
+      ],
+      "default": "pending"
+    },
+    "errorMessage": {
+      "type": "string"
+    },
+    "device": {
+      "type": "string",
+      "enum": [
+        "desktop",
+        "mobile"
+      ],
+      "default": "desktop"
+    }
+  },
+  "required": [
+    "url"
+  ]
+}
