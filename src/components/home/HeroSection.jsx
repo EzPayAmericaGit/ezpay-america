@@ -85,6 +85,7 @@ export default function HeroSection() {
                 alt="Modern payment processing terminal and POS system for retail and restaurant businesses"
                 className="w-full h-auto"
                 loading="eager"
+                fetchpriority="high"
                 width="800"
                 height="600"
               />

@@ -44,7 +44,7 @@ export default function SolutionsSection() {
             </p>
             <Link to={createPageUrl("EzPayPOSHome")}>
               <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white">
-                Learn More
+                Learn About POS Systems
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>

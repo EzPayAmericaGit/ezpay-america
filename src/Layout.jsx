@@ -165,11 +165,12 @@ export default function Layout({ children }) {
             {/* Logo */}
             <Link to={createPageUrl("Home")} className="flex items-center gap-3">
               <img 
-                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/8eb2dd274_EZSMALL.png" 
-                alt="EzPay America - Zero-Fee Payment Processing Solutions"
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/8eb2dd274_EZSMALL.png?width=96&height=96&resize=contain&quality=80" 
+                alt="EzPay America logo"
                 className="w-12 h-12 object-contain"
                 style={{ filter: 'saturate(1.4) hue-rotate(-5deg) brightness(0.95)' }}
                 loading="eager"
+                fetchPriority="high"
                 width="48"
                 height="48"
               />
