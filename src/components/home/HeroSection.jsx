@@ -33,10 +33,10 @@ export default function HeroSection() {
 
             <div className="space-y-4">
               <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
-                Payment Processing Solutions<br className="hidden sm:block" /> for Growing Businesses
+                Zero Fee Credit Card Processing<br className="hidden sm:block" /> for Small Businesses
               </h1>
               <h2 className="text-xl md:text-2xl font-semibold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent leading-snug">
-                Zero-Fee Credit Card Processing — No Contracts, No Hidden Fees
+                Cash Discount Program — No Contracts, No Hidden Fees, No Monthly Costs
               </h2>
             </div>
 
