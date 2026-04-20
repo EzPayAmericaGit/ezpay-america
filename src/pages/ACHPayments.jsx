@@ -52,10 +52,14 @@ const defaultContent = {
 
 export default function ACHPayments() {
   const [content, setContent] = useState(defaultContent);
-  const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   React.useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    let cancelled = false;
+    base44.auth.me()
+      .then(u => { if (!cancelled && u?.role === 'admin') setIsAdmin(true); })
+      .catch(() => {});
+    return () => { cancelled = true; };
   }, []);
 
   const handlePublish = (newContent) => {
@@ -69,7 +73,7 @@ export default function ACHPayments() {
         description={content.seo.description}
         keywords={content.seo.keywords}
       />
-      {user?.role === 'admin' && (
+      {isAdmin && (
         <AIContentGenerator
           pageName="ACH Payments"
           currentContent={content}
