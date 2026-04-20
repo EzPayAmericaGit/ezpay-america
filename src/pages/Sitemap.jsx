@@ -78,6 +78,9 @@ export default function Sitemap() {
     { path: '/ECommerce', priority: '0.75', changefreq: 'monthly', title: 'E-Commerce Payment Gateway Integration' },
     { path: '/FraudDetection', priority: '0.7', changefreq: 'monthly', title: 'Fraud Detection & Prevention' },
     { path: '/Quiz', priority: '0.75', changefreq: 'monthly', title: 'Business Type Quiz - Find Your Perfect POS Solution' },
+    { path: '/BookAppointment', priority: '0.9', changefreq: 'weekly', title: 'Book a Call - Schedule a Consultation' },
+    { path: '/FAQ', priority: '0.85', changefreq: 'monthly', title: 'Frequently Asked Questions - EzPay America' },
+    { path: '/AffiliateSignup', priority: '0.8', changefreq: 'monthly', title: 'Affiliate Program - Earn Commissions' },
     { path: '/Support', priority: '0.8', changefreq: 'weekly', title: 'Customer Support & Help Center' },
     { path: '/Helpdesk', priority: '0.7', changefreq: 'weekly', title: 'Help Desk & Support Tickets' },
     { path: '/Sitemap', priority: '0.5', changefreq: 'monthly', title: 'Sitemap - All Pages' },
@@ -224,6 +227,9 @@ export default function Sitemap() {
               <li><a href="/Shop" className="text-amber-700 hover:text-amber-900 hover:underline font-medium">Shop Equipment</a></li>
               <li><a href="/News" className="text-amber-700 hover:text-amber-900 hover:underline font-medium">News & Insights</a></li>
               <li><a href="/Quiz" className="text-amber-700 hover:text-amber-900 hover:underline font-medium">Business Quiz</a></li>
+              <li><a href="/BookAppointment" className="text-amber-700 hover:text-amber-900 hover:underline font-medium">Book a Call</a></li>
+              <li><a href="/FAQ" className="text-amber-700 hover:text-amber-900 hover:underline font-medium">FAQ</a></li>
+              <li><a href="/AffiliateSignup" className="text-amber-700 hover:text-amber-900 hover:underline font-medium">Affiliate Program</a></li>
               <li><a href="/Support" className="text-amber-700 hover:text-amber-900 hover:underline font-medium">Support Center</a></li>
             </ul>
           </div>
