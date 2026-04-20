@@ -292,7 +292,7 @@ export default function Layout({ children }) {
               ))}
 
               <a href="tel:8653169625" className="block pt-2">
-                <Button className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white">
+                <Button className="w-full bg-white hover:bg-gray-100 text-black border border-gray-300">
                   <Phone className="w-4 h-4 mr-2" />
                   (865) 316-9625
                 </Button>
