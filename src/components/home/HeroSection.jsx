@@ -7,7 +7,7 @@ import { createPageUrl } from "@/utils";
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 pt-20">
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50" style={{paddingTop: '80px'}}>
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-20 left-10 w-72 h-72 bg-amber-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
@@ -15,8 +15,8 @@ export default function HeroSection() {
         <div className="absolute -bottom-8 left-1/3 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-12 lg:py-20">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left Content */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -32,15 +32,15 @@ export default function HeroSection() {
             </div>
 
             <div className="space-y-4">
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
                 Zero Fee Credit Card Processing<br className="hidden sm:block" /> for Small Businesses
               </h1>
-              <h2 className="text-xl md:text-2xl font-semibold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent leading-snug">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-semibold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent leading-snug">
                 Cash Discount Program — No Contracts, No Hidden Fees, No Monthly Costs
               </h2>
             </div>
 
-            <p className="text-xl text-gray-600 leading-relaxed">
+            <p className="text-base sm:text-xl text-gray-600 leading-relaxed">
               Accept credit cards with transparent pricing, 24-hour approval, and free POS equipment. Trusted by 15,000+ small businesses nationwide — retail, restaurants, and more.
             </p>
 

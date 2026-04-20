@@ -41,7 +41,7 @@ export default function BusinessTypesSection() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
             We Can Handle Any Business Type
           </h2>
         </motion.div>

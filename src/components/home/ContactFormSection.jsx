@@ -16,7 +16,7 @@ export default function ContactFormSection() {
           viewport={{ once: true }}
           className="space-y-8"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-white">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white">
             Are You Ready to Get Started Today?
           </h2>
           <p className="text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto">
@@ -24,7 +24,7 @@ export default function ContactFormSection() {
           </p>
           
           <Link to={createPageUrl("ApplyOnline")} className="block mt-12">
-            <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-12 py-8 text-xl shadow-xl">
+            <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 sm:px-12 py-6 sm:py-8 text-lg sm:text-xl shadow-xl w-full sm:w-auto">
               Apply Online Now
               <ArrowRight className="w-6 h-6 ml-3" />
             </Button>

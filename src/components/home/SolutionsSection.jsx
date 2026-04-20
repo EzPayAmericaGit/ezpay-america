@@ -16,7 +16,7 @@ export default function SolutionsSection() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             We Design Solutions With You. For You.
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">

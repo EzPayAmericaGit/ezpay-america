@@ -33,7 +33,7 @@ export default function TestimonialsSection() {
           className="text-center mb-16"
         >
           <p className="text-amber-600 font-semibold mb-2">Testimonials</p>
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900">
             What Others are Saying
           </h2>
         </motion.div>
