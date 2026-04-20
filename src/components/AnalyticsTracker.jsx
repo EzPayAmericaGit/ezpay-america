@@ -4,12 +4,18 @@ import { base44 } from '@/api/base44Client';
 
 let sessionId = null;
 
+const isPreview = typeof window !== 'undefined' && (
+  window.location.hostname.includes('preview-sandbox') ||
+  window.location.hostname.includes('localhost')
+);
+
 export default function AnalyticsTracker() {
   const location = useLocation();
   const startTime = useRef(Date.now());
   const isAdmin = useRef(false);
 
   useEffect(() => {
+    if (isPreview) return;
     // Generate session ID once
     if (!sessionId) {
       sessionId = crypto.randomUUID();
@@ -24,6 +30,7 @@ export default function AnalyticsTracker() {
   }, []);
 
   useEffect(() => {
+    if (isPreview) return;
     // Skip tracking for admins
     if (isAdmin.current) return;
 
@@ -82,6 +89,7 @@ export default function AnalyticsTracker() {
 
   // Track clicks
   useEffect(() => {
+    if (isPreview) return;
     if (isAdmin.current) return;
 
     const handleClick = (e) => {
