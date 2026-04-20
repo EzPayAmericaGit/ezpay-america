@@ -111,7 +111,7 @@ export default function ACHPayments() {
                 </Button>
               </Link>
               <Link to={createPageUrl("Contact")}>
-                <Button variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-blue-900 px-8 py-6 text-lg">
+                <Button className="bg-white text-blue-900 hover:bg-gray-100 border-2 border-white px-8 py-6 text-lg font-semibold">
                   Learn More
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
