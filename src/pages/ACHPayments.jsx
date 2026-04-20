@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import SEOHead from "../components/SEOHead";
@@ -7,53 +7,75 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import ServiceSEOContent from "../components/landing/ServiceSEOContent";
+import AIContentGenerator from "../components/admin/AIContentGenerator";
+import { base44 } from "@/api/base44Client";
 
-const features = [
-  {
-    icon: DollarSign,
-    title: "Lower Processing Costs",
-    description: "ACH transactions typically cost $0.20-$1.50 per transaction, significantly less than credit card processing fees of 2-3%.",
-    color: "from-green-500 to-emerald-600"
-  },
-  {
-    icon: Shield,
-    title: "Secure & Compliant",
-    description: "Bank-level encryption and NACHA compliance ensure your transactions are safe and meet all regulatory requirements.",
-    color: "from-blue-500 to-cyan-600"
-  },
-  {
-    icon: Clock,
-    title: "Automated Recurring Payments",
-    description: "Set up automatic billing for subscriptions, memberships, and recurring services to improve cash flow.",
-    color: "from-purple-500 to-pink-600"
-  },
-  {
-    icon: Zap,
-    title: "Fast Settlement",
-    description: "ACH transfers typically settle in 1-2 business days, providing reliable and predictable funding.",
-    color: "from-amber-500 to-orange-600"
+const featureColors = [
+  "from-green-500 to-emerald-600",
+  "from-blue-500 to-cyan-600",
+  "from-purple-500 to-pink-600",
+  "from-amber-500 to-orange-600"
+];
+const featureIcons = [DollarSign, Shield, Clock, Zap];
+
+const defaultContent = {
+  heroHeadline: "ACH Payment Processing\nFor Your Business",
+  heroSubheadline: "Accept bank transfers and electronic checks with lower fees than credit cards. Perfect for recurring payments, payroll, and high-value transactions.",
+  features: [
+    { title: "Lower Processing Costs", description: "ACH transactions typically cost $0.20-$1.50 per transaction, significantly less than credit card processing fees of 2-3%." },
+    { title: "Secure & Compliant", description: "Bank-level encryption and NACHA compliance ensure your transactions are safe and meet all regulatory requirements." },
+    { title: "Automated Recurring Payments", description: "Set up automatic billing for subscriptions, memberships, and recurring services to improve cash flow." },
+    { title: "Fast Settlement", description: "ACH transfers typically settle in 1-2 business days, providing reliable and predictable funding." }
+  ],
+  benefits: [
+    "Process payroll deposits directly to employee bank accounts",
+    "Accept one-time and recurring payments from customer checking accounts",
+    "Reduce chargebacks compared to credit card transactions",
+    "No interchange fees or card network costs",
+    "Ideal for high-ticket purchases and B2B transactions",
+    "Lower failed payment rates with account verification",
+    "Compatible with accounting software and payment platforms",
+    "Support for both ACH credit and ACH debit transactions"
+  ],
+  faqs: [
+    { q: "How long does ACH processing take to settle?", a: "Standard ACH transactions settle in 1–2 business days. Same-day ACH is available for time-sensitive payments. EzPay America provides clear settlement timelines so you can manage cash flow accurately." },
+    { q: "Can I use ACH and credit card processing together?", a: "Yes. Many EzPay America merchants use both — zero-fee credit card processing for in-person sales and ACH for recurring billing or large invoices. You get a single dashboard for all transactions." },
+    { q: "What happens if an ACH payment fails?", a: "Failed ACH payments generate a return code explaining the reason (insufficient funds, closed account, etc.). EzPay America's system flags these automatically so you can follow up or retry the payment." },
+    { q: "Is there a minimum monthly volume for ACH processing?", a: "No. EzPay America offers ACH processing for businesses of all sizes, from small service providers to high-volume B2B companies." }
+  ],
+  seo: {
+    title: "ACH Payment Processing - Accept Bank Transfers | EzPay America",
+    description: "Accept ACH payments and bank transfers with EzPay America. Lower fees than credit cards, automated recurring billing, secure payroll deposits. Fast approval and easy integration. Call (865) 316-9625.",
+    keywords: "ACH payment processing, ACH payments, bank transfer payments, electronic check processing, eCheck payments, ACH credit, ACH debit, recurring ACH payments, automated clearing house, direct deposit, payroll ACH, bank account payments, ACH merchant services, ACH processing fees, accept bank transfers, electronic funds transfer, EFT processing, ACH payment gateway, recurring billing ACH, subscription payments ACH, low cost payment processing, bank to bank transfers, check by phone, check by web, ACH payment solutions, business ACH processing"
   }
-];
-
-const benefits = [
-  "Process payroll deposits directly to employee bank accounts",
-  "Accept one-time and recurring payments from customer checking accounts",
-  "Reduce chargebacks compared to credit card transactions",
-  "No interchange fees or card network costs",
-  "Ideal for high-ticket purchases and B2B transactions",
-  "Lower failed payment rates with account verification",
-  "Compatible with accounting software and payment platforms",
-  "Support for both ACH credit and ACH debit transactions"
-];
+};
 
 export default function ACHPayments() {
+  const [content, setContent] = useState(defaultContent);
+  const [user, setUser] = useState(null);
+
+  React.useEffect(() => {
+    base44.auth.me().then(setUser).catch(() => {});
+  }, []);
+
+  const handlePublish = (newContent) => {
+    setContent(prev => ({ ...prev, ...newContent }));
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="ACH Payment Processing - Accept Bank Transfers | EzPay America"
-        description="Accept ACH payments and bank transfers with EzPay America. Lower fees than credit cards, automated recurring billing, secure payroll deposits. Fast approval and easy integration. Call (865) 316-9625."
-        keywords="ACH payment processing, ACH payments, bank transfer payments, electronic check processing, eCheck payments, ACH credit, ACH debit, recurring ACH payments, automated clearing house, direct deposit, payroll ACH, bank account payments, ACH merchant services, ACH processing fees, accept bank transfers, electronic funds transfer, EFT processing, ACH payment gateway, recurring billing ACH, subscription payments ACH, low cost payment processing, bank to bank transfers, check by phone, check by web, ACH payment solutions, business ACH processing"
+        title={content.seo.title}
+        description={content.seo.description}
+        keywords={content.seo.keywords}
       />
+      {user?.role === 'admin' && (
+        <AIContentGenerator
+          pageName="ACH Payments"
+          currentContent={content}
+          onPublish={handlePublish}
+        />
+      )}
 
       {/* Hero Section */}
       <section className="relative py-32 bg-gradient-to-br from-blue-900 via-blue-800 to-gray-900 text-white overflow-hidden">
@@ -70,12 +92,12 @@ export default function ACHPayments() {
               <Building2 className="w-20 h-20 text-blue-400" />
             </div>
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6">
-              ACH Payment Processing
-              <br />
-              <span className="text-blue-400">For Your Business</span>
+              {content.heroHeadline.split('\n').map((line, i) => (
+                <span key={i}>{i === 1 ? <><br /><span className="text-blue-400">{line}</span></> : line}</span>
+              ))}
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
-              Accept bank transfers and electronic checks with lower fees than credit cards. Perfect for recurring payments, payroll, and high-value transactions.
+              {content.heroSubheadline}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to={createPageUrl("FreeDemo")}>
@@ -114,29 +136,28 @@ export default function ACHPayments() {
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <Card className="h-full border-none shadow-lg hover:shadow-2xl transition-all duration-300 group">
-                  <CardContent className="p-8 space-y-4">
-                    <div className={`w-16 h-16 bg-gradient-to-br ${feature.color} rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
-                      <feature.icon className="w-8 h-8 text-white" />
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900">
-                      {feature.title}
-                    </h3>
-                    <p className="text-gray-600 leading-relaxed">
-                      {feature.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+            {content.features.map((feature, index) => {
+              const Icon = featureIcons[index] || DollarSign;
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                >
+                  <Card className="h-full border-none shadow-lg hover:shadow-2xl transition-all duration-300 group">
+                    <CardContent className="p-8 space-y-4">
+                      <div className={`w-16 h-16 bg-gradient-to-br ${featureColors[index]} rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
+                        <Icon className="w-8 h-8 text-white" />
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-900">{feature.title}</h3>
+                      <p className="text-gray-600 leading-relaxed">{feature.description}</p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -158,7 +179,7 @@ export default function ACHPayments() {
                 EzPay America's ACH payment processing enables businesses to accept electronic bank transfers directly from customer checking and savings accounts. Our NACHA-compliant ACH processing solutions offer lower transaction costs, reduced chargebacks, and improved cash flow management.
               </p>
               <div className="space-y-3">
-                {benefits.map((benefit, index) => (
+                {content.benefits.map((benefit, index) => (
                   <div key={index} className="flex items-start gap-3">
                     <CheckCircle2 className="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5" />
                     <span className="text-gray-700">{benefit}</span>
@@ -272,12 +293,7 @@ export default function ACHPayments() {
             body: "Yes. ACH transactions are processed through the Federal Reserve's Automated Clearing House network, governed by NACHA operating rules. EzPay America's ACH processing is fully NACHA-compliant with bank-level encryption, account verification, and return code management to minimize failed payments and fraud."
           }
         ]}
-        faqs={[
-          { q: "How long does ACH processing take to settle?", a: "Standard ACH transactions settle in 1–2 business days. Same-day ACH is available for time-sensitive payments. EzPay America provides clear settlement timelines so you can manage cash flow accurately." },
-          { q: "Can I use ACH and credit card processing together?", a: "Yes. Many EzPay America merchants use both — zero-fee credit card processing for in-person sales and ACH for recurring billing or large invoices. You get a single dashboard for all transactions." },
-          { q: "What happens if an ACH payment fails?", a: "Failed ACH payments generate a return code explaining the reason (insufficient funds, closed account, etc.). EzPay America's system flags these automatically so you can follow up or retry the payment." },
-          { q: "Is there a minimum monthly volume for ACH processing?", a: "No. EzPay America offers ACH processing for businesses of all sizes, from small service providers to high-volume B2B companies." }
-        ]}
+        faqs={content.faqs}
         relatedLinks={[
           { label: "Services Overview", to: createPageUrl("Services") },
           { label: "Web Payment Pages", to: createPageUrl("WebPaymentPages") },
