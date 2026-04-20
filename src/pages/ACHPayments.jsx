@@ -6,6 +6,7 @@ import { Building2, Shield, Clock, DollarSign, CheckCircle2, ArrowRight, Trendin
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
+import ServiceSEOContent from "../components/landing/ServiceSEOContent";
 
 const features = [
   {
@@ -247,6 +248,44 @@ export default function ACHPayments() {
           </div>
         </div>
       </section>
+
+      <ServiceSEOContent
+        heading="ACH Payment Processing for Small & Mid-Size Businesses"
+        intro="ACH (Automated Clearing House) payments let businesses accept bank-to-bank transfers electronically — no card networks, no interchange fees, no percentage-based processing costs. Whether you're collecting recurring membership dues, processing B2B invoices, or handling payroll, EzPay America's ACH processing delivers lower costs and reliable settlement."
+        sections={[
+          {
+            h2: "ACH vs Credit Card Processing: Which Is Better?",
+            body: "The right answer depends on your business. Credit cards are ideal for in-person retail or restaurant transactions where customers expect tap-to-pay convenience. ACH is better for high-value invoices, subscriptions, and B2B payments where cost savings matter most.",
+            bullets: [
+              "ACH cost: $0.20–$1.50 flat fee per transaction",
+              "Credit card cost: 2.5–3.5% per transaction (e.g. $25–$35 on a $1,000 payment)",
+              "ACH is ideal for payments over $500 where the savings are significant",
+              "Both can be combined — many EzPay America merchants use ACH + zero-fee card processing together"
+            ]
+          },
+          {
+            h2: "How ACH Recurring Billing Works",
+            body: "EzPay America's recurring ACH billing lets you charge customers automatically on any schedule — weekly, monthly, quarterly, or custom. Once a customer authorizes the payment via a signed agreement, future charges happen automatically with no action required. This is ideal for gyms, SaaS businesses, property managers, and service contractors."
+          },
+          {
+            h2: "Is ACH Processing Secure?",
+            body: "Yes. ACH transactions are processed through the Federal Reserve's Automated Clearing House network, governed by NACHA operating rules. EzPay America's ACH processing is fully NACHA-compliant with bank-level encryption, account verification, and return code management to minimize failed payments and fraud."
+          }
+        ]}
+        faqs={[
+          { q: "How long does ACH processing take to settle?", a: "Standard ACH transactions settle in 1–2 business days. Same-day ACH is available for time-sensitive payments. EzPay America provides clear settlement timelines so you can manage cash flow accurately." },
+          { q: "Can I use ACH and credit card processing together?", a: "Yes. Many EzPay America merchants use both — zero-fee credit card processing for in-person sales and ACH for recurring billing or large invoices. You get a single dashboard for all transactions." },
+          { q: "What happens if an ACH payment fails?", a: "Failed ACH payments generate a return code explaining the reason (insufficient funds, closed account, etc.). EzPay America's system flags these automatically so you can follow up or retry the payment." },
+          { q: "Is there a minimum monthly volume for ACH processing?", a: "No. EzPay America offers ACH processing for businesses of all sizes, from small service providers to high-volume B2B companies." }
+        ]}
+        relatedLinks={[
+          { label: "Services Overview", to: createPageUrl("Services") },
+          { label: "Web Payment Pages", to: createPageUrl("WebPaymentPages") },
+          { label: "Merchant Cash Advance", to: createPageUrl("MerchantCashAdvance") },
+          { label: "E-Commerce", to: createPageUrl("ECommerce") },
+          { label: "Apply Online", to: createPageUrl("ApplyOnline") }
+        ]}
+      />
 
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-br from-blue-900 to-gray-900 text-white">
