@@ -331,7 +331,7 @@ export default function ACHPayments() {
                 </Button>
               </Link>
               <a href="tel:8653169625">
-                <Button variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-blue-900 px-8 py-6 text-lg">
+                <Button className="bg-white text-blue-900 hover:bg-gray-100 border-2 border-white px-8 py-6 text-lg font-semibold">
                   Call (865) 316-9625
                 </Button>
               </a>
