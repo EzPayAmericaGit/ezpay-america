@@ -16,6 +16,8 @@ import {
   ArrowRight 
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { createPageUrl } from "@/utils";
+import ServiceSEOContent from "../components/landing/ServiceSEOContent";
 
 const services = [
   {
@@ -72,9 +74,10 @@ export default function Services() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <SEOHead 
-        title="Payment Processing Services & Merchant Solutions"
-        description="EzPay America payment processing services including credit card processing, mobile payments, POS systems, e-commerce integration, ACH processing, and merchant cash advance. Zero-fee processing with free equipment."
-        keywords="payment processing services, merchant services, credit card processing, mobile payment solutions, POS systems, point of sale, e-commerce payments, online payment gateway, ACH processing, electronic check processing, merchant cash advance, business funding, gift card programs, loyalty programs, payment terminal, card reader, EMV chip card processing, contactless payments, NFC payments, tap to pay, Apple Pay, Google Pay, Samsung Pay, digital wallet, virtual terminal, recurring billing, subscription payments, invoice payments, payment integration, shopping cart integration, WooCommerce payments, Shopify payments, Magento payments, BigCommerce, payment API, secure payment processing, PCI compliance, fraud protection, chargeback prevention, payment security, SSL encryption, tokenization, payment analytics, sales reporting, real-time reporting, business intelligence, multi-location processing, franchise payment solutions, retail payment processing, restaurant payment systems, hospitality payments, healthcare payments, professional services payments, B2B payments, wholesale payments, distribution payments, manufacturing payments, next-day funding, same-day deposits, fast funding, competitive rates, low processing fees, transparent pricing, no hidden fees, no monthly fees, no annual fees, month to month, no contract, free equipment, free terminal, free card reader, free setup, free installation, 24/7 support, USA-based support, merchant support, technical support, payment processing support"
+        title="Cash Discount Program & Merchant Services for Small Business | EzPay America"
+        description="Zero fee credit card processing, free POS systems, and complete merchant services for small businesses. No contracts, 24-hr approval. Serving retail, restaurants & more."
+        keywords="cash discount program, zero fee credit card processing, merchant services for small business, payment processing solutions, credit card processing, free POS system, no fee payment processing, merchant account, retail payment processing, restaurant payment processing"
+        url="https://ezpayamerica.com/Services"
       />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-500 to-orange-600 text-white">
@@ -85,9 +88,9 @@ export default function Services() {
             transition={{ duration: 0.6 }}
             className="text-center"
           >
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">Our Services</h1>
+            <h1 className="text-5xl md:text-6xl font-bold mb-6">Cash Discount Program &amp; Merchant Services for Small Business</h1>
             <p className="text-xl md:text-2xl max-w-3xl mx-auto opacity-90">
-              Comprehensive payment processing solutions tailored to your business needs
+              Zero fee credit card processing, free POS equipment, and complete payment solutions — no contracts, no hidden fees
             </p>
           </motion.div>
         </div>
@@ -123,6 +126,67 @@ export default function Services() {
           </div>
         </div>
       </section>
+
+      <ServiceSEOContent
+        heading="What Is the Cash Discount Program?"
+        intro="The cash discount program is a legal, compliant merchant services model that eliminates credit card processing fees for business owners. Instead of paying 2–3% on every transaction, merchants display their regular price as the 'cash price.' Customers who pay by card see a small service fee added at checkout — covering the cost of processing. The result: you keep 100% of every sale, and your bottom line grows every single month."
+        sections={[
+          {
+            h2: "How It Works",
+            body: "EzPay America sets up your terminals, provides compliant in-store signage, and handles everything. Customers choose to pay cash and save, or pay by card with a transparent service fee. There's nothing hidden, nothing complicated — and you pay zero in processing fees.",
+            bullets: [
+              "Free terminal programming — we handle all the setup",
+              "Compliant signage provided at no cost",
+              "Works with Visa, Mastercard, Amex, Discover, Apple Pay & Google Pay",
+              "No monthly fees, no setup fees, no cancellation fees",
+              "Next-day or same-day funding available"
+            ]
+          },
+          {
+            h2: "Pros and Cons of the Cash Discount Program",
+            body: "Like any business decision, it's important to understand both sides. Here's an honest breakdown:",
+            bullets: [
+              "✅ Pro: Eliminate 100% of your credit card processing costs",
+              "✅ Pro: Completely legal and compliant when properly disclosed",
+              "✅ Pro: Free POS equipment and setup included",
+              "✅ Pro: Works for retail, restaurants, salons, healthcare, and more",
+              "⚠️ Note: Requires proper in-store signage per card network rules",
+              "⚠️ Note: Some customers may prefer cash — but most pay by card regardless"
+            ]
+          },
+          {
+            h2: "Is Zero Fee Credit Card Processing Legal?",
+            body: "Yes — 100%. Cash discount and dual pricing programs are fully legal across all 50 states when implemented correctly. Card networks (Visa, Mastercard) explicitly allow merchants to offer a discount to cash-paying customers. EzPay America ensures your program is fully compliant with all required disclosures and terminal programming so you never have to worry."
+          },
+          {
+            h2: "Who Should Use the Cash Discount Program?",
+            body: "Any small business paying more than $100/month in processing fees stands to benefit. The more you process, the more you save. Our merchants typically save $300–$2,000+ per month after switching.",
+            bullets: [
+              "Retail stores, boutiques, and specialty shops",
+              "Restaurants, cafes, bars, and food trucks",
+              "Salons, spas, barber shops, and beauty businesses",
+              "Medical, dental, and healthcare offices",
+              "Service businesses, contractors, and home services",
+              "Any business processing $5,000+/month in card payments"
+            ]
+          }
+        ]}
+        faqs={[
+          { q: "How much can I save with the cash discount program?", a: "Most merchants save between $300 and $2,000+ per month depending on their processing volume. A business processing $50,000/month in cards at 2.5% was paying $1,250/month — with EzPay America's cash discount program, that cost drops to $0." },
+          { q: "Does the cash discount program hurt my sales?", a: "Most merchants see no meaningful drop in sales. The vast majority of customers pay by card regardless of the small service fee, especially when it's properly disclosed and signage is clear. Many of our merchants report no change in customer behavior after switching." },
+          { q: "What equipment do I need?", a: "EzPay America provides free terminals, card readers, and POS systems pre-programmed for your cash discount program. There's no equipment cost and no setup fee." },
+          { q: "How long does approval take?", a: "Most merchants are approved within 24 hours. Once approved, equipment arrives and you can be processing within a few days." },
+          { q: "Are there any hidden fees?", a: "No. EzPay America charges $0 in transaction fees under the cash discount program. There are no monthly fees, no annual fees, and no cancellation fees. You can leave at any time with no penalty." }
+        ]}
+        relatedLinks={[
+          { label: "Retail Merchants", to: createPageUrl("RetailMerchants") },
+          { label: "Restaurant Merchants", to: createPageUrl("RestaurantMerchants") },
+          { label: "ACH Payments", to: createPageUrl("ACHPayments") },
+          { label: "Merchant Cash Advance", to: createPageUrl("MerchantCashAdvance") },
+          { label: "Web Payment Pages", to: createPageUrl("WebPaymentPages") },
+          { label: "FAQ", to: createPageUrl("FAQ") }
+        ]}
+      />
 
       {/* CTA Section */}
       <section className="py-20 bg-white">
