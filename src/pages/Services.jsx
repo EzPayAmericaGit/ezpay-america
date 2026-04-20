@@ -16,7 +16,6 @@ import {
   ArrowRight 
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { createPageUrl } from "@/utils";
 import ServiceSEOContent from "../components/landing/ServiceSEOContent";
 
 const services = [
