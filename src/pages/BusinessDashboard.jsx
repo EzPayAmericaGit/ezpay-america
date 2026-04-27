@@ -284,6 +284,62 @@ export default function BusinessDashboard() {
 
   const transactionTrendData = Object.values(transactionsByMonth).slice(-6);
 
+  // Daily volume — last 14 days
+  const today = new Date();
+  const dailyVolumeMap = {};
+  for (let i = 13; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(d.getDate() - i);
+    const label = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    dailyVolumeMap[label] = { day: label, volume: 0, count: 0 };
+  }
+  transactions.filter(t => t.status === 'approved').forEach(t => {
+    const d = new Date(t.created_date);
+    const label = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    if (dailyVolumeMap[label]) {
+      dailyVolumeMap[label].volume += t.amount || 0;
+      dailyVolumeMap[label].count += 1;
+    }
+  });
+  const dailyVolumeData = Object.values(dailyVolumeMap);
+
+  // Weekly volume — last 8 weeks
+  const weeklyVolumeMap = {};
+  for (let i = 7; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(d.getDate() - i * 7);
+    const weekStart = new Date(d);
+    weekStart.setDate(d.getDate() - d.getDay());
+    const label = `Wk ${weekStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+    weeklyVolumeMap[label] = { week: label, volume: 0, count: 0 };
+  }
+  transactions.filter(t => t.status === 'approved').forEach(t => {
+    const d = new Date(t.created_date);
+    const weekStart = new Date(d);
+    weekStart.setDate(d.getDate() - d.getDay());
+    const label = `Wk ${weekStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+    if (weeklyVolumeMap[label]) {
+      weeklyVolumeMap[label].volume += t.amount || 0;
+      weeklyVolumeMap[label].count += 1;
+    }
+  });
+  const weeklyVolumeData = Object.values(weeklyVolumeMap);
+
+  // Monthly fees summary (estimate: 0% on cash discount, 2.9% on non-cash-discount)
+  const currentMonth = new Date().getMonth();
+  const currentYear = new Date().getFullYear();
+  const thisMonthTxns = transactions.filter(t => {
+    const d = new Date(t.created_date);
+    return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+  });
+  const thisMonthVolume = thisMonthTxns.filter(t => t.status === 'approved').reduce((s, t) => s + (t.amount || 0), 0);
+  const thisMonthCount = thisMonthTxns.filter(t => t.status === 'approved').length;
+  const thisMonthDeclined = thisMonthTxns.filter(t => t.status === 'declined').length;
+  const estimatedFees = thisMonthVolume * 0.029; // standard rate for non-cash-discount merchants
+  const cashDiscountSavings = thisMonthVolume * 0.029; // savings if on cash discount program
+  const monthlyStatementFee = 9.95;
+  const totalMonthlyFees = estimatedFees + monthlyStatementFee;
+
   // Customer status distribution
   const customerStatusData = [
     { name: 'Active', value: customers.filter(c => c.status === 'active').length, color: '#10b981' },
@@ -389,6 +445,7 @@ export default function BusinessDashboard() {
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="bg-white border">
             <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="processing">Processing</TabsTrigger>
             <TabsTrigger value="transactions">Transactions</TabsTrigger>
             <TabsTrigger value="audit">Audit Trail</TabsTrigger>
           </TabsList>
@@ -519,6 +576,116 @@ export default function BusinessDashboard() {
                 </CardContent>
               </Card>
             </div>
+          </TabsContent>
+
+          <TabsContent value="processing" className="space-y-6">
+            {/* This Month Summary Cards */}
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <Card>
+                <CardContent className="p-5">
+                  <p className="text-sm text-gray-500 font-medium">This Month Volume</p>
+                  <p className="text-2xl font-bold text-gray-900 mt-1">${thisMonthVolume.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                  <p className="text-xs text-gray-400 mt-1">{thisMonthCount} approved transactions</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-5">
+                  <p className="text-sm text-gray-500 font-medium">Declined This Month</p>
+                  <p className="text-2xl font-bold text-red-600 mt-1">{thisMonthDeclined}</p>
+                  <p className="text-xs text-gray-400 mt-1">
+                    {thisMonthCount + thisMonthDeclined > 0
+                      ? `${((thisMonthDeclined / (thisMonthCount + thisMonthDeclined)) * 100).toFixed(1)}% decline rate`
+                      : 'No data'}
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-5">
+                  <p className="text-sm text-gray-500 font-medium">Avg Ticket Size</p>
+                  <p className="text-2xl font-bold text-gray-900 mt-1">
+                    ${thisMonthCount > 0 ? (thisMonthVolume / thisMonthCount).toFixed(2) : '0.00'}
+                  </p>
+                  <p className="text-xs text-gray-400 mt-1">Per approved transaction</p>
+                </CardContent>
+              </Card>
+              <Card className="border-amber-200 bg-amber-50">
+                <CardContent className="p-5">
+                  <p className="text-sm text-amber-700 font-medium">Est. Monthly Fees</p>
+                  <p className="text-2xl font-bold text-amber-700 mt-1">${totalMonthlyFees.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                  <p className="text-xs text-amber-600 mt-1">Processing + $9.95 statement</p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Fees Breakdown */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-base">
+                  <DollarSign className="w-4 h-4 text-amber-500" />
+                  Monthly Fees Breakdown
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {[
+                    { label: 'Processing Fees (2.9% standard rate)', amount: estimatedFees, note: 'Estimated on non-cash-discount volume' },
+                    { label: 'Monthly Statement Fee', amount: monthlyStatementFee, note: 'Fixed monthly fee' },
+                    { label: 'Cash Discount Savings (if enrolled)', amount: -cashDiscountSavings, note: 'Fees passed to customers', savings: true },
+                  ].map((row, i) => (
+                    <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-gray-50">
+                      <div>
+                        <p className="text-sm font-medium text-gray-800">{row.label}</p>
+                        <p className="text-xs text-gray-500">{row.note}</p>
+                      </div>
+                      <p className={`font-bold text-sm ${row.savings ? 'text-green-600' : 'text-gray-900'}`}>
+                        {row.savings ? '-' : ''}${Math.abs(row.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      </p>
+                    </div>
+                  ))}
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-gray-900 text-white">
+                    <p className="font-semibold">Total Estimated Fees</p>
+                    <p className="font-bold">${totalMonthlyFees.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Daily Volume Chart */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Daily Processing Volume — Last 14 Days</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={280}>
+                  <BarChart data={dailyVolumeData} margin={{ top: 4, right: 8, left: 0, bottom: 4 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                    <XAxis dataKey="day" tick={{ fontSize: 11 }} interval={1} />
+                    <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => `$${v >= 1000 ? `${(v/1000).toFixed(1)}k` : v}`} />
+                    <Tooltip formatter={(v) => [`$${v.toFixed(2)}`, 'Volume']} />
+                    <Bar dataKey="volume" fill="#f59e0b" radius={[4, 4, 0, 0]} name="Volume" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
+            {/* Weekly Volume Chart */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Weekly Processing Volume — Last 8 Weeks</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={280}>
+                  <LineChart data={weeklyVolumeData} margin={{ top: 4, right: 8, left: 0, bottom: 4 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                    <XAxis dataKey="week" tick={{ fontSize: 11 }} />
+                    <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => `$${v >= 1000 ? `${(v/1000).toFixed(1)}k` : v}`} />
+                    <Tooltip formatter={(v) => [`$${v.toFixed(2)}`, 'Volume']} />
+                    <Legend />
+                    <Line type="monotone" dataKey="volume" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} name="Weekly Volume" />
+                  </LineChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="transactions" className="space-y-6">
