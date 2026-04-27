@@ -83,6 +83,11 @@ import AffiliateAdmin from './pages/AffiliateAdmin';
 import AffiliateReferralPortal from './pages/AffiliateReferralPortal';
 import AffiliateLeaderboard from './pages/AffiliateLeaderboard';
 import SEOMonitor from './pages/SEOMonitor';
+import CashDiscountProgram from './pages/CashDiscountProgram';
+import GiftCardProgram from './pages/GiftCardProgram';
+import LoyaltyProgram from './pages/LoyaltyProgram';
+import PointOfSaleFinancing from './pages/PointOfSaleFinancing';
+import TapToPay from './pages/TapToPay';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -193,6 +198,11 @@ const AuthenticatedApp = () => {
         <Route path="/AffiliateReferralPortal" element={<LayoutWrapper currentPageName="AffiliateReferralPortal"><AffiliateReferralPortal /></LayoutWrapper>} />
         <Route path="/AffiliateLeaderboard" element={<LayoutWrapper currentPageName="AffiliateLeaderboard"><AffiliateLeaderboard /></LayoutWrapper>} />
         <Route path="/SEOMonitor" element={<LayoutWrapper currentPageName="SEOMonitor"><SEOMonitor /></LayoutWrapper>} />
+        <Route path="/CashDiscountProgram" element={<LayoutWrapper currentPageName="CashDiscountProgram"><CashDiscountProgram /></LayoutWrapper>} />
+        <Route path="/GiftCardProgram" element={<LayoutWrapper currentPageName="GiftCardProgram"><GiftCardProgram /></LayoutWrapper>} />
+        <Route path="/LoyaltyProgram" element={<LayoutWrapper currentPageName="LoyaltyProgram"><LoyaltyProgram /></LayoutWrapper>} />
+        <Route path="/PointOfSaleFinancing" element={<LayoutWrapper currentPageName="PointOfSaleFinancing"><PointOfSaleFinancing /></LayoutWrapper>} />
+        <Route path="/TapToPay" element={<LayoutWrapper currentPageName="TapToPay"><TapToPay /></LayoutWrapper>} />
         <Route path="/news/:slug" element={<LayoutWrapper currentPageName="NewsArticle"><NewsArticle /></LayoutWrapper>} />
 
         {/* Legacy WordPress URL redirects → 301-equivalent client-side */}
