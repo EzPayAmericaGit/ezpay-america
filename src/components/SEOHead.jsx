@@ -90,7 +90,38 @@ export default function SEOHead({ title, description, keywords, image, url, arti
       ogType.setAttribute('property', 'og:type');
       document.head.appendChild(ogType);
     }
-    ogType.content = "website";
+    ogType.content = articleSchema ? "article" : "website";
+
+    // Article-specific OG tags
+    let ogPublishedTime = document.querySelector('meta[property="article:published_time"]');
+    let ogModifiedTime = document.querySelector('meta[property="article:modified_time"]');
+    let ogSection = document.querySelector('meta[property="article:section"]');
+    if (articleSchema) {
+      if (!ogPublishedTime) {
+        ogPublishedTime = document.createElement('meta');
+        ogPublishedTime.setAttribute('property', 'article:published_time');
+        document.head.appendChild(ogPublishedTime);
+      }
+      ogPublishedTime.content = articleSchema.datePublished || '';
+
+      if (!ogModifiedTime) {
+        ogModifiedTime = document.createElement('meta');
+        ogModifiedTime.setAttribute('property', 'article:modified_time');
+        document.head.appendChild(ogModifiedTime);
+      }
+      ogModifiedTime.content = articleSchema.dateModified || articleSchema.datePublished || '';
+
+      if (!ogSection) {
+        ogSection = document.createElement('meta');
+        ogSection.setAttribute('property', 'article:section');
+        document.head.appendChild(ogSection);
+      }
+      ogSection.content = articleSchema.category || '';
+    } else {
+      if (ogPublishedTime) ogPublishedTime.remove();
+      if (ogModifiedTime) ogModifiedTime.remove();
+      if (ogSection) ogSection.remove();
+    }
 
     let ogUrl = document.querySelector('meta[property="og:url"]');
     if (!ogUrl) {
@@ -313,32 +344,67 @@ export default function SEOHead({ title, description, keywords, image, url, arti
         articleStructuredData.setAttribute('data-schema', 'article');
         document.head.appendChild(articleStructuredData);
       }
-      const articleUrl = `https://ezpayamerica.com/news/${articleSchema.slug || articleSchema.id}`;
+      const articleUrl = articleSchema.canonicalUrl || `https://ezpayamerica.com/news/${articleSchema.slug || articleSchema.id}`;
+      const logoUrl = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/8eb2dd274_EZSMALL.png";
+
+      // Build image object per Google Article schema requirements (min 1200px wide)
+      const imageObjects = articleSchema.image ? [{
+        "@type": "ImageObject",
+        "url": articleSchema.image,
+        "width": articleSchema.imageWidth || 1200,
+        "height": articleSchema.imageHeight || 630,
+        "caption": articleSchema.imageAlt || articleSchema.headline
+      }] : [];
+
+      // Author: Person if name provided, else Organization fallback
+      const authorObj = articleSchema.authorName
+        ? {
+            "@type": "Person",
+            "name": articleSchema.authorName,
+            ...(articleSchema.authorUrl ? { "url": articleSchema.authorUrl } : {}),
+            "worksFor": {
+              "@type": "Organization",
+              "name": "EzPay America",
+              "url": "https://ezpayamerica.com"
+            }
+          }
+        : {
+            "@type": "Organization",
+            "name": "EzPay America",
+            "url": "https://ezpayamerica.com"
+          };
+
       articleStructuredData.textContent = JSON.stringify({
         "@context": "https://schema.org",
-        "@type": "BlogPosting",
+        "@type": "NewsArticle",
         "headline": articleSchema.headline,
         "description": articleSchema.description,
-        "image": articleSchema.image ? [articleSchema.image] : [],
+        "image": imageObjects,
         "datePublished": articleSchema.datePublished,
         "dateModified": articleSchema.dateModified || articleSchema.datePublished,
-        "author": {
-          "@type": "Organization",
-          "name": "EzPay America",
-          "url": "https://ezpayamerica.com"
-        },
+        "author": authorObj,
         "publisher": {
           "@type": "Organization",
           "name": "EzPay America",
           "logo": {
             "@type": "ImageObject",
-            "url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/8eb2dd274_EZSMALL.png"
+            "url": logoUrl,
+            "width": 512,
+            "height": 512
           }
         },
         "url": articleUrl,
         "mainEntityOfPage": { "@type": "WebPage", "@id": articleUrl },
         "articleSection": articleSchema.category,
-        "keywords": `${articleSchema.category}, EzPay America, payment processing`
+        "keywords": articleSchema.keywords || `${articleSchema.category}, EzPay America, payment processing`,
+        "inLanguage": "en-US",
+        "isAccessibleForFree": articleSchema.isFree !== false,
+        ...(articleSchema.wordCount ? { "wordCount": articleSchema.wordCount } : {}),
+        ...(articleSchema.articleBody ? { "articleBody": articleSchema.articleBody.substring(0, 500) } : {}),
+        "speakable": {
+          "@type": "SpeakableSpecification",
+          "cssSelector": ["h1", ".article-excerpt"]
+        }
       });
     } else if (articleStructuredData) {
       articleStructuredData.remove();

@@ -77,16 +77,26 @@ export default function NewsArticlePage() {
         description={article.meta_description || article.excerpt}
         keywords={article.meta_keywords || `${article.category}, EzPay America, payment processing, ${article.title.split(' ').slice(0, 3).join(', ')}`}
         image={article.image}
-        url={`https://ezpayamerica.com/news/${article.slug || article.id}`}
+        url={article.canonical_url || `https://ezpayamerica.com/news/${article.slug || article.id}`}
         articleSchema={{
           headline: article.title,
           description: article.excerpt,
           image: article.image,
-          datePublished: article.created_date,
-          dateModified: article.updated_date || article.created_date,
+          imageAlt: article.image_alt || article.title,
+          imageWidth: article.image_width || 1200,
+          imageHeight: article.image_height || 630,
+          datePublished: article.date_published || article.created_date,
+          dateModified: article.updated_date || article.date_published || article.created_date,
           category: article.category,
           slug: article.slug,
           id: article.id,
+          authorName: article.author_name || "EzPay America Editorial Team",
+          authorUrl: article.author_url || null,
+          keywords: article.meta_keywords,
+          wordCount: article.word_count,
+          isFree: article.is_free !== false,
+          articleBody: article.content,
+          canonicalUrl: article.canonical_url,
         }}
       />
 
@@ -138,7 +148,7 @@ export default function NewsArticlePage() {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             {/* Excerpt */}
-            <p className="text-xl md:text-2xl text-gray-600 leading-relaxed mb-8 font-medium border-l-4 border-amber-500 pl-6">
+            <p className="article-excerpt text-xl md:text-2xl text-gray-600 leading-relaxed mb-8 font-medium border-l-4 border-amber-500 pl-6">
               {article.excerpt}
             </p>
 

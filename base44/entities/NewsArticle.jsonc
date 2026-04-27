@@ -1,0 +1,124 @@
+{
+  "name": "NewsArticle",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Article title"
+    },
+    "slug": {
+      "type": "string",
+      "description": "URL-friendly slug for SEO"
+    },
+    "excerpt": {
+      "type": "string",
+      "description": "Short summary of the article"
+    },
+    "content": {
+      "type": "string",
+      "description": "Full article content"
+    },
+    "image": {
+      "type": "string",
+      "description": "Article image URL"
+    },
+    "image_alt": {
+      "type": "string",
+      "description": "Alt text for the featured image (required for Google Article schema)"
+    },
+    "image_width": {
+      "type": "number",
+      "description": "Featured image width in pixels (Google recommends minimum 1200px)"
+    },
+    "image_height": {
+      "type": "number",
+      "description": "Featured image height in pixels"
+    },
+    "author_name": {
+      "type": "string",
+      "description": "Author display name (used in Article schema Person type)"
+    },
+    "author_url": {
+      "type": "string",
+      "description": "Author profile URL (LinkedIn, bio page, etc.)"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Mobile Payments",
+        "Restaurant Tips",
+        "POS Systems",
+        "Merchant Services",
+        "Business News",
+        "Industry Insights",
+        "Technology",
+        "Industry News",
+        "Future Trends"
+      ],
+      "description": "Article category"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "AI-generated content tags"
+    },
+    "content_score": {
+      "type": "number",
+      "description": "AI content quality score 1-100"
+    },
+    "sentiment": {
+      "type": "string",
+      "enum": [
+        "positive",
+        "neutral",
+        "negative"
+      ],
+      "description": "Content sentiment analysis"
+    },
+    "reading_time": {
+      "type": "number",
+      "description": "Estimated reading time in minutes"
+    },
+    "word_count": {
+      "type": "number",
+      "description": "Total word count (used in Article schema)"
+    },
+    "published": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the article is published"
+    },
+    "date_published": {
+      "type": "string",
+      "description": "Explicit publish date (ISO 8601). If blank, created_date is used."
+    },
+    "is_free": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether the article is freely accessible (isAccessibleForFree in schema)"
+    },
+    "meta_title": {
+      "type": "string",
+      "description": "SEO meta title"
+    },
+    "meta_description": {
+      "type": "string",
+      "description": "SEO meta description"
+    },
+    "meta_keywords": {
+      "type": "string",
+      "description": "SEO keywords comma separated"
+    },
+    "canonical_url": {
+      "type": "string",
+      "description": "Override canonical URL (leave blank to auto-generate)"
+    }
+  },
+  "required": [
+    "title",
+    "excerpt",
+    "category"
+  ]
+}

@@ -38,15 +38,24 @@ export default function NewsAdmin() {
     excerpt: "",
     content: "",
     image: "",
+    image_alt: "",
+    image_width: "",
+    image_height: "",
+    author_name: "",
+    author_url: "",
     category: "",
     tags: [],
     content_score: null,
     sentiment: "",
     reading_time: null,
+    word_count: null,
     published: false,
+    date_published: "",
+    is_free: true,
     meta_title: "",
     meta_description: "",
-    meta_keywords: ""
+    meta_keywords: "",
+    canonical_url: ""
   });
   const [analyzing, setAnalyzing] = useState(false);
   const [seoOptimizing, setSeoOptimizing] = useState(false);
@@ -84,7 +93,7 @@ export default function NewsAdmin() {
   });
 
   const resetForm = () => {
-    setFormData({ title: "", slug: "", excerpt: "", content: "", image: "", category: "", tags: [], content_score: null, sentiment: "", reading_time: null, published: false, meta_title: "", meta_description: "", meta_keywords: "" });
+    setFormData({ title: "", slug: "", excerpt: "", content: "", image: "", image_alt: "", image_width: "", image_height: "", author_name: "", author_url: "", category: "", tags: [], content_score: null, sentiment: "", reading_time: null, word_count: null, published: false, date_published: "", is_free: true, meta_title: "", meta_description: "", meta_keywords: "", canonical_url: "" });
     setIsEditing(false);
     setEditingArticle(null);
   };
@@ -96,15 +105,24 @@ export default function NewsAdmin() {
       excerpt: article.excerpt || "",
       content: article.content || "",
       image: article.image || "",
+      image_alt: article.image_alt || "",
+      image_width: article.image_width || "",
+      image_height: article.image_height || "",
+      author_name: article.author_name || "",
+      author_url: article.author_url || "",
       category: article.category || "",
       tags: article.tags || [],
       content_score: article.content_score || null,
       sentiment: article.sentiment || "",
       reading_time: article.reading_time || null,
+      word_count: article.word_count || null,
       published: article.published || false,
+      date_published: article.date_published || "",
+      is_free: article.is_free !== false,
       meta_title: article.meta_title || "",
       meta_description: article.meta_description || "",
-      meta_keywords: article.meta_keywords || ""
+      meta_keywords: article.meta_keywords || "",
+      canonical_url: article.canonical_url || ""
     });
     setEditingArticle(article);
     setIsEditing(true);
@@ -147,6 +165,7 @@ Provide:
       content_score: result.content_score || null,
       sentiment: result.sentiment || "",
       reading_time: readingTime,
+      word_count: wordCount,
       category: formData.category || result.suggested_category || ""
     });
     setAnalyzing(false);
@@ -229,21 +248,31 @@ Provide a complete article with all metadata.`,
       const readingTime = Math.max(1, Math.ceil(wordCount / 200));
 
       // Set form data with generated content
+      const generatedWordCount = (articleResult.content || "").split(/\s+/).filter(Boolean).length;
       setFormData({
         title: articleResult.title || "",
         slug: articleResult.slug || "",
         excerpt: articleResult.excerpt || "",
         content: articleResult.content || "",
         image: imageUrl || "",
+        image_alt: articleResult.title || "",
+        image_width: 1200,
+        image_height: 630,
+        author_name: "EzPay America Editorial Team",
+        author_url: "",
         category: articleResult.category || "",
         tags: articleResult.tags || [],
         content_score: 75,
         sentiment: "positive",
         reading_time: readingTime,
+        word_count: generatedWordCount,
         published: false,
+        date_published: "",
+        is_free: true,
         meta_title: articleResult.meta_title || "",
         meta_description: articleResult.meta_description || "",
-        meta_keywords: articleResult.meta_keywords || ""
+        meta_keywords: articleResult.meta_keywords || "",
+        canonical_url: ""
       });
 
       setShowAIGenerator(false);
@@ -720,6 +749,116 @@ Optimize for:
                     </div>
                   )}
                 </div>
+                {/* Image Metadata for Schema */}
+                {formData.image && (
+                  <div className="border-t pt-4 mt-4">
+                    <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                      <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded font-medium">Article Schema</span>
+                      Featured Image Metadata
+                    </h3>
+                    <div className="grid gap-3">
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Image Alt Text <span className="text-red-500">*</span></label>
+                        <Input
+                          value={formData.image_alt}
+                          onChange={(e) => setFormData({...formData, image_alt: e.target.value})}
+                          placeholder="Descriptive alt text for the featured image"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">Required by Google for Article rich results. Describe the image content.</p>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-sm font-medium mb-1">Image Width (px)</label>
+                          <Input
+                            type="number"
+                            value={formData.image_width}
+                            onChange={(e) => setFormData({...formData, image_width: parseInt(e.target.value) || ""})}
+                            placeholder="1200"
+                          />
+                          <p className="text-xs text-gray-400 mt-1">Google requires min 1200px</p>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium mb-1">Image Height (px)</label>
+                          <Input
+                            type="number"
+                            value={formData.image_height}
+                            onChange={(e) => setFormData({...formData, image_height: parseInt(e.target.value) || ""})}
+                            placeholder="630"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Author & Publication Metadata */}
+                <div className="border-t pt-4 mt-4">
+                  <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                    <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded font-medium">Article Schema</span>
+                    Author & Publication
+                  </h3>
+                  <div className="grid gap-3">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Author Name</label>
+                        <Input
+                          value={formData.author_name}
+                          onChange={(e) => setFormData({...formData, author_name: e.target.value})}
+                          placeholder="EzPay America Editorial Team"
+                        />
+                        <p className="text-xs text-gray-400 mt-1">Used in schema Person type</p>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Author Profile URL</label>
+                        <Input
+                          value={formData.author_url}
+                          onChange={(e) => setFormData({...formData, author_url: e.target.value})}
+                          placeholder="https://linkedin.com/in/..."
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Publish Date</label>
+                        <Input
+                          type="date"
+                          value={formData.date_published}
+                          onChange={(e) => setFormData({...formData, date_published: e.target.value})}
+                        />
+                        <p className="text-xs text-gray-400 mt-1">Leave blank to use creation date</p>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Word Count</label>
+                        <div className="flex gap-2">
+                          <Input
+                            type="number"
+                            value={formData.word_count || ""}
+                            onChange={(e) => setFormData({...formData, word_count: parseInt(e.target.value) || null})}
+                            placeholder="Auto-calculated"
+                            readOnly={!!formData.content}
+                          />
+                          {formData.content && (
+                            <Button type="button" variant="outline" size="sm" onClick={() => {
+                              const wc = formData.content.split(/\s+/).filter(Boolean).length;
+                              setFormData({...formData, word_count: wc});
+                            }}>Calc</Button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Switch
+                        checked={formData.is_free !== false}
+                        onCheckedChange={(v) => setFormData({...formData, is_free: v})}
+                      />
+                      <div>
+                        <label className="text-sm font-medium">Freely Accessible</label>
+                        <p className="text-xs text-gray-400">isAccessibleForFree in Article schema — keep enabled unless content is paywalled</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 {/* SEO Section */}
                 <div className="border-t pt-4 mt-4">
                   <div className="flex justify-between items-center mb-3">
@@ -874,6 +1013,15 @@ Optimize for:
                         placeholder="keyword1, keyword2, keyword3"
                       />
                       <p className="text-xs text-gray-500 mt-1">Separate keywords with commas</p>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Canonical URL Override</label>
+                      <Input
+                        value={formData.canonical_url}
+                        onChange={(e) => setFormData({...formData, canonical_url: e.target.value})}
+                        placeholder="https://ezpayamerica.com/news/my-article (leave blank for auto)"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">Only set if this article is syndicated or republished from another source.</p>
                     </div>
                   </div>
                 </div>
