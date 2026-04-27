@@ -2,6 +2,85 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 const BASE_URL = "https://ezpayamerica.com";
 
+// Top 50 US cities — mirrors lib/locationPages.js (backend can't import frontend files)
+const TOP_CITIES = [
+  { stateSlug: "new-york",       citySlug: "new-york" },
+  { stateSlug: "california",     citySlug: "los-angeles" },
+  { stateSlug: "illinois",       citySlug: "chicago" },
+  { stateSlug: "texas",          citySlug: "houston" },
+  { stateSlug: "arizona",        citySlug: "phoenix" },
+  { stateSlug: "pennsylvania",   citySlug: "philadelphia" },
+  { stateSlug: "texas",          citySlug: "san-antonio" },
+  { stateSlug: "california",     citySlug: "san-diego" },
+  { stateSlug: "texas",          citySlug: "dallas" },
+  { stateSlug: "florida",        citySlug: "jacksonville" },
+  { stateSlug: "texas",          citySlug: "austin" },
+  { stateSlug: "texas",          citySlug: "fort-worth" },
+  { stateSlug: "ohio",           citySlug: "columbus" },
+  { stateSlug: "north-carolina", citySlug: "charlotte" },
+  { stateSlug: "indiana",        citySlug: "indianapolis" },
+  { stateSlug: "california",     citySlug: "san-francisco" },
+  { stateSlug: "washington",     citySlug: "seattle" },
+  { stateSlug: "colorado",       citySlug: "denver" },
+  { stateSlug: "tennessee",      citySlug: "nashville" },
+  { stateSlug: "oklahoma",       citySlug: "oklahoma-city" },
+  { stateSlug: "texas",          citySlug: "el-paso" },
+  { stateSlug: "dc",             citySlug: "washington" },
+  { stateSlug: "nevada",         citySlug: "las-vegas" },
+  { stateSlug: "kentucky",       citySlug: "louisville" },
+  { stateSlug: "tennessee",      citySlug: "memphis" },
+  { stateSlug: "oregon",         citySlug: "portland" },
+  { stateSlug: "maryland",       citySlug: "baltimore" },
+  { stateSlug: "wisconsin",      citySlug: "milwaukee" },
+  { stateSlug: "new-mexico",     citySlug: "albuquerque" },
+  { stateSlug: "arizona",        citySlug: "tucson" },
+  { stateSlug: "california",     citySlug: "fresno" },
+  { stateSlug: "california",     citySlug: "sacramento" },
+  { stateSlug: "georgia",        citySlug: "atlanta" },
+  { stateSlug: "missouri",       citySlug: "kansas-city" },
+  { stateSlug: "arizona",        citySlug: "mesa" },
+  { stateSlug: "nebraska",       citySlug: "omaha" },
+  { stateSlug: "north-carolina", citySlug: "raleigh" },
+  { stateSlug: "ohio",           citySlug: "cleveland" },
+  { stateSlug: "virginia",       citySlug: "virginia-beach" },
+  { stateSlug: "california",     citySlug: "long-beach" },
+  { stateSlug: "colorado",       citySlug: "colorado-springs" },
+  { stateSlug: "florida",        citySlug: "miami" },
+  { stateSlug: "florida",        citySlug: "tampa" },
+  { stateSlug: "florida",        citySlug: "orlando" },
+  { stateSlug: "minnesota",      citySlug: "minneapolis" },
+  { stateSlug: "pennsylvania",   citySlug: "pittsburgh" },
+  { stateSlug: "missouri",       citySlug: "st-louis" },
+  { stateSlug: "tennessee",      citySlug: "knoxville" },
+  { stateSlug: "tennessee",      citySlug: "chattanooga" },
+  { stateSlug: "alabama",        citySlug: "birmingham" },
+];
+
+const BUSINESS_SLUGS = [
+  // Retail
+  "clothing-boutique","shoe-store","jewelry-store","specialty-food-store",
+  "furniture-store","electronics-store","sporting-goods-store","pet-store",
+  "florist","thrift-store","pop-up-retail",
+  // Personal Services
+  "hair-salon","barber-shop","nail-salon","spa","massage-therapy",
+  "tanning-salon","tattoo-shop","beauty-clinic","med-spa","personal-trainer",
+  "yoga-studio","fitness-gym","dance-studio","coaching-business",
+  // Healthcare
+  "dental-office","chiropractor","physical-therapy","urgent-care",
+  "private-medical","mental-health-clinic","veterinary-clinic",
+  "home-healthcare","medical-lab",
+  // Home Services
+  "hvac-company","plumbing-services","electrical-contractor","roofing-company",
+  "landscaping","pest-control","residential-cleaning","commercial-cleaning",
+  "restoration-company","handyman-services","pool-maintenance",
+  "security-installer","moving-company","appliance-repair","dry-cleaners",
+  // Professional Services
+  "law-firm","accounting-firm","bookkeeping-services","marketing-agency",
+  "consulting-firm","it-services","web-design-agency","software-developer",
+  "architecture-firm","engineering-firm","staffing-agency",
+  "translation-services","pr-firm",
+];
+
 // Static pages — baseline always included.
 // Any NEW pages added to the codebase should also be added to the SitePage
 // entity in the CMS so they are picked up automatically without touching this file.
@@ -172,7 +251,20 @@ Deno.serve(async (req) => {
       return `  <url>\n    <loc>${BASE_URL}/news/${escapeXml(slug)}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n    <news:news xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">\n      <news:publication>\n        <news:name>EzPay America</news:name>\n        <news:language>en</news:language>\n      </news:publication>\n      <news:publication_date>${lastmod}</news:publication_date>\n      <news:title>${escapeXml(a.title)}</news:title>\n    </news:news>\n  </url>`;
     });
 
-    const allEntries = [...staticEntries, ...cmsEntries, ...newsEntries].join('\n');
+    // Location landing pages: /:businessSlug/:stateSlug/:citySlug
+    const locationEntries = [];
+    for (const slug of BUSINESS_SLUGS) {
+      for (const loc of TOP_CITIES) {
+        locationEntries.push(buildUrlEntry(
+          `/${slug}/${loc.stateSlug}/${loc.citySlug}`,
+          '0.7',
+          'monthly',
+          today
+        ));
+      }
+    }
+
+    const allEntries = [...staticEntries, ...cmsEntries, ...locationEntries, ...newsEntries].join('\n');
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">\n${allEntries}\n</urlset>`;
 
