@@ -4,6 +4,7 @@ import LandingHero from "./LandingHero";
 import LandingFeatures from "./LandingFeatures";
 import LandingCTA from "./LandingCTA";
 import { DollarSign, Gift, Zap, Headphones, FileText, Shield } from "lucide-react";
+import SocialProof from "./SocialProof";
 
 const DEFAULT_FEATURES = [
   { icon: DollarSign, title: "Zero Transaction Fees", description: "Our surcharge program means you pay $0 in credit card processing fees. Customers pay a small convenience fee — you keep 100% of your revenue.", color: "from-green-500 to-emerald-600" },
@@ -270,6 +271,7 @@ export default function GenericBusinessLanding({ slug, location = null, city = n
         subtitle={location ? `Serving ${location} businesses with no hidden fees or surprises` : "Complete payment processing with no hidden fees or surprises"}
         features={DEFAULT_FEATURES}
       />
+      <SocialProof />
       <LandingCTA
         headline={location ? `Ready to Save on Processing Fees in ${location}?` : "Ready to Stop Paying Processing Fees?"}
         subtext={
