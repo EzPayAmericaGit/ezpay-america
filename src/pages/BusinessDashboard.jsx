@@ -122,10 +122,7 @@ export default function BusinessDashboard() {
   if (authStatus.loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <SEOHead 
-          title="Business Dashboard"
-          robots="noindex, nofollow"
-        />
+        <SEOHead title="Business Dashboard" robots="noindex, nofollow" />
         <Loader2 className="w-8 h-8 animate-spin text-amber-500" />
       </div>
     );
@@ -134,10 +131,7 @@ export default function BusinessDashboard() {
   if (!authStatus.isAdmin) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <SEOHead 
-          title="Business Dashboard"
-          robots="noindex, nofollow"
-        />
+        <SEOHead title="Business Dashboard" robots="noindex, nofollow" />
         <Card className="max-w-md">
           <CardContent className="p-8 text-center">
             <Lock className="w-16 h-16 text-red-500 mx-auto mb-4" />
@@ -155,10 +149,7 @@ export default function BusinessDashboard() {
   if (!authStatus.passwordVerified) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center py-12 px-4">
-        <SEOHead 
-          title="Business Dashboard"
-          robots="noindex, nofollow"
-        />
+        <SEOHead title="Business Dashboard" robots="noindex, nofollow" />
         <Card className="w-full max-w-md">
           <CardHeader>
             <CardTitle className="text-2xl text-center flex items-center justify-center gap-2">
@@ -198,10 +189,7 @@ export default function BusinessDashboard() {
   if (!authStatus.twoFactorVerified) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center py-12 px-4">
-        <SEOHead 
-          title="Business Dashboard - 2FA"
-          robots="noindex, nofollow"
-        />
+        <SEOHead title="Business Dashboard - 2FA" robots="noindex, nofollow" />
         <Card className="w-full max-w-md">
           <CardHeader>
             <CardTitle className="text-2xl text-center flex items-center justify-center gap-2">

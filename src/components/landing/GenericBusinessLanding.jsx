@@ -200,6 +200,16 @@ export default function GenericBusinessLanding({ slug, location = null, city = n
     ? `${title.toLowerCase()} payment processing ${location}, ${title.toLowerCase()} POS ${city || ""}, merchant services ${location}, credit card processing ${city || ""} ${state || ""}, zero fee payment processing ${location}`
     : `${title.toLowerCase()} payment processing, ${title.toLowerCase()} POS system, ${title.toLowerCase()} credit card processing, zero fee payment processing, merchant services, best payment processor for ${title.toLowerCase()}`;
 
+  // Rich OG image — 1200×630 Unsplash photo keyed to business category for social sharing & Google rich previews
+  const OG_IMAGES = {
+    "Retail": "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1200&h=630&fit=crop&auto=format",
+    "Personal Services": "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1200&h=630&fit=crop&auto=format",
+    "Healthcare": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&h=630&fit=crop&auto=format",
+    "Home Services": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&h=630&fit=crop&auto=format",
+    "Professional Services": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&h=630&fit=crop&auto=format",
+  };
+  const ogImage = OG_IMAGES[category] || "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&h=630&fit=crop&auto=format";
+
   // Schema
   const areaServed = location
     ? city
@@ -253,6 +263,7 @@ export default function GenericBusinessLanding({ slug, location = null, city = n
         description={seoDesc}
         keywords={seoKeywords}
         url={canonicalUrl}
+        image={ogImage}
         pageSchema={pageSchema}
       />
       <LandingHero
