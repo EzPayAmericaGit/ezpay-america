@@ -2,6 +2,9 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 const BASE_URL = "https://ezpayamerica.com";
 
+// Static pages — baseline always included.
+// Any NEW pages added to the codebase should also be added to the SitePage
+// entity in the CMS so they are picked up automatically without touching this file.
 const STATIC_PAGES = [
   { path: '/', priority: '1.0', changefreq: 'daily' },
   { path: '/ApplyOnline', priority: '1.0', changefreq: 'weekly' },
@@ -31,6 +34,11 @@ const STATIC_PAGES = [
   { path: '/MerchantCapital', priority: '0.75', changefreq: 'monthly' },
   { path: '/ECommerce', priority: '0.75', changefreq: 'monthly' },
   { path: '/FraudDetection', priority: '0.7', changefreq: 'monthly' },
+  { path: '/CashDiscountProgram', priority: '0.9', changefreq: 'weekly' },
+  { path: '/GiftCardProgram', priority: '0.8', changefreq: 'weekly' },
+  { path: '/LoyaltyProgram', priority: '0.8', changefreq: 'weekly' },
+  { path: '/PointOfSaleFinancing', priority: '0.8', changefreq: 'weekly' },
+  { path: '/TapToPay', priority: '0.85', changefreq: 'weekly' },
   { path: '/RetailPOS', priority: '0.85', changefreq: 'weekly' },
   { path: '/RestaurantPOS', priority: '0.85', changefreq: 'weekly' },
   { path: '/CountertopTerminal', priority: '0.8', changefreq: 'weekly' },
@@ -115,11 +123,6 @@ const STATIC_PAGES = [
   { path: '/StaffingAgencyPOS', priority: '0.75', changefreq: 'weekly' },
   { path: '/TranslationServicesPOS', priority: '0.75', changefreq: 'weekly' },
   { path: '/PRFirmPOS', priority: '0.75', changefreq: 'weekly' },
-  { path: '/CashDiscountProgram', priority: '0.9', changefreq: 'weekly' },
-  { path: '/GiftCardProgram', priority: '0.8', changefreq: 'weekly' },
-  { path: '/LoyaltyProgram', priority: '0.8', changefreq: 'weekly' },
-  { path: '/PointOfSaleFinancing', priority: '0.8', changefreq: 'weekly' },
-  { path: '/TapToPay', priority: '0.85', changefreq: 'weekly' },
   { path: '/AffiliateSignup', priority: '0.7', changefreq: 'monthly' },
   { path: '/BookAppointment', priority: '0.9', changefreq: 'weekly' },
   { path: '/FAQ', priority: '0.85', changefreq: 'monthly' },
@@ -129,25 +132,49 @@ function escapeXml(str) {
   return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+function buildUrlEntry(path, priority, changefreq, lastmod) {
+  return `  <url>\n    <loc>${BASE_URL}${escapeXml(path)}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`;
+}
+
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
     const today = new Date().toISOString().split('T')[0];
 
-    // Fetch published news articles dynamically
-    const articles = await base44.asServiceRole.entities.NewsArticle.filter({ published: true }, '-updated_date', 500);
+    // Fetch all dynamic sources in parallel
+    const [articles, cmsPages] = await Promise.all([
+      base44.asServiceRole.entities.NewsArticle.filter({ published: true }, '-updated_date', 500),
+      base44.asServiceRole.entities.SitePage.filter({ isActive: true }, 'path', 1000),
+    ]);
 
+    // Build a set of paths already covered by STATIC_PAGES for deduplication
+    const staticPathSet = new Set(STATIC_PAGES.map(p => p.path));
+
+    // CMS pages: only include paths not already in static list
+    const cmsEntries = cmsPages
+      .filter(p => p.path && !staticPathSet.has(p.path))
+      .map(p => buildUrlEntry(
+        p.path,
+        p.priority || '0.75',
+        p.changefreq || 'weekly',
+        today
+      ));
+
+    // Static entries
     const staticEntries = STATIC_PAGES.map(p =>
-      `  <url>\n    <loc>${BASE_URL}${p.path}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>${p.changefreq}</changefreq>\n    <priority>${p.priority}</priority>\n  </url>`
-    ).join('\n');
+      buildUrlEntry(p.path, p.priority, p.changefreq, today)
+    );
 
+    // News article entries with Google News namespace
     const newsEntries = articles.map(a => {
       const slug = a.slug || a.id;
       const lastmod = a.updated_date ? a.updated_date.split('T')[0] : today;
-      return `  <url>\n    <loc>${BASE_URL}/news/${slug}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n    <news:news xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">\n      <news:publication>\n        <news:name>EzPay America</news:name>\n        <news:language>en</news:language>\n      </news:publication>\n      <news:publication_date>${lastmod}</news:publication_date>\n      <news:title>${escapeXml(a.title)}</news:title>\n    </news:news>\n  </url>`;
-    }).join('\n');
+      return `  <url>\n    <loc>${BASE_URL}/news/${escapeXml(slug)}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n    <news:news xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">\n      <news:publication>\n        <news:name>EzPay America</news:name>\n        <news:language>en</news:language>\n      </news:publication>\n      <news:publication_date>${lastmod}</news:publication_date>\n      <news:title>${escapeXml(a.title)}</news:title>\n    </news:news>\n  </url>`;
+    });
 
-    const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">\n${staticEntries}\n${newsEntries}\n</urlset>`;
+    const allEntries = [...staticEntries, ...cmsEntries, ...newsEntries].join('\n');
+
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">\n${allEntries}\n</urlset>`;
 
     return new Response(xml, {
       status: 200,
@@ -158,7 +185,7 @@ Deno.serve(async (req) => {
     });
 
   } catch (error) {
-    return new Response(`<?xml version="1.0"?><error>${error.message}</error>`, {
+    return new Response(`<?xml version="1.0"?><error>${escapeXml(error.message)}</error>`, {
       status: 500,
       headers: { 'Content-Type': 'application/xml' }
     });

@@ -1,0 +1,64 @@
+{
+  "name": "SitePage",
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string",
+      "description": "URL path (e.g. /MyPage or /news/my-slug)"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "1.0",
+        "0.95",
+        "0.9",
+        "0.85",
+        "0.8",
+        "0.75",
+        "0.7",
+        "0.6",
+        "0.5"
+      ],
+      "default": "0.75",
+      "description": "Sitemap priority 0.5\u20131.0"
+    },
+    "changefreq": {
+      "type": "string",
+      "enum": [
+        "always",
+        "hourly",
+        "daily",
+        "weekly",
+        "monthly",
+        "yearly",
+        "never"
+      ],
+      "default": "weekly",
+      "description": "How frequently the page is likely to change"
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true,
+      "description": "Include this page in the sitemap"
+    },
+    "pageType": {
+      "type": "string",
+      "enum": [
+        "service",
+        "business_type",
+        "landing",
+        "location",
+        "other"
+      ],
+      "default": "other",
+      "description": "Category of page for organization"
+    },
+    "label": {
+      "type": "string",
+      "description": "Human-readable label for admin UI"
+    }
+  },
+  "required": [
+    "path"
+  ]
+}
