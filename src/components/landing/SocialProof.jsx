@@ -1,21 +1,22 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Star, ShieldCheck, Award, BadgeCheck, Zap, Lock } from "lucide-react";
 
 // Customer logos — real business types using text-based logo tiles (no broken img links)
 const CUSTOMER_LOGOS = [
-  { name: "Pizza Palace", type: "Restaurant" },
-  { name: "Green Thumb", type: "Landscaping" },
-  { name: "StyleCuts", type: "Hair Salon" },
-  { name: "PetPaws", type: "Pet Store" },
-  { name: "TechFix", type: "IT Services" },
-  { name: "SmileDental", type: "Dental Office" },
-  { name: "FitLife Gym", type: "Fitness Gym" },
-  { name: "Café Aroma", type: "Coffee Shop" },
-  { name: "CleanPro", type: "Cleaning Co." },
-  { name: "LuxeNails", type: "Nail Salon" },
-  { name: "AutoFix", type: "Auto Services" },
-  { name: "The Law Group", type: "Law Firm" },
+  { name: "Pizza Palace",   type: "Restaurant",    url: "/FullServiceRestaurantPOS" },
+  { name: "Green Thumb",    type: "Landscaping",   url: "/LandscapingPOS" },
+  { name: "StyleCuts",      type: "Hair Salon",    url: "/HairSalonPOS" },
+  { name: "PetPaws",        type: "Pet Store",     url: "/PetStorePOS" },
+  { name: "TechFix",        type: "IT Services",   url: "/ITServicesPOS" },
+  { name: "SmileDental",    type: "Dental Office", url: "/DentalOfficePOS" },
+  { name: "FitLife Gym",    type: "Fitness Gym",   url: "/FitnessGymPOS" },
+  { name: "Café Aroma",     type: "Coffee Shop",   url: "/CoffeePOS" },
+  { name: "CleanPro",       type: "Cleaning Co.",  url: "/ResidentialCleaningPOS" },
+  { name: "LuxeNails",      type: "Nail Salon",    url: "/NailSalonPOS" },
+  { name: "AutoFix",        type: "Auto Services", url: "/ITServicesPOS" },
+  { name: "The Law Group",  type: "Law Firm",      url: "/LawFirmPOS" },
 ];
 
 const TRUST_BADGES = [
@@ -100,13 +101,17 @@ export default function SocialProof() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.3, delay: i * 0.04 }}
-                className="flex flex-col items-center justify-center py-4 px-3 rounded-xl bg-gray-50 border border-gray-100 hover:border-amber-200 hover:bg-amber-50 transition-colors"
               >
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white font-bold text-lg mb-2">
-                  {logo.name.charAt(0)}
-                </div>
-                <p className="text-xs font-semibold text-gray-700 text-center leading-tight">{logo.name}</p>
-                <p className="text-[10px] text-gray-400 text-center mt-0.5">{logo.type}</p>
+                <Link
+                  to={logo.url}
+                  className="flex flex-col items-center justify-center py-4 px-3 rounded-xl bg-gray-50 border border-gray-100 hover:border-amber-200 hover:bg-amber-50 transition-colors block"
+                >
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white font-bold text-lg mb-2">
+                    {logo.name.charAt(0)}
+                  </div>
+                  <p className="text-xs font-semibold text-gray-700 text-center leading-tight">{logo.name}</p>
+                  <p className="text-[10px] text-gray-400 text-center mt-0.5">{logo.type}</p>
+                </Link>
               </motion.div>
             ))}
           </div>
