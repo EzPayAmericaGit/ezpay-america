@@ -136,8 +136,7 @@ export default function Layout({ children }) {
       { title: "Book a Call", url: createPageUrl("BookAppointment") },
       { title: "Affiliates", url: createPageUrl("AffiliateSignup") },
       { title: "FAQ", url: createPageUrl("FAQ") },
-      { title: "News", url: createPageUrl("News") },
-      { title: "Helpdesk", url: createPageUrl("Helpdesk") }
+      { title: "News", url: createPageUrl("News") }
     ];
 
     return items;
