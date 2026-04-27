@@ -1,0 +1,48 @@
+{
+  "name": "NewsletterSubscriber",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "description": "Subscriber email address"
+    },
+    "firstName": {
+      "type": "string",
+      "description": "First name (optional)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "unsubscribed",
+        "bounced"
+      ],
+      "default": "active",
+      "description": "Subscriber status"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "website",
+        "news_page",
+        "article",
+        "manual"
+      ],
+      "default": "website",
+      "description": "How they subscribed"
+    },
+    "welcomeSent": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether welcome email was sent"
+    },
+    "lastEmailSent": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last newsletter email sent date"
+    }
+  },
+  "required": [
+    "email"
+  ]
+}

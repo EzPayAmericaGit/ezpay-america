@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Plus, Pencil, Trash2, Eye, EyeOff, Upload, Loader2, Sparkles, RefreshCw, Tags, BarChart3, Wand2, Share2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Eye, EyeOff, Upload, Loader2, Sparkles, RefreshCw, Tags, BarChart3, Wand2, Share2, Mail, Users, Send, TestTube } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import SocialShareDialog from "../components/news/SocialShareDialog";
 
@@ -63,6 +63,10 @@ export default function NewsAdmin() {
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [shareArticle, setShareArticle] = useState(null);
+  const [showNewsletter, setShowNewsletter] = useState(false);
+  const [testEmail, setTestEmail] = useState("");
+  const [broadcastStatus, setBroadcastStatus] = useState(null);
+  const [broadcastLoading, setBroadcastLoading] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -70,6 +74,29 @@ export default function NewsAdmin() {
     queryKey: ['newsArticles'],
     queryFn: () => base44.entities.NewsArticle.list('-created_date')
   });
+
+  const { data: subscribers = [] } = useQuery({
+    queryKey: ['newsletterSubscribers'],
+    queryFn: () => base44.entities.NewsletterSubscriber.list('-created_date')
+  });
+
+  const activeSubscribers = subscribers.filter(s => s.status === 'active');
+
+  const sendBroadcast = async (articleId, isTest) => {
+    setBroadcastLoading(true);
+    setBroadcastStatus(null);
+    try {
+      const res = await base44.functions.invoke('sendNewsletterBroadcast', {
+        articleId: articleId || undefined,
+        testEmail: isTest ? testEmail : undefined
+      });
+      setBroadcastStatus({ success: true, message: res.data?.message });
+    } catch (e) {
+      setBroadcastStatus({ success: false, message: e.message });
+    } finally {
+      setBroadcastLoading(false);
+    }
+  };
 
   const createMutation = useMutation({
     mutationFn: (data) => base44.entities.NewsArticle.create(data),
@@ -407,7 +434,15 @@ Optimize for:
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">News Admin</h1>
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
+            <Button
+              variant="outline"
+              onClick={() => setShowNewsletter(!showNewsletter)}
+              className="border-green-500 text-green-700 hover:bg-green-50"
+            >
+              <Mail className="w-4 h-4 mr-2" />
+              Newsletter ({activeSubscribers.length})
+            </Button>
             {articles.length > 0 && (
               <Button 
                 onClick={bulkOptimizeSEO}
@@ -449,6 +484,118 @@ Optimize for:
             )}
           </div>
         </div>
+
+        {/* Newsletter Management Panel */}
+        {showNewsletter && (
+          <Card className="mb-8 border-green-200 bg-green-50">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-green-700">
+                <Mail className="w-5 h-5" />
+                Newsletter Management
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-5">
+              {/* Stats */}
+              <div className="grid grid-cols-3 gap-4">
+                <div className="bg-white rounded-lg p-3 text-center border border-green-100">
+                  <div className="text-2xl font-bold text-green-700">{activeSubscribers.length}</div>
+                  <div className="text-xs text-gray-500 mt-1">Active Subscribers</div>
+                </div>
+                <div className="bg-white rounded-lg p-3 text-center border border-green-100">
+                  <div className="text-2xl font-bold text-gray-700">{subscribers.filter(s => s.status === 'unsubscribed').length}</div>
+                  <div className="text-xs text-gray-500 mt-1">Unsubscribed</div>
+                </div>
+                <div className="bg-white rounded-lg p-3 text-center border border-green-100">
+                  <div className="text-2xl font-bold text-amber-600">{articles.filter(a => a.published).length}</div>
+                  <div className="text-xs text-gray-500 mt-1">Published Articles</div>
+                </div>
+              </div>
+
+              {/* Automations info */}
+              <div className="bg-white border border-green-200 rounded-lg p-4 text-sm">
+                <p className="font-semibold text-green-800 mb-1">✅ Automation Active</p>
+                <p className="text-gray-600">Newsletter emails + social posts are automatically sent when you <strong>publish</strong> any article. Use manual broadcast below to send to existing subscribers.</p>
+              </div>
+
+              {/* Manual broadcast */}
+              <div className="space-y-3">
+                <p className="font-semibold text-gray-800 text-sm">Send Manual Broadcast</p>
+                <div className="flex gap-2 items-end">
+                  <div className="flex-1">
+                    <label className="block text-xs text-gray-500 mb-1">Select Article</label>
+                    <Select onValueChange={(v) => setBroadcastStatus(null)}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Latest published article" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value={null}>Latest published article</SelectItem>
+                        {articles.filter(a => a.published).map(a => (
+                          <SelectItem key={a.id} value={a.id}>{a.title.substring(0, 50)}{a.title.length > 50 ? '...' : ''}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <Button
+                    onClick={() => sendBroadcast(null, false)}
+                    disabled={broadcastLoading || activeSubscribers.length === 0}
+                    className="bg-green-600 hover:bg-green-700 text-white whitespace-nowrap"
+                  >
+                    {broadcastLoading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Send className="w-4 h-4 mr-2" />}
+                    Send to {activeSubscribers.length} subscribers
+                  </Button>
+                </div>
+
+                {/* Test send */}
+                <div className="flex gap-2 items-end">
+                  <div className="flex-1">
+                    <label className="block text-xs text-gray-500 mb-1">Test Email</label>
+                    <Input
+                      type="email"
+                      value={testEmail}
+                      onChange={e => setTestEmail(e.target.value)}
+                      placeholder="your@email.com"
+                      className="h-9"
+                    />
+                  </div>
+                  <Button
+                    variant="outline"
+                    onClick={() => sendBroadcast(null, true)}
+                    disabled={broadcastLoading || !testEmail}
+                    className="border-green-500 text-green-700 whitespace-nowrap"
+                  >
+                    <TestTube className="w-4 h-4 mr-2" />
+                    Send Test
+                  </Button>
+                </div>
+
+                {broadcastStatus && (
+                  <div className={`text-sm p-3 rounded-lg ${broadcastStatus.success ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-700'}`}>
+                    {broadcastStatus.success ? '✅' : '❌'} {broadcastStatus.message}
+                  </div>
+                )}
+              </div>
+
+              {/* Recent subscribers */}
+              {subscribers.length > 0 && (
+                <div>
+                  <p className="font-semibold text-gray-800 text-sm mb-2 flex items-center gap-2">
+                    <Users className="w-4 h-4" /> Recent Subscribers
+                  </p>
+                  <div className="space-y-1 max-h-40 overflow-y-auto">
+                    {subscribers.slice(0, 20).map(s => (
+                      <div key={s.id} className="flex items-center justify-between bg-white rounded px-3 py-1.5 text-sm border border-gray-100">
+                        <span className="text-gray-700">{s.email}</span>
+                        <span className={`text-xs px-2 py-0.5 rounded-full ${s.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                          {s.status}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
 
         {/* AI Generator Modal */}
         {showAIGenerator && (
