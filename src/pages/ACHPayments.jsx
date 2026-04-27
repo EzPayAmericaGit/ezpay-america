@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import SEOHead from "../components/SEOHead";
+import { ServiceSchema } from "../components/seo/SchemaOrg";
 import { Building2, Shield, Clock, DollarSign, CheckCircle2, ArrowRight, TrendingDown, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -72,6 +73,18 @@ export default function ACHPayments() {
         title={content.seo.title}
         description={content.seo.description}
         keywords={content.seo.keywords}
+      />
+      <ServiceSchema
+        name="ACH Payment Processing"
+        description={content.seo.description}
+        url="https://ezpayamerica.com/ACHPayments"
+        serviceType="ACH Payment Processing"
+        offers={[
+          { name: "ACH Debit Processing", description: "Pull payments directly from customer bank accounts" },
+          { name: "ACH Credit Processing", description: "Push funds for payroll, vendor payments, and refunds" },
+          { name: "Recurring ACH Billing", description: "Automated recurring payments for subscriptions and memberships" },
+          { name: "Same-Day ACH", description: "Expedited ACH settlement for time-sensitive payments" },
+        ]}
       />
       {isAdmin && (
         <AIContentGenerator
