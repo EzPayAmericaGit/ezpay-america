@@ -88,6 +88,7 @@ import GiftCardProgram from './pages/GiftCardProgram';
 import LoyaltyProgram from './pages/LoyaltyProgram';
 import PointOfSaleFinancing from './pages/PointOfSaleFinancing';
 import TapToPay from './pages/TapToPay';
+import LeadsView from './pages/LeadsView';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -203,6 +204,7 @@ const AuthenticatedApp = () => {
         <Route path="/LoyaltyProgram" element={<LayoutWrapper currentPageName="LoyaltyProgram"><LoyaltyProgram /></LayoutWrapper>} />
         <Route path="/PointOfSaleFinancing" element={<LayoutWrapper currentPageName="PointOfSaleFinancing"><PointOfSaleFinancing /></LayoutWrapper>} />
         <Route path="/TapToPay" element={<LayoutWrapper currentPageName="TapToPay"><TapToPay /></LayoutWrapper>} />
+        <Route path="/LeadsView" element={<LayoutWrapper currentPageName="LeadsView"><LeadsView /></LayoutWrapper>} />
         <Route path="/news/:slug" element={<LayoutWrapper currentPageName="NewsArticle"><NewsArticle /></LayoutWrapper>} />
 
         {/* Legacy WordPress URL redirects → 301-equivalent client-side */}
