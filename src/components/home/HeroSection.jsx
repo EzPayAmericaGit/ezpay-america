@@ -26,15 +26,15 @@ export default function HeroSection() {
             </div>
 
             <div className="space-y-4">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
                 Zero Fee Credit Card Processing<br className="hidden sm:block" /> for Small Businesses
               </h1>
-              <h2 className="text-lg sm:text-xl md:text-2xl font-semibold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent leading-snug">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent leading-snug">
                 Cash Discount Program — No Contracts, No Hidden Fees, No Monthly Costs
               </h2>
             </div>
 
-            <p className="text-base sm:text-xl text-gray-600 leading-relaxed">
+            <p className="text-xl text-gray-600 leading-relaxed">
               Accept credit cards with transparent pricing, 24-hour approval, and free POS equipment. Trusted by 15,000+ small businesses nationwide — retail, restaurants, and more.
             </p>
 
