@@ -73,6 +73,9 @@ Disallow: /BusinessDashboard
 Disallow: /Helpdesk
 
 Sitemap: https://ezpayamerica.com/sitemap.xml
+Sitemap: https://ezpayamerica.com/sitemap.xml?type=static
+Sitemap: https://ezpayamerica.com/sitemap.xml?type=news
+Sitemap: https://ezpayamerica.com/sitemap.xml?type=locations
 `;
 
   return new Response(robotsTxt, {

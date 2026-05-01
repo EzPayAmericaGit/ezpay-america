@@ -2,7 +2,6 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 const BASE_URL = "https://ezpayamerica.com";
 
-// Top 50 US cities — mirrors lib/locationPages.js (backend can't import frontend files)
 const TOP_CITIES = [
   { stateSlug: "new-york",       citySlug: "new-york" },
   { stateSlug: "california",     citySlug: "los-angeles" },
@@ -57,45 +56,33 @@ const TOP_CITIES = [
 ];
 
 const BUSINESS_SLUGS = [
-  // Retail
   "clothing-boutique","shoe-store","jewelry-store","specialty-food-store",
   "furniture-store","electronics-store","sporting-goods-store","pet-store",
   "florist","thrift-store","pop-up-retail",
-  // Personal Services
   "hair-salon","barber-shop","nail-salon","spa","massage-therapy",
   "tanning-salon","tattoo-shop","beauty-clinic","med-spa","personal-trainer",
   "yoga-studio","fitness-gym","dance-studio","coaching-business",
-  // Healthcare
   "dental-office","chiropractor","physical-therapy","urgent-care",
   "private-medical","mental-health-clinic","veterinary-clinic",
   "home-healthcare","medical-lab",
-  // Home Services
   "hvac-company","plumbing-services","electrical-contractor","roofing-company",
   "landscaping","pest-control","residential-cleaning","commercial-cleaning",
   "restoration-company","handyman-services","pool-maintenance",
   "security-installer","moving-company","appliance-repair","dry-cleaners",
-  // Professional Services
   "law-firm","accounting-firm","bookkeeping-services","marketing-agency",
   "consulting-firm","it-services","web-design-agency","software-developer",
   "architecture-firm","engineering-firm","staffing-agency",
   "translation-services","pr-firm",
 ];
 
-// Static pages — baseline always included.
-// Any NEW pages added to the codebase should also be added to the SitePage
-// entity in the CMS so they are picked up automatically without touching this file.
 const STATIC_PAGES = [
   { path: '/', priority: '1.0', changefreq: 'daily' },
   { path: '/ApplyOnline', priority: '1.0', changefreq: 'weekly' },
-  { path: '/FreeDemo', priority: '0.95', changefreq: 'weekly' },
   { path: '/Services', priority: '0.9', changefreq: 'weekly' },
   { path: '/EzPayPOSHome', priority: '0.9', changefreq: 'weekly' },
-  { path: '/Shop', priority: '0.9', changefreq: 'daily' },
   { path: '/News', priority: '0.85', changefreq: 'daily' },
   { path: '/Contact', priority: '0.9', changefreq: 'monthly' },
   { path: '/Quiz', priority: '0.75', changefreq: 'monthly' },
-  { path: '/Support', priority: '0.8', changefreq: 'weekly' },
-  { path: '/Helpdesk', priority: '0.7', changefreq: 'weekly' },
   { path: '/RetailMerchants', priority: '0.85', changefreq: 'weekly' },
   { path: '/RestaurantMerchants', priority: '0.85', changefreq: 'weekly' },
   { path: '/WebPaymentPages', priority: '0.8', changefreq: 'weekly' },
@@ -211,70 +198,119 @@ function escapeXml(str) {
   return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-function buildUrlEntry(path, priority, changefreq, lastmod) {
-  return `  <url>\n    <loc>${BASE_URL}${escapeXml(path)}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`;
+function urlEntry(loc, priority, changefreq, lastmod) {
+  return `  <url>
+    <loc>${escapeXml(loc)}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>${changefreq}</changefreq>
+    <priority>${priority}</priority>
+  </url>`;
+}
+
+function wrapUrlset(entries, extra = '') {
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"${extra}>
+${entries.join('\n')}
+</urlset>`;
+}
+
+function sitemapIndex(sitemaps) {
+  const entries = sitemaps.map(({ loc, lastmod }) => `  <sitemap>
+    <loc>${escapeXml(loc)}</loc>
+    <lastmod>${lastmod}</lastmod>
+  </sitemap>`).join('\n');
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${entries}
+</sitemapindex>`;
 }
 
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
+    const url = new URL(req.url);
+    const type = url.searchParams.get('type'); // static | news | locations | cms
     const today = new Date().toISOString().split('T')[0];
 
-    // Fetch all dynamic sources in parallel
-    const [articles, cmsPages] = await Promise.all([
-      base44.asServiceRole.entities.NewsArticle.filter({ published: true }, '-updated_date', 500),
-      base44.asServiceRole.entities.SitePage.filter({ isActive: true }, 'path', 1000),
-    ]);
-
-    // Build a set of paths already covered by STATIC_PAGES for deduplication
-    const staticPathSet = new Set(STATIC_PAGES.map(p => p.path));
-
-    // CMS pages: only include paths not already in static list
-    const cmsEntries = cmsPages
-      .filter(p => p.path && !staticPathSet.has(p.path))
-      .map(p => buildUrlEntry(
-        p.path,
-        p.priority || '0.75',
-        p.changefreq || 'weekly',
-        today
-      ));
-
-    // Static entries
-    const staticEntries = STATIC_PAGES.map(p =>
-      buildUrlEntry(p.path, p.priority, p.changefreq, today)
-    );
-
-    // News article entries with Google News namespace
-    const newsEntries = articles.map(a => {
-      const slug = a.slug || a.id;
-      const lastmod = a.updated_date ? a.updated_date.split('T')[0] : today;
-      return `  <url>\n    <loc>${BASE_URL}/news/${escapeXml(slug)}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n    <news:news xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">\n      <news:publication>\n        <news:name>EzPay America</news:name>\n        <news:language>en</news:language>\n      </news:publication>\n      <news:publication_date>${lastmod}</news:publication_date>\n      <news:title>${escapeXml(a.title)}</news:title>\n    </news:news>\n  </url>`;
-    });
-
-    // Location landing pages: /:businessSlug/:stateSlug/:citySlug
-    const locationEntries = [];
-    for (const slug of BUSINESS_SLUGS) {
-      for (const loc of TOP_CITIES) {
-        locationEntries.push(buildUrlEntry(
-          `/${slug}/${loc.stateSlug}/${loc.citySlug}`,
-          '0.7',
-          'monthly',
-          today
-        ));
-      }
+    // --- Sitemap Index (no ?type param) ---
+    if (!type) {
+      const xml = sitemapIndex([
+        { loc: `${BASE_URL}/sitemap.xml?type=static`, lastmod: today },
+        { loc: `${BASE_URL}/sitemap.xml?type=news`, lastmod: today },
+        { loc: `${BASE_URL}/sitemap.xml?type=locations`, lastmod: today },
+        { loc: `${BASE_URL}/sitemap.xml?type=cms`, lastmod: today },
+      ]);
+      return new Response(xml, {
+        status: 200,
+        headers: { 'Content-Type': 'application/xml; charset=utf-8', 'Cache-Control': 'public, max-age=3600' }
+      });
     }
 
-    const allEntries = [...staticEntries, ...cmsEntries, ...locationEntries, ...newsEntries].join('\n');
+    // --- Static pages sitemap ---
+    if (type === 'static') {
+      const entries = STATIC_PAGES.map(p => urlEntry(`${BASE_URL}${p.path}`, p.priority, p.changefreq, today));
+      return new Response(wrapUrlset(entries), {
+        status: 200,
+        headers: { 'Content-Type': 'application/xml; charset=utf-8', 'Cache-Control': 'public, max-age=3600' }
+      });
+    }
 
-    const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">\n${allEntries}\n</urlset>`;
+    // --- News articles sitemap ---
+    if (type === 'news') {
+      const articles = await base44.asServiceRole.entities.NewsArticle.filter({ published: true }, '-updated_date', 1000);
+      const entries = articles.map(a => {
+        const slug = a.slug || a.id;
+        const lastmod = a.updated_date ? a.updated_date.split('T')[0] : today;
+        const pubDate = (a.date_published || a.created_date || today).split('T')[0];
+        return `  <url>
+    <loc>${BASE_URL}/news/${escapeXml(slug)}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <news:news>
+      <news:publication>
+        <news:name>EzPay America</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>${pubDate}</news:publication_date>
+      <news:title>${escapeXml(a.title)}</news:title>
+    </news:news>
+  </url>`;
+      });
+      return new Response(wrapUrlset(entries, '\n        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"'), {
+        status: 200,
+        headers: { 'Content-Type': 'application/xml; charset=utf-8', 'Cache-Control': 'public, max-age=1800' }
+      });
+    }
 
-    return new Response(xml, {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/xml; charset=utf-8',
-        'Cache-Control': 'public, max-age=3600',
+    // --- Location landing pages sitemap ---
+    if (type === 'locations') {
+      const entries = [];
+      for (const slug of BUSINESS_SLUGS) {
+        for (const loc of TOP_CITIES) {
+          entries.push(urlEntry(`${BASE_URL}/${slug}/${loc.stateSlug}/${loc.citySlug}`, '0.7', 'monthly', today));
+        }
       }
-    });
+      return new Response(wrapUrlset(entries), {
+        status: 200,
+        headers: { 'Content-Type': 'application/xml; charset=utf-8', 'Cache-Control': 'public, max-age=86400' }
+      });
+    }
+
+    // --- CMS-managed pages sitemap ---
+    if (type === 'cms') {
+      const staticPathSet = new Set(STATIC_PAGES.map(p => p.path));
+      const cmsPages = await base44.asServiceRole.entities.SitePage.filter({ isActive: true }, 'path', 1000);
+      const entries = cmsPages
+        .filter(p => p.path && !staticPathSet.has(p.path))
+        .map(p => urlEntry(`${BASE_URL}${p.path}`, p.priority || '0.75', p.changefreq || 'weekly', today));
+      return new Response(wrapUrlset(entries), {
+        status: 200,
+        headers: { 'Content-Type': 'application/xml; charset=utf-8', 'Cache-Control': 'public, max-age=3600' }
+      });
+    }
+
+    return new Response('Not found', { status: 404 });
 
   } catch (error) {
     return new Response(`<?xml version="1.0"?><error>${escapeXml(error.message)}</error>`, {
