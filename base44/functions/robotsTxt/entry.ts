@@ -1,19 +1,8 @@
 Deno.serve(async (req) => {
   const robotsTxt = `# EzPay America - Robots.txt
+
 User-agent: *
 Allow: /
-
-User-agent: Googlebot
-Allow: /
-
-User-agent: Googlebot-Image
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-# Block admin-only areas
-User-agent: *
 Disallow: /AdminDashboard
 Disallow: /OrdersAdmin
 Disallow: /ProductAdmin
@@ -24,17 +13,22 @@ Disallow: /Invoicing
 Disallow: /EmailMarketing
 Disallow: /NewsAdmin
 Disallow: /SettingsAdmin
-Disallow: /ApplicationTracker
 Disallow: /CustomerOnboarding
-Disallow: /BusinessDashboard
 Disallow: /ProcessPayment
-Disallow: /TransactionHistory
 Disallow: /BacklinkOutreach
 Disallow: /ContentBot
 Disallow: /NotificationPreferences
 Disallow: /AffiliateAdmin
 Disallow: /EquipmentInventory
 Disallow: /AgentManagement
+Disallow: /ApplicationTracker
+Disallow: /BusinessDashboard
+Disallow: /TransactionHistory
+Disallow: /LeadsView
+Disallow: /SEOMonitor
+Disallow: /AffiliateAdmin
+Disallow: /FraudRules
+Disallow: /WebhookManagement
 
 Sitemap: https://ezpayamerica.com/sitemap.xml
 `;
