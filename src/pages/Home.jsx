@@ -12,6 +12,7 @@ const TestimonialsSection = React.lazy(() => import("../components/home/Testimon
 const RestaurantTypesSection = React.lazy(() => import("../components/home/RestaurantTypesSection"));
 const ContactFormSection = React.lazy(() => import("../components/home/ContactFormSection"));
 const SEOContentSection = React.lazy(() => import("../components/home/SEOContentSection"));
+const InternalLinks = React.lazy(() => import("../components/seo/InternalLinks"));
 
 
 export default function Home() {
@@ -62,6 +63,7 @@ export default function Home() {
         <TestimonialsSection />
         <RestaurantTypesSection />
         <SEOContentSection />
+        <InternalLinks />
         <ContactFormSection />
       </Suspense>
     </div>
