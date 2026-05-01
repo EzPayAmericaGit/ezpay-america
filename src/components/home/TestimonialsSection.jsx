@@ -1,7 +1,6 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Star, Quote } from "lucide-react";
-import { motion } from "framer-motion";
 
 const testimonials = [
   {
@@ -25,28 +24,16 @@ export default function TestimonialsSection() {
   return (
     <section className="py-20 bg-gradient-to-br from-amber-50 to-orange-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
+        <div className="text-center mb-16">
           <p className="text-amber-600 font-semibold mb-2">Testimonials</p>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900">
             What Others are Saying
           </h2>
-        </motion.div>
+        </div>
 
         <div className="grid md:grid-cols-3 gap-8">
           {testimonials.map((testimonial, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-            >
+            <div key={index}>
               <Card className="h-full bg-white shadow-xl hover:shadow-2xl transition-all border-none">
                 <CardContent className="p-8 space-y-4">
                   <Quote className="w-10 h-10 text-amber-500" />
@@ -66,7 +53,7 @@ export default function TestimonialsSection() {
                   </div>
                 </CardContent>
               </Card>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

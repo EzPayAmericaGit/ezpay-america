@@ -3,19 +3,12 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { motion } from "framer-motion";
 
 export default function ContactFormSection() {
   return (
     <section className="py-20 bg-gradient-to-br from-gray-900 to-gray-800">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="space-y-8"
-        >
+        <div className="space-y-8">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white">
             Are You Ready to Get Started Today?
           </h2>
@@ -33,7 +26,7 @@ export default function ContactFormSection() {
           <p className="text-gray-400 text-sm">
             Questions? Call us at <a href="tel:8653169625" className="text-amber-500 hover:text-amber-400 font-semibold">(865) 316-9625</a>
           </p>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

@@ -1,7 +1,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { UtensilsCrossed, Coffee, Zap, Truck, ArrowRight } from "lucide-react";
-import { motion } from "framer-motion";
 
 const restaurantTypes = [
   {
@@ -34,30 +33,20 @@ export default function RestaurantTypesSection() {
   return (
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
+        <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900">
             Specialized Restaurant Solutions
           </h2>
-        </motion.div>
+        </div>
 
         <div className="grid md:grid-cols-2 gap-8">
           {restaurantTypes.map((type, index) => (
-            <motion.div
+            <div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
               className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-3xl p-8 shadow-lg hover:shadow-xl transition-all"
             >
               <div className={`w-16 h-16 bg-gradient-to-br ${type.color} rounded-2xl flex items-center justify-center mb-6`}>
-                <type.icon className="w-8 h-8 text-white" />
+                <type.icon className="w-8 h-8 text-white" aria-hidden="true" />
               </div>
               
               <h3 className="text-2xl font-bold text-gray-900 mb-4">
@@ -75,10 +64,10 @@ export default function RestaurantTypesSection() {
               >
                 <Button variant="outline" className="border-gray-300 hover:bg-gray-900 hover:text-white">
                   Apply Online Today!
-                  <ArrowRight className="w-4 h-4 ml-2" />
+                  <ArrowRight className="w-4 h-4 ml-2" aria-hidden="true" />
                 </Button>
               </a>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

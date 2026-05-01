@@ -86,8 +86,8 @@ export default function HelpWidget() {
                 <p className="text-white/80 text-xs">AI Assistant · Online</p>
               </div>
             </div>
-            <button onClick={() => setIsOpen(false)} className="text-white/80 hover:text-white">
-              <X className="w-5 h-5" />
+            <button onClick={() => setIsOpen(false)} aria-label="Close chat" className="text-white/80 hover:text-white">
+              <X className="w-5 h-5" aria-hidden="true" />
             </button>
           </div>
 
@@ -144,9 +144,10 @@ export default function HelpWidget() {
                   onClick={sendMessage}
                   disabled={loading || !input.trim()}
                   size="icon"
+                  aria-label="Send message"
                   className="bg-amber-500 hover:bg-amber-600 shrink-0"
                 >
-                  <Send className="w-4 h-4" />
+                  <Send className="w-4 h-4" aria-hidden="true" />
                 </Button>
               </div>
             </>
@@ -195,9 +196,10 @@ export default function HelpWidget() {
       {/* Floating Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
+        aria-label={isOpen ? "Close support chat" : "Open support chat"}
         className="w-14 h-14 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 rounded-full shadow-xl flex items-center justify-center transition-all hover:scale-110 active:scale-95"
       >
-        {isOpen ? <X className="w-6 h-6 text-white" /> : <MessageCircle className="w-6 h-6 text-white" />}
+        {isOpen ? <X className="w-6 h-6 text-white" aria-hidden="true" /> : <MessageCircle className="w-6 h-6 text-white" aria-hidden="true" />}
       </button>
     </div>
   );
