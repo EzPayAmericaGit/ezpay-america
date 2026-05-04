@@ -205,7 +205,7 @@ export default function Sitemap() {
             <p className="text-gray-600 mt-2">Complete directory of all pages and services</p>
           </div>
           <a
-            href="https://ezpayamerica.com/sitemap.xml"
+            href="https://ezpayamerica.com/api/sitemapXml"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white font-medium rounded-lg text-sm transition-colors"

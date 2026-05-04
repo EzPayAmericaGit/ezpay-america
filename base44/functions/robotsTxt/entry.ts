@@ -1,6 +1,6 @@
-Deno.serve(async (req) => {
+Deno.serve(async (_req) => {
   const robotsTxt = `# EzPay America - Robots.txt
-# Updated: 2026-05-01
+# Updated: 2026-05-04
 
 User-agent: *
 Allow: /
@@ -56,6 +56,7 @@ Disallow: /InventoryManagement
 Disallow: /TemplateManagement
 Disallow: /CustomerPortal
 Disallow: /AffiliateDashboard
+Disallow: /IndexingStatus
 
 # Crawl-delay for polite crawling
 Crawl-delay: 1
@@ -71,12 +72,9 @@ Disallow: /SEOMonitor
 Disallow: /AffiliateAdmin
 Disallow: /BusinessDashboard
 Disallow: /Helpdesk
+Disallow: /IndexingStatus
 
 Sitemap: https://ezpayamerica.com/api/sitemapXml
-Sitemap: https://ezpayamerica.com/api/sitemapXml?type=static
-Sitemap: https://ezpayamerica.com/api/sitemapXml?type=news
-Sitemap: https://ezpayamerica.com/api/sitemapXml?type=locations
-Sitemap: https://ezpayamerica.com/api/sitemapXml?type=cms
 `;
 
   return new Response(robotsTxt, {
