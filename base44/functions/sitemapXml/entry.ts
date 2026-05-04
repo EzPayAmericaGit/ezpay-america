@@ -1,80 +1,6 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 const BASE_URL = "https://ezpayamerica.com";
-const API_BASE = "https://ezpayamerica.com/api/sitemapXml";
-
-const TOP_CITIES = [
-  { stateSlug: "new-york",       citySlug: "new-york" },
-  { stateSlug: "california",     citySlug: "los-angeles" },
-  { stateSlug: "illinois",       citySlug: "chicago" },
-  { stateSlug: "texas",          citySlug: "houston" },
-  { stateSlug: "arizona",        citySlug: "phoenix" },
-  { stateSlug: "pennsylvania",   citySlug: "philadelphia" },
-  { stateSlug: "texas",          citySlug: "san-antonio" },
-  { stateSlug: "california",     citySlug: "san-diego" },
-  { stateSlug: "texas",          citySlug: "dallas" },
-  { stateSlug: "florida",        citySlug: "jacksonville" },
-  { stateSlug: "texas",          citySlug: "austin" },
-  { stateSlug: "texas",          citySlug: "fort-worth" },
-  { stateSlug: "ohio",           citySlug: "columbus" },
-  { stateSlug: "north-carolina", citySlug: "charlotte" },
-  { stateSlug: "indiana",        citySlug: "indianapolis" },
-  { stateSlug: "california",     citySlug: "san-francisco" },
-  { stateSlug: "washington",     citySlug: "seattle" },
-  { stateSlug: "colorado",       citySlug: "denver" },
-  { stateSlug: "tennessee",      citySlug: "nashville" },
-  { stateSlug: "oklahoma",       citySlug: "oklahoma-city" },
-  { stateSlug: "texas",          citySlug: "el-paso" },
-  { stateSlug: "dc",             citySlug: "washington" },
-  { stateSlug: "nevada",         citySlug: "las-vegas" },
-  { stateSlug: "kentucky",       citySlug: "louisville" },
-  { stateSlug: "tennessee",      citySlug: "memphis" },
-  { stateSlug: "oregon",         citySlug: "portland" },
-  { stateSlug: "maryland",       citySlug: "baltimore" },
-  { stateSlug: "wisconsin",      citySlug: "milwaukee" },
-  { stateSlug: "new-mexico",     citySlug: "albuquerque" },
-  { stateSlug: "arizona",        citySlug: "tucson" },
-  { stateSlug: "california",     citySlug: "fresno" },
-  { stateSlug: "california",     citySlug: "sacramento" },
-  { stateSlug: "georgia",        citySlug: "atlanta" },
-  { stateSlug: "missouri",       citySlug: "kansas-city" },
-  { stateSlug: "arizona",        citySlug: "mesa" },
-  { stateSlug: "nebraska",       citySlug: "omaha" },
-  { stateSlug: "north-carolina", citySlug: "raleigh" },
-  { stateSlug: "ohio",           citySlug: "cleveland" },
-  { stateSlug: "virginia",       citySlug: "virginia-beach" },
-  { stateSlug: "california",     citySlug: "long-beach" },
-  { stateSlug: "colorado",       citySlug: "colorado-springs" },
-  { stateSlug: "florida",        citySlug: "miami" },
-  { stateSlug: "florida",        citySlug: "tampa" },
-  { stateSlug: "florida",        citySlug: "orlando" },
-  { stateSlug: "minnesota",      citySlug: "minneapolis" },
-  { stateSlug: "pennsylvania",   citySlug: "pittsburgh" },
-  { stateSlug: "missouri",       citySlug: "st-louis" },
-  { stateSlug: "tennessee",      citySlug: "knoxville" },
-  { stateSlug: "tennessee",      citySlug: "chattanooga" },
-  { stateSlug: "alabama",        citySlug: "birmingham" },
-];
-
-const BUSINESS_SLUGS = [
-  "clothing-boutique","shoe-store","jewelry-store","specialty-food-store",
-  "furniture-store","electronics-store","sporting-goods-store","pet-store",
-  "florist","thrift-store","pop-up-retail",
-  "hair-salon","barber-shop","nail-salon","spa","massage-therapy",
-  "tanning-salon","tattoo-shop","beauty-clinic","med-spa","personal-trainer",
-  "yoga-studio","fitness-gym","dance-studio","coaching-business",
-  "dental-office","chiropractor","physical-therapy","urgent-care",
-  "private-medical","mental-health-clinic","veterinary-clinic",
-  "home-healthcare","medical-lab",
-  "hvac-company","plumbing-services","electrical-contractor","roofing-company",
-  "landscaping","pest-control","residential-cleaning","commercial-cleaning",
-  "restoration-company","handyman-services","pool-maintenance",
-  "security-installer","moving-company","appliance-repair","dry-cleaners",
-  "law-firm","accounting-firm","bookkeeping-services","marketing-agency",
-  "consulting-firm","it-services","web-design-agency","software-developer",
-  "architecture-firm","engineering-firm","staffing-agency",
-  "translation-services","pr-firm",
-];
 
 const STATIC_PAGES = [
   { path: '/', priority: '1.0', changefreq: 'daily' },
@@ -84,6 +10,9 @@ const STATIC_PAGES = [
   { path: '/News', priority: '0.85', changefreq: 'daily' },
   { path: '/Contact', priority: '0.9', changefreq: 'monthly' },
   { path: '/Quiz', priority: '0.75', changefreq: 'monthly' },
+  { path: '/BookAppointment', priority: '0.9', changefreq: 'weekly' },
+  { path: '/FAQ', priority: '0.85', changefreq: 'monthly' },
+  { path: '/AffiliateSignup', priority: '0.7', changefreq: 'monthly' },
   { path: '/RetailMerchants', priority: '0.85', changefreq: 'weekly' },
   { path: '/RestaurantMerchants', priority: '0.85', changefreq: 'weekly' },
   { path: '/WebPaymentPages', priority: '0.8', changefreq: 'weekly' },
@@ -190,131 +119,64 @@ const STATIC_PAGES = [
   { path: '/StaffingAgencyPOS', priority: '0.75', changefreq: 'weekly' },
   { path: '/TranslationServicesPOS', priority: '0.75', changefreq: 'weekly' },
   { path: '/PRFirmPOS', priority: '0.75', changefreq: 'weekly' },
-  { path: '/AffiliateSignup', priority: '0.7', changefreq: 'monthly' },
-  { path: '/BookAppointment', priority: '0.9', changefreq: 'weekly' },
-  { path: '/FAQ', priority: '0.85', changefreq: 'monthly' },
 ];
 
-function escapeXml(str) {
+function esc(str) {
   return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
-
-function urlEntry(loc, priority, changefreq, lastmod) {
-  return `  <url>
-    <loc>${escapeXml(loc)}</loc>
-    <lastmod>${lastmod}</lastmod>
-    <changefreq>${changefreq}</changefreq>
-    <priority>${priority}</priority>
-  </url>`;
-}
-
-function wrapUrlset(entries, extra = '') {
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"${extra}>
-${entries.join('\n')}
-</urlset>`;
-}
-
-function sitemapIndex(sitemaps) {
-  const entries = sitemaps.map(({ loc, lastmod }) => `  <sitemap>
-    <loc>${escapeXml(loc)}</loc>
-    <lastmod>${lastmod}</lastmod>
-  </sitemap>`).join('\n');
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${entries}
-</sitemapindex>`;
 }
 
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    const url = new URL(req.url);
-    const type = url.searchParams.get('type'); // static | news | locations | cms
     const today = new Date().toISOString().split('T')[0];
 
-    // --- Sitemap Index (no ?type param) ---
-    if (!type) {
-      const xml = sitemapIndex([
-        { loc: `${API_BASE}?type=static`, lastmod: today },
-        { loc: `${API_BASE}?type=news`, lastmod: today },
-        { loc: `${API_BASE}?type=locations`, lastmod: today },
-        { loc: `${API_BASE}?type=cms`, lastmod: today },
-      ]);
-      return new Response(xml, {
-        status: 200,
-        headers: { 'Content-Type': 'application/xml; charset=utf-8', 'Cache-Control': 'public, max-age=3600' }
-      });
+    // Fetch published articles
+    let articles = [];
+    try {
+      articles = await base44.asServiceRole.entities.NewsArticle.filter({ published: true }, '-updated_date', 500);
+    } catch (_e) {
+      // continue without articles if fetch fails
     }
 
-    // --- Static pages sitemap ---
-    if (type === 'static') {
-      const entries = STATIC_PAGES.map(p => urlEntry(`${BASE_URL}${p.path}`, p.priority, p.changefreq, today));
-      return new Response(wrapUrlset(entries), {
-        status: 200,
-        headers: { 'Content-Type': 'application/xml; charset=utf-8', 'Cache-Control': 'public, max-age=3600' }
-      });
+    const entries = [];
+
+    // Static pages
+    for (const p of STATIC_PAGES) {
+      entries.push(`  <url>
+    <loc>${BASE_URL}${p.path}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>${p.changefreq}</changefreq>
+    <priority>${p.priority}</priority>
+  </url>`);
     }
 
-    // --- News articles sitemap ---
-    if (type === 'news') {
-      const articles = await base44.asServiceRole.entities.NewsArticle.filter({ published: true }, '-updated_date', 1000);
-      const entries = articles.map(a => {
-        const slug = a.slug || a.id;
-        const lastmod = a.updated_date ? a.updated_date.split('T')[0] : today;
-        const pubDate = (a.date_published || a.created_date || today).split('T')[0];
-        return `  <url>
-    <loc>${BASE_URL}/news/${escapeXml(slug)}</loc>
+    // News articles
+    for (const a of articles) {
+      const slug = a.slug || a.id;
+      const lastmod = (a.updated_date || today).split('T')[0];
+      entries.push(`  <url>
+    <loc>${BASE_URL}/news/${esc(slug)}</loc>
     <lastmod>${lastmod}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <news:news>
-      <news:publication>
-        <news:name>EzPay America</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>${pubDate}</news:publication_date>
-      <news:title>${escapeXml(a.title)}</news:title>
-    </news:news>
-  </url>`;
-      });
-      return new Response(wrapUrlset(entries, '\n        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"'), {
-        status: 200,
-        headers: { 'Content-Type': 'application/xml; charset=utf-8', 'Cache-Control': 'public, max-age=1800' }
-      });
+  </url>`);
     }
 
-    // --- Location landing pages sitemap ---
-    if (type === 'locations') {
-      const entries = [];
-      for (const slug of BUSINESS_SLUGS) {
-        for (const loc of TOP_CITIES) {
-          entries.push(urlEntry(`${BASE_URL}/${slug}/${loc.stateSlug}/${loc.citySlug}`, '0.7', 'monthly', today));
-        }
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${entries.join('\n')}
+</urlset>`;
+
+    return new Response(xml, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/xml; charset=utf-8',
+        'Cache-Control': 'public, max-age=3600',
       }
-      return new Response(wrapUrlset(entries), {
-        status: 200,
-        headers: { 'Content-Type': 'application/xml; charset=utf-8', 'Cache-Control': 'public, max-age=86400' }
-      });
-    }
-
-    // --- CMS-managed pages sitemap ---
-    if (type === 'cms') {
-      const staticPathSet = new Set(STATIC_PAGES.map(p => p.path));
-      const cmsPages = await base44.asServiceRole.entities.SitePage.filter({ isActive: true }, 'path', 1000);
-      const entries = cmsPages
-        .filter(p => p.path && !staticPathSet.has(p.path))
-        .map(p => urlEntry(`${BASE_URL}${p.path}`, p.priority || '0.75', p.changefreq || 'weekly', today));
-      return new Response(wrapUrlset(entries), {
-        status: 200,
-        headers: { 'Content-Type': 'application/xml; charset=utf-8', 'Cache-Control': 'public, max-age=3600' }
-      });
-    }
-
-    return new Response('Not found', { status: 404 });
+    });
 
   } catch (error) {
-    return new Response(`<?xml version="1.0"?><error>${escapeXml(error.message)}</error>`, {
+    return new Response(`<?xml version="1.0"?><error>${(error.message || '').replace(/&/g,'&amp;')}</error>`, {
       status: 500,
       headers: { 'Content-Type': 'application/xml' }
     });
