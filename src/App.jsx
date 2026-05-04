@@ -89,6 +89,7 @@ import LoyaltyProgram from './pages/LoyaltyProgram';
 import PointOfSaleFinancing from './pages/PointOfSaleFinancing';
 import TapToPay from './pages/TapToPay';
 import LeadsView from './pages/LeadsView';
+import IndexingStatus from './pages/IndexingStatus';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -205,6 +206,7 @@ const AuthenticatedApp = () => {
         <Route path="/PointOfSaleFinancing" element={<LayoutWrapper currentPageName="PointOfSaleFinancing"><PointOfSaleFinancing /></LayoutWrapper>} />
         <Route path="/TapToPay" element={<LayoutWrapper currentPageName="TapToPay"><TapToPay /></LayoutWrapper>} />
         <Route path="/LeadsView" element={<LayoutWrapper currentPageName="LeadsView"><LeadsView /></LayoutWrapper>} />
+        <Route path="/IndexingStatus" element={<LayoutWrapper currentPageName="IndexingStatus"><IndexingStatus /></LayoutWrapper>} />
         <Route path="/news/:slug" element={<LayoutWrapper currentPageName="NewsArticle"><NewsArticle /></LayoutWrapper>} />
 
         {/* Legacy WordPress URL redirects → 301-equivalent client-side */}
