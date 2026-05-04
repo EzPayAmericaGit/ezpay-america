@@ -21,7 +21,7 @@ export default function DocumentUploader({
     if (!file) return;
 
     // Validate file type
-    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
+    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf', 'image/webp'];
     if (!validTypes.includes(file.type)) {
       alert("Please upload an image (JPG, PNG) or PDF file.");
       return;

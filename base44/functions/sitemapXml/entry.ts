@@ -1,6 +1,7 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 const BASE_URL = "https://ezpayamerica.com";
+const API_BASE = "https://ezpayamerica.com/api/sitemapXml";
 
 const TOP_CITIES = [
   { stateSlug: "new-york",       citySlug: "new-york" },
@@ -235,10 +236,10 @@ Deno.serve(async (req) => {
     // --- Sitemap Index (no ?type param) ---
     if (!type) {
       const xml = sitemapIndex([
-        { loc: `${BASE_URL}/sitemap.xml?type=static`, lastmod: today },
-        { loc: `${BASE_URL}/sitemap.xml?type=news`, lastmod: today },
-        { loc: `${BASE_URL}/sitemap.xml?type=locations`, lastmod: today },
-        { loc: `${BASE_URL}/sitemap.xml?type=cms`, lastmod: today },
+        { loc: `${API_BASE}?type=static`, lastmod: today },
+        { loc: `${API_BASE}?type=news`, lastmod: today },
+        { loc: `${API_BASE}?type=locations`, lastmod: today },
+        { loc: `${API_BASE}?type=cms`, lastmod: today },
       ]);
       return new Response(xml, {
         status: 200,

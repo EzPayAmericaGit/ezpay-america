@@ -72,10 +72,11 @@ Disallow: /AffiliateAdmin
 Disallow: /BusinessDashboard
 Disallow: /Helpdesk
 
-Sitemap: https://ezpayamerica.com/sitemap.xml
-Sitemap: https://ezpayamerica.com/sitemap.xml?type=static
-Sitemap: https://ezpayamerica.com/sitemap.xml?type=news
-Sitemap: https://ezpayamerica.com/sitemap.xml?type=locations
+Sitemap: https://ezpayamerica.com/api/sitemapXml
+Sitemap: https://ezpayamerica.com/api/sitemapXml?type=static
+Sitemap: https://ezpayamerica.com/api/sitemapXml?type=news
+Sitemap: https://ezpayamerica.com/api/sitemapXml?type=locations
+Sitemap: https://ezpayamerica.com/api/sitemapXml?type=cms
 `;
 
   return new Response(robotsTxt, {
