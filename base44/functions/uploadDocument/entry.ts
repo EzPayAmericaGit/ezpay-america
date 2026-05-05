@@ -45,16 +45,11 @@ Deno.serve(async (req) => {
 
     const base44 = createClientFromRequest(req);
 
-    // Require authentication for all uploads
-    let user;
+    // Try to get user for logging (non-blocking — public applicants are not logged in)
     try {
-      user = await base44.auth.me();
-    } catch (_) { /* not authenticated */ }
-
-    if (!user) {
-      return Response.json({ error: 'Authentication required to upload documents.' }, { status: 401 });
-    }
-    userEmail = user.email;
+      const user = await base44.auth.me();
+      if (user?.email) userEmail = user.email;
+    } catch (_) { /* unauthenticated upload — allowed for public applicants */ }
 
     console.info(`[uploadDocument] Uploading "${filename}" (${resolvedMime}, ${(bytes.length / 1024).toFixed(1)}KB) for user: ${userEmail}`);
 
