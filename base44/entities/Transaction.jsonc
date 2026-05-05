@@ -1,0 +1,125 @@
+{
+  "name": "Transaction",
+  "type": "object",
+  "properties": {
+    "transactionId": {
+      "type": "string",
+      "description": "NMI transaction ID"
+    },
+    "merchantId": {
+      "type": "string",
+      "description": "Merchant user ID"
+    },
+    "merchantName": {
+      "type": "string",
+      "description": "Merchant business name"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Transaction amount"
+    },
+    "currency": {
+      "type": "string",
+      "default": "USD",
+      "description": "Currency code"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "declined",
+        "error",
+        "refunded"
+      ],
+      "default": "pending",
+      "description": "Transaction status"
+    },
+    "paymentMethod": {
+      "type": "string",
+      "enum": [
+        "credit_card",
+        "debit_card",
+        "ach"
+      ],
+      "description": "Payment method type"
+    },
+    "cardType": {
+      "type": "string",
+      "description": "Card type (Visa, Mastercard, etc.)"
+    },
+    "last4": {
+      "type": "string",
+      "description": "Last 4 digits of card"
+    },
+    "customerName": {
+      "type": "string",
+      "description": "Customer name"
+    },
+    "customerEmail": {
+      "type": "string",
+      "description": "Customer email"
+    },
+    "description": {
+      "type": "string",
+      "description": "Transaction description"
+    },
+    "responseCode": {
+      "type": "string",
+      "description": "Gateway response code"
+    },
+    "responseText": {
+      "type": "string",
+      "description": "Gateway response message"
+    },
+    "authCode": {
+      "type": "string",
+      "description": "Authorization code"
+    },
+    "avsResponse": {
+      "type": "string",
+      "description": "AVS response"
+    },
+    "cvvResponse": {
+      "type": "string",
+      "description": "CVV response"
+    },
+    "orderId": {
+      "type": "string",
+      "description": "Related order ID"
+    },
+    "nmiResponse": {
+      "type": "object",
+      "description": "Full NMI response data"
+    }
+  },
+  "required": [
+    "amount",
+    "status"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "data.customerEmail": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
