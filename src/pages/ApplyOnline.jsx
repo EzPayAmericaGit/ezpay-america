@@ -10,6 +10,7 @@ import { base44 } from "@/api/base44Client";
 import { CheckCircle2, ArrowRight, ArrowLeft, Building2, User, DollarSign, FileCheck, Loader2, CreditCard, Landmark } from "lucide-react";
 import DocumentUploader from "../components/application/DocumentUploader";
 import AdditionalDocumentUploader from "../components/application/AdditionalDocumentUploader";
+import FormField from "../components/application/FormField";
 import { motion, AnimatePresence } from "framer-motion";
 
 const steps = [
@@ -47,6 +48,10 @@ export default function ApplyOnline() {
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
+
+  const touch = (field) => setTouched(prev => ({ ...prev, [field]: true }));
+  const fieldError = (field) => touched[field] ? errors[field] : undefined;
 
   const [formData, setFormData] = useState({
     // Business Information
@@ -182,8 +187,19 @@ export default function ApplyOnline() {
   };
 
   const handleNext = () => {
+    // Mark all fields as touched so errors become visible
+    setTouched(prev => {
+      const allTouched = { ...prev };
+      Object.keys(formData).forEach(k => { allTouched[k] = true; });
+      // Also mark document fields
+      allTouched.driversLicenseUrl = true;
+      allTouched.voidedCheckUrl = true;
+      return allTouched;
+    });
     if (validateStep(currentStep)) {
       setCurrentStep(currentStep + 1);
+      setTouched({});
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -1199,14 +1215,14 @@ export default function ApplyOnline() {
                               Upload Driver's License *
                             </label>
                             <DocumentUploader
-                             label="Driver's License"
-                             description="A valid, non-expired driver's license for the business owner"
-                             currentUrl={formData.driversLicenseUrl}
-                             onUpload={(url) => setFormData({...formData, driversLicenseUrl: url})}
-                             documentType="drivers_license"
-                             required
-                            />
-                            {errors.driversLicenseUrl && <p className="text-red-500 text-sm mt-1">Driver's license is required</p>}
+                               label="Driver's License"
+                               description="A valid, non-expired driver's license for the business owner"
+                               currentUrl={formData.driversLicenseUrl}
+                               onUpload={(url) => { setFormData({...formData, driversLicenseUrl: url}); touch('driversLicenseUrl'); }}
+                               documentType="drivers_license"
+                               required
+                             />
+                              {fieldError('driversLicenseUrl') && <p className="text-xs text-red-500 mt-1 flex items-center gap-1"><span>⚠</span> Driver's license photo is required</p>}
                           </div>
 
                           <div>
@@ -1214,14 +1230,14 @@ export default function ApplyOnline() {
                               Upload Voided Business Check *
                             </label>
                             <DocumentUploader
-                             label="Voided Check"
-                             description="A voided check from your business bank account"
-                             currentUrl={formData.voidedCheckUrl}
-                             onUpload={(url) => setFormData({...formData, voidedCheckUrl: url})}
-                             documentType="voided_check"
-                             required
-                            />
-                            {errors.voidedCheckUrl && <p className="text-red-500 text-sm mt-1">Voided check is required</p>}
+                               label="Voided Check"
+                               description="A voided check from your business bank account"
+                               currentUrl={formData.voidedCheckUrl}
+                               onUpload={(url) => { setFormData({...formData, voidedCheckUrl: url}); touch('voidedCheckUrl'); }}
+                               documentType="voided_check"
+                               required
+                             />
+                              {fieldError('voidedCheckUrl') && <p className="text-xs text-red-500 mt-1 flex items-center gap-1"><span>⚠</span> Voided check photo is required</p>}
                           </div>
                         </div>
                       </div>

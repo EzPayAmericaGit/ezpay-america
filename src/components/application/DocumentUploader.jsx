@@ -82,9 +82,10 @@ export default function DocumentUploader({
       const file_url = await uploadFileViaBackend(file, mimeType, documentType);
       setUploadedUrl(file_url);
       onUpload(file_url);
+      console.info(`[DocumentUploader] ✓ ${label} uploaded successfully`);
     } catch (err) {
-      console.error("Upload error:", err);
-      setError(`Upload failed: ${err.message}`);
+      console.error(`[DocumentUploader] ✗ ${label} upload failed:`, err.message);
+      setError(`Upload failed: ${err.message}. Please try again or use a different file.`);
       setPreview(null);
     } finally {
       setIsUploading(false);
@@ -153,7 +154,10 @@ export default function DocumentUploader({
             <p className="text-sm text-gray-500 mb-4">{description}</p>
             
             {error && (
-              <p className="text-sm text-red-600 mb-3 font-medium">{error}</p>
+              <div className="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-sm text-red-700 font-medium">⚠ {error}</p>
+                <p className="text-xs text-red-500 mt-1">Tip: Try a JPG or PNG under 25MB. HEIC photos from iPhone are also supported.</p>
+              </div>
             )}
             
             {uploadedUrl ? (
