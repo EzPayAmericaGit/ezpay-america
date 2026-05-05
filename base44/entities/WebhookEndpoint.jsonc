@@ -1,0 +1,95 @@
+{
+  "name": "WebhookEndpoint",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Friendly name for this webhook"
+    },
+    "url": {
+      "type": "string",
+      "description": "Target URL to POST events to"
+    },
+    "secret": {
+      "type": "string",
+      "description": "Signing secret for HMAC verification"
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Subscribed event types"
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true,
+      "description": "Is this webhook active"
+    },
+    "lastTriggered": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last successful trigger time"
+    },
+    "failureCount": {
+      "type": "number",
+      "default": 0,
+      "description": "Consecutive failure count"
+    },
+    "totalDeliveries": {
+      "type": "number",
+      "default": 0,
+      "description": "Total delivery attempts"
+    },
+    "successDeliveries": {
+      "type": "number",
+      "default": 0,
+      "description": "Successful deliveries"
+    },
+    "lastStatusCode": {
+      "type": "number",
+      "description": "Last HTTP response code received"
+    },
+    "lastError": {
+      "type": "string",
+      "description": "Last error message"
+    },
+    "retryEnabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Auto-retry on failure"
+    },
+    "maxRetries": {
+      "type": "number",
+      "default": 3,
+      "description": "Max retry attempts"
+    }
+  },
+  "required": [
+    "name",
+    "url"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
