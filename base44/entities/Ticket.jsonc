@@ -1,0 +1,146 @@
+{
+  "name": "Ticket",
+  "type": "object",
+  "properties": {
+    "ticketNumber": {
+      "type": "string",
+      "description": "Unique ticket number"
+    },
+    "title": {
+      "type": "string",
+      "description": "Ticket title/subject"
+    },
+    "description": {
+      "type": "string",
+      "description": "Detailed description of the issue"
+    },
+    "businessName": {
+      "type": "string",
+      "description": "Business name"
+    },
+    "businessPhone": {
+      "type": "string",
+      "description": "Business phone number"
+    },
+    "businessAddress": {
+      "type": "string",
+      "description": "Business address"
+    },
+    "contactPerson": {
+      "type": "string",
+      "description": "Contact person name"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "new",
+        "open",
+        "pending",
+        "solved",
+        "closed"
+      ],
+      "default": "new",
+      "description": "Ticket status"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "normal",
+        "high",
+        "urgent"
+      ],
+      "default": "normal",
+      "description": "Ticket priority"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "technical",
+        "billing",
+        "general",
+        "feature_request",
+        "bug_report"
+      ],
+      "default": "general",
+      "description": "Ticket category"
+    },
+    "customerEmail": {
+      "type": "string",
+      "description": "Customer email address"
+    },
+    "customerName": {
+      "type": "string",
+      "description": "Customer name"
+    },
+    "assignedTo": {
+      "type": "string",
+      "description": "Agent email assigned to ticket"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Ticket tags"
+    },
+    "resolvedDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date ticket was resolved"
+    },
+    "attachments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      },
+      "default": [],
+      "description": "Attached files"
+    }
+  },
+  "required": [
+    "title",
+    "customerEmail"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "data.customerEmail": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.customerEmail": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
