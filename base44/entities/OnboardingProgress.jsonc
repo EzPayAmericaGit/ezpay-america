@@ -1,0 +1,124 @@
+{
+  "name": "OnboardingProgress",
+  "type": "object",
+  "properties": {
+    "merchantId": {
+      "type": "string",
+      "description": "Merchant user ID"
+    },
+    "applicationId": {
+      "type": "string",
+      "description": "Associated merchant application ID"
+    },
+    "currentStep": {
+      "type": "number",
+      "default": 1,
+      "description": "Current onboarding step (1-6)"
+    },
+    "completedSteps": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "default": [],
+      "description": "List of completed step numbers"
+    },
+    "accountSetup": {
+      "type": "boolean",
+      "default": false,
+      "description": "Account setup completed"
+    },
+    "equipmentOrdered": {
+      "type": "boolean",
+      "default": false,
+      "description": "Equipment has been ordered"
+    },
+    "equipmentDetails": {
+      "type": "object",
+      "description": "Equipment order details"
+    },
+    "trainingScheduled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Training session scheduled"
+    },
+    "trainingDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Scheduled training date"
+    },
+    "trainingCompleted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Training completed"
+    },
+    "integrationCompleted": {
+      "type": "boolean",
+      "default": false,
+      "description": "System integration completed"
+    },
+    "firstTransactionProcessed": {
+      "type": "boolean",
+      "default": false,
+      "description": "First transaction processed"
+    },
+    "onboardingCompleted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Full onboarding completed"
+    },
+    "completedDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date onboarding was completed"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Onboarding notes"
+    }
+  },
+  "required": [
+    "merchantId"
+  ],
+  "rls": {
+    "create": {
+      "data.merchantId": "{{user.id}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "data.merchantId": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.merchantId": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.merchantId": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}
