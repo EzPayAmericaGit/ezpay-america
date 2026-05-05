@@ -116,7 +116,7 @@ export default function DocumentUploader({
     onUpload(null);
   };
 
-  const isImage = uploadedUrl?.match(/\.(jpg|jpeg|png|gif|webp|heic)$/i) || preview;
+  const isImage = preview || (uploadedUrl && !uploadedUrl.endsWith('.pdf'));
 
   return (
     <Card className={`border-2 border-dashed transition-all ${
