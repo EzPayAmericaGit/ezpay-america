@@ -5,6 +5,14 @@ import { Loader2, Plus } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 async function uploadFileViaBackend(file) {
+  // Detect MIME type from extension if browser returns empty string (common on iOS/HEIC)
+  let mimeType = file.type;
+  if (!mimeType) {
+    const ext = file.name.split('.').pop().toLowerCase();
+    const extMap = { jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', gif: 'image/gif', webp: 'image/webp', heic: 'image/heic', heif: 'image/heif', pdf: 'application/pdf' };
+    mimeType = extMap[ext] || 'application/octet-stream';
+  }
+
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = async (e) => {
@@ -12,7 +20,7 @@ async function uploadFileViaBackend(file) {
         const base64Data = e.target.result.split(',')[1];
         const response = await base44.functions.invoke('uploadDocument', {
           filename: file.name,
-          mimeType: file.type,
+          mimeType,
           base64Data
         });
         const data = response?.data;
@@ -40,7 +48,6 @@ export default function AdditionalDocumentUploader({ onUpload }) {
     if (!file) return;
     setError(null);
 
-    // Allow up to 25MB
     if (file.size > 25 * 1024 * 1024) {
       setError("File size must be less than 25MB.");
       return;
@@ -55,7 +62,7 @@ export default function AdditionalDocumentUploader({ onUpload }) {
       setDocumentName("");
     } catch (err) {
       console.error("Upload error:", err);
-      setError("Upload failed. Please try again.");
+      setError(`Upload failed: ${err.message}`);
     } finally {
       setIsUploading(false);
       e.target.value = '';

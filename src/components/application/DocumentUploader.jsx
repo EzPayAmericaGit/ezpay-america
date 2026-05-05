@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Upload, CheckCircle2, Loader2, FileText, X, Camera } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
-async function uploadFileViaBackend(file) {
+async function uploadFileViaBackend(file, mimeType) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = async (e) => {
@@ -12,7 +12,7 @@ async function uploadFileViaBackend(file) {
         const base64Data = e.target.result.split(',')[1];
         const response = await base44.functions.invoke('uploadDocument', {
           filename: file.name,
-          mimeType: file.type,
+          mimeType: mimeType || file.type || 'application/octet-stream',
           base64Data
         });
         const data = response?.data;
@@ -48,19 +48,28 @@ export default function DocumentUploader({
     if (!file) return;
     setError(null);
 
-    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf', 'image/webp', 'image/heic', 'image/heif'];
-    if (!validTypes.includes(file.type) && !file.type.startsWith('image/')) {
-      setError("Please upload an image (JPG, PNG, HEIC) or PDF file.");
-      return;
-    }
-
     // Allow up to 25MB
     if (file.size > 25 * 1024 * 1024) {
       setError("File size must be less than 25MB.");
       return;
     }
 
-    if (file.type.startsWith('image/')) {
+    // Detect MIME type from extension if browser returns empty string
+    let mimeType = file.type;
+    if (!mimeType) {
+      const ext = file.name.split('.').pop().toLowerCase();
+      const extMap = { jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', gif: 'image/gif', webp: 'image/webp', heic: 'image/heic', heif: 'image/heif', pdf: 'application/pdf' };
+      mimeType = extMap[ext] || 'application/octet-stream';
+    }
+
+    const allowedExts = ['jpg','jpeg','png','gif','webp','heic','heif','pdf'];
+    const ext = file.name.split('.').pop().toLowerCase();
+    if (!mimeType.startsWith('image/') && mimeType !== 'application/pdf' && !allowedExts.includes(ext)) {
+      setError("Please upload an image (JPG, PNG, HEIC) or PDF file.");
+      return;
+    }
+
+    if (mimeType.startsWith('image/')) {
       const reader = new FileReader();
       reader.onload = (e) => setPreview(e.target.result);
       reader.readAsDataURL(file);
@@ -68,12 +77,12 @@ export default function DocumentUploader({
 
     setIsUploading(true);
     try {
-      const file_url = await uploadFileViaBackend(file);
+      const file_url = await uploadFileViaBackend(file, mimeType);
       setUploadedUrl(file_url);
       onUpload(file_url);
     } catch (err) {
       console.error("Upload error:", err);
-      setError("Upload failed. Please try again or use a smaller file.");
+      setError(`Upload failed: ${err.message}`);
       setPreview(null);
     } finally {
       setIsUploading(false);

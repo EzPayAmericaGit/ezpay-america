@@ -8,9 +8,9 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Missing file data' }, { status: 400 });
     }
 
-    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf', 'image/webp', 'image/heic', 'image/heif'];
-    if (!validTypes.includes(mimeType) && !mimeType.startsWith('image/')) {
-      return Response.json({ error: 'Invalid file type.' }, { status: 400 });
+    // Accept any image or PDF; reject truly unknown types
+    if (mimeType && !mimeType.startsWith('image/') && mimeType !== 'application/pdf' && mimeType !== 'application/octet-stream') {
+      return Response.json({ error: 'Invalid file type. Please upload an image or PDF.' }, { status: 400 });
     }
 
     // Decode base64 to binary
