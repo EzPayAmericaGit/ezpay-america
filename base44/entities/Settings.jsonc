@@ -1,0 +1,44 @@
+{
+  "name": "Settings",
+  "type": "object",
+  "properties": {
+    "settingKey": {
+      "type": "string",
+      "description": "Unique setting key"
+    },
+    "settingValue": {
+      "type": "string",
+      "description": "Setting value"
+    },
+    "description": {
+      "type": "string",
+      "description": "Setting description"
+    }
+  },
+  "required": [
+    "settingKey",
+    "settingValue"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
