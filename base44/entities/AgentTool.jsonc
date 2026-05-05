@@ -1,0 +1,84 @@
+{
+  "name": "AgentTool",
+  "type": "object",
+  "properties": {
+    "agentEmail": {
+      "type": "string",
+      "description": "Agent email"
+    },
+    "toolName": {
+      "type": "string",
+      "description": "Tool identifier"
+    },
+    "toolType": {
+      "type": "string",
+      "enum": [
+        "knowledge_base",
+        "faq_lookup",
+        "policy_search",
+        "customer_history",
+        "order_lookup",
+        "refund_calculator",
+        "escalation_guide"
+      ],
+      "description": "Type of tool"
+    },
+    "description": {
+      "type": "string",
+      "description": "Tool description"
+    },
+    "configuration": {
+      "type": "object",
+      "description": "Tool-specific configuration"
+    },
+    "usageCount": {
+      "type": "number",
+      "default": 0,
+      "description": "Times tool was used"
+    },
+    "lastUsedDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last usage timestamp"
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true,
+      "description": "Is tool active"
+    }
+  },
+  "required": [
+    "agentEmail",
+    "toolName",
+    "toolType"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "data.agentEmail": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
