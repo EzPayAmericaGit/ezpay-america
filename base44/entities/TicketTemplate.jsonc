@@ -1,0 +1,66 @@
+{
+  "name": "TicketTemplate",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Template name"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "technical",
+        "billing",
+        "general",
+        "feature_request",
+        "bug_report"
+      ],
+      "description": "Template category"
+    },
+    "subject": {
+      "type": "string",
+      "description": "Response subject/title"
+    },
+    "message": {
+      "type": "string",
+      "description": "Template message content"
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true,
+      "description": "Is template active"
+    },
+    "usageCount": {
+      "type": "number",
+      "default": 0,
+      "description": "How many times used"
+    }
+  },
+  "required": [
+    "name",
+    "category",
+    "message"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
