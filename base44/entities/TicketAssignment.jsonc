@@ -1,0 +1,98 @@
+{
+  "name": "TicketAssignment",
+  "type": "object",
+  "properties": {
+    "agentEmail": {
+      "type": "string",
+      "description": "Agent email address"
+    },
+    "agentName": {
+      "type": "string",
+      "description": "Agent full name"
+    },
+    "specialization": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "technical",
+          "billing",
+          "general",
+          "feature_request",
+          "bug_report"
+        ]
+      },
+      "default": [],
+      "description": "Agent specialization categories"
+    },
+    "maxActiveTickets": {
+      "type": "number",
+      "default": 10,
+      "description": "Maximum active tickets for this agent"
+    },
+    "currentActiveTickets": {
+      "type": "number",
+      "default": 0,
+      "description": "Current number of active tickets"
+    },
+    "isAvailable": {
+      "type": "boolean",
+      "default": true,
+      "description": "Agent availability status"
+    },
+    "priority": {
+      "type": "number",
+      "default": 5,
+      "description": "Assignment priority (1-10, higher = more priority)"
+    },
+    "totalTicketsResolved": {
+      "type": "number",
+      "default": 0,
+      "description": "Total tickets resolved by agent"
+    },
+    "avgResolutionTime": {
+      "type": "number",
+      "description": "Average resolution time in hours"
+    }
+  },
+  "required": [
+    "agentEmail",
+    "agentName"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "data.agentEmail": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.agentEmail": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
