@@ -99,21 +99,14 @@
   ],
   "rls": {
     "create": {
-      "$or": [
-        {
-          "created_by": "{{user.email}}"
-        },
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        }
-      ]
+      "user_condition": {
+        "role": "admin"
+      }
     },
     "read": {
       "$or": [
         {
-          "data.customerEmail": "{{user.email}}"
+          "data.merchantId": "{{user.id}}"
         },
         {
           "user_condition": {
