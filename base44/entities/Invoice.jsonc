@@ -1,0 +1,130 @@
+{
+  "name": "Invoice",
+  "type": "object",
+  "properties": {
+    "invoiceNumber": {
+      "type": "string",
+      "description": "Unique invoice number"
+    },
+    "customerId": {
+      "type": "string",
+      "description": "Customer ID"
+    },
+    "customerName": {
+      "type": "string",
+      "description": "Customer name"
+    },
+    "customerEmail": {
+      "type": "string",
+      "description": "Customer email"
+    },
+    "customerAddress": {
+      "type": "string",
+      "description": "Customer billing address"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "rate": {
+            "type": "number"
+          },
+          "amount": {
+            "type": "number"
+          }
+        }
+      },
+      "description": "Invoice line items"
+    },
+    "subtotal": {
+      "type": "number",
+      "description": "Subtotal amount"
+    },
+    "tax": {
+      "type": "number",
+      "default": 0,
+      "description": "Tax amount"
+    },
+    "total": {
+      "type": "number",
+      "description": "Total amount"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "sent",
+        "paid",
+        "overdue",
+        "cancelled"
+      ],
+      "default": "draft",
+      "description": "Invoice status"
+    },
+    "issueDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Invoice issue date"
+    },
+    "dueDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Payment due date"
+    },
+    "paidDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date invoice was paid"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Invoice notes"
+    },
+    "terms": {
+      "type": "string",
+      "description": "Payment terms"
+    }
+  },
+  "required": [
+    "customerName",
+    "customerEmail",
+    "items",
+    "total"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "data.customerEmail": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
