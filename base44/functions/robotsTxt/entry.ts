@@ -74,7 +74,7 @@ Disallow: /BusinessDashboard
 Disallow: /Helpdesk
 Disallow: /IndexingStatus
 
-Sitemap: https://ezpayamerica.com/api/sitemapXml
+Sitemap: https://ezpayamerica.com/api/generateSitemap
 `;
 
   return new Response(robotsTxt, {
