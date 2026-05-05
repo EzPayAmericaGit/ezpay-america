@@ -73,16 +73,9 @@
   "rls": {
     "create": {},
     "read": {
-      "$or": [
-        {
-          "data.businessEmail": "{{user.email}}"
-        },
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        }
-      ]
+      "user_condition": {
+        "role": "admin"
+      }
     },
     "update": {
       "user_condition": {
