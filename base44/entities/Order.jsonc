@@ -1,0 +1,132 @@
+{
+  "name": "Order",
+  "type": "object",
+  "properties": {
+    "orderNumber": {
+      "type": "string",
+      "description": "Unique order number"
+    },
+    "customerEmail": {
+      "type": "string",
+      "description": "Customer email"
+    },
+    "customerName": {
+      "type": "string",
+      "description": "Customer name"
+    },
+    "customerPhone": {
+      "type": "string",
+      "description": "Customer phone"
+    },
+    "shippingAddress": {
+      "type": "object",
+      "description": "Shipping address"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "quantity": {
+            "type": "number"
+          }
+        }
+      },
+      "description": "Order items"
+    },
+    "subtotal": {
+      "type": "number",
+      "description": "Subtotal amount"
+    },
+    "tax": {
+      "type": "number",
+      "description": "Tax amount"
+    },
+    "shipping": {
+      "type": "number",
+      "description": "Shipping cost"
+    },
+    "total": {
+      "type": "number",
+      "description": "Total amount"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "processing",
+        "shipped",
+        "delivered",
+        "cancelled"
+      ],
+      "default": "pending",
+      "description": "Order status"
+    },
+    "paymentStatus": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "paid",
+        "failed",
+        "refunded"
+      ],
+      "default": "pending",
+      "description": "Payment status"
+    },
+    "transactionId": {
+      "type": "string",
+      "description": "NMI transaction ID"
+    },
+    "trackingNumber": {
+      "type": "string",
+      "description": "Shipping tracking number"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal order notes"
+    },
+    "nmiResponse": {
+      "type": "object",
+      "description": "Full NMI response data"
+    }
+  },
+  "required": [
+    "customerEmail",
+    "items",
+    "total"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "data.customerEmail": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
