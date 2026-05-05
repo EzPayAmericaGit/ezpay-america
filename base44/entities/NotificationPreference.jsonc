@@ -1,0 +1,84 @@
+{
+  "name": "NotificationPreference",
+  "type": "object",
+  "properties": {
+    "userEmail": {
+      "type": "string",
+      "description": "User email address"
+    },
+    "applicationSubmitted": {
+      "type": "boolean",
+      "default": true,
+      "description": "Notify on application submission"
+    },
+    "applicationStatusChange": {
+      "type": "boolean",
+      "default": true,
+      "description": "Notify on application status updates"
+    },
+    "orderConfirmation": {
+      "type": "boolean",
+      "default": true,
+      "description": "Notify on successful orders"
+    },
+    "orderStatusChange": {
+      "type": "boolean",
+      "default": true,
+      "description": "Notify on order status updates"
+    },
+    "promotionalEmails": {
+      "type": "boolean",
+      "default": false,
+      "description": "Receive promotional emails"
+    },
+    "newsletterEmails": {
+      "type": "boolean",
+      "default": false,
+      "description": "Receive newsletter emails"
+    }
+  },
+  "required": [
+    "userEmail"
+  ],
+  "rls": {
+    "create": {
+      "data.userEmail": "{{user.email}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "data.userEmail": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.userEmail": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.userEmail": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}
