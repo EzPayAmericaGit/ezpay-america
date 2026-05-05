@@ -1,0 +1,95 @@
+{
+  "name": "FraudRule",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Rule name"
+    },
+    "description": {
+      "type": "string",
+      "description": "What this rule does"
+    },
+    "ruleType": {
+      "type": "string",
+      "enum": [
+        "velocity",
+        "amount",
+        "country",
+        "card_type",
+        "email_domain",
+        "ip_range",
+        "bin_block",
+        "custom"
+      ],
+      "description": "Type of fraud rule"
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "block",
+        "review",
+        "flag",
+        "allow"
+      ],
+      "default": "flag",
+      "description": "Action to take when rule matches"
+    },
+    "conditions": {
+      "type": "object",
+      "description": "Rule condition parameters (e.g. threshold, countries list, amount range)"
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true,
+      "description": "Is rule active"
+    },
+    "priority": {
+      "type": "number",
+      "default": 5,
+      "description": "Rule priority 1-10 (10 = highest)"
+    },
+    "triggerCount": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of times this rule was triggered"
+    },
+    "lastTriggered": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last trigger timestamp"
+    },
+    "revenueProtected": {
+      "type": "number",
+      "default": 0,
+      "description": "Estimated revenue protected ($)"
+    }
+  },
+  "required": [
+    "name",
+    "ruleType",
+    "action"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
