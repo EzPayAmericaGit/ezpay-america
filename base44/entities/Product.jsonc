@@ -1,0 +1,103 @@
+{
+  "name": "Product",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Product name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Product description"
+    },
+    "price": {
+      "type": "number",
+      "description": "Product price"
+    },
+    "image": {
+      "type": "string",
+      "description": "Product image URL"
+    },
+    "images": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Product image URLs (up to 4)",
+      "default": []
+    },
+    "category": {
+      "type": "string",
+      "description": "Product category"
+    },
+    "stock": {
+      "type": "number",
+      "default": 0,
+      "description": "Available stock quantity"
+    },
+    "active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Is product active/visible"
+    },
+    "sku": {
+      "type": "string",
+      "description": "Product SKU/code"
+    },
+    "bundleItems": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          }
+        }
+      },
+      "description": "Bundle items (if this is a bundle product)"
+    },
+    "isBundle": {
+      "type": "boolean",
+      "default": false,
+      "description": "Is this a bundle product"
+    },
+    "regularPrice": {
+      "type": "number",
+      "description": "Regular price (before discount)"
+    },
+    "salePrice": {
+      "type": "number",
+      "description": "Sale price (discounted)"
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false,
+      "description": "Is this a featured product"
+    }
+  },
+  "required": [
+    "name",
+    "price"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
