@@ -32,6 +32,7 @@ export default function Shop() {
         description="Shop payment processing hardware: credit card terminals, POS systems, wireless readers, and more. Free shipping, free setup, zero-fee processing included. Order today."
         keywords="payment processing hardware, credit card terminal, POS equipment, card reader, wireless payment terminal, payment terminal shop, buy credit card terminal, POS system for sale, payment hardware free shipping, Clover terminal, PAX terminal"
         url="https://ezpayamerica.com/Shop"
+        noindex={true}
       />
       <LandingHero
         badge="Payment Hardware Store"
