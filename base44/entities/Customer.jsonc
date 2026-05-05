@@ -1,0 +1,128 @@
+{
+  "name": "Customer",
+  "type": "object",
+  "properties": {
+    "fullName": {
+      "type": "string",
+      "description": "Customer full name"
+    },
+    "email": {
+      "type": "string",
+      "description": "Customer email"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Customer phone number"
+    },
+    "company": {
+      "type": "string",
+      "description": "Company name"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "lead",
+        "active",
+        "inactive",
+        "churned"
+      ],
+      "default": "lead",
+      "description": "Customer status"
+    },
+    "source": {
+      "type": "string",
+      "description": "Lead source"
+    },
+    "assignedTo": {
+      "type": "string",
+      "description": "Assigned sales rep email"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal notes"
+    },
+    "address": {
+      "type": "string",
+      "description": "Customer address"
+    },
+    "lastContactDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last contact date"
+    },
+    "interactions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "type": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "createdBy": {
+            "type": "string"
+          }
+        }
+      },
+      "default": [],
+      "description": "Interaction history"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Customer tags"
+    }
+  },
+  "required": [
+    "fullName",
+    "email"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "data.assignedTo": "{{user.email}}"
+        },
+        {
+          "data.email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.assignedTo": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
