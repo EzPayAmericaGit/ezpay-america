@@ -112,7 +112,10 @@
     "customerEmail"
   ],
   "rls": {
-    "create": {},
+    "create": {
+      "created_by": "{{user.email}}",
+      "data.customerEmail": "{{user.email}}"
+    },
     "read": {
       "$or": [
         {
