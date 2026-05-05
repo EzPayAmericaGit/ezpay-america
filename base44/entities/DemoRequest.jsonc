@@ -1,0 +1,66 @@
+{
+  "name": "DemoRequest",
+  "type": "object",
+  "properties": {
+    "contactName": {
+      "type": "string",
+      "description": "Contact person name"
+    },
+    "email": {
+      "type": "string",
+      "description": "Contact email"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Contact phone number"
+    },
+    "businessName": {
+      "type": "string",
+      "description": "Business name"
+    },
+    "businessAddress": {
+      "type": "string",
+      "description": "Business address"
+    },
+    "timeZone": {
+      "type": "string",
+      "description": "Time zone preference"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "contacted",
+        "scheduled",
+        "completed",
+        "cancelled"
+      ],
+      "default": "pending",
+      "description": "Demo request status"
+    }
+  },
+  "required": [
+    "contactName",
+    "email",
+    "phone",
+    "businessName"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
