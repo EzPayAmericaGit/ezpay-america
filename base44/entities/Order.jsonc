@@ -105,18 +105,7 @@
     "total"
   ],
   "rls": {
-    "create": {
-      "$or": [
-        {
-          "created_by": "{{user.email}}"
-        },
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        }
-      ]
-    },
+    "create": {},
     "read": {
       "$or": [
         {
