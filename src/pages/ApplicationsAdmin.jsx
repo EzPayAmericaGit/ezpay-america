@@ -57,6 +57,51 @@ export default function ApplicationsAdmin() {
     }
   };
 
+  const exportToCSV = () => {
+    const rows = filteredApplications.length > 0 ? filteredApplications : applications;
+    const headers = [
+      'Submitted Date', 'Status', 'Legal Business Name', 'DBA Name',
+      'Business Email', 'Business Phone', 'Owner Full Name',
+      'Monthly Volume', 'Annual Volume', 'Avg Ticket',
+      'Bank Name', 'Account Type', 'Routing Number',
+      'Business Address', 'Market Type', 'Formation Type', 'Tax ID'
+    ];
+    const escape = (val) => {
+      const s = String(val ?? '');
+      return s.includes(',') || s.includes('"') || s.includes('\n') ? `"${s.replace(/"/g, '""')}"` : s;
+    };
+    const dataRows = rows.map(app => {
+      const d = app.applicationData || {};
+      return [
+        new Date(app.created_date).toLocaleDateString(),
+        app.status,
+        app.legalBusinessName,
+        app.dbaName,
+        app.businessEmail,
+        app.businessPhone,
+        app.ownerFullName,
+        d.monthlyVolume,
+        d.annualVolume,
+        d.averageTicket,
+        d.bankName,
+        d.accountType,
+        d.routingNumber,
+        d.businessPhysicalAddress,
+        d.businessMarketType,
+        d.businessFormationType,
+        d.taxId
+      ].map(escape).join(',');
+    });
+    const csv = [headers.map(escape).join(','), ...dataRows].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `merchant-applications-${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const filteredApplications = applications.filter(app => {
     const matchesSearch = !searchQuery || 
       app.legalBusinessName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -85,17 +130,27 @@ export default function ApplicationsAdmin() {
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-3xl font-bold text-gray-900">Merchant Applications</h1>
-          <Button
-            variant="outline"
-            className="gap-2 border-amber-300 text-amber-700 hover:bg-amber-50"
-            onClick={async () => {
-              await base44.functions.invoke('sendApplicationReminders', {});
-              alert('Reminders sent to eligible applicants.');
-            }}
-          >
-            <Bell className="w-4 h-4" />
-            Send Reminders Now
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              className="gap-2 border-green-300 text-green-700 hover:bg-green-50"
+              onClick={exportToCSV}
+            >
+              <Download className="w-4 h-4" />
+              Export CSV
+            </Button>
+            <Button
+              variant="outline"
+              className="gap-2 border-amber-300 text-amber-700 hover:bg-amber-50"
+              onClick={async () => {
+                await base44.functions.invoke('sendApplicationReminders', {});
+                alert('Reminders sent to eligible applicants.');
+              }}
+            >
+              <Bell className="w-4 h-4" />
+              Send Reminders Now
+            </Button>
+          </div>
         </div>
 
         <ApplicationStats applications={applications} />
