@@ -82,7 +82,9 @@
   ],
   "rls": {
     "create": {
-      "data.merchantId": "{{user.id}}"
+      "user_condition": {
+        "role": "admin"
+      }
     },
     "read": {
       "$or": [
@@ -109,16 +111,9 @@
       ]
     },
     "delete": {
-      "$or": [
-        {
-          "data.merchantId": "{{user.id}}"
-        },
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        }
-      ]
+      "user_condition": {
+        "role": "admin"
+      }
     }
   }
 }
