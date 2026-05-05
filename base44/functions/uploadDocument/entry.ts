@@ -8,8 +8,8 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Missing file data' }, { status: 400 });
     }
 
-    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf', 'image/webp'];
-    if (!validTypes.includes(mimeType)) {
+    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf', 'image/webp', 'image/heic', 'image/heif'];
+    if (!validTypes.includes(mimeType) && !mimeType.startsWith('image/')) {
       return Response.json({ error: 'Invalid file type.' }, { status: 400 });
     }
 
@@ -22,8 +22,8 @@ Deno.serve(async (req) => {
     const blob = new Blob([bytes], { type: mimeType });
     const file = new File([blob], filename || 'upload', { type: mimeType });
 
-    if (file.size > 10 * 1024 * 1024) {
-      return Response.json({ error: 'File too large (max 10MB).' }, { status: 400 });
+    if (file.size > 25 * 1024 * 1024) {
+      return Response.json({ error: 'File too large (max 25MB).' }, { status: 400 });
     }
 
     const base44 = createClientFromRequest(req);

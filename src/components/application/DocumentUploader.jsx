@@ -1,8 +1,29 @@
 import React, { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Upload, CheckCircle2, Loader2, FileText, X, Camera, Image } from "lucide-react";
+import { Upload, CheckCircle2, Loader2, FileText, X, Camera } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+
+async function uploadFileViaBackend(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const base64Data = e.target.result.split(',')[1];
+      const { data } = await base44.functions.invoke('uploadDocument', {
+        filename: file.name,
+        mimeType: file.type,
+        base64Data
+      });
+      if (data?.file_url) {
+        resolve(data.file_url);
+      } else {
+        reject(new Error(data?.error || 'Upload failed'));
+      }
+    };
+    reader.onerror = () => reject(new Error('Failed to read file'));
+    reader.readAsDataURL(file);
+  });
+}
 
 export default function DocumentUploader({ 
   label, 
@@ -16,24 +37,24 @@ export default function DocumentUploader({
   const [uploadedUrl, setUploadedUrl] = useState(currentUrl);
   const [dragActive, setDragActive] = useState(false);
   const [preview, setPreview] = useState(null);
+  const [error, setError] = useState(null);
 
   const handleFile = async (file) => {
     if (!file) return;
+    setError(null);
 
-    // Validate file type
-    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf', 'image/webp'];
-    if (!validTypes.includes(file.type)) {
-      alert("Please upload an image (JPG, PNG) or PDF file.");
+    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf', 'image/webp', 'image/heic', 'image/heif'];
+    if (!validTypes.includes(file.type) && !file.type.startsWith('image/')) {
+      setError("Please upload an image (JPG, PNG, HEIC) or PDF file.");
       return;
     }
 
-    // Validate file size (max 10MB)
-    if (file.size > 10 * 1024 * 1024) {
-      alert("File size must be less than 10MB.");
+    // Allow up to 25MB
+    if (file.size > 25 * 1024 * 1024) {
+      setError("File size must be less than 25MB.");
       return;
     }
 
-    // Show preview for images
     if (file.type.startsWith('image/')) {
       const reader = new FileReader();
       reader.onload = (e) => setPreview(e.target.result);
@@ -42,12 +63,12 @@ export default function DocumentUploader({
 
     setIsUploading(true);
     try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      const file_url = await uploadFileViaBackend(file);
       setUploadedUrl(file_url);
       onUpload(file_url);
-    } catch (error) {
-      console.error("Upload error:", error);
-      alert("Failed to upload file. Please try again.");
+    } catch (err) {
+      console.error("Upload error:", err);
+      setError("Upload failed. Please try again or use a smaller file.");
       setPreview(null);
     } finally {
       setIsUploading(false);
@@ -56,16 +77,15 @@ export default function DocumentUploader({
 
   const handleFileChange = (e) => {
     handleFile(e.target.files?.[0]);
+    // Reset input so same file can be re-selected if needed
+    e.target.value = '';
   };
 
   const handleDrag = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dragover") {
-      setDragActive(true);
-    } else if (e.type === "dragleave") {
-      setDragActive(false);
-    }
+    if (e.type === "dragenter" || e.type === "dragover") setDragActive(true);
+    else if (e.type === "dragleave") setDragActive(false);
   }, []);
 
   const handleDrop = useCallback((e) => {
@@ -78,15 +98,17 @@ export default function DocumentUploader({
   const handleRemove = () => {
     setUploadedUrl(null);
     setPreview(null);
+    setError(null);
     onUpload(null);
   };
 
-  const isImage = uploadedUrl?.match(/\.(jpg|jpeg|png|gif)$/i) || preview;
+  const isImage = uploadedUrl?.match(/\.(jpg|jpeg|png|gif|webp|heic)$/i) || preview;
 
   return (
     <Card className={`border-2 border-dashed transition-all ${
       dragActive ? 'border-amber-500 bg-amber-50' : 
       uploadedUrl ? 'border-green-400 bg-green-50/50' : 
+      error ? 'border-red-400 bg-red-50/30' :
       'border-gray-300 hover:border-amber-400'
     }`}>
       <CardContent 
@@ -98,12 +120,12 @@ export default function DocumentUploader({
       >
         <div className="flex items-start gap-4">
           <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
-            uploadedUrl ? 'bg-green-500' : 'bg-gray-200'
+            uploadedUrl ? 'bg-green-500' : error ? 'bg-red-100' : 'bg-gray-200'
           }`}>
             {uploadedUrl ? (
               <CheckCircle2 className="w-6 h-6 text-white" />
             ) : (
-              <FileText className="w-6 h-6 text-gray-500" />
+              <FileText className={`w-6 h-6 ${error ? 'text-red-400' : 'text-gray-500'}`} />
             )}
           </div>
           
@@ -113,6 +135,10 @@ export default function DocumentUploader({
               {required && <span className="text-red-500 text-sm">*</span>}
             </div>
             <p className="text-sm text-gray-500 mb-4">{description}</p>
+            
+            {error && (
+              <p className="text-sm text-red-600 mb-3 font-medium">{error}</p>
+            )}
             
             {uploadedUrl ? (
               <div className="space-y-3">
@@ -150,7 +176,7 @@ export default function DocumentUploader({
                 <label className="cursor-pointer block">
                   <input
                     type="file"
-                    accept={accept}
+                    accept="image/*,.pdf,.heic,.heif"
                     onChange={handleFileChange}
                     className="hidden"
                     disabled={isUploading}
@@ -161,7 +187,7 @@ export default function DocumentUploader({
                     {isUploading ? (
                       <>
                         <Loader2 className="w-8 h-8 text-amber-500 animate-spin mb-2" />
-                        <span className="text-sm text-gray-600">Uploading...</span>
+                        <span className="text-sm text-gray-600">Uploading... please wait</span>
                       </>
                     ) : (
                       <>
@@ -170,7 +196,7 @@ export default function DocumentUploader({
                           Drop file here or click to upload
                         </span>
                         <span className="text-xs text-gray-500 mt-1">
-                          JPG, PNG or PDF (max 10MB)
+                          JPG, PNG, HEIC or PDF — max 25MB
                         </span>
                       </>
                     )}

@@ -1,27 +1,43 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Upload, Loader2, Plus } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+
+async function uploadFileViaBackend(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const base64Data = e.target.result.split(',')[1];
+      const { data } = await base44.functions.invoke('uploadDocument', {
+        filename: file.name,
+        mimeType: file.type,
+        base64Data
+      });
+      if (data?.file_url) {
+        resolve(data.file_url);
+      } else {
+        reject(new Error(data?.error || 'Upload failed'));
+      }
+    };
+    reader.onerror = () => reject(new Error('Failed to read file'));
+    reader.readAsDataURL(file);
+  });
+}
 
 export default function AdditionalDocumentUploader({ onUpload }) {
   const [isUploading, setIsUploading] = useState(false);
   const [documentName, setDocumentName] = useState("");
+  const [error, setError] = useState(null);
 
   const handleFileChange = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    setError(null);
 
-    // Validate file type
-    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
-    if (!validTypes.includes(file.type)) {
-      alert("Please upload an image (JPG, PNG) or PDF file.");
-      return;
-    }
-
-    // Validate file size (max 10MB)
-    if (file.size > 10 * 1024 * 1024) {
-      alert("File size must be less than 10MB.");
+    // Allow up to 25MB
+    if (file.size > 25 * 1024 * 1024) {
+      setError("File size must be less than 25MB.");
       return;
     }
 
@@ -29,14 +45,15 @@ export default function AdditionalDocumentUploader({ onUpload }) {
 
     setIsUploading(true);
     try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      const file_url = await uploadFileViaBackend(file);
       onUpload({ name, url: file_url });
       setDocumentName("");
-    } catch (error) {
-      console.error("Upload error:", error);
-      alert("Failed to upload file. Please try again.");
+    } catch (err) {
+      console.error("Upload error:", err);
+      setError("Upload failed. Please try again.");
     } finally {
       setIsUploading(false);
+      e.target.value = '';
     }
   };
 
@@ -48,10 +65,11 @@ export default function AdditionalDocumentUploader({ onUpload }) {
         onChange={(e) => setDocumentName(e.target.value)}
         className="h-12"
       />
+      {error && <p className="text-sm text-red-600">{error}</p>}
       <label className="cursor-pointer block">
         <input
           type="file"
-          accept="image/*,.pdf"
+          accept="image/*,.pdf,.heic,.heif"
           onChange={handleFileChange}
           className="hidden"
           disabled={isUploading}
@@ -70,7 +88,7 @@ export default function AdditionalDocumentUploader({ onUpload }) {
           ) : (
             <>
               <Plus className="w-4 h-4 mr-2" />
-              Add Document
+              Add Document (JPG, PNG, HEIC or PDF — max 25MB)
             </>
           )}
         </Button>
