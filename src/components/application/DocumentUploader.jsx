@@ -8,16 +8,21 @@ async function uploadFileViaBackend(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = async (e) => {
-      const base64Data = e.target.result.split(',')[1];
-      const { data } = await base44.functions.invoke('uploadDocument', {
-        filename: file.name,
-        mimeType: file.type,
-        base64Data
-      });
-      if (data?.file_url) {
-        resolve(data.file_url);
-      } else {
-        reject(new Error(data?.error || 'Upload failed'));
+      try {
+        const base64Data = e.target.result.split(',')[1];
+        const response = await base44.functions.invoke('uploadDocument', {
+          filename: file.name,
+          mimeType: file.type,
+          base64Data
+        });
+        const data = response?.data;
+        if (data?.file_url) {
+          resolve(data.file_url);
+        } else {
+          reject(new Error(data?.error || 'Upload failed — no URL returned'));
+        }
+      } catch (err) {
+        reject(err);
       }
     };
     reader.onerror = () => reject(new Error('Failed to read file'));
