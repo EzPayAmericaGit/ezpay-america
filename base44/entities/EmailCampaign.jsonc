@@ -1,0 +1,121 @@
+{
+  "name": "EmailCampaign",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Campaign name"
+    },
+    "subject": {
+      "type": "string",
+      "description": "Email subject line"
+    },
+    "content": {
+      "type": "string",
+      "description": "Email HTML content"
+    },
+    "imageUrl": {
+      "type": "string",
+      "description": "Uploaded image URL for email"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "scheduled",
+        "sending",
+        "sent",
+        "paused"
+      ],
+      "default": "draft",
+      "description": "Campaign status"
+    },
+    "targetAudience": {
+      "type": "string",
+      "enum": [
+        "all",
+        "pending_applications",
+        "approved_merchants",
+        "demo_requests",
+        "website_visitors",
+        "custom"
+      ],
+      "description": "Target audience segment"
+    },
+    "customEmailList": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Custom email list"
+    },
+    "scheduledDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Scheduled send date"
+    },
+    "sentDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Actual send date"
+    },
+    "totalRecipients": {
+      "type": "number",
+      "default": 0,
+      "description": "Total recipients"
+    },
+    "sent": {
+      "type": "number",
+      "default": 0,
+      "description": "Emails sent successfully"
+    },
+    "opened": {
+      "type": "number",
+      "default": 0,
+      "description": "Emails opened"
+    },
+    "clicked": {
+      "type": "number",
+      "default": 0,
+      "description": "Links clicked"
+    },
+    "bounced": {
+      "type": "number",
+      "default": 0,
+      "description": "Bounced emails"
+    },
+    "unsubscribed": {
+      "type": "number",
+      "default": 0,
+      "description": "Unsubscribe count"
+    }
+  },
+  "required": [
+    "name",
+    "subject",
+    "content",
+    "targetAudience"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
