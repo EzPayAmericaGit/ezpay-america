@@ -1,0 +1,80 @@
+{
+  "name": "AuditLog",
+  "type": "object",
+  "properties": {
+    "userEmail": {
+      "type": "string",
+      "description": "Email of user who performed the action"
+    },
+    "userName": {
+      "type": "string",
+      "description": "Name of user who performed the action"
+    },
+    "action": {
+      "type": "string",
+      "description": "Action performed"
+    },
+    "entityType": {
+      "type": "string",
+      "description": "Type of entity affected (Order, Customer, Invoice, etc.)"
+    },
+    "entityId": {
+      "type": "string",
+      "description": "ID of affected entity"
+    },
+    "changes": {
+      "type": "object",
+      "description": "Details of changes made"
+    },
+    "ipAddress": {
+      "type": "string",
+      "description": "IP address of user"
+    },
+    "userAgent": {
+      "type": "string",
+      "description": "Browser/device information"
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "default": "low",
+      "description": "Severity level of the action"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "success",
+        "failed"
+      ],
+      "default": "success",
+      "description": "Status of the action"
+    }
+  },
+  "required": [
+    "userEmail",
+    "action"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
