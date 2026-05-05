@@ -1,0 +1,105 @@
+{
+  "name": "MerchantApplication",
+  "type": "object",
+  "properties": {
+    "legalBusinessName": {
+      "type": "string",
+      "description": "Legal business name"
+    },
+    "dbaName": {
+      "type": "string",
+      "description": "DBA name"
+    },
+    "businessEmail": {
+      "type": "string",
+      "description": "Business email"
+    },
+    "businessPhone": {
+      "type": "string",
+      "description": "Business phone"
+    },
+    "ownerFullName": {
+      "type": "string",
+      "description": "Owner full name"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "submitted",
+        "under_review",
+        "documents_needed",
+        "approved",
+        "declined"
+      ],
+      "default": "submitted",
+      "description": "Application status"
+    },
+    "voidedCheckUrl": {
+      "type": "string",
+      "description": "Uploaded voided check URL"
+    },
+    "driversLicenseUrl": {
+      "type": "string",
+      "description": "Uploaded driver's license URL"
+    },
+    "additionalDocuments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Additional uploaded documents"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal notes"
+    },
+    "applicationData": {
+      "type": "object",
+      "description": "Full application form data"
+    }
+  },
+  "required": [
+    "legalBusinessName",
+    "businessEmail"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "data.businessEmail": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.businessEmail": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
