@@ -1199,11 +1199,12 @@ export default function ApplyOnline() {
                               Upload Driver's License *
                             </label>
                             <DocumentUploader
-                              label="Driver's License"
-                              description="A valid, non-expired driver's license for the business owner"
-                              currentUrl={formData.driversLicenseUrl}
-                              onUpload={(url) => setFormData({...formData, driversLicenseUrl: url})}
-                              required
+                             label="Driver's License"
+                             description="A valid, non-expired driver's license for the business owner"
+                             currentUrl={formData.driversLicenseUrl}
+                             onUpload={(url) => setFormData({...formData, driversLicenseUrl: url})}
+                             documentType="drivers_license"
+                             required
                             />
                             {errors.driversLicenseUrl && <p className="text-red-500 text-sm mt-1">Driver's license is required</p>}
                           </div>
@@ -1213,11 +1214,12 @@ export default function ApplyOnline() {
                               Upload Voided Business Check *
                             </label>
                             <DocumentUploader
-                              label="Voided Check"
-                              description="A voided check from your business bank account"
-                              currentUrl={formData.voidedCheckUrl}
-                              onUpload={(url) => setFormData({...formData, voidedCheckUrl: url})}
-                              required
+                             label="Voided Check"
+                             description="A voided check from your business bank account"
+                             currentUrl={formData.voidedCheckUrl}
+                             onUpload={(url) => setFormData({...formData, voidedCheckUrl: url})}
+                             documentType="voided_check"
+                             required
                             />
                             {errors.voidedCheckUrl && <p className="text-red-500 text-sm mt-1">Voided check is required</p>}
                           </div>

@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Upload, CheckCircle2, Loader2, FileText, X, Camera } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
-async function uploadFileViaBackend(file, mimeType) {
+async function uploadFileViaBackend(file, mimeType, documentType) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = async (e) => {
@@ -13,7 +13,8 @@ async function uploadFileViaBackend(file, mimeType) {
         const response = await base44.functions.invoke('uploadDocument', {
           filename: file.name,
           mimeType: mimeType || file.type || 'application/octet-stream',
-          base64Data
+          base64Data,
+          documentType
         });
         const data = response?.data;
         if (data?.file_url) {
@@ -36,7 +37,8 @@ export default function DocumentUploader({
   currentUrl, 
   onUpload, 
   accept = "image/*,.pdf",
-  required = false
+  required = false,
+  documentType = "document"
 }) {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState(currentUrl);
@@ -77,7 +79,7 @@ export default function DocumentUploader({
 
     setIsUploading(true);
     try {
-      const file_url = await uploadFileViaBackend(file, mimeType);
+      const file_url = await uploadFileViaBackend(file, mimeType, documentType);
       setUploadedUrl(file_url);
       onUpload(file_url);
     } catch (err) {
