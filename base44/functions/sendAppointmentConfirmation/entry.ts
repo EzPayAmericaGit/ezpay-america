@@ -23,6 +23,13 @@ async function sendEmail(to, subject, html) {
 
 Deno.serve(async (req) => {
   const base44 = createClientFromRequest(req);
+
+  // Require admin authentication
+  const user = await base44.auth.me();
+  if (!user || user.role !== 'admin') {
+    return Response.json({ error: 'Unauthorized' }, { status: 403 });
+  }
+
   const { appointmentId } = await req.json();
 
   const appt = await base44.asServiceRole.entities.Appointment.get(appointmentId);

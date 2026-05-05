@@ -9,10 +9,13 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
-    const { phoneNumber } = await req.json();
+    const { phoneNumber: requestedPhone } = await req.json();
+
+    // Always use the server-configured admin phone — never trust client-provided numbers
+    const phoneNumber = Deno.env.get('TWILIO_ADMIN_PHONE') || '+18653216338';
 
     if (!phoneNumber) {
-      return Response.json({ error: 'Phone number is required' }, { status: 400 });
+      return Response.json({ error: 'Admin phone not configured' }, { status: 500 });
     }
 
     // Generate 6-digit code

@@ -46,7 +46,7 @@ export default function BusinessDashboard() {
     setSending(true);
     try {
       const { data } = await base44.functions.invoke('send2FACode', { 
-        phoneNumber: '+18653216338' 
+        phoneNumber: 'admin' 
       });
       
       if (data.success) {
@@ -200,7 +200,7 @@ export default function BusinessDashboard() {
           <CardContent>
             <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
               <p className="text-sm text-blue-800">
-                A verification code has been sent to (865) 321-6338
+                A verification code has been sent to the registered admin phone
               </p>
             </div>
             <form onSubmit={handleVerifyCode} className="space-y-4">

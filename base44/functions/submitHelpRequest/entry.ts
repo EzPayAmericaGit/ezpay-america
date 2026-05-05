@@ -94,6 +94,7 @@ Deno.serve(async (req) => {
 
       const smsBody = `New EzPay help request!\nName: ${plainName}\nPhone: ${plainPhone}\nEmail: ${plainEmail}\nMsg: ${plainMsg}`;
 
+      const TWILIO_TO = Deno.env.get('TWILIO_NOTIFICATION_PHONE') || '+18653169625';
       await fetch(`https://api.twilio.com/2010-04-01/Accounts/${TWILIO_SID}/Messages.json`, {
         method: 'POST',
         headers: {
@@ -102,7 +103,7 @@ Deno.serve(async (req) => {
         },
         body: new URLSearchParams({
           From: TWILIO_FROM,
-          To: '+18653169625',
+          To: TWILIO_TO,
           Body: smsBody
         })
       });
