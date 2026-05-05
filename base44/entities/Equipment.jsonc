@@ -1,0 +1,120 @@
+{
+  "name": "Equipment",
+  "type": "object",
+  "properties": {
+    "terminalType": {
+      "type": "string",
+      "description": "Type of terminal equipment"
+    },
+    "serialNumber": {
+      "type": "string",
+      "description": "Terminal serial number"
+    },
+    "merchantName": {
+      "type": "string",
+      "description": "Assigned merchant name"
+    },
+    "merchantMID": {
+      "type": "string",
+      "description": "Merchant MID number"
+    },
+    "businessContactName": {
+      "type": "string",
+      "description": "Business contact person name"
+    },
+    "businessPhoneNumber": {
+      "type": "string",
+      "description": "Business phone number"
+    },
+    "ownerCellNumber": {
+      "type": "string",
+      "description": "Owner cell phone number"
+    },
+    "emailAddress": {
+      "type": "string",
+      "description": "Contact email address"
+    },
+    "streetAddress": {
+      "type": "string",
+      "description": "Street address"
+    },
+    "city": {
+      "type": "string",
+      "description": "City"
+    },
+    "state": {
+      "type": "string",
+      "description": "State"
+    },
+    "dateShipped": {
+      "type": "string",
+      "format": "date",
+      "description": "Date equipment was shipped"
+    },
+    "dateReturned": {
+      "type": "string",
+      "format": "date",
+      "description": "Date equipment was returned"
+    },
+    "terminalCost": {
+      "type": "number",
+      "description": "Cost of the terminal"
+    },
+    "agentAssigned": {
+      "type": "string",
+      "description": "Agent assigned to this equipment"
+    },
+    "warrantyDocumentUrl": {
+      "type": "string",
+      "description": "Uploaded warranty document URL"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "in_stock",
+        "shipped",
+        "assigned",
+        "returned",
+        "maintenance"
+      ],
+      "default": "in_stock",
+      "description": "Equipment status"
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true,
+      "description": "Is terminal currently active"
+    },
+    "hasBeenReturned": {
+      "type": "boolean",
+      "default": false,
+      "description": "Has terminal been returned"
+    }
+  },
+  "required": [
+    "terminalType",
+    "serialNumber"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
