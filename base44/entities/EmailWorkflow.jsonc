@@ -1,0 +1,128 @@
+{
+  "name": "EmailWorkflow",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Workflow name"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "abandoned_cart",
+        "post_purchase",
+        "promotional",
+        "re_engagement",
+        "welcome",
+        "custom"
+      ],
+      "description": "Workflow type"
+    },
+    "active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Is workflow active"
+    },
+    "trigger": {
+      "type": "object",
+      "properties": {
+        "event": {
+          "type": "string"
+        },
+        "conditions": {
+          "type": "object"
+        },
+        "delayMinutes": {
+          "type": "number"
+        }
+      },
+      "description": "Trigger configuration"
+    },
+    "segmentation": {
+      "type": "object",
+      "properties": {
+        "customerStatus": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "orderCount": {
+          "type": "object"
+        },
+        "lastActivityDays": {
+          "type": "number"
+        }
+      },
+      "description": "Audience segmentation criteria"
+    },
+    "emailTemplate": {
+      "type": "object",
+      "properties": {
+        "subject": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "fromName": {
+          "type": "string"
+        }
+      },
+      "description": "Email template"
+    },
+    "stats": {
+      "type": "object",
+      "properties": {
+        "totalSent": {
+          "type": "number",
+          "default": 0
+        },
+        "totalOpened": {
+          "type": "number",
+          "default": 0
+        },
+        "totalClicked": {
+          "type": "number",
+          "default": 0
+        },
+        "totalConverted": {
+          "type": "number",
+          "default": 0
+        }
+      },
+      "description": "Workflow statistics"
+    },
+    "lastRun": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last execution timestamp"
+    }
+  },
+  "required": [
+    "name",
+    "type"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
