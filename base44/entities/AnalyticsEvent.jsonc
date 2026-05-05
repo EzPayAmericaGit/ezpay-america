@@ -1,0 +1,117 @@
+{
+  "name": "AnalyticsEvent",
+  "type": "object",
+  "properties": {
+    "eventType": {
+      "type": "string",
+      "enum": [
+        "page_view",
+        "click",
+        "form_submit",
+        "demo_request",
+        "application_start",
+        "application_complete",
+        "session_start",
+        "session_end"
+      ],
+      "description": "Type of analytics event"
+    },
+    "pagePath": {
+      "type": "string",
+      "description": "Page URL path"
+    },
+    "pageTitle": {
+      "type": "string",
+      "description": "Page title"
+    },
+    "userId": {
+      "type": "string",
+      "description": "User ID if logged in"
+    },
+    "sessionId": {
+      "type": "string",
+      "description": "Session identifier"
+    },
+    "referrer": {
+      "type": "string",
+      "description": "Referrer URL"
+    },
+    "utmSource": {
+      "type": "string",
+      "description": "UTM source parameter"
+    },
+    "utmMedium": {
+      "type": "string",
+      "description": "UTM medium parameter"
+    },
+    "utmCampaign": {
+      "type": "string",
+      "description": "UTM campaign parameter"
+    },
+    "deviceType": {
+      "type": "string",
+      "enum": [
+        "desktop",
+        "mobile",
+        "tablet"
+      ],
+      "description": "Device type"
+    },
+    "browser": {
+      "type": "string",
+      "description": "Browser name"
+    },
+    "operatingSystem": {
+      "type": "string",
+      "description": "Operating system"
+    },
+    "screenResolution": {
+      "type": "string",
+      "description": "Screen resolution"
+    },
+    "location": {
+      "type": "object",
+      "properties": {
+        "country": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        }
+      }
+    },
+    "duration": {
+      "type": "number",
+      "description": "Time spent on page in seconds"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Additional event metadata"
+    }
+  },
+  "required": [
+    "eventType",
+    "sessionId"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
