@@ -41,6 +41,15 @@ export default function Home() {
             ]
           },
           {
+            "@type": "AggregateRating",
+            "itemReviewed": { "@type": "Organization", "name": "EzPay America", "@id": "https://ezpayamerica.com/#organization" },
+            "ratingValue": "5.0",
+            "bestRating": "5",
+            "worstRating": "1",
+            "ratingCount": "15000",
+            "reviewCount": "847"
+          },
+          {
             "@type": "WebSite",
             "@id": "https://ezpayamerica.com/#website",
             "url": "https://ezpayamerica.com",

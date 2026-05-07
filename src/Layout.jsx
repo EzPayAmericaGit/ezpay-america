@@ -135,6 +135,7 @@ export default function Layout({ children }) {
       { title: "Apply Online", url: createPageUrl("ApplyOnline") },
       { title: "Book a Call", url: createPageUrl("BookAppointment") },
       { title: "Affiliates", url: createPageUrl("AffiliateSignup") },
+      { title: "About", url: createPageUrl("About") },
       { title: "FAQ", url: createPageUrl("FAQ") },
       { title: "News", url: createPageUrl("News") }
     ];
