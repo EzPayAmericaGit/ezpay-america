@@ -9,7 +9,7 @@ const TEAM = [
     name: "Jeremy Carrigg",
     title: "CEO & Director of Operations",
     bio: "Over a decade of experience in merchant services and payment processing. Jeremy has personally helped thousands of small business owners eliminate credit card fees and modernize their payment infrastructure across retail, restaurant, and service industries.",
-    img: "https://media.base44.com/images/public/68fffaddc76dcc9f094717fa/fd7cca555_generated_image.png",
+    img: "https://media.base44.com/images/public/68fffaddc76dcc9f094717fa/5d8c01863_generated_image.png",
   },
   {
     name: "Your Name Here",
