@@ -12,10 +12,10 @@ const TEAM = [
     img: "https://media.base44.com/images/public/68fffaddc76dcc9f094717fa/5d8c01863_generated_image.png",
   },
   {
-    name: "Your Name Here",
-    title: "Head of Merchant Success",
-    bio: "Add your team member's bio here. Our US-based team of payment specialists is available 7 days a week, trained in PCI compliance, cash discount regulations, and POS system implementation.",
-    img: null,
+    name: "Denise Sanders",
+    title: "Regional Sales Manager — Eastern Region",
+    bio: "Experienced Merchant Services Consultant with a demonstrated history of working in the financial services industry. Denise brings years of experience to the table and personally oversees all merchants in her region.",
+    img: "https://media.base44.com/images/public/68fffaddc76dcc9f094717fa/cfaa49eab_generated_image.png",
   },
   {
     name: "Your Name Here",
