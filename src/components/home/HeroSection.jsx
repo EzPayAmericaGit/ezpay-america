@@ -27,7 +27,7 @@ export default function HeroSection() {
 
             <div className="space-y-4">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                Stop Paying Credit Card<br className="hidden sm:block" /> Processing Fees — Forever
+                Stop Paying<br />Credit Card Processing Fees<br />Forever
               </h1>
               <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent leading-snug">
                 Zero-Fee Merchant Services · Free POS Equipment · No Contracts
