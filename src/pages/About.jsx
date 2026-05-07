@@ -18,10 +18,10 @@ const TEAM = [
     img: "https://media.base44.com/images/public/68fffaddc76dcc9f094717fa/cfaa49eab_generated_image.png",
   },
   {
-    name: "Your Name Here",
-    title: "Senior Account Executive",
-    bio: "Add your team member's bio here. Dedicated to helping merchants transition smoothly to zero-fee processing with personalized onboarding and hands-on support.",
-    img: null,
+    name: "Bristol Leos",
+    title: "Regional Sales Manager — Western Region",
+    bio: "Bristol brings over two decades in the merchant services industry to the table. She has worked with many large and commercial accounts and has a very in-depth knowledge of all aspects of payment processing.",
+    img: "https://media.base44.com/images/public/68fffaddc76dcc9f094717fa/80dc8e4fb_generated_image.png",
   },
   {
     name: "Samual Markinson",
