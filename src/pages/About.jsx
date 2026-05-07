@@ -27,7 +27,7 @@ const TEAM = [
     name: "Samual Markinson",
     title: "Technical Support Lead",
     bio: "Samual has extensive experience overseeing complex technical operations, managing support teams, troubleshooting critical systems, and ensuring projects are completed efficiently, securely, and on schedule. Skilled in leadership, system optimization, client support, and delivering reliable technology solutions in fast-paced environments.",
-    img: "https://media.base44.com/images/public/68fffaddc76dcc9f094717fa/81cc2d4e1_generated_image.png",
+    img: "https://media.base44.com/images/public/68fffaddc76dcc9f094717fa/d0b6a1266_generated_image.png",
   },
 ];
 
