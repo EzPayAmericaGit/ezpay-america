@@ -7,9 +7,9 @@ import { Shield, Award, Users, Phone, MapPin, CheckCircle2, Star, Building2, Cre
 const TEAM = [
   {
     name: "Jeremy Carrigg",
-    title: "Director of Operations",
+    title: "CEO & Director of Operations",
     bio: "Over a decade of experience in merchant services and payment processing. Jeremy has personally helped thousands of small business owners eliminate credit card fees and modernize their payment infrastructure across retail, restaurant, and service industries.",
-    img: null, // placeholder for real photo
+    img: "https://media.base44.com/images/public/68fffaddc76dcc9f094717fa/f8f687062_jc.jpeg",
   },
   {
     name: "Your Name Here",
