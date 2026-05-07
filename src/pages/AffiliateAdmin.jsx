@@ -45,6 +45,12 @@ export default function AffiliateAdmin() {
   const [payoutLoading, setPayoutLoading] = useState(false);
   const [addReferralDialog, setAddReferralDialog] = useState(false);
   const [newReferral, setNewReferral] = useState({ affiliateId: "", referredName: "", referredEmail: "", referredBusiness: "", referredPhone: "", commissionAmount: "" });
+  const [addAffiliateDialog, setAddAffiliateDialog] = useState(false);
+  const [newAffiliate, setNewAffiliate] = useState({ firstName: "", lastName: "", email: "", paypalEmail: "", phone: "", company: "", website: "", marketingStrategy: "", proposedCommission: "" });
+  const [addAffiliateLoading, setAddAffiliateLoading] = useState(false);
+  const [editCommissionDialog, setEditCommissionDialog] = useState(false);
+  const [editCommissionAffiliate, setEditCommissionAffiliate] = useState(null);
+  const [editCommissionValue, setEditCommissionValue] = useState("");
 
   useEffect(() => { loadAll(); }, []);
 
@@ -186,6 +192,34 @@ export default function AffiliateAdmin() {
     setNewReferral({ affiliateId: "", referredName: "", referredEmail: "", referredBusiness: "", referredPhone: "", commissionAmount: "" });
   };
 
+  const addAffiliate = async () => {
+    if (!newAffiliate.firstName || !newAffiliate.lastName || !newAffiliate.email || !newAffiliate.paypalEmail) return;
+    setAddAffiliateLoading(true);
+    const referralCode = (newAffiliate.firstName.slice(0, 3) + newAffiliate.lastName.slice(0, 3)).toUpperCase().replace(/[^A-Z]/g, "") + Math.floor(1000 + Math.random() * 9000);
+    const created = await base44.entities.Affiliate.create({
+      ...newAffiliate,
+      referralCode,
+      status: "pending",
+      commissionRate: newAffiliate.proposedCommission ? parseFloat(newAffiliate.proposedCommission) : 10,
+      totalEarned: 0, totalPaid: 0, totalReferrals: 0, totalConversions: 0, totalClicks: 0,
+      tier: "bronze"
+    });
+    setAffiliates(prev => [created, ...prev]);
+    setAddAffiliateDialog(false);
+    setNewAffiliate({ firstName: "", lastName: "", email: "", paypalEmail: "", phone: "", company: "", website: "", marketingStrategy: "", proposedCommission: "" });
+    setAddAffiliateLoading(false);
+  };
+
+  const saveCommissionRate = async () => {
+    if (!editCommissionAffiliate || editCommissionValue === "") return;
+    const rate = parseFloat(editCommissionValue);
+    await base44.entities.Affiliate.update(editCommissionAffiliate.id, { commissionRate: rate });
+    setAffiliates(prev => prev.map(a => a.id === editCommissionAffiliate.id ? { ...a, commissionRate: rate } : a));
+    setEditCommissionDialog(false);
+    setEditCommissionAffiliate(null);
+    setEditCommissionValue("");
+  };
+
   const filteredAffiliates = affiliates.filter(a => {
     const matchSearch = !search || `${a.firstName} ${a.lastName} ${a.email} ${a.company}`.toLowerCase().includes(search.toLowerCase());
     const matchStatus = statusFilter === "all" || a.status === statusFilter;
@@ -219,6 +253,7 @@ export default function AffiliateAdmin() {
               <ShieldCheck className="w-4 h-4 mr-1" />Validate All Referrals
             </Button>
             <Button onClick={runTierUpgrades} variant="outline" className="border-purple-400 text-purple-700"><ArrowUp className="w-4 h-4 mr-1" />Run Tier Upgrades</Button>
+            <Button onClick={() => setAddAffiliateDialog(true)} className="bg-amber-500 hover:bg-amber-600 text-white">+ Add Affiliate</Button>
             <Button onClick={() => setAddReferralDialog(true)} variant="outline" className="border-amber-400 text-amber-700">Add Referral</Button>
             <Button onClick={loadAll} variant="outline"><RefreshCw className="w-4 h-4 mr-2" />Refresh</Button>
           </div>
@@ -295,6 +330,7 @@ export default function AffiliateAdmin() {
                       <th className="pb-3 font-medium">Code</th>
                       <th className="pb-3 font-medium">Status</th>
                       <th className="pb-3 font-medium">Tier</th>
+                      <th className="pb-3 font-medium">Commission %</th>
                       <th className="pb-3 font-medium">Earned</th>
                       <th className="pb-3 font-medium">Paid</th>
                       <th className="pb-3 font-medium">Refs</th>
@@ -318,6 +354,14 @@ export default function AffiliateAdmin() {
                         </td>
                         <td className="py-3">
                           <Badge className={`${STATUS_BADGE[a.tier]} text-xs capitalize`}>{a.tier}</Badge>
+                        </td>
+                        <td className="py-3">
+                          <button
+                            className="text-sm font-semibold text-blue-600 hover:underline"
+                            onClick={() => { setEditCommissionAffiliate(a); setEditCommissionValue(String(a.commissionRate || 10)); setEditCommissionDialog(true); }}
+                          >
+                            {a.commissionRate || 10}%
+                          </button>
                         </td>
                         <td className="py-3 font-semibold text-green-600">${(a.totalEarned || 0).toFixed(2)}</td>
                         <td className="py-3 text-gray-600">${(a.totalPaid || 0).toFixed(2)}</td>
@@ -577,6 +621,58 @@ export default function AffiliateAdmin() {
                 <Button disabled={!payoutAmount || payoutLoading} onClick={processPayout} className="flex-1 bg-green-500 hover:bg-green-600 text-white">
                   {payoutLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <><CheckCircle2 className="w-4 h-4 mr-1" />Record Payout</>}
                 </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Add Affiliate Dialog */}
+      <Dialog open={addAffiliateDialog} onOpenChange={setAddAffiliateDialog}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader><DialogTitle>Add New Affiliate</DialogTitle></DialogHeader>
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <Input placeholder="First Name *" value={newAffiliate.firstName} onChange={e => setNewAffiliate({...newAffiliate, firstName: e.target.value})} />
+              <Input placeholder="Last Name *" value={newAffiliate.lastName} onChange={e => setNewAffiliate({...newAffiliate, lastName: e.target.value})} />
+            </div>
+            <Input type="email" placeholder="Email Address *" value={newAffiliate.email} onChange={e => setNewAffiliate({...newAffiliate, email: e.target.value})} />
+            <Input type="email" placeholder="PayPal Email (for payouts) *" value={newAffiliate.paypalEmail} onChange={e => setNewAffiliate({...newAffiliate, paypalEmail: e.target.value})} />
+            <Input type="tel" placeholder="Phone Number" value={newAffiliate.phone} onChange={e => setNewAffiliate({...newAffiliate, phone: e.target.value})} />
+            <div className="grid grid-cols-2 gap-3">
+              <Input placeholder="Company (optional)" value={newAffiliate.company} onChange={e => setNewAffiliate({...newAffiliate, company: e.target.value})} />
+              <Input placeholder="Website (optional)" value={newAffiliate.website} onChange={e => setNewAffiliate({...newAffiliate, website: e.target.value})} />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1 block">Proposed Commission Rate (%)</label>
+              <Input type="number" placeholder="e.g. 10" min="1" max="100" value={newAffiliate.proposedCommission} onChange={e => setNewAffiliate({...newAffiliate, proposedCommission: e.target.value})} />
+              <p className="text-xs text-gray-400 mt-1">Default is 10% if left blank</p>
+            </div>
+            <Textarea placeholder="Marketing strategy / notes (optional)" rows={2} value={newAffiliate.marketingStrategy} onChange={e => setNewAffiliate({...newAffiliate, marketingStrategy: e.target.value})} />
+            <div className="flex gap-2">
+              <Button variant="outline" className="flex-1" onClick={() => setAddAffiliateDialog(false)}>Cancel</Button>
+              <Button disabled={!newAffiliate.firstName || !newAffiliate.lastName || !newAffiliate.email || !newAffiliate.paypalEmail || addAffiliateLoading} onClick={addAffiliate} className="flex-1 bg-amber-500 hover:bg-amber-600 text-white">
+                {addAffiliateLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Add Affiliate"}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Commission Rate Dialog */}
+      <Dialog open={editCommissionDialog} onOpenChange={setEditCommissionDialog}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader><DialogTitle>Edit Commission Rate</DialogTitle></DialogHeader>
+          {editCommissionAffiliate && (
+            <div className="space-y-4">
+              <p className="text-sm text-gray-600">Setting commission rate for <strong>{editCommissionAffiliate.firstName} {editCommissionAffiliate.lastName}</strong></p>
+              <div>
+                <label className="text-sm font-medium text-gray-700 mb-1 block">Commission Rate (%)</label>
+                <Input type="number" min="1" max="100" value={editCommissionValue} onChange={e => setEditCommissionValue(e.target.value)} className="h-12 text-lg font-bold" />
+              </div>
+              <div className="flex gap-2">
+                <Button variant="outline" className="flex-1" onClick={() => setEditCommissionDialog(false)}>Cancel</Button>
+                <Button className="flex-1 bg-blue-500 hover:bg-blue-600 text-white" onClick={saveCommissionRate}>Save</Button>
               </div>
             </div>
           )}
