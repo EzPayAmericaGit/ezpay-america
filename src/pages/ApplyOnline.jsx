@@ -285,9 +285,10 @@ export default function ApplyOnline() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Apply Online"
-        description="Apply for a merchant account with EzPay America. Fast approval, zero transaction fees, free equipment. Complete your application in minutes."
-        keywords="merchant account application, apply for credit card processing, merchant services application, payment processing signup"
+        title="Apply for Zero-Fee Merchant Account | EzPay America"
+        description="Apply online for zero-fee credit card processing with EzPay America. Get approved in 24 hours, free POS equipment, no contracts. Start accepting payments with $0 in processing fees."
+        keywords="apply for merchant account, merchant account application online, zero fee credit card processing application, apply for payment processing, merchant services application, get merchant account, credit card processing signup, apply online EzPay America"
+        url="https://ezpayamerica.com/ApplyOnline"
       />
       
       {/* Hero Section */}

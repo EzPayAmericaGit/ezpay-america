@@ -68,8 +68,8 @@ export default function ECommerce() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="E-Commerce Payment Processing - Online Payment Gateway"
-        description="Accept online payments with EzPay America's eCommerce payment gateway. Integration with Shopify, WooCommerce, Magento, BigCommerce. Secure checkout, fraud protection, multi-currency support. Lower rates for online merchants. Call (865) 316-9625."
+        title="E-Commerce Payment Gateway – Shopify, WooCommerce & More | EzPay America"
+        description="Secure e-commerce payment gateway for Shopify, WooCommerce, Magento & BigCommerce. Accept all cards online, recurring billing, fraud protection, and same-day deposits. No monthly fees. Apply free."
         keywords="ecommerce payment processing, online payment gateway, accept payments online, ecommerce merchant account, online credit card processing, payment gateway integration, Shopify payments, WooCommerce payments, Magento payment processing, shopping cart integration, virtual terminal, online payment solutions, secure checkout, ecommerce payments, internet merchant account, web payment processing, hosted payment page, payment gateway API, recurring billing online, subscription payment processing, digital wallet payments, Apple Pay online, Google Pay ecommerce, mobile checkout, international payment processing, multi-currency gateway, fraud prevention ecommerce, PCI compliant gateway, tokenization, 3D secure, chargeback protection, cart abandonment recovery"
       />
 

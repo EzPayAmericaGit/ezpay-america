@@ -116,9 +116,10 @@ export default function Quiz() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Payment Solution Finder Quiz - Find Your Perfect POS System"
-        description="Take our quick interactive quiz to discover the best payment processing and POS solution tailored to your business type, industry, and needs. Get personalized recommendations in minutes with free consultation included."
-        keywords="payment solution quiz, POS system finder, payment processing quiz, merchant services quiz, business payment quiz, find my POS system, POS system selector, payment solution finder, business type quiz, industry solution finder, which POS system, best POS for my business, payment processing recommendations, merchant services finder, business needs assessment, solution matcher, payment calculator, POS comparison tool, free consultation, business evaluation quiz, payment needs analysis, custom solution finder, tailored recommendations, personalized payment solutions"
+        title="Find the Best POS & Payment Processing for Your Business | EzPay America"
+        description="Take our free 2-minute quiz to find the best credit card processing and POS system for your business. Get personalized merchant services recommendations — retail, restaurant, services, and more."
+        keywords="best POS system quiz, payment processing finder, which credit card processor is best, POS system for my business, merchant services comparison, best payment processor for small business, restaurant POS quiz, retail POS quiz, payment processing recommendation"
+        url="https://ezpayamerica.com/Quiz"
       />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500">

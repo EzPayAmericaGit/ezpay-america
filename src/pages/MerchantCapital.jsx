@@ -78,8 +78,8 @@ export default function MerchantCapital() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Merchant Cash Advance - Fast Business Funding | EzPay America"
-        description="Get fast business funding with merchant cash advance from EzPay America. $5K-$500K working capital, 24-hour approval, no collateral required. Repayment based on daily sales. Bad credit OK. Call (865) 316-9625."
+        title="Merchant Capital & Business Cash Advance | EzPay America"
+        description="Get $5,000–$500,000 in working capital with a merchant cash advance from EzPay America. 24-hour approval, no collateral, revenue-based repayment. All credit types accepted. Call (865) 316-9625."
         keywords="merchant cash advance, business cash advance, merchant funding, small business loans, business working capital, fast business funding, merchant capital, revenue based financing, alternative business lending, quick business loans, no collateral business loans, bad credit business funding, same day business funding, restaurant funding, retail business loans, cash advance for business, business capital advance, merchant advance loan, credit card receivables financing, future receivables financing, business funding no credit check, emergency business funding, working capital advance, merchant financing, small business cash advance, daily payment business loan"
       />
 

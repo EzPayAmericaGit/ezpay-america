@@ -311,8 +311,8 @@ export default function BookAppointment() {
   return (
     <>
       <SEOHead
-        title="Book a Free Consultation | EzPay America Payment Processing"
-        description="Schedule a free consultation with an EzPay America payment specialist. No obligation, no contracts. Get your free quote and free equipment today."
+        title="Book a Free Merchant Services Consultation | EzPay America"
+        description="Schedule a free 30-minute consultation with an EzPay America payment specialist. Learn how to eliminate credit card processing fees, get free POS equipment, and grow your business. No obligation."
         keywords="book appointment EzPay America, free consultation payment processing, schedule demo merchant services"
         url="https://ezpayamerica.com/BookAppointment"
       />

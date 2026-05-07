@@ -21,8 +21,8 @@ export default function MobilePayments() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead
-        title="Mobile Payments & Tap-to-Pay Solutions | EzPay America"
-        description="Accept mobile tap-to-pay payments anywhere. Free Bluetooth card reader, zero transaction fees, works on 4G & WiFi. Perfect for events, markets, and pop-ups. Apply free."
+        title="Mobile Payment Processing & Tap-to-Pay for Small Business | EzPay America"
+        description="Accept tap-to-pay, chip, and swipe payments anywhere with a free Bluetooth card reader. Zero transaction fees, works on 4G & WiFi. Best mobile payment solution for markets, events & pop-ups."
         keywords="mobile payments, tap to pay, mobile payment processing, mobile card reader, NFC payments, contactless mobile payment, accept payments on phone, mobile payment small business, Bluetooth card reader, mobile POS, tap to pay small business"
         url="https://ezpayamerica.com/MobilePayments"
       />

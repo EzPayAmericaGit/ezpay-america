@@ -129,8 +129,8 @@ export default function FAQ() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead
-        title="FAQ - Frequently Asked Questions | EzPay America"
-        description="Get answers to the most common questions about EzPay America's zero-fee payment processing, free POS equipment, setup, fees, and merchant support."
+        title="Payment Processing FAQs – Zero-Fee Merchant Services Explained | EzPay America"
+        description="Answers to the most common questions about zero-fee credit card processing, free POS equipment, merchant account approval, fees, contracts, and support at EzPay America."
         keywords="payment processing FAQ, zero fee processing questions, merchant services FAQ, POS equipment questions, EzPay America FAQ, credit card processing questions"
         url="https://ezpayamerica.com/FAQ"
       />
