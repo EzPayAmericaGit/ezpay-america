@@ -47,16 +47,13 @@ export default function AffiliateSignup() {
     if (!validate()) return;
     setLoading(true);
     const referralCode = generateCode(form.firstName, form.lastName);
-    const created = await base44.asServiceRole?.entities?.Affiliate?.create({
+    const created = await base44.entities.Affiliate.create({
       ...form,
       referralCode,
       status: "pending",
       commissionRate: 10,
       totalEarned: 0, totalPaid: 0, totalReferrals: 0, totalConversions: 0, totalClicks: 0,
       tier: "bronze"
-    }) ?? await base44.entities.Affiliate.create({
-      ...form, referralCode, status: "pending", commissionRate: 10,
-      totalEarned: 0, totalPaid: 0, totalReferrals: 0, totalConversions: 0, totalClicks: 0, tier: "bronze"
     });
 
     // Notify admin
