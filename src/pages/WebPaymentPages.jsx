@@ -21,8 +21,8 @@ export default function WebPaymentPages() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead
-        title="Web Payment Pages & Online Payment Processing | EzPay America"
-        description="Custom online payment pages for your business. Accept credit cards online, recurring billing, payment links, and more. No coding needed. Apply free. (865) 316-9625."
+        title="Online Payment Pages & Payment Links for Small Business | EzPay America"
+        description="Custom branded payment pages live in minutes. Accept all credit cards online, send payment links via text/email, set up recurring billing — zero transaction fees, no coding required. Apply free."
         keywords="web payment page, online payment processing, online credit card processing, payment link, recurring billing online, e-commerce payment gateway, secure online payments, virtual payment page, hosted payment page, online merchant services, accept payments online"
         url="https://ezpayamerica.com/WebPaymentPages"
       />

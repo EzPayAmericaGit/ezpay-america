@@ -48,8 +48,8 @@ export default function GatewayMobilePayments() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead
-        title="Mobile & Tap-to-Pay Payment Processing"
-        description="Accept contactless tap-to-pay payments on any smartphone with EzPay America. Apple Pay, Google Pay, NFC payments — no card reader required. Zero setup fees, no contracts."
+        title="Mobile Payments & Tap-to-Pay – Accept Cards on Any Phone | EzPay America"
+        description="Accept contactless tap-to-pay on any iPhone or Android — no card reader required. Supports Apple Pay, Google Pay & Samsung Pay. Works on cell or Wi-Fi. Zero setup fees."
         keywords="mobile payment processing, tap to pay smartphone, NFC payment processing, Apple Pay merchant, Google Pay merchant, contactless payment small business, mobile payment terminal, accept payments on phone, EzPay mobile payments, tap to pay no reader"
         url="https://ezpayamerica.com/GatewayMobilePayments"
       />

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import SEOHead from "../components/SEOHead";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -431,6 +432,7 @@ Optimize for:
 
   return (
     <div className="min-h-screen bg-gray-50 py-24 px-4">
+      <SEOHead noindex={true} title="News Admin" />
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">News Admin</h1>

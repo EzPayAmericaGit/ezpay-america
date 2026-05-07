@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import SEOHead from "../components/SEOHead";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -302,6 +303,7 @@ export default function LeadsView() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-24 px-4">
+      <SEOHead noindex={true} title="Leads View" />
       <div className="max-w-7xl mx-auto">
 
         {/* Header */}

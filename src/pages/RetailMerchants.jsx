@@ -23,8 +23,8 @@ export default function RetailMerchants() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead
-        title="Zero Fee Credit Card Processing for Retail Stores | EzPay America"
-        description="Best payment processor for retail stores. Zero transaction fees, free POS equipment, no contracts. Eliminate credit card fees and keep every dollar you earn. Apply in minutes."
+        title="Zero-Fee Credit Card Processing for Retail Stores | EzPay America"
+        description="Best payment processor for retail stores. $0 transaction fees, free POS equipment, no contracts. Our cash discount program eliminates processing costs entirely. Apply in minutes & get approved in 24 hours."
         keywords="zero fee credit card processing retail, retail payment processing, cash discount program retail, retail merchant services, retail POS system, best payment processor for retail store, no fee credit card processing, free POS equipment"
         url="https://ezpayamerica.com/RetailMerchants"
       />

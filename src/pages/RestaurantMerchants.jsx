@@ -23,8 +23,8 @@ export default function RestaurantMerchants() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead
-        title="Zero Fee Credit Card Processing for Restaurants | EzPay America"
-        description="Best payment processor for restaurants. Zero transaction fees, free restaurant POS, tableside payments, and tip management. No contracts. Eliminate processing fees today."
+        title="Zero-Fee Payment Processing for Restaurants | Best Restaurant POS | EzPay America"
+        description="Eliminate credit card processing fees at your restaurant. Free restaurant POS with table management, tip prompts & tableside payments. No contracts, 24-hour approval. Save $1,000–$2,000+/month."
         keywords="zero fee credit card processing restaurants, restaurant payment processing, restaurant merchant services, cash discount program restaurant, restaurant POS system, best payment processor restaurant, no fee restaurant credit card processing, free restaurant POS"
         url="https://ezpayamerica.com/RestaurantMerchants"
       />

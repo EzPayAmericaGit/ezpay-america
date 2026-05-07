@@ -19,8 +19,8 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Zero Fee Credit Card Processing for Small Business | EzPay America"
-        description="Eliminate credit card fees with our cash discount program. Trusted merchant services for small businesses. Free POS equipment, no contracts, 24-hr approval. Get started today."
+        title="Zero-Fee Credit Card Processing for Small Business | EzPay America"
+        description="Eliminate 100% of your credit card processing fees with EzPay America's cash discount program. Free POS equipment, no contracts, 24-hour approval. Trusted by 15,000+ retail & restaurant merchants nationwide."
         keywords="zero fee credit card processing, cash discount program, credit card processing for small business, merchant services provider, payment processing solutions, best credit card processor for small business, cheapest credit card processing, how to avoid credit card fees, merchant account, no fee payment processing, free POS system, zero fee processing, restaurant POS, retail POS, EzPay America"
         pageSchema={[
           {

@@ -9,6 +9,7 @@ import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
+import SEOHead from "../components/SEOHead";
 import { 
   Building2, 
   Search, 
@@ -525,6 +526,7 @@ Provide a complete article with all metadata.`,
 
   return (
     <div className="min-h-screen bg-gray-50 py-24 px-4">
+      <SEOHead noindex={true} title="Admin Dashboard" />
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <div>

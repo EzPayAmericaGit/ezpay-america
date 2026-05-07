@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import SEOHead from "../components/SEOHead";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -117,6 +118,7 @@ export default function SEOMonitor() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-24 px-4">
+      <SEOHead noindex={true} title="SEO Monitor" />
       <div className="max-w-7xl mx-auto space-y-6">
 
         {/* Header */}

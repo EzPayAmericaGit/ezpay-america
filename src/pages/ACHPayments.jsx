@@ -45,8 +45,8 @@ const defaultContent = {
     { q: "Is there a minimum monthly volume for ACH processing?", a: "No. EzPay America offers ACH processing for businesses of all sizes, from small service providers to high-volume B2B companies." }
   ],
   seo: {
-    title: "ACH Payment Processing - Accept Bank Transfers | EzPay America",
-    description: "Accept ACH payments and bank transfers with EzPay America. Lower fees than credit cards, automated recurring billing, secure payroll deposits. Fast approval and easy integration. Call (865) 316-9625.",
+    title: "ACH Payment Processing – Bank Transfers & Recurring Billing | EzPay America",
+    description: "Accept ACH bank transfers for a fraction of credit card costs. Automated recurring billing, payroll deposits, B2B invoicing, and NACHA-compliant processing. Fast approval. Call (865) 316-9625.",
     keywords: "ACH payment processing, ACH payments, bank transfer payments, electronic check processing, eCheck payments, ACH credit, ACH debit, recurring ACH payments, automated clearing house, direct deposit, payroll ACH, bank account payments, ACH merchant services, ACH processing fees, accept bank transfers, electronic funds transfer, EFT processing, ACH payment gateway, recurring billing ACH, subscription payments ACH, low cost payment processing, bank to bank transfers, check by phone, check by web, ACH payment solutions, business ACH processing"
   }
 };

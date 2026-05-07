@@ -21,8 +21,8 @@ export default function RetailPaymentSolutions() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead
-        title="Retail Payment Solutions – Complete POS & Processing | EzPay America"
-        description="Complete retail payment solutions: zero-fee processing, inventory management, loyalty programs, multi-location support. Best retail POS for small business. Apply free."
+        title="Complete Retail Payment Solutions – POS, Inventory & Zero Fees | EzPay America"
+        description="Full retail payment ecosystem: zero-fee processing, inventory management, loyalty programs, multi-location support, and omnichannel payments. The best retail merchant services for small business."
         keywords="retail payment solutions, retail payment processing, retail POS system, retail merchant services, multi-location retail payment, omnichannel retail payment, retail inventory management, retail credit card processing, best retail payment processor, retail point of sale"
         url="https://ezpayamerica.com/RetailPaymentSolutions"
       />

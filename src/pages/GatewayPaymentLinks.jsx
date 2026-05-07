@@ -48,8 +48,8 @@ export default function GatewayPaymentLinks() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead
-        title="Instant Payment Links for Businesses"
-        description="Send secure, branded payment links via text or email in seconds with EzPay America. Perfect for invoices, phone orders, and deposits. No terminal needed. Zero setup fees."
+        title="Payment Links – Get Paid by Text or Email | EzPay America"
+        description="Send secure, branded payment links via text or email in seconds. Customers pay instantly from any device. Perfect for invoices, phone orders, and deposits. No terminal needed. Zero setup fees."
         keywords="payment links, send payment link via text, payment link via email, instant payment link, branded payment link, invoice payment link, no terminal payment, text to pay, virtual payment link, EzPay payment links, small business payment link"
         url="https://ezpayamerica.com/GatewayPaymentLinks"
       />

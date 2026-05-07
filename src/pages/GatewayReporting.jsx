@@ -48,8 +48,8 @@ export default function GatewayReporting() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead
-        title="Payment Reporting & Analytics Dashboard"
-        description="Get real-time payment reporting and analytics with EzPay America's gateway dashboard. Transaction reports, batch settlements, multi-location data, chargeback tracking. Zero fees."
+        title="Payment Reporting & Transaction Analytics Dashboard | EzPay America"
+        description="Real-time payment reports, batch settlements, multi-location analytics, and chargeback tracking — all in one EzPay dashboard. Automated daily/monthly reports emailed to your inbox."
         keywords="payment reporting dashboard, transaction analytics, real-time payment reports, batch settlement report, multi-location payment reporting, chargeback tracking, sales analytics payment, EzPay reporting, payment reconciliation, merchant analytics dashboard"
         url="https://ezpayamerica.com/GatewayReporting"
       />

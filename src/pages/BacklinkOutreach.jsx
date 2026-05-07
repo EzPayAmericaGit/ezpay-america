@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import SEOHead from "../components/SEOHead";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -141,6 +142,7 @@ Return just the email body, no subject line.`,
 
   return (
     <div className="min-h-screen bg-gray-50 py-24 px-4">
+      <SEOHead noindex={true} title="Backlink Outreach" />
       <div className="max-w-5xl mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">

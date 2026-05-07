@@ -21,27 +21,27 @@ export default function HeroSection() {
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-md">
               <Sparkles className="w-4 h-4 text-amber-600" />
               <span className="text-sm font-medium text-gray-700">
-                Trusted Payment Solutions
+                #1 Zero-Fee Payment Processor for Small Business
               </span>
             </div>
 
             <div className="space-y-4">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                Zero Fee Credit Card Processing<br className="hidden sm:block" /> for Small Businesses
+                Stop Paying Credit Card<br className="hidden sm:block" /> Processing Fees — Forever
               </h1>
               <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent leading-snug">
-                Cash Discount Program — No Contracts, No Hidden Fees, No Monthly Costs
+                Zero-Fee Merchant Services · Free POS Equipment · No Contracts
               </h2>
             </div>
 
             <p className="text-xl text-gray-600 leading-relaxed">
-              Accept credit cards with transparent pricing, 24-hour approval, and free POS equipment. Trusted by 15,000+ small businesses nationwide — retail, restaurants, and more.
+              EzPay America's cash discount program eliminates 100% of your credit card processing fees. Free equipment. 24-hour approval. No monthly costs. Trusted by 15,000+ retailers and restaurants nationwide.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to={createPageUrl("ApplyOnline")}>
                 <Button className="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-6 text-lg shadow-xl hover:shadow-2xl transition-all">
-                  Get Your Free Quote
+                  Apply Free — Get Started Today
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
               </Link>
@@ -57,7 +57,7 @@ export default function HeroSection() {
 
             {/* Trust signals */}
             <div className="flex flex-nowrap items-center gap-3 pt-2 overflow-x-auto">
-              {["15,000+ merchants served", "No contracts ever", "24-hour approval", "PCI DSS Compliant"].map((item) => (
+              {["15,000+ businesses served", "Zero transaction fees", "24-hour approval", "No contracts ever"].map((item) => (
                 <div key={item} className="flex items-center gap-1 text-xs text-gray-600 whitespace-nowrap flex-shrink-0">
                   <span aria-hidden="true" className="w-4 h-4 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-bold text-xs flex-shrink-0">✓</span>
                   {item}
@@ -88,8 +88,8 @@ export default function HeroSection() {
                   <span className="text-white font-bold text-xl">✓</span>
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-900">No Transaction Fees</p>
-                  <p className="text-sm text-gray-500">Save on every transaction</p>
+                  <p className="font-semibold text-gray-900">$0 Processing Fees</p>
+                  <p className="text-sm text-gray-500">Keep every dollar you earn</p>
                 </div>
               </div>
             </div>

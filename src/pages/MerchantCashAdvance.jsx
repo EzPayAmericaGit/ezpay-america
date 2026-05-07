@@ -21,8 +21,8 @@ export default function MerchantCashAdvance() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead
-        title="Merchant Cash Advance – Fast Business Funding | EzPay America"
-        description="Get a merchant cash advance up to $500K in 24–72 hours. Revenue-based repayment, no collateral, all credit types. Fast small business funding. Apply free."
+        title="Merchant Cash Advance Up to $500K | Fast Business Funding | EzPay America"
+        description="Get a merchant cash advance up to $500,000 in 24–72 hours. No collateral, all credit types welcome, revenue-based repayment. The fastest way to fund your small business growth."
         keywords="merchant cash advance, small business funding, business cash advance, fast business loan, working capital advance, merchant funding, revenue based financing, no collateral business loan, merchant cash advance small business, quick business funding"
         url="https://ezpayamerica.com/MerchantCashAdvance"
       />

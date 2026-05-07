@@ -9,7 +9,10 @@ export default function SEOHead({ title, description, keywords, image, url, noin
   
   // Compute canonical URL — use explicit prop, fall back to current path on ezpayamerica.com
   const canonicalUrl = url || (typeof window !== 'undefined' ? `${SITE_URL}${window.location.pathname}` : SITE_URL);
-  const metaTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} - Zero-Fee Payment Processing`;
+  // Don't double-append "| EzPay America" if the title already contains it
+  const metaTitle = title
+    ? (title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`)
+    : `${SITE_NAME} - Zero-Fee Payment Processing`;
   const metaDescription = description || DEFAULT_DESCRIPTION;
 
   // Set document title immediately - Google recommends 50-60 characters

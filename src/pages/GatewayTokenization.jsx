@@ -48,8 +48,8 @@ export default function GatewayTokenization() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead
-        title="Payment Tokenization & Card Security"
-        description="EzPay America's payment tokenization replaces sensitive card data with secure tokens, ensuring PCI DSS Level 1 compliance and protecting every transaction. Zero extra fees."
+        title="Payment Tokenization & PCI Compliant Card Security | EzPay America"
+        description="EzPay America's tokenization replaces card data with secure tokens — PCI DSS Level 1 certified, encrypted vault for recurring billing, and network tokenization via Visa & Mastercard. Zero extra fees."
         keywords="payment tokenization, card tokenization, PCI DSS compliance, secure card vault, network tokenization, payment security, credit card tokenization, PCI compliant payment processing, reduce PCI scope, token vault payment"
         url="https://ezpayamerica.com/GatewayTokenization"
       />

@@ -48,8 +48,8 @@ export default function GatewayFraudProtection() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead
-        title="Payment Fraud Protection & Prevention"
-        description="Protect your business with EzPay America's built-in fraud detection — velocity filters, 3D Secure, AVS & CVV verification, IP screening, and real-time risk scoring. Zero extra cost."
+        title="Payment Fraud Protection & Chargeback Prevention | EzPay America"
+        description="Enterprise-grade fraud detection built into every EzPay account: velocity filters, 3D Secure, AVS & CVV verification, IP screening, real-time scoring. Chargeback liability shifted away from you."
         keywords="payment fraud protection, fraud detection payment gateway, 3D Secure payment processing, AVS CVV verification, chargeback prevention, velocity filter payment, fraud prevention small business, EzPay fraud protection, real-time fraud scoring, BIN blocking payment"
         url="https://ezpayamerica.com/GatewayFraudProtection"
       />

@@ -48,8 +48,8 @@ export default function GatewayRecurringBilling() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead
-        title="Recurring Billing & Subscription Payments"
-        description="Automate recurring billing and subscription payments with EzPay America's gateway. Installment plans, smart retries, card updater, and PCI-compliant tokenization. Zero setup fees."
+        title="Recurring Billing & Subscription Payment Processing | EzPay America"
+        description="Automate recurring billing and subscription payments with EzPay America. Smart retry logic, card updater service, PCI-compliant tokenization, and flexible schedules. Zero setup fees, no contracts."
         keywords="recurring billing gateway, subscription payment processing, automated billing, installment payments, card updater service, failed payment retry, recurring payments small business, subscription billing EzPay, no fee recurring billing, PCI compliant recurring payments"
         url="https://ezpayamerica.com/GatewayRecurringBilling"
       />
