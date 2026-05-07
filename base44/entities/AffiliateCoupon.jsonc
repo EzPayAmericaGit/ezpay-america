@@ -1,0 +1,61 @@
+{
+  "name": "AffiliateCoupon",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string",
+      "description": "Coupon code (e.g. SAVE10)"
+    },
+    "affiliateId": {
+      "type": "string",
+      "description": "Affiliate this coupon belongs to (null = global)"
+    },
+    "affiliateName": {
+      "type": "string",
+      "description": "Affiliate name for display"
+    },
+    "discountType": {
+      "type": "string",
+      "enum": [
+        "percentage",
+        "flat"
+      ],
+      "default": "flat",
+      "description": "Type of discount"
+    },
+    "discountValue": {
+      "type": "number",
+      "description": "Discount amount (% or $)"
+    },
+    "description": {
+      "type": "string",
+      "description": "What this coupon offers to the customer"
+    },
+    "maxUses": {
+      "type": "number",
+      "description": "Maximum number of uses (null = unlimited)"
+    },
+    "currentUses": {
+      "type": "number",
+      "default": 0
+    },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Expiration date (null = no expiry)"
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true
+    },
+    "programId": {
+      "type": "string",
+      "description": "Associated affiliate program"
+    }
+  },
+  "required": [
+    "code",
+    "discountType",
+    "discountValue"
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "name": "AffiliateProgram",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Program name (e.g. 'Standard Partner', 'VIP Reseller')"
+    },
+    "description": {
+      "type": "string",
+      "description": "Program description shown to affiliates"
+    },
+    "commissionType": {
+      "type": "string",
+      "enum": [
+        "flat",
+        "percentage",
+        "tiered"
+      ],
+      "default": "flat",
+      "description": "How commission is calculated"
+    },
+    "commissionValue": {
+      "type": "number",
+      "description": "Flat $ amount or percentage value"
+    },
+    "cookieDays": {
+      "type": "number",
+      "default": 30,
+      "description": "Days the referral cookie lasts"
+    },
+    "minPayout": {
+      "type": "number",
+      "default": 50,
+      "description": "Minimum payout threshold in $"
+    },
+    "payoutSchedule": {
+      "type": "string",
+      "enum": [
+        "immediate",
+        "weekly",
+        "monthly",
+        "net30"
+      ],
+      "default": "net30",
+      "description": "When payouts are processed"
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true,
+      "description": "Is this program accepting new affiliates"
+    },
+    "isDefault": {
+      "type": "boolean",
+      "default": false,
+      "description": "Default program for new signups"
+    },
+    "requiresApproval": {
+      "type": "boolean",
+      "default": true,
+      "description": "Do affiliates need manual approval"
+    },
+    "maxAffiliates": {
+      "type": "number",
+      "description": "Maximum affiliates allowed (null = unlimited)"
+    },
+    "targetAudience": {
+      "type": "string",
+      "description": "Who this program is designed for"
+    },
+    "terms": {
+      "type": "string",
+      "description": "Program-specific terms and conditions"
+    },
+    "color": {
+      "type": "string",
+      "default": "#f59e0b",
+      "description": "Brand color for this program"
+    },
+    "totalAffiliates": {
+      "type": "number",
+      "default": 0
+    },
+    "totalReferrals": {
+      "type": "number",
+      "default": 0
+    },
+    "totalRevenue": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "name",
+    "commissionType",
+    "commissionValue"
+  ]
+}

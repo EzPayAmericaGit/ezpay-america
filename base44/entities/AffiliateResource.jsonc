@@ -1,0 +1,71 @@
+{
+  "name": "AffiliateResource",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Resource title"
+    },
+    "description": {
+      "type": "string",
+      "description": "Short description of the resource"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "banner",
+        "email_template",
+        "social_post",
+        "document",
+        "video",
+        "link",
+        "landing_page"
+      ],
+      "description": "Type of resource"
+    },
+    "fileUrl": {
+      "type": "string",
+      "description": "URL to the downloadable file or resource"
+    },
+    "previewUrl": {
+      "type": "string",
+      "description": "Preview/thumbnail image URL"
+    },
+    "dimensions": {
+      "type": "string",
+      "description": "For banners: dimensions like '728x90'"
+    },
+    "format": {
+      "type": "string",
+      "description": "File format: PNG, JPG, PDF, DOCX, etc."
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "banners",
+        "email_swipes",
+        "social_media",
+        "guides",
+        "videos",
+        "other"
+      ],
+      "default": "other"
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true
+    },
+    "downloadCount": {
+      "type": "number",
+      "default": 0
+    },
+    "programId": {
+      "type": "string",
+      "description": "Optional: restrict to a specific program (null = all)"
+    }
+  },
+  "required": [
+    "title",
+    "type"
+  ]
+}
