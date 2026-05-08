@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,10 +12,16 @@ import { Package, Search, Loader2, Calendar, DollarSign, MapPin, Eye, RefreshCw,
 import SEOHead from "../components/SEOHead";
 import { Textarea } from "@/components/ui/textarea";
 import { motion, AnimatePresence } from "framer-motion";
+import { Navigate } from "react-router-dom";
 
 export default function OrdersAdmin() {
   const queryClient = useQueryClient();
+  const [user, setUser] = useState(undefined);
   const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    base44.auth.me().then(setUser).catch(() => setUser(null));
+  }, []);
   const [statusFilter, setStatusFilter] = useState("all");
   const [paymentFilter, setPaymentFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("all");
@@ -213,17 +219,17 @@ EzPay America
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin" />
-      </div>
-    );
+  if (user === undefined || isLoading) {
+    return <div className="min-h-screen flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin" /></div>;
+  }
+
+  if (!user || user.role !== 'admin') {
+    return <Navigate to="/" replace />;
   }
 
   return (
     <div className="min-h-screen bg-gray-50 py-20">
-      <SEOHead title="Orders Management - Admin" />
+      <SEOHead title="Orders Management - Admin" noindex={true} />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}

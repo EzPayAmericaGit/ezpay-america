@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { Navigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
+import SEOHead from "../components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -31,11 +33,16 @@ const STATUS_BADGE = {
 };
 
 export default function AffiliateAdmin() {
+  const [authUser, setAuthUser] = useState(undefined);
   const [affiliates, setAffiliates] = useState([]);
   const [referrals, setReferrals] = useState([]);
   const [payouts, setPayouts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    base44.auth.me().then(setAuthUser).catch(() => setAuthUser(null));
+  }, []);
   const [statusFilter, setStatusFilter] = useState("all");
   const [activeTab, setActiveTab] = useState("affiliates");
   const [selectedAffiliate, setSelectedAffiliate] = useState(null);
@@ -238,10 +245,12 @@ export default function AffiliateAdmin() {
     conversions: referrals.filter(r => r.status === "converted").length,
   };
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><Loader2 className="w-10 h-10 animate-spin text-amber-500" /></div>;
+  if (authUser === undefined || loading) return <div className="min-h-screen flex items-center justify-center"><Loader2 className="w-10 h-10 animate-spin text-amber-500" /></div>;
+  if (!authUser || authUser.role !== 'admin') return <Navigate to="/" replace />;
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
+      <SEOHead title="Affiliate Admin" noindex={true} />
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>

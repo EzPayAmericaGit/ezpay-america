@@ -125,7 +125,7 @@ export default function ApplicationsAdmin() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-24 px-4">
-      <SEOHead title="Applications Management" />
+      <SEOHead title="Applications Management" noindex={true} />
       
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-6">

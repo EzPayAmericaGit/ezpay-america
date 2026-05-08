@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
@@ -10,10 +10,16 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Edit, Trash2, Upload, Loader2, Search, Filter, Package, DollarSign, Eye, EyeOff, Star, X, ArrowUpDown } from "lucide-react";
 import SEOHead from "../components/SEOHead";
+import { Navigate } from "react-router-dom";
 
 export default function ProductAdmin() {
   const queryClient = useQueryClient();
+  const [user, setUser] = useState(undefined);
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  useEffect(() => {
+    base44.auth.me().then(setUser).catch(() => setUser(null));
+  }, []);
   const [editingProduct, setEditingProduct] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -242,17 +248,17 @@ export default function ProductAdmin() {
     featured: products.filter(p => p.featured).length
   };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin" />
-      </div>
-    );
+  if (user === undefined || isLoading) {
+    return <div className="min-h-screen flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin" /></div>;
+  }
+
+  if (!user || user.role !== 'admin') {
+    return <Navigate to="/" replace />;
   }
 
   return (
     <div className="min-h-screen bg-white py-20">
-      <SEOHead title="Product Management" />
+      <SEOHead title="Product Management" noindex={true} />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
