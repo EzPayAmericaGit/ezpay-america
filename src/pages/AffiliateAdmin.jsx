@@ -39,10 +39,6 @@ export default function AffiliateAdmin() {
   const [payouts, setPayouts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-
-  useEffect(() => {
-    base44.auth.me().then(setAuthUser).catch(() => setAuthUser(null));
-  }, []);
   const [statusFilter, setStatusFilter] = useState("all");
   const [activeTab, setActiveTab] = useState("affiliates");
   const [selectedAffiliate, setSelectedAffiliate] = useState(null);
@@ -61,6 +57,10 @@ export default function AffiliateAdmin() {
   const [editCommissionDialog, setEditCommissionDialog] = useState(false);
   const [editCommissionAffiliate, setEditCommissionAffiliate] = useState(null);
   const [editCommissionValue, setEditCommissionValue] = useState("");
+
+  useEffect(() => {
+    base44.auth.me().then(setAuthUser).catch(() => setAuthUser(null));
+  }, []);
 
   useEffect(() => { loadAll(); }, []);
 
