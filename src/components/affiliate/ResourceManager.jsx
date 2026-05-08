@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Plus, Trash2, Download, Image, Mail, FileText, Video, Link, Pencil } from "lucide-react";
+import { Plus, Trash2, Download, Image, Mail, FileText, Video, Link, Pencil, Upload, Loader2 } from "lucide-react";
 
 const TYPE_ICONS = {
   banner: Image,
@@ -44,6 +44,10 @@ export default function ResourceManager({ isAffiliate = false }) {
   const [form, setForm] = useState(defaultForm);
   const [saving, setSaving] = useState(false);
   const [categoryFilter, setCategoryFilter] = useState("all");
+  const [uploading, setUploading] = useState(false);
+  const [uploadingPreview, setUploadingPreview] = useState(false);
+  const fileInputRef = useRef(null);
+  const previewInputRef = useRef(null);
 
   useEffect(() => { loadResources(); }, []);
 
@@ -84,6 +88,25 @@ export default function ResourceManager({ isAffiliate = false }) {
     if (!confirm("Delete this resource?")) return;
     await base44.entities.AffiliateResource.delete(id);
     setResources(prev => prev.filter(r => r.id !== id));
+  };
+
+  const handleFileUpload = async (e, field) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (field === "fileUrl") setUploading(true);
+    else setUploadingPreview(true);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      setForm(prev => ({ ...prev, [field]: file_url }));
+      // Auto-detect format from file extension
+      if (field === "fileUrl") {
+        const ext = file.name.split(".").pop().toUpperCase();
+        setForm(prev => ({ ...prev, [field]: file_url, format: ext }));
+      }
+    } finally {
+      setUploading(false);
+      setUploadingPreview(false);
+    }
   };
 
   const handleDownload = async (resource) => {
@@ -206,12 +229,26 @@ export default function ResourceManager({ isAffiliate = false }) {
                 </div>
               </div>
               <div>
-                <label className="text-xs font-medium text-gray-600 mb-1 block">File / Download URL</label>
-                <Input placeholder="https://..." value={form.fileUrl} onChange={e => setForm({ ...form, fileUrl: e.target.value })} />
+                <label className="text-xs font-medium text-gray-600 mb-1 block">File / Download</label>
+                <div className="flex gap-2">
+                  <Input placeholder="https://... or upload below" value={form.fileUrl} onChange={e => setForm({ ...form, fileUrl: e.target.value })} className="flex-1" />
+                  <Button type="button" variant="outline" size="sm" onClick={() => fileInputRef.current?.click()} disabled={uploading} className="shrink-0">
+                    {uploading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5" />}
+                  </Button>
+                  <input ref={fileInputRef} type="file" className="hidden" onChange={e => handleFileUpload(e, "fileUrl")} />
+                </div>
+                {form.fileUrl && <p className="text-xs text-green-600 mt-1 truncate">✓ {form.fileUrl.split("/").pop()}</p>}
               </div>
               <div>
-                <label className="text-xs font-medium text-gray-600 mb-1 block">Preview Image URL (optional)</label>
-                <Input placeholder="https://..." value={form.previewUrl} onChange={e => setForm({ ...form, previewUrl: e.target.value })} />
+                <label className="text-xs font-medium text-gray-600 mb-1 block">Preview Image (optional)</label>
+                <div className="flex gap-2">
+                  <Input placeholder="https://... or upload below" value={form.previewUrl} onChange={e => setForm({ ...form, previewUrl: e.target.value })} className="flex-1" />
+                  <Button type="button" variant="outline" size="sm" onClick={() => previewInputRef.current?.click()} disabled={uploadingPreview} className="shrink-0">
+                    {uploadingPreview ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Image className="w-3.5 h-3.5" />}
+                  </Button>
+                  <input ref={previewInputRef} type="file" accept="image/*" className="hidden" onChange={e => handleFileUpload(e, "previewUrl")} />
+                </div>
+                {form.previewUrl && <img src={form.previewUrl} alt="preview" className="mt-1 h-16 rounded object-cover border" onError={e => e.target.style.display="none"} />}
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <Input placeholder="Dimensions (e.g. 728x90)" value={form.dimensions} onChange={e => setForm({ ...form, dimensions: e.target.value })} />

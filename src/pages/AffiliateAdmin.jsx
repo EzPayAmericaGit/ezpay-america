@@ -21,6 +21,8 @@ import ProgramManager from "../components/affiliate/ProgramManager";
 import ResourceManager from "../components/affiliate/ResourceManager";
 import CouponManager from "../components/affiliate/CouponManager";
 import MerchantApplicationsAnalytics from "../components/affiliate/MerchantApplicationsAnalytics";
+import AffiliateMilestones from "../components/affiliate/AffiliateMilestones";
+import ReferralLinkGenerator from "../components/affiliate/ReferralLinkGenerator";
 
 const STATUS_BADGE = {
   pending: "bg-yellow-100 text-yellow-800",
@@ -293,7 +295,7 @@ export default function AffiliateAdmin() {
 
         {/* Tabs */}
         <div className="flex gap-1 bg-gray-200 rounded-xl p-1 mb-6 flex-wrap">
-          {["affiliates", "referrals", "payouts", "batch-payout", "analytics", "merchant-applications", "programs", "coupons", "resources", "drip-campaigns", "email-templates", "tier-rules"].map(t => (
+          {["affiliates", "referrals", "payouts", "batch-payout", "analytics", "merchant-applications", "milestones", "link-generator", "programs", "coupons", "resources", "drip-campaigns", "email-templates", "tier-rules"].map(t => (
             <button key={t} onClick={() => setActiveTab(t)}
               className={`px-4 py-2 rounded-lg text-sm font-medium capitalize transition-all flex items-center gap-1.5 ${activeTab === t ? "bg-white shadow text-gray-900" : "text-gray-600 hover:text-gray-900"}`}>
               {t === "analytics" && <BarChart2 className="w-3.5 h-3.5" />}
@@ -309,6 +311,8 @@ export default function AffiliateAdmin() {
                t === "tier-rules" ? "Tier Rules" :
                t === "drip-campaigns" ? "Drip Campaigns" :
                t === "merchant-applications" ? "Merchant Applications" :
+               t === "milestones" ? "Milestones" :
+               t === "link-generator" ? "Link Generator" :
                t === "programs" ? "Programs" :
                t === "resources" ? "Resources" :
                t === "coupons" ? "Coupons" : "Analytics"}
@@ -541,6 +545,16 @@ export default function AffiliateAdmin() {
         {/* Merchant Applications Tab */}
         {activeTab === "merchant-applications" && (
           <MerchantApplicationsAnalytics affiliates={affiliates} />
+        )}
+
+        {/* Milestones Tab */}
+        {activeTab === "milestones" && (
+          <AffiliateMilestones affiliates={affiliates} />
+        )}
+
+        {/* Link Generator Tab */}
+        {activeTab === "link-generator" && (
+          <ReferralLinkGenerator affiliates={affiliates} />
         )}
 
         {/* Email Templates Tab */}
