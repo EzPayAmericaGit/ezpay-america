@@ -195,21 +195,21 @@ const AuthenticatedApp = () => {
         <Route path="/StaffingAgencyPOS" element={<StaffingAgencyPOS />} />
         <Route path="/TranslationServicesPOS" element={<TranslationServicesPOS />} />
         <Route path="/PRFirmPOS" element={<PRFirmPOS />} />
-        <Route path="/AffiliateSignup" element={<LayoutWrapper currentPageName="AffiliateSignup"><AffiliateSignup /></LayoutWrapper>} />
-        <Route path="/AffiliateDashboard" element={<LayoutWrapper currentPageName="AffiliateDashboard"><AffiliateDashboard /></LayoutWrapper>} />
-        <Route path="/AffiliateAdmin" element={<LayoutWrapper currentPageName="AffiliateAdmin"><AffiliateAdmin /></LayoutWrapper>} />
-        <Route path="/AffiliateReferralPortal" element={<LayoutWrapper currentPageName="AffiliateReferralPortal"><AffiliateReferralPortal /></LayoutWrapper>} />
-        <Route path="/AffiliateLeaderboard" element={<LayoutWrapper currentPageName="AffiliateLeaderboard"><AffiliateLeaderboard /></LayoutWrapper>} />
-        <Route path="/SEOMonitor" element={<LayoutWrapper currentPageName="SEOMonitor"><SEOMonitor /></LayoutWrapper>} />
-        <Route path="/CashDiscountProgram" element={<LayoutWrapper currentPageName="CashDiscountProgram"><CashDiscountProgram /></LayoutWrapper>} />
-        <Route path="/GiftCardProgram" element={<LayoutWrapper currentPageName="GiftCardProgram"><GiftCardProgram /></LayoutWrapper>} />
-        <Route path="/LoyaltyProgram" element={<LayoutWrapper currentPageName="LoyaltyProgram"><LoyaltyProgram /></LayoutWrapper>} />
-        <Route path="/PointOfSaleFinancing" element={<LayoutWrapper currentPageName="PointOfSaleFinancing"><PointOfSaleFinancing /></LayoutWrapper>} />
-        <Route path="/TapToPay" element={<LayoutWrapper currentPageName="TapToPay"><TapToPay /></LayoutWrapper>} />
-        <Route path="/LeadsView" element={<LayoutWrapper currentPageName="LeadsView"><LeadsView /></LayoutWrapper>} />
-        <Route path="/IndexingStatus" element={<LayoutWrapper currentPageName="IndexingStatus"><IndexingStatus /></LayoutWrapper>} />
-        <Route path="/About" element={<LayoutWrapper currentPageName="About"><About /></LayoutWrapper>} />
-        <Route path="/news/:slug" element={<LayoutWrapper currentPageName="NewsArticle"><NewsArticle /></LayoutWrapper>} />
+        <Route path="/AffiliateSignup" element={<AffiliateSignup />} />
+        <Route path="/AffiliateDashboard" element={<AffiliateDashboard />} />
+        <Route path="/AffiliateAdmin" element={<AffiliateAdmin />} />
+        <Route path="/AffiliateReferralPortal" element={<AffiliateReferralPortal />} />
+        <Route path="/AffiliateLeaderboard" element={<AffiliateLeaderboard />} />
+        <Route path="/SEOMonitor" element={<SEOMonitor />} />
+        <Route path="/CashDiscountProgram" element={<CashDiscountProgram />} />
+        <Route path="/GiftCardProgram" element={<GiftCardProgram />} />
+        <Route path="/LoyaltyProgram" element={<LoyaltyProgram />} />
+        <Route path="/PointOfSaleFinancing" element={<PointOfSaleFinancing />} />
+        <Route path="/TapToPay" element={<TapToPay />} />
+        <Route path="/LeadsView" element={<LeadsView />} />
+        <Route path="/IndexingStatus" element={<IndexingStatus />} />
+        <Route path="/About" element={<About />} />
+        <Route path="/news/:slug" element={<NewsArticle />} />
 
         {/* Legacy WordPress URL redirects → 301-equivalent client-side */}
         <Route path="/restaurant-merchants" element={<Navigate to="/RestaurantMerchants" replace />} />
@@ -249,8 +249,8 @@ const AuthenticatedApp = () => {
         <Route path="/payment-processing/:state" element={<StatePaymentLanding />} />
 
         {/* Appointment booking page */}
-        <Route path="/BookAppointment" element={<LayoutWrapper currentPageName="BookAppointment"><BookAppointment /></LayoutWrapper>} />
-        <Route path="/FAQ" element={<LayoutWrapper currentPageName="FAQ"><FAQ /></LayoutWrapper>} />
+        <Route path="/BookAppointment" element={<BookAppointment />} />
+        <Route path="/FAQ" element={<FAQ />} />
 
         {/* Dynamic location landing pages: /:businessSlug/:state/:city */}
         <Route path="/:businessSlug/:state/:city" element={<LocationLanding />} />
