@@ -5,7 +5,7 @@ const SITE_URL = "https://ezpayamerica.com";
 const DEFAULT_IMAGE = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68fffaddc76dcc9f094717fa/8eb2dd274_EZSMALL.png";
 const DEFAULT_DESCRIPTION = "EzPay America: zero-fee credit card processing & merchant services for small business. No monthly fees, no contracts, free POS equipment. Best Square & PayPal alternative. Apply online today.";
 
-export default function SEOHead({ title, description, keywords, image, url, noindex, articleSchema, pageSchema }) {
+export default function SEOHead({ title, description, keywords, image, url, noindex, articleSchema, pageSchema, suppressFaq }) {
   
   // Compute canonical URL — use explicit prop, fall back to current path on ezpayamerica.com
   const canonicalUrl = url || (typeof window !== 'undefined' ? `${SITE_URL}${window.location.pathname}` : SITE_URL);
@@ -462,8 +462,14 @@ export default function SEOHead({ title, description, keywords, image, url, noin
       articleStructuredData.remove();
     }
 
-    // Add FAQ Schema for common questions (helps with featured snippets)
+    // Add FAQ Schema for common questions — suppress when page has its own Product/rich schema
+    // to avoid Google validation conflicts ("Cannot continue validation process")
+    const shouldSuppressFaq = suppressFaq || (pageSchema && pageSchema.length > 0);
     let faqSchema = document.querySelector('script[data-schema="faq"]');
+    if (shouldSuppressFaq) {
+      if (faqSchema) faqSchema.remove();
+      return;
+    }
     if (!faqSchema) {
       faqSchema = document.createElement('script');
       faqSchema.type = 'application/ld+json';
