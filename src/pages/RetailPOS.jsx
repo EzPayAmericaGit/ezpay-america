@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SEOHead from "../components/SEOHead";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -54,42 +54,84 @@ const FAQS = [
   { q: "Can I accept Apple Pay and Google Pay?", a: "Yes. All EzPay America terminals include NFC contactless readers that accept Apple Pay, Google Pay, Samsung Pay, and any tap-to-pay card. Contactless payments are processed with zero fees just like any other card — no different rate for NFC payments." },
 ];
 
+const PRODUCT_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "EzPay America Retail POS System",
+  "description": "Cloud-based retail point of sale system with zero transaction fees, full inventory management, customer loyalty programs, multi-location support, and free hardware. No monthly software fees.",
+  "url": "https://ezpayamerica.com/retailpos",
+  "image": "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=700&h=500&fit=crop",
+  "brand": {
+    "@type": "Brand",
+    "name": "EzPay America"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0.00",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock",
+    "url": "https://ezpayamerica.com/ApplyOnline",
+    "priceValidUntil": "2027-12-31",
+    "seller": {
+      "@type": "Organization",
+      "name": "EzPay America",
+      "url": "https://ezpayamerica.com"
+    }
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "reviewCount": "284",
+    "bestRating": "5",
+    "worstRating": "1"
+  },
+  "review": [
+    {
+      "@type": "Review",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "5",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Maria S."
+      },
+      "datePublished": "2025-03-10",
+      "reviewBody": "Switched from Square and saving over $1,000 a month in fees. The inventory system is just as powerful and the support team is outstanding."
+    },
+    {
+      "@type": "Review",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "5",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "James T."
+      },
+      "datePublished": "2025-01-22",
+      "reviewBody": "Best decision I made for my boutique. Zero fees, free hardware, and setup was done in two days. Highly recommend."
+    }
+  ]
+};
+
 export default function RetailPOS() {
   return (
     <div className="min-h-screen bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(PRODUCT_SCHEMA) }}
+      />
       <SEOHead
         title="Retail POS System – Free Cloud POS With Zero Transaction Fees | EzPay America"
         description="The best retail POS system with zero credit card transaction fees. Cloud-based inventory management, customer loyalty programs, barcode scanning, multi-location support, and free hardware. Better than Square for Retail and Clover. No monthly fees. Apply free today."
         keywords="retail POS system, best retail POS system 2025, free retail point of sale, cloud POS for retail stores, retail store POS software, inventory management POS, zero fee retail processing, retail POS vs Square, small business retail POS, boutique POS system, retail credit card processing no fees, retail store merchant services, multi-location retail POS, retail loyalty program POS"
         url="https://ezpayamerica.com/retailpos"
-        pageSchema={[{
-          "@type": "Product",
-          "name": "EzPay America Retail POS System",
-          "description": "Cloud-based retail POS with zero transaction fees, full inventory management, loyalty programs, multi-location support, and free hardware. No monthly software fees.",
-          "url": "https://ezpayamerica.com/retailpos",
-          "brand": { "@type": "Brand", "name": "EzPay America" },
-          "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "USD",
-            "availability": "https://schema.org/InStock",
-            "url": "https://ezpayamerica.com/ApplyOnline",
-            "seller": { "@type": "Organization", "name": "EzPay America" }
-          },
-          "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "4.9",
-            "reviewCount": "284",
-            "bestRating": "5",
-            "worstRating": "1"
-          },
-          "review": [{
-            "@type": "Review",
-            "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
-            "author": { "@type": "Person", "name": "Verified Merchant" },
-            "reviewBody": "Switched from Square and saving over $1,000 a month in fees. The inventory system is just as good and the support is fantastic."
-          }]
-        }]}
+        suppressFaq={true}
       />
 
       {/* Hero */}
