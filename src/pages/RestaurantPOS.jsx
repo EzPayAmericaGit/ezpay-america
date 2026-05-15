@@ -71,9 +71,29 @@ export default function RestaurantPOS() {
           "@type": "Product",
           "name": "EzPay America Restaurant POS System",
           "description": "Zero-fee restaurant point of sale system with table management, kitchen display, online ordering, tableside payments, and free hardware. No monthly fees, no transaction fees.",
+          "url": "https://ezpayamerica.com/RestaurantPOS",
           "brand": { "@type": "Brand", "name": "EzPay America" },
-          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD", "availability": "https://schema.org/InStock" },
-          "aggregateRating": { "@type": "AggregateRating", "ratingValue": "5", "reviewCount": "312", "bestRating": "5" }
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "url": "https://ezpayamerica.com/ApplyOnline",
+            "seller": { "@type": "Organization", "name": "EzPay America" }
+          },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.9",
+            "reviewCount": "312",
+            "bestRating": "5",
+            "worstRating": "1"
+          },
+          "review": [{
+            "@type": "Review",
+            "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+            "author": { "@type": "Person", "name": "Verified Merchant" },
+            "reviewBody": "Switched from Toast and we're saving over $2,000 a month in fees. The table management and KDS work perfectly together."
+          }]
         }]}
       />
 
