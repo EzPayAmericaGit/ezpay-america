@@ -61,12 +61,12 @@ export default function RetailPOS() {
         title="Retail POS System – Free Cloud POS With Zero Transaction Fees | EzPay America"
         description="The best retail POS system with zero credit card transaction fees. Cloud-based inventory management, customer loyalty programs, barcode scanning, multi-location support, and free hardware. Better than Square for Retail and Clover. No monthly fees. Apply free today."
         keywords="retail POS system, best retail POS system 2025, free retail point of sale, cloud POS for retail stores, retail store POS software, inventory management POS, zero fee retail processing, retail POS vs Square, small business retail POS, boutique POS system, retail credit card processing no fees, retail store merchant services, multi-location retail POS, retail loyalty program POS"
-        url="https://ezpayamerica.com/RetailPOS"
+        url="https://ezpayamerica.com/retailpos"
         pageSchema={[{
           "@type": "Product",
           "name": "EzPay America Retail POS System",
           "description": "Cloud-based retail POS with zero transaction fees, full inventory management, loyalty programs, multi-location support, and free hardware. No monthly software fees.",
-          "url": "https://ezpayamerica.com/RetailPOS",
+          "url": "https://ezpayamerica.com/retailpos",
           "brand": { "@type": "Brand", "name": "EzPay America" },
           "offers": {
             "@type": "Offer",
