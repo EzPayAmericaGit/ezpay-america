@@ -66,9 +66,29 @@ export default function RetailPOS() {
           "@type": "Product",
           "name": "EzPay America Retail POS System",
           "description": "Cloud-based retail POS with zero transaction fees, full inventory management, loyalty programs, multi-location support, and free hardware. No monthly software fees.",
+          "url": "https://ezpayamerica.com/RetailPOS",
           "brand": { "@type": "Brand", "name": "EzPay America" },
-          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD", "availability": "https://schema.org/InStock" },
-          "aggregateRating": { "@type": "AggregateRating", "ratingValue": "5", "reviewCount": "284", "bestRating": "5" }
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "url": "https://ezpayamerica.com/ApplyOnline",
+            "seller": { "@type": "Organization", "name": "EzPay America" }
+          },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.9",
+            "reviewCount": "284",
+            "bestRating": "5",
+            "worstRating": "1"
+          },
+          "review": [{
+            "@type": "Review",
+            "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+            "author": { "@type": "Person", "name": "Verified Merchant" },
+            "reviewBody": "Switched from Square and saving over $1,000 a month in fees. The inventory system is just as good and the support is fantastic."
+          }]
         }]}
       />
 
