@@ -91,6 +91,7 @@ import TapToPay from './pages/TapToPay';
 import LeadsView from './pages/LeadsView';
 import IndexingStatus from './pages/IndexingStatus';
 import About from './pages/About';
+import GitHubDashboard from './pages/GitHubDashboard';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -209,6 +210,7 @@ const AuthenticatedApp = () => {
         <Route path="/LeadsView" element={<LeadsView />} />
         <Route path="/IndexingStatus" element={<IndexingStatus />} />
         <Route path="/About" element={<About />} />
+        <Route path="/GitHubDashboard" element={<GitHubDashboard />} />
         <Route path="/news/:slug" element={<NewsArticle />} />
 
         {/* Legacy WordPress URL redirects → 301-equivalent client-side */}
