@@ -4,38 +4,10 @@ import { Input } from "@/components/ui/input";
 import { Loader2, Plus } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
-async function uploadFileViaBackend(file) {
-  // Detect MIME type from extension if browser returns empty string (common on iOS/HEIC)
-  let mimeType = file.type;
-  if (!mimeType) {
-    const ext = file.name.split('.').pop().toLowerCase();
-    const extMap = { jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', gif: 'image/gif', webp: 'image/webp', heic: 'image/heic', heif: 'image/heif', pdf: 'application/pdf' };
-    mimeType = extMap[ext] || 'application/octet-stream';
-  }
-
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-      try {
-        const base64Data = e.target.result.split(',')[1];
-        const response = await base44.functions.invoke('uploadDocument', {
-          filename: file.name,
-          mimeType,
-          base64Data
-        });
-        const data = response?.data;
-        if (data?.file_url) {
-          resolve(data.file_url);
-        } else {
-          reject(new Error(data?.error || 'Upload failed — no URL returned'));
-        }
-      } catch (err) {
-        reject(err);
-      }
-    };
-    reader.onerror = () => reject(new Error('Failed to read file'));
-    reader.readAsDataURL(file);
-  });
+async function uploadFileDirect(file) {
+  const result = await base44.integrations.Core.UploadFile({ file });
+  if (result?.file_url) return result.file_url;
+  throw new Error('Upload failed — no URL returned');
 }
 
 export default function AdditionalDocumentUploader({ onUpload }) {
@@ -57,7 +29,7 @@ export default function AdditionalDocumentUploader({ onUpload }) {
 
     setIsUploading(true);
     try {
-      const file_url = await uploadFileViaBackend(file);
+      const file_url = await uploadFileDirect(file);
       onUpload({ name, url: file_url });
       setDocumentName("");
     } catch (err) {

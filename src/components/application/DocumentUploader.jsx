@@ -4,31 +4,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Upload, CheckCircle2, Loader2, FileText, X, Camera } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
-async function uploadFileViaBackend(file, mimeType, documentType) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-      try {
-        const base64Data = e.target.result.split(',')[1];
-        const response = await base44.functions.invoke('uploadDocument', {
-          filename: file.name,
-          mimeType: mimeType || file.type || 'application/octet-stream',
-          base64Data,
-          documentType
-        });
-        const data = response?.data;
-        if (data?.file_url) {
-          resolve(data.file_url);
-        } else {
-          reject(new Error(data?.error || 'Upload failed — no URL returned'));
-        }
-      } catch (err) {
-        reject(err);
-      }
-    };
-    reader.onerror = () => reject(new Error('Failed to read file'));
-    reader.readAsDataURL(file);
-  });
+async function uploadFileDirect(file) {
+  const result = await base44.integrations.Core.UploadFile({ file });
+  if (result?.file_url) return result.file_url;
+  throw new Error('Upload failed — no URL returned');
 }
 
 export default function DocumentUploader({ 
@@ -79,7 +58,7 @@ export default function DocumentUploader({
 
     setIsUploading(true);
     try {
-      const file_url = await uploadFileViaBackend(file, mimeType, documentType);
+      const file_url = await uploadFileDirect(file);
       setUploadedUrl(file_url);
       onUpload(file_url);
       console.info(`[DocumentUploader] ✓ ${label} uploaded successfully`);
