@@ -5,9 +5,18 @@ import { Loader2, Plus } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 async function uploadFileDirect(file) {
-  const result = await base44.integrations.Core.UploadFile({ file });
-  if (result?.file_url) return result.file_url;
-  throw new Error('Upload failed — no URL returned');
+  let lastErr;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const result = await base44.integrations.Core.UploadFile({ file });
+      if (result?.file_url) return result.file_url;
+      throw new Error('No URL returned');
+    } catch (err) {
+      lastErr = err;
+      if (attempt < 3) await new Promise(r => setTimeout(r, attempt * 1500));
+    }
+  }
+  throw lastErr;
 }
 
 export default function AdditionalDocumentUploader({ onUpload }) {
@@ -20,8 +29,8 @@ export default function AdditionalDocumentUploader({ onUpload }) {
     if (!file) return;
     setError(null);
 
-    if (file.size > 25 * 1024 * 1024) {
-      setError("File size must be less than 25MB.");
+    if (file.size > 50 * 1024 * 1024) {
+      setError("File size must be less than 50MB.");
       return;
     }
 
@@ -72,7 +81,7 @@ export default function AdditionalDocumentUploader({ onUpload }) {
           ) : (
             <>
               <Plus className="w-4 h-4 mr-2" />
-              Add Document (JPG, PNG, HEIC or PDF — max 25MB)
+              Add Document (JPG, PNG, HEIC or PDF — max 50MB)
             </>
           )}
         </Button>

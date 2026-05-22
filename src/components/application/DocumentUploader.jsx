@@ -5,9 +5,19 @@ import { Upload, CheckCircle2, Loader2, FileText, X, Camera } from "lucide-react
 import { base44 } from "@/api/base44Client";
 
 async function uploadFileDirect(file) {
-  const result = await base44.integrations.Core.UploadFile({ file });
-  if (result?.file_url) return result.file_url;
-  throw new Error('Upload failed — no URL returned');
+  // Retry up to 3 times with exponential backoff
+  let lastErr;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const result = await base44.integrations.Core.UploadFile({ file });
+      if (result?.file_url) return result.file_url;
+      throw new Error('No URL returned');
+    } catch (err) {
+      lastErr = err;
+      if (attempt < 3) await new Promise(r => setTimeout(r, attempt * 1500));
+    }
+  }
+  throw lastErr;
 }
 
 export default function DocumentUploader({ 
@@ -29,9 +39,9 @@ export default function DocumentUploader({
     if (!file) return;
     setError(null);
 
-    // Allow up to 25MB
-    if (file.size > 25 * 1024 * 1024) {
-      setError("File size must be less than 25MB.");
+    // Allow up to 50MB
+    if (file.size > 50 * 1024 * 1024) {
+      setError("File size must be less than 50MB.");
       return;
     }
 
@@ -64,7 +74,7 @@ export default function DocumentUploader({
       console.info(`[DocumentUploader] ✓ ${label} uploaded successfully`);
     } catch (err) {
       console.error(`[DocumentUploader] ✗ ${label} upload failed:`, err.message);
-      setError(`Upload failed: ${err.message}. Please try again or use a different file.`);
+      setError(`Upload failed after 3 attempts: ${err.message}. Please try again or use a smaller/different file.`);
       setPreview(null);
     } finally {
       setIsUploading(false);
@@ -135,7 +145,7 @@ export default function DocumentUploader({
             {error && (
               <div className="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg">
                 <p className="text-sm text-red-700 font-medium">⚠ {error}</p>
-                <p className="text-xs text-red-500 mt-1">Tip: Try a JPG or PNG under 25MB. HEIC photos from iPhone are also supported.</p>
+                <p className="text-xs text-red-500 mt-1">Tip: Try a JPG, PNG, PDF, or HEIC under 50MB. If it keeps failing, try a smaller or compressed version of the file.</p>
               </div>
             )}
             
@@ -195,7 +205,7 @@ export default function DocumentUploader({
                           Drop file here or click to upload
                         </span>
                         <span className="text-xs text-gray-500 mt-1">
-                          JPG, PNG, HEIC or PDF — max 25MB
+                           JPG, PNG, HEIC, or PDF — max 50MB
                         </span>
                       </>
                     )}
