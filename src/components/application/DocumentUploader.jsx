@@ -2,19 +2,37 @@ import React, { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Upload, CheckCircle2, Loader2, FileText, X, Camera } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { appParams } from "@/lib/app-params";
 
 async function uploadFileDirect(file) {
-  // Retry up to 3 times with exponential backoff
   let lastErr;
   for (let attempt = 1; attempt <= 3; attempt++) {
     try {
-      const result = await base44.integrations.Core.UploadFile({ file });
-      if (result?.file_url) return result.file_url;
-      throw new Error('No URL returned');
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const headers = {};
+      if (appParams.token) headers["Authorization"] = `Bearer ${appParams.token}`;
+      if (appParams.appId) headers["X-App-Id"] = appParams.appId;
+
+      const baseUrl = appParams.serverUrl || "https://api.base44.com";
+      const res = await fetch(`${baseUrl}/api/apps/${appParams.appId}/integrations/upload`, {
+        method: "POST",
+        headers,
+        body: formData,
+      });
+
+      if (!res.ok) {
+        const text = await res.text().catch(() => res.statusText);
+        throw new Error(`Server error ${res.status}: ${text}`);
+      }
+
+      const data = await res.json();
+      if (data?.file_url) return data.file_url;
+      throw new Error("No file_url in response");
     } catch (err) {
       lastErr = err;
-      if (attempt < 3) await new Promise(r => setTimeout(r, attempt * 1500));
+      if (attempt < 3) await new Promise(r => setTimeout(r, attempt * 2000));
     }
   }
   throw lastErr;
