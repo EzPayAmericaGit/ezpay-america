@@ -2,34 +2,27 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader2, Plus } from "lucide-react";
-import { appParams } from "@/lib/app-params";
+import { base44 } from "@/api/base44Client";
 
 async function uploadFileDirect(file) {
+  const base64Data = await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+
   let lastErr;
   for (let attempt = 1; attempt <= 3; attempt++) {
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const headers = {};
-      if (appParams.token) headers["Authorization"] = `Bearer ${appParams.token}`;
-      if (appParams.appId) headers["X-App-Id"] = appParams.appId;
-
-      const baseUrl = appParams.serverUrl || "https://api.base44.com";
-      const res = await fetch(`${baseUrl}/api/apps/${appParams.appId}/integrations/upload`, {
-        method: "POST",
-        headers,
-        body: formData,
+      const res = await base44.functions.invoke("uploadDocument", {
+        filename: file.name,
+        mimeType: file.type || "application/octet-stream",
+        base64Data,
+        documentType: "merchant_application",
       });
-
-      if (!res.ok) {
-        const text = await res.text().catch(() => res.statusText);
-        throw new Error(`Server error ${res.status}: ${text}`);
-      }
-
-      const data = await res.json();
-      if (data?.file_url) return data.file_url;
-      throw new Error("No file_url in response");
+      if (res?.data?.file_url) return res.data.file_url;
+      throw new Error(res?.data?.error || "No file_url returned");
     } catch (err) {
       lastErr = err;
       if (attempt < 3) await new Promise(r => setTimeout(r, attempt * 2000));

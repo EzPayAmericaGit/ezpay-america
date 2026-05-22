@@ -35,9 +35,9 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Invalid file data — could not decode.' }, { status: 400 });
     }
 
-    if (bytes.length > 25 * 1024 * 1024) {
+    if (bytes.length > 50 * 1024 * 1024) {
       console.warn('[uploadDocument] File too large:', bytes.length, 'bytes, filename:', filename);
-      return Response.json({ error: 'File too large (max 25MB).' }, { status: 400 });
+      return Response.json({ error: 'File too large (max 50MB).' }, { status: 400 });
     }
 
     const blob = new Blob([bytes], { type: resolvedMime });
