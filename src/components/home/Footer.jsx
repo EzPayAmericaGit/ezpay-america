@@ -98,7 +98,9 @@ export default function Footer() {
             </div>
             <Link to={createPageUrl("Sitemap")} className="hover:text-amber-400 transition-colors">Sitemap</Link>
             <span>|</span>
-            <a href="mailto:info@ezpayamerica.com" className="hover:text-amber-400 transition-colors">Privacy</a>
+            <Link to="/PrivacyPolicy" className="hover:text-amber-400 transition-colors">Privacy Policy</Link>
+            <span>|</span>
+            <Link to="/TermsOfUse" className="hover:text-amber-400 transition-colors">Terms of Use</Link>
           </div>
         </div>
       </div>
