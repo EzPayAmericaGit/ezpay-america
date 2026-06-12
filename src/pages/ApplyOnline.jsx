@@ -109,11 +109,24 @@ export default function ApplyOnline() {
     zoningInfo: "",
     hasPermanentSignage: "yes",
     
-    // Additional Owner Information
+    // Additional Owner #1 Information
     ownerDriversLicense: "",
     ownerDLState: "",
     ownerDLExpiration: "",
     ownerPersonalEmail: "",
+
+    // Owner #2 Information (optional)
+    owner2FullName: "",
+    owner2Title: "",
+    owner2OwnershipPercent: "",
+    owner2HomeAddress: "",
+    owner2PersonalPhone: "",
+    owner2SSN: "",
+    owner2DOB: "",
+    owner2DriversLicense: "",
+    owner2DLState: "",
+    owner2DLExpiration: "",
+    owner2PersonalEmail: "",
     
     // Banking Information
     bankName: "",
@@ -1148,7 +1161,7 @@ export default function ApplyOnline() {
                       </div>
 
                       <div className="bg-gray-50 p-4 rounded-lg mt-6">
-                        <h4 className="font-medium text-gray-900 mb-2">Information Already Collected:</h4>
+                        <h4 className="font-medium text-gray-900 mb-2">Owner #1 — Information Already Collected:</h4>
                         <div className="grid md:grid-cols-2 gap-2 text-sm text-gray-600">
                           <div><span className="font-medium">Owner Name:</span> {formData.ownerFullName}</div>
                           <div><span className="font-medium">Title:</span> {formData.ownerTitle}</div>
@@ -1157,6 +1170,136 @@ export default function ApplyOnline() {
                           <div><span className="font-medium">Personal Phone:</span> {formData.ownerPersonalPhone}</div>
                           <div><span className="font-medium">DOB:</span> {formData.ownerDOB}</div>
                           <div><span className="font-medium">SSN:</span> ***-**-{formData.ownerSSN?.slice(-4)}</div>
+                        </div>
+                      </div>
+
+                      {/* Owner #2 Section */}
+                      <div className="border-t pt-6 mt-6">
+                        <h3 className="text-lg font-semibold mb-2">Owner #2 Information <span className="text-sm font-normal text-gray-500">(Optional — required if ownership ≥ 25%)</span></h3>
+
+                        <div className="grid md:grid-cols-2 gap-6">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                            <Input
+                              value={formData.owner2FullName}
+                              onChange={(e) => setFormData({...formData, owner2FullName: e.target.value})}
+                              className="h-12"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
+                            <Select value={formData.owner2Title} onValueChange={(value) => setFormData({...formData, owner2Title: value})}>
+                              <SelectTrigger className="h-12"><SelectValue placeholder="Select title" /></SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="Owner">Owner</SelectItem>
+                                <SelectItem value="President">President</SelectItem>
+                                <SelectItem value="Vice President">Vice President</SelectItem>
+                                <SelectItem value="CEO">CEO</SelectItem>
+                                <SelectItem value="CFO">CFO</SelectItem>
+                                <SelectItem value="COO">COO</SelectItem>
+                                <SelectItem value="Managing Member">Managing Member</SelectItem>
+                                <SelectItem value="General Partner">General Partner</SelectItem>
+                                <SelectItem value="Treasurer">Treasurer</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-6 mt-4">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Ownership Percentage</label>
+                            <Input
+                              type="number" min="1" max="100"
+                              value={formData.owner2OwnershipPercent}
+                              onChange={(e) => setFormData({...formData, owner2OwnershipPercent: e.target.value})}
+                              className="h-12"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Personal Phone</label>
+                            <Input
+                              type="tel"
+                              value={formData.owner2PersonalPhone}
+                              onChange={(e) => setFormData({...formData, owner2PersonalPhone: e.target.value})}
+                              className="h-12"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="mt-4">
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Home Address</label>
+                          <Input
+                            value={formData.owner2HomeAddress}
+                            onChange={(e) => setFormData({...formData, owner2HomeAddress: e.target.value})}
+                            placeholder="Street, City, State, ZIP"
+                            className="h-12"
+                          />
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-6 mt-4">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
+                            <Input
+                              type="date"
+                              value={formData.owner2DOB}
+                              onChange={(e) => setFormData({...formData, owner2DOB: e.target.value})}
+                              className="h-12"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Social Security Number</label>
+                            <Input
+                              type="password" autoComplete="off"
+                              value={formData.owner2SSN}
+                              onChange={(e) => setFormData({...formData, owner2SSN: e.target.value.replace(/[^\d\-]/g, '').substring(0, 11)})}
+                              placeholder="XXX-XX-XXXX"
+                              className="h-12"
+                            />
+                            <p className="text-xs text-gray-500 mt-1">Transmitted securely and never emailed.</p>
+                          </div>
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-6 mt-4">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Driver's License Number</label>
+                            <Input
+                              value={formData.owner2DriversLicense}
+                              onChange={(e) => setFormData({...formData, owner2DriversLicense: e.target.value})}
+                              className="h-12"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Driver's License State</label>
+                            <Select value={formData.owner2DLState} onValueChange={(value) => setFormData({...formData, owner2DLState: value})}>
+                              <SelectTrigger className="h-12"><SelectValue placeholder="Select state" /></SelectTrigger>
+                              <SelectContent>
+                                {["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming","District of Columbia"].map((state) => (
+                                  <SelectItem key={state} value={state}>{state}</SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-6 mt-4">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Driver's License Expiration Date</label>
+                            <Input
+                              type="date"
+                              value={formData.owner2DLExpiration}
+                              onChange={(e) => setFormData({...formData, owner2DLExpiration: e.target.value})}
+                              className="h-12"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Personal Email</label>
+                            <Input
+                              type="email"
+                              value={formData.owner2PersonalEmail}
+                              onChange={(e) => setFormData({...formData, owner2PersonalEmail: e.target.value})}
+                              className="h-12"
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -1342,7 +1485,7 @@ export default function ApplyOnline() {
                         <div className="bg-white p-6 rounded-lg border-2 border-gray-200">
                           <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                             <User className="w-5 h-5 text-amber-600" />
-                            Owner Information
+                            Owner #1 Information
                           </h3>
                           <div className="grid md:grid-cols-2 gap-3 text-sm">
                             <div><span className="font-semibold">Name:</span> {formData.ownerFullName}</div>
@@ -1356,6 +1499,26 @@ export default function ApplyOnline() {
                             <div className="md:col-span-2"><span className="font-semibold">Home Address:</span> {formData.ownerHomeAddress}</div>
                           </div>
                         </div>
+
+                        {formData.owner2FullName && (
+                          <div className="bg-white p-6 rounded-lg border-2 border-gray-200">
+                            <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                              <User className="w-5 h-5 text-amber-600" />
+                              Owner #2 Information
+                            </h3>
+                            <div className="grid md:grid-cols-2 gap-3 text-sm">
+                              <div><span className="font-semibold">Name:</span> {formData.owner2FullName}</div>
+                              <div><span className="font-semibold">Title:</span> {formData.owner2Title}</div>
+                              <div><span className="font-semibold">Ownership:</span> {formData.owner2OwnershipPercent}%</div>
+                              <div><span className="font-semibold">DOB:</span> {formData.owner2DOB}</div>
+                              <div><span className="font-semibold">SSN:</span> ***-**-{formData.owner2SSN?.slice(-4)}</div>
+                              <div><span className="font-semibold">Personal Phone:</span> {formData.owner2PersonalPhone}</div>
+                              <div><span className="font-semibold">Personal Email:</span> {formData.owner2PersonalEmail}</div>
+                              <div><span className="font-semibold">DL #:</span> ****{String(formData.owner2DriversLicense || '').slice(-4)} ({formData.owner2DLState})</div>
+                              <div className="md:col-span-2"><span className="font-semibold">Home Address:</span> {formData.owner2HomeAddress}</div>
+                            </div>
+                          </div>
+                        )}
 
                         <div className="bg-white p-6 rounded-lg border-2 border-gray-200">
                           <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
