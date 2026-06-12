@@ -8,7 +8,19 @@
     },
     "settingValue": {
       "type": "string",
-      "description": "Setting value"
+      "description": "Setting value (string)"
+    },
+    "type": {
+      "type": "string",
+      "description": "Category type (e.g. api_key, branding, team_member, general)"
+    },
+    "key": {
+      "type": "string",
+      "description": "Key/name for this setting"
+    },
+    "value": {
+      "type": "object",
+      "description": "Structured value (JSON object)"
     },
     "description": {
       "type": "string",
@@ -16,7 +28,28 @@
     }
   },
   "required": [
-    "settingKey",
-    "settingValue"
-  ]
+    "settingKey"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
 }

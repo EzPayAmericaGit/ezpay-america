@@ -29,10 +29,16 @@ export default function AffiliateLeaderboard() {
   const [period, setPeriod] = useState("all"); // all | month
 
   useEffect(() => {
-    base44.entities.Affiliate.filter({ status: "approved" }).then(data => {
-      setAffiliates(data);
-      setLoading(false);
-    });
+    base44.entities.Affiliate.filter({ status: "approved" })
+      .then(data => {
+        setAffiliates(data || []);
+      })
+      .catch(() => {
+        setAffiliates([]);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   const ranked = [...affiliates]
@@ -44,7 +50,10 @@ export default function AffiliateLeaderboard() {
 
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900">
-      <Loader2 className="w-10 h-10 animate-spin text-amber-500" />
+      <div className="text-center">
+        <Loader2 className="w-10 h-10 animate-spin text-amber-500 mx-auto mb-4" />
+        <p className="text-gray-400 text-sm">Loading leaderboard...</p>
+      </div>
     </div>
   );
 
@@ -77,6 +86,14 @@ export default function AffiliateLeaderboard() {
           </div>
         </motion.div>
       </div>
+
+      {/* Empty state */}
+      {affiliates.length === 0 && (
+        <div className="text-center py-16 text-gray-500">
+          <Trophy className="w-16 h-16 mx-auto mb-4 opacity-30" />
+          <p className="text-lg text-gray-400">No affiliates yet. Be the first!</p>
+        </div>
+      )}
 
       {/* Podium - Top 3 */}
       {top3.length > 0 && (
@@ -162,12 +179,6 @@ export default function AffiliateLeaderboard() {
             </Card>
           )}
 
-          {affiliates.length === 0 && (
-            <div className="text-center py-16 text-gray-500">
-              <Trophy className="w-16 h-16 mx-auto mb-4 opacity-30" />
-              <p className="text-lg">No affiliates yet. Be the first!</p>
-            </div>
-          )}
         </div>
       )}
 

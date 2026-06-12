@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { DollarSign, Users, TrendingUp, Search, CheckCircle2, Clock, RefreshCw, ExternalLink, Loader2, Eye, BarChart2, Send, ArrowUp, Mail, ShieldCheck, Trophy, Webhook } from "lucide-react";
+import { DollarSign, Users, TrendingUp, Search, CheckCircle2, Clock, RefreshCw, ExternalLink, Loader2, Eye, BarChart2, Send, ArrowUp, Mail, ShieldCheck, Trophy, Webhook, Key, UserCog, AlertTriangle, Palette, FileText } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import AffiliateAnalytics from "../components/affiliate/AffiliateAnalytics";
@@ -26,6 +26,11 @@ import ReferralLinkGenerator from "../components/affiliate/ReferralLinkGenerator
 import WebhookManager from "../components/affiliate/WebhookManager";
 import LeadsDashboard from "../components/affiliate/LeadsDashboard";
 import ReferralAnalytics from "../components/affiliate/ReferralAnalytics";
+import APIKeyManager from "../components/affiliate/APIKeyManager";
+import TeamManager from "../components/affiliate/TeamManager";
+import RefundManager from "../components/affiliate/RefundManager";
+import BrandingManager from "../components/affiliate/BrandingManager";
+import ReportsManager from "../components/affiliate/ReportsManager";
 
 const STATUS_BADGE = {
   pending: "bg-yellow-100 text-yellow-800",
@@ -298,16 +303,21 @@ export default function AffiliateAdmin() {
 
         {/* Tabs */}
         <div className="flex gap-1 bg-gray-200 rounded-xl p-1 mb-6 flex-wrap">
-          {["leads", "affiliates", "referrals", "payouts", "batch-payout", "analytics", "merchant-applications", "milestones", "link-generator", "programs", "coupons", "resources", "drip-campaigns", "email-templates", "tier-rules", "webhooks"].map(t => (
+          {["leads", "affiliates", "referrals", "payouts", "batch-payout", "analytics", "reports", "merchant-applications", "milestones", "link-generator", "programs", "coupons", "resources", "drip-campaigns", "email-templates", "tier-rules", "refunds", "webhooks", "api-keys", "team", "branding"].map(t => (
             <button key={t} onClick={() => setActiveTab(t)}
               className={`px-4 py-2 rounded-lg text-sm font-medium capitalize transition-all flex items-center gap-1.5 ${activeTab === t ? "bg-white shadow text-gray-900" : "text-gray-600 hover:text-gray-900"}`}>
               {t === "analytics" && <BarChart2 className="w-3.5 h-3.5" />}
+              {t === "reports" && <FileText className="w-3.5 h-3.5" />}
               {t === "batch-payout" && <Send className="w-3.5 h-3.5" />}
               {t === "email-templates" && <Mail className="w-3.5 h-3.5" />}
               {t === "tier-rules" && <ArrowUp className="w-3.5 h-3.5" />}
               {t === "drip-campaigns" && <Mail className="w-3.5 h-3.5" />}
               {t === "leads" && <TrendingUp className="w-3.5 h-3.5" />}
               {t === "webhooks" && <Webhook className="w-3.5 h-3.5" />}
+              {t === "api-keys" && <Key className="w-3.5 h-3.5" />}
+              {t === "team" && <UserCog className="w-3.5 h-3.5" />}
+              {t === "refunds" && <AlertTriangle className="w-3.5 h-3.5" />}
+              {t === "branding" && <Palette className="w-3.5 h-3.5" />}
               {t === "affiliates" ? `Affiliates (${affiliates.length})` :
                t === "referrals" ? `Referrals (${referrals.length})` :
                t === "payouts" ? `Payouts (${payouts.length})` :
@@ -322,7 +332,12 @@ export default function AffiliateAdmin() {
                t === "resources" ? "Resources" :
                t === "coupons" ? "Coupons" :
                t === "leads" ? `Leads (${referrals.filter(r => !["converted","rejected"].includes(r.status)).length})` :
-               t === "webhooks" ? "Webhooks" : "Analytics"}
+               t === "webhooks" ? "Webhooks" :
+               t === "api-keys" ? "API Keys" :
+               t === "team" ? "Team" :
+               t === "refunds" ? "Refunds/Clawbacks" :
+               t === "branding" ? "Branding" :
+               t === "reports" ? "Reports" : "Analytics"}
             </button>
           ))}
         </div>
@@ -614,6 +629,31 @@ export default function AffiliateAdmin() {
         {/* Webhooks Tab */}
         {activeTab === "webhooks" && (
           <WebhookManager />
+        )}
+
+        {/* Reports Tab */}
+        {activeTab === "reports" && (
+          <ReportsManager affiliates={affiliates} referrals={referrals} payouts={payouts} />
+        )}
+
+        {/* Refunds / Clawbacks Tab */}
+        {activeTab === "refunds" && (
+          <RefundManager referrals={referrals} affiliates={affiliates} onUpdated={loadAll} />
+        )}
+
+        {/* API Keys Tab */}
+        {activeTab === "api-keys" && (
+          <APIKeyManager />
+        )}
+
+        {/* Team Tab */}
+        {activeTab === "team" && (
+          <TeamManager />
+        )}
+
+        {/* Branding Tab */}
+        {activeTab === "branding" && (
+          <BrandingManager />
         )}
       </div>
 
