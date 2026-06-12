@@ -24,6 +24,8 @@ import MerchantApplicationsAnalytics from "../components/affiliate/MerchantAppli
 import AffiliateMilestones from "../components/affiliate/AffiliateMilestones";
 import ReferralLinkGenerator from "../components/affiliate/ReferralLinkGenerator";
 import WebhookManager from "../components/affiliate/WebhookManager";
+import LeadsDashboard from "../components/affiliate/LeadsDashboard";
+import ReferralAnalytics from "../components/affiliate/ReferralAnalytics";
 
 const STATUS_BADGE = {
   pending: "bg-yellow-100 text-yellow-800",
@@ -296,7 +298,7 @@ export default function AffiliateAdmin() {
 
         {/* Tabs */}
         <div className="flex gap-1 bg-gray-200 rounded-xl p-1 mb-6 flex-wrap">
-          {["affiliates", "referrals", "payouts", "batch-payout", "analytics", "merchant-applications", "milestones", "link-generator", "programs", "coupons", "resources", "drip-campaigns", "email-templates", "tier-rules", "webhooks"].map(t => (
+          {["leads", "affiliates", "referrals", "payouts", "batch-payout", "analytics", "merchant-applications", "milestones", "link-generator", "programs", "coupons", "resources", "drip-campaigns", "email-templates", "tier-rules", "webhooks"].map(t => (
             <button key={t} onClick={() => setActiveTab(t)}
               className={`px-4 py-2 rounded-lg text-sm font-medium capitalize transition-all flex items-center gap-1.5 ${activeTab === t ? "bg-white shadow text-gray-900" : "text-gray-600 hover:text-gray-900"}`}>
               {t === "analytics" && <BarChart2 className="w-3.5 h-3.5" />}
@@ -304,6 +306,7 @@ export default function AffiliateAdmin() {
               {t === "email-templates" && <Mail className="w-3.5 h-3.5" />}
               {t === "tier-rules" && <ArrowUp className="w-3.5 h-3.5" />}
               {t === "drip-campaigns" && <Mail className="w-3.5 h-3.5" />}
+              {t === "leads" && <TrendingUp className="w-3.5 h-3.5" />}
               {t === "webhooks" && <Webhook className="w-3.5 h-3.5" />}
               {t === "affiliates" ? `Affiliates (${affiliates.length})` :
                t === "referrals" ? `Referrals (${referrals.length})` :
@@ -318,10 +321,16 @@ export default function AffiliateAdmin() {
                t === "programs" ? "Programs" :
                t === "resources" ? "Resources" :
                t === "coupons" ? "Coupons" :
+               t === "leads" ? `Leads (${referrals.filter(r => !["converted","rejected"].includes(r.status)).length})` :
                t === "webhooks" ? "Webhooks" : "Analytics"}
             </button>
           ))}
         </div>
+
+        {/* Leads Dashboard Tab */}
+        {activeTab === "leads" && (
+          <LeadsDashboard referrals={referrals} affiliates={affiliates} onReferralUpdated={loadAll} />
+        )}
 
         {/* Affiliates Tab */}
         {activeTab === "affiliates" && (
@@ -556,6 +565,11 @@ export default function AffiliateAdmin() {
             referrals={referrals}
             payouts={payouts}
           />
+        )}
+
+        {/* Referral Analytics (grouped) Tab */}
+        {activeTab === "referral-analytics" && (
+          <ReferralAnalytics referrals={referrals} payouts={payouts} affiliates={affiliates} />
         )}
 
         {/* Merchant Applications Tab */}

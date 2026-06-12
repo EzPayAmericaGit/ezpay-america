@@ -27,7 +27,92 @@ const MONTH_LABELS = () => {
   return months;
 };
 
-export default function ReferralAnalytics({ referrals, payouts, affiliate }) {
+// ── Per-affiliate grouped table ─────────────────────────────────────────────
+function AffiliateGroupedTable({ referrals, affiliates = [] }) {
+  const affiliateMap = useMemo(() => {
+    const m = {};
+    affiliates.forEach(a => { m[a.id] = a; });
+    return m;
+  }, [affiliates]);
+
+  const grouped = useMemo(() => {
+    const g = {};
+    referrals.forEach(r => {
+      const key = r.affiliateId || r.affiliateCode || "unknown";
+      if (!g[key]) g[key] = { id: key, affiliate: affiliateMap[r.affiliateId], referrals: [] };
+      g[key].referrals.push(r);
+    });
+    return Object.values(g).sort((a, b) => b.referrals.length - a.referrals.length);
+  }, [referrals, affiliateMap]);
+
+  if (grouped.length === 0) return null;
+
+  return (
+    <Card className="border-none shadow-lg">
+      <CardHeader><CardTitle>Referrals Grouped by Affiliate</CardTitle></CardHeader>
+      <CardContent>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b text-left text-gray-500">
+                <th className="pb-2 font-medium">Affiliate</th>
+                <th className="pb-2 font-medium text-right">Total</th>
+                <th className="pb-2 font-medium text-right">Converted</th>
+                <th className="pb-2 font-medium text-right">Conv. Rate</th>
+                <th className="pb-2 font-medium text-right">Commission</th>
+                <th className="pb-2 font-medium">Pipeline</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {grouped.map(g => {
+                const total = g.referrals.length;
+                const converted = g.referrals.filter(r => r.status === "converted").length;
+                const rate = total > 0 ? ((converted / total) * 100).toFixed(0) : 0;
+                const commission = g.referrals.reduce((s, r) => s + (r.commissionAmount || 0), 0);
+                const pipelineCounts = {};
+                ["lead","applied","approved","processing","converted","rejected"].forEach(s => {
+                  pipelineCounts[s] = g.referrals.filter(r => r.status === s).length;
+                });
+                const aff = g.affiliate;
+                return (
+                  <tr key={g.id} className="hover:bg-gray-50">
+                    <td className="py-3">
+                      {aff ? (
+                        <>
+                          <p className="font-medium text-gray-900">{aff.firstName} {aff.lastName}</p>
+                          <p className="text-xs text-gray-400">{aff.referralCode}</p>
+                        </>
+                      ) : (
+                        <p className="font-mono text-xs text-gray-500">{g.id}</p>
+                      )}
+                    </td>
+                    <td className="py-3 text-right font-semibold">{total}</td>
+                    <td className="py-3 text-right text-emerald-600 font-semibold">{converted}</td>
+                    <td className="py-3 text-right">
+                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${Number(rate) >= 50 ? "bg-green-100 text-green-700" : Number(rate) >= 20 ? "bg-yellow-100 text-yellow-700" : "bg-red-100 text-red-700"}`}>
+                        {rate}%
+                      </span>
+                    </td>
+                    <td className="py-3 text-right font-semibold text-green-600">${commission.toFixed(2)}</td>
+                    <td className="py-3">
+                      <div className="flex gap-1 flex-wrap">
+                        {Object.entries(pipelineCounts).filter(([,v]) => v > 0).map(([s, v]) => (
+                          <span key={s} className="text-xs bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded capitalize">{s[0].toUpperCase()}: {v}</span>
+                        ))}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+export default function ReferralAnalytics({ referrals, payouts, affiliate, affiliates = [] }) {
   const months = useMemo(() => MONTH_LABELS(), []);
 
   // Monthly referrals + commissions
@@ -195,6 +280,9 @@ export default function ReferralAnalytics({ referrals, payouts, affiliate }) {
           </CardContent>
         </Card>
       </div>
+
+      {/* Grouped by Affiliate (admin view) */}
+      {!affiliate && <AffiliateGroupedTable referrals={referrals} affiliates={affiliates} />}
 
       {/* Status Breakdown */}
       <div className="grid md:grid-cols-2 gap-6">
