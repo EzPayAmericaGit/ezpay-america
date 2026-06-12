@@ -60,14 +60,22 @@ export default function AffiliateDashboard() {
       const results = await base44.entities.Affiliate.filter({ email });
       if (results.length > 0) {
         const aff = results[0];
-        setAffiliate(aff);
-        localStorage.setItem("affiliate_email", email);
-        const [refs, pays] = await Promise.all([
-          base44.entities.AffiliateReferral.filter({ affiliateId: aff.id }),
-          base44.entities.AffiliatePayout.filter({ affiliateId: aff.id })
-        ]);
-        setReferrals(refs);
-        setPayouts(pays);
+        if (aff.status === "pending") {
+          setLoginError("Your application is still under review. You'll receive an email once approved (within 24–48 hours).");
+          localStorage.removeItem("affiliate_email");
+        } else if (aff.status === "rejected") {
+          setLoginError("Your application was not approved. Please contact mail@ezpayamerica.com for more information.");
+          localStorage.removeItem("affiliate_email");
+        } else {
+          setAffiliate(aff);
+          localStorage.setItem("affiliate_email", email);
+          const [refs, pays] = await Promise.all([
+            base44.entities.AffiliateReferral.filter({ affiliateId: aff.id }),
+            base44.entities.AffiliatePayout.filter({ affiliateId: aff.id })
+          ]);
+          setReferrals(refs);
+          setPayouts(pays);
+        }
       } else {
         setLoginError("No affiliate account found with that email. Please check your email or apply first.");
         localStorage.removeItem("affiliate_email");

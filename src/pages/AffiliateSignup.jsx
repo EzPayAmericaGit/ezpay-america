@@ -61,9 +61,15 @@ export default function AffiliateSignup() {
         setLoginError("No affiliate account found with that email. Please sign up or check your email address.");
       } else {
         const aff = results[0];
-        localStorage.setItem("affiliate_email", loginEmail);
-        localStorage.setItem("affiliate_id", aff.id);
-        navigate(createPageUrl("AffiliateDashboard"));
+        if (aff.status === "pending") {
+          setLoginError("Your application is still under review. You'll be notified by email once approved (within 24–48 hours).");
+        } else if (aff.status === "rejected") {
+          setLoginError("Your application was not approved. Please contact mail@ezpayamerica.com for more information.");
+        } else {
+          localStorage.setItem("affiliate_email", loginEmail);
+          localStorage.setItem("affiliate_id", aff.id);
+          navigate(createPageUrl("AffiliateDashboard"));
+        }
       }
     } catch (err) {
       setLoginError("Unable to look up your account. Please try again.");
