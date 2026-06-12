@@ -8,8 +8,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { base44 } from "@/api/base44Client";
 import { CheckCircle2, ArrowRight, ArrowLeft, Building2, User, DollarSign, FileCheck, Loader2, CreditCard, Landmark } from "lucide-react";
-import DocumentUploader from "../components/application/DocumentUploader";
-import AdditionalDocumentUploader from "../components/application/AdditionalDocumentUploader";
+import DocumentUploader from "../components/application/DocumentUploader.jsx";
+import AdditionalDocumentUploader from "../components/application/AdditionalDocumentUploader.jsx";
 import FormField from "../components/application/FormField";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -73,6 +73,8 @@ export default function ApplyOnline() {
     businessFormationType: "",
     businessPhysicalAddress: "",
     corporateAddress: "",
+    otherMailingAddress: "",
+    businessWebsite: "",
     
     // Current Processing
     currentlyAcceptCards: "no",
@@ -627,11 +629,34 @@ export default function ApplyOnline() {
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Business Website
+                        </label>
+                        <Input
+                          value={formData.businessWebsite}
+                          onChange={(e) => setFormData({...formData, businessWebsite: e.target.value})}
+                          placeholder="https://www.yourbusiness.com"
+                          className="h-12"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
                           Corporate Address (if different from physical)
                         </label>
                         <Input
                           value={formData.corporateAddress}
                           onChange={(e) => setFormData({...formData, corporateAddress: e.target.value})}
+                          className="h-12"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Other Mailing Address
+                        </label>
+                        <Input
+                          value={formData.otherMailingAddress}
+                          onChange={(e) => setFormData({...formData, otherMailingAddress: e.target.value})}
                           className="h-12"
                         />
                       </div>

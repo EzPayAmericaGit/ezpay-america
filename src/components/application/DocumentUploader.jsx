@@ -4,34 +4,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Upload, CheckCircle2, Loader2, FileText, X, Camera } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
-async function uploadFileDirect(file) {
-  // Convert file to base64 and send via the uploadDocument backend function
-  const base64Data = await new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result.split(',')[1]);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-
-  let lastErr;
-  for (let attempt = 1; attempt <= 3; attempt++) {
-    try {
-      const res = await base44.functions.invoke("uploadDocument", {
-        filename: file.name,
-        mimeType: file.type || "application/octet-stream",
-        base64Data,
-        documentType: "merchant_application",
-      });
-      if (res?.data?.file_url) return res.data.file_url;
-      throw new Error(res?.data?.error || "No file_url returned");
-    } catch (err) {
-      lastErr = err;
-      if (attempt < 3) await new Promise(r => setTimeout(r, attempt * 2000));
-    }
-  }
-  throw lastErr;
-}
-
 export default function DocumentUploader({ 
   label, 
   description, 
@@ -51,28 +23,20 @@ export default function DocumentUploader({
     if (!file) return;
     setError(null);
 
-    // Allow up to 50MB
     if (file.size > 50 * 1024 * 1024) {
       setError("File size must be less than 50MB.");
       return;
     }
 
-    // Detect MIME type from extension if browser returns empty string
-    let mimeType = file.type;
-    if (!mimeType) {
-      const ext = file.name.split('.').pop().toLowerCase();
-      const extMap = { jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', gif: 'image/gif', webp: 'image/webp', heic: 'image/heic', heif: 'image/heif', pdf: 'application/pdf' };
-      mimeType = extMap[ext] || 'application/octet-stream';
-    }
-
     const allowedExts = ['jpg','jpeg','png','gif','webp','heic','heif','pdf'];
     const ext = file.name.split('.').pop().toLowerCase();
+    const mimeType = file.type || '';
     if (!mimeType.startsWith('image/') && mimeType !== 'application/pdf' && !allowedExts.includes(ext)) {
       setError("Please upload an image (JPG, PNG, HEIC) or PDF file.");
       return;
     }
 
-    if (mimeType.startsWith('image/')) {
+    if (mimeType.startsWith('image/') || ['jpg','jpeg','png','gif','webp','heic','heif'].includes(ext)) {
       const reader = new FileReader();
       reader.onload = (e) => setPreview(e.target.result);
       reader.readAsDataURL(file);
@@ -80,13 +44,13 @@ export default function DocumentUploader({
 
     setIsUploading(true);
     try {
-      const file_url = await uploadFileDirect(file);
+      // Upload directly via the SDK integration — no backend hop needed
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
       setUploadedUrl(file_url);
       onUpload(file_url);
-      console.info(`[DocumentUploader] ✓ ${label} uploaded successfully`);
     } catch (err) {
-      console.error(`[DocumentUploader] ✗ ${label} upload failed:`, err.message);
-      setError(`Upload failed after 3 attempts: ${err.message}. Please try again or use a smaller/different file.`);
+      console.error(`[DocumentUploader] Upload failed:`, err.message);
+      setError(`Upload failed: ${err.message}. Please try again or use a smaller file.`);
       setPreview(null);
     } finally {
       setIsUploading(false);
@@ -95,7 +59,6 @@ export default function DocumentUploader({
 
   const handleFileChange = (e) => {
     handleFile(e.target.files?.[0]);
-    // Reset input so same file can be re-selected if needed
     e.target.value = '';
   };
 
@@ -157,7 +120,7 @@ export default function DocumentUploader({
             {error && (
               <div className="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg">
                 <p className="text-sm text-red-700 font-medium">⚠ {error}</p>
-                <p className="text-xs text-red-500 mt-1">Tip: Try a JPG, PNG, PDF, or HEIC under 50MB. If it keeps failing, try a smaller or compressed version of the file.</p>
+                <p className="text-xs text-red-500 mt-1">Try a JPG, PNG, PDF, or HEIC under 50MB.</p>
               </div>
             )}
             
@@ -173,21 +136,16 @@ export default function DocumentUploader({
                   </div>
                 )}
                 <div className="flex items-center gap-3">
-                  <span className="text-sm text-green-700 font-medium">
-                    ✓ Document uploaded successfully
-                  </span>
+                  <span className="text-sm text-green-700 font-medium">✓ Document uploaded successfully</span>
                   <a 
                     href={uploadedUrl} 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-sm text-amber-600 hover:underline font-medium"
                   >
-                    View Full Size
+                    View
                   </a>
-                  <button 
-                    onClick={handleRemove} 
-                    className="text-gray-400 hover:text-red-500 transition-colors"
-                  >
+                  <button onClick={handleRemove} className="text-gray-400 hover:text-red-500 transition-colors">
                     <X className="w-4 h-4" />
                   </button>
                 </div>
@@ -213,12 +171,8 @@ export default function DocumentUploader({
                     ) : (
                       <>
                         <Upload className="w-8 h-8 text-gray-400 mb-2" />
-                        <span className="text-sm font-medium text-gray-700">
-                          Drop file here or click to upload
-                        </span>
-                        <span className="text-xs text-gray-500 mt-1">
-                           JPG, PNG, HEIC, or PDF — max 50MB
-                        </span>
+                        <span className="text-sm font-medium text-gray-700">Drop file here or click to upload</span>
+                        <span className="text-xs text-gray-500 mt-1">JPG, PNG, HEIC, or PDF — max 50MB</span>
                       </>
                     )}
                   </div>

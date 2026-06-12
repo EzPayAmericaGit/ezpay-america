@@ -1,0 +1,48 @@
+{
+  "name": "TicketMessage",
+  "type": "object",
+  "properties": {
+    "ticketId": {
+      "type": "string",
+      "description": "Associated ticket ID"
+    },
+    "message": {
+      "type": "string",
+      "description": "Message content"
+    },
+    "senderEmail": {
+      "type": "string",
+      "description": "Sender email"
+    },
+    "senderName": {
+      "type": "string",
+      "description": "Sender name"
+    },
+    "isInternal": {
+      "type": "boolean",
+      "default": false,
+      "description": "Internal note (not visible to customer)"
+    },
+    "attachments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      },
+      "default": [],
+      "description": "Message attachments"
+    }
+  },
+  "required": [
+    "ticketId",
+    "message",
+    "senderEmail"
+  ]
+}
