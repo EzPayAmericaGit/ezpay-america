@@ -4,9 +4,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { base44 } from "@/api/base44Client";
 import SEOHead from "../components/SEOHead";
-import { CheckCircle2, DollarSign, Users, TrendingUp, ArrowRight, Loader2, ExternalLink } from "lucide-react";
+import { CheckCircle2, DollarSign, Users, TrendingUp, ArrowRight, Loader2, ExternalLink, LogIn } from "lucide-react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 
 const benefits = [
@@ -29,6 +29,11 @@ export default function AffiliateSignup() {
     company: "", website: "", phone: "", marketingStrategy: ""
   });
   const [errors, setErrors] = useState({});
+  const [showLogin, setShowLogin] = useState(false);
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const [loginLoading, setLoginLoading] = useState(false);
+  const navigate = useNavigate();
 
   const validate = () => {
     const e = {};
@@ -40,6 +45,30 @@ export default function AffiliateSignup() {
     if (!form.marketingStrategy) e.marketingStrategy = "Required";
     setErrors(e);
     return Object.keys(e).length === 0;
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoginError("");
+    if (!loginEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(loginEmail)) {
+      setLoginError("Please enter a valid email address.");
+      return;
+    }
+    setLoginLoading(true);
+    try {
+      const results = await base44.entities.Affiliate.filter({ email: loginEmail });
+      if (!results || results.length === 0) {
+        setLoginError("No affiliate account found with that email. Please sign up or check your email address.");
+      } else {
+        const aff = results[0];
+        localStorage.setItem("affiliate_email", loginEmail);
+        localStorage.setItem("affiliate_id", aff.id);
+        navigate(createPageUrl("AffiliateDashboard"));
+      }
+    } catch (err) {
+      setLoginError("Unable to look up your account. Please try again.");
+    }
+    setLoginLoading(false);
   };
 
   const handleSubmit = async (e) => {
@@ -111,9 +140,45 @@ export default function AffiliateSignup() {
             </motion.div>
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
               <div className="bg-white rounded-2xl shadow-2xl p-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Apply to Join</h2>
-                <p className="text-gray-500 text-sm mb-6">Free to join. Approval within 24–48 hours.</p>
+                {/* Tab toggle */}
+                <div className="flex rounded-xl bg-gray-100 p-1 mb-6">
+                  <button type="button" onClick={() => setShowLogin(false)}
+                    className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${!showLogin ? "bg-white shadow text-gray-900" : "text-gray-500 hover:text-gray-700"}`}>
+                    Apply to Join
+                  </button>
+                  <button type="button" onClick={() => setShowLogin(true)}
+                    className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 ${showLogin ? "bg-white shadow text-gray-900" : "text-gray-500 hover:text-gray-700"}`}>
+                    <LogIn className="w-4 h-4" /> Affiliate Login
+                  </button>
+                </div>
+
+                {showLogin ? (
+                  <form onSubmit={handleLogin} className="space-y-4">
+                    <div>
+                      <h2 className="text-2xl font-bold text-gray-900 mb-1">Welcome Back</h2>
+                      <p className="text-gray-500 text-sm mb-5">Enter your affiliate email to access your dashboard.</p>
+                    </div>
+                    <div>
+                      <Input
+                        type="email"
+                        placeholder="Your affiliate email address"
+                        value={loginEmail}
+                        onChange={e => { setLoginEmail(e.target.value); setLoginError(""); }}
+                        className={loginError ? "border-red-500" : ""}
+                      />
+                      {loginError && <p className="text-red-500 text-xs mt-1">{loginError}</p>}
+                    </div>
+                    <Button type="submit" disabled={loginLoading} className="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white h-12 text-base font-bold">
+                      {loginLoading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Looking up...</> : <><LogIn className="w-4 h-4 mr-2" />Go to My Dashboard</>}
+                    </Button>
+                    <p className="text-xs text-center text-gray-400">New affiliate? Switch to "Apply to Join" above.</p>
+                  </form>
+                ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-1">Apply to Join</h2>
+                    <p className="text-gray-500 text-sm mb-2">Free to join. Approval within 24–48 hours.</p>
+                  </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <Input placeholder="First Name *" value={form.firstName} onChange={e => setForm({...form, firstName: e.target.value})} className={errors.firstName ? "border-red-500" : ""} />
@@ -155,6 +220,7 @@ export default function AffiliateSignup() {
                   </Button>
                   <p className="text-xs text-center text-gray-400">By applying, you agree to our affiliate terms. Payouts sent via PayPal within 30 days of approval.</p>
                 </form>
+                )}
               </div>
             </motion.div>
           </div>
