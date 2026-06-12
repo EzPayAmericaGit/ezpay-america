@@ -1,10 +1,5 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
-import sgMail from 'npm:@sendgrid/mail@8.1.0';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.31';
 
-sgMail.setApiKey(Deno.env.get("SENDGRID_API_KEY"));
-
-const FROM_EMAIL = Deno.env.get("SENDGRID_FROM_EMAIL") || "noreply@ezpayamerica.com";
-const FROM_NAME = "EzPay America";
 const APPLY_URL = "https://ezpayamerica.com/ApplyOnline";
 
 // Drip steps 2, 3, 4 (step 1 is sent immediately in startAffiliateDrip)
@@ -127,11 +122,11 @@ Deno.serve(async (req) => {
       const data = dripState.drip_data || {};
 
       try {
-        await sgMail.send({
+        await base44.asServiceRole.integrations.Core.SendEmail({
           to: ref.referredEmail,
-          from: { email: FROM_EMAIL, name: FROM_NAME },
           subject: step.subject(data),
-          html: step.html(data),
+          body: step.html(data),
+          from_name: "EzPay America",
         });
         sent++;
 

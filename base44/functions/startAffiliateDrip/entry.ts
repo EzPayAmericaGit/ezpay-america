@@ -1,10 +1,5 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
-import sgMail from 'npm:@sendgrid/mail@8.1.0';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.31';
 
-sgMail.setApiKey(Deno.env.get("SENDGRID_API_KEY"));
-
-const FROM_EMAIL = Deno.env.get("SENDGRID_FROM_EMAIL") || "noreply@ezpayamerica.com";
-const FROM_NAME = "EzPay America";
 const APPLY_URL = "https://ezpayamerica.com/ApplyOnline";
 
 // Drip sequence: [{delay_hours, subject, html_fn}]
@@ -158,11 +153,11 @@ Deno.serve(async (req) => {
     // For simplicity and reliability: send email 1 now, store drip state for automation pickup
 
     const email1 = DRIP_SEQUENCE[0];
-    await sgMail.send({
+    await base44.asServiceRole.integrations.Core.SendEmail({
       to: leadEmail,
-      from: { email: FROM_EMAIL, name: FROM_NAME },
       subject: email1.subject(data),
-      html: email1.html(data),
+      body: email1.html(data),
+      from_name: "EzPay America",
     });
 
     // Store follow-up data in the referral notes for the scheduled drip automation to pick up
