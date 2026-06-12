@@ -80,12 +80,14 @@ export default function BatchPayoutPanel({ affiliates, referrals, payouts, onPay
       const newTotalPaid = (item.affiliate.totalPaid || 0) + amount;
       await base44.entities.Affiliate.update(item.affiliate.id, { totalPaid: newTotalPaid });
 
-      // Email the affiliate
-      base44.functions.invoke("sendContactEmail", {
-        name: `${item.affiliate.firstName} ${item.affiliate.lastName}`,
-        email: item.affiliate.email,
-        message: `Great news! We've queued a PayPal payout of $${amount.toFixed(2)} to ${item.affiliate.paypalEmail}.\n\nThis covers ${item.unpaidRefs.length} approved referral(s).\n\nPlease allow 1–3 business days for the payment to arrive in your PayPal account.\n\nThank you for being an EzPay America affiliate!`,
-        service: "Affiliate Payout — EzPay America"
+      // Email the affiliate via backend function with branded template
+      base44.functions.invoke("sendPayoutNotification", {
+        affiliateName: `${item.affiliate.firstName} ${item.affiliate.lastName}`,
+        affiliateEmail: item.affiliate.email,
+        paypalEmail: item.affiliate.paypalEmail,
+        amount,
+        referralCount: item.unpaidRefs.length,
+        payoutId: payout.id,
       }).catch(() => {});
 
       results.push(payout);
