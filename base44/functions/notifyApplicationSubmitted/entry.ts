@@ -1,30 +1,10 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.31';
 
 const escapeHtml = (text) => {
   if (!text || typeof text !== 'string') return '';
   return text
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
-};
-
-const sendEmail = async (apiKey, fromEmail, to, subject, htmlBody) => {
-  const res = await fetch('https://api.sendgrid.com/v3/mail/send', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${apiKey}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      personalizations: [{ to: [{ email: to }], subject }],
-      from: { email: fromEmail, name: 'EzPay America' },
-      content: [{ type: 'text/html', value: htmlBody }]
-    })
-  });
-  if (!res.ok) {
-    const err = await res.text();
-    console.error(`SendGrid error sending to ${to}:`, err);
-  }
-  return res.ok;
 };
 
 Deno.serve(async (req) => {
@@ -36,13 +16,6 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Missing application data' }, { status: 400 });
     }
 
-    const SENDGRID_API_KEY = Deno.env.get("SENDGRID_API_KEY");
-    const FROM_EMAIL = Deno.env.get("SENDGRID_FROM_EMAIL");
-
-    if (!SENDGRID_API_KEY || !FROM_EMAIL) {
-      return Response.json({ error: 'Email service not configured' }, { status: 500 });
-    }
-
     const safeLegalBusinessName = escapeHtml(String(applicationData.legalBusinessName || '').substring(0, 200));
     const safeDbaName = escapeHtml(String(applicationData.dbaName || '').substring(0, 200));
     const safeOwnerFullName = escapeHtml(String(applicationData.ownerFullName || '').substring(0, 100));
@@ -50,6 +23,12 @@ Deno.serve(async (req) => {
     const safeBusinessPhone = escapeHtml(String(applicationData.businessPhone || '').substring(0, 30));
     const safeMonthlyVolume = escapeHtml(String(applicationData.monthlyVolume || '').substring(0, 20));
     const safeBusinessMarketType = escapeHtml(String(applicationData.businessMarketType || '').substring(0, 50));
+
+    const docList = [
+      applicationData.driversLicenseUrl ? "Driver's License" : null,
+      applicationData.voidedCheckUrl ? "Voided Check" : null,
+      ...(applicationData.additionalDocuments || []).map(d => d.name)
+    ].filter(Boolean).join(", ") || "None";
 
     // --- 1. Internal notification to EzPay America team ---
     const internalHtml = `
@@ -88,7 +67,7 @@ Deno.serve(async (req) => {
             <p style="margin:8px 0 0;color:#78350f;">
               Business: <strong>${safeLegalBusinessName}</strong><br/>
               Monthly Volume: <strong>$${safeMonthlyVolume}</strong><br/>
-              Documents Uploaded: <strong>${[applicationData.driversLicenseUrl ? "Driver's License" : null, applicationData.voidedCheckUrl ? "Voided Check" : null, ...(applicationData.additionalDocuments || []).map(d => d.name)].filter(Boolean).join(", ") || "None"}</strong>
+              Documents Uploaded: <strong>${docList}</strong>
             </p>
           </div>
 
@@ -97,7 +76,7 @@ Deno.serve(async (req) => {
           <p>If you have any questions in the meantime, please don't hesitate to reach out:</p>
           <ul style="padding-left:20px;">
             <li>📞 <a href="tel:8653169625" style="color:#d97706;">(865) 316-9625</a></li>
-            <li>📧 <a href="mailto:mail@ezpayamerica.com" style="color:#d97706;">mail@ezpayamerica.com</a></li>
+            <li>📧 <a href="mailto:info@ezpayamerica.com" style="color:#d97706;">info@ezpayamerica.com</a></li>
           </ul>
 
           <p style="margin-top:32px;">Thank you for choosing EzPay America!</p>
@@ -105,20 +84,37 @@ Deno.serve(async (req) => {
           
           <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0;"/>
           <p style="font-size:12px;color:#9ca3af;text-align:center;">
-            EzPay America | (865) 316-9625 | mail@ezpayamerica.com<br/>
+            EzPay America | (865) 316-9625 | info@ezpayamerica.com<br/>
             This is an automated confirmation. Please do not reply to this email.
           </p>
         </div>
       </div>
     `;
 
-    // Send both emails in parallel
-    const [internalSent, merchantSent] = await Promise.all([
-      sendEmail(SENDGRID_API_KEY, FROM_EMAIL, 'mail@ezpayamerica.com', `New Merchant Application: ${safeLegalBusinessName}`, internalHtml),
-      safeBusinessEmail ? sendEmail(SENDGRID_API_KEY, FROM_EMAIL, applicationData.businessEmail.toLowerCase(), `Your EzPay America Application Has Been Received`, merchantHtml) : Promise.resolve(false)
-    ]);
+    // Use the platform's SendEmail integration which handles proper authentication
+    const emailPromises = [
+      base44.asServiceRole.integrations.Core.SendEmail({
+        to: 'info@ezpayamerica.com',
+        subject: `New Merchant Application: ${safeLegalBusinessName}`,
+        body: internalHtml,
+        from_name: 'EzPay America Applications'
+      })
+    ];
 
-    return Response.json({ success: true, internalSent, merchantSent });
+    if (applicationData.businessEmail) {
+      emailPromises.push(
+        base44.asServiceRole.integrations.Core.SendEmail({
+          to: applicationData.businessEmail.toLowerCase(),
+          subject: 'Your EzPay America Application Has Been Received',
+          body: merchantHtml,
+          from_name: 'EzPay America'
+        })
+      );
+    }
+
+    await Promise.all(emailPromises);
+
+    return Response.json({ success: true });
   } catch (error) {
     console.error('Application notification error:', error);
     return Response.json({ error: 'Failed to send notification' }, { status: 500 });
