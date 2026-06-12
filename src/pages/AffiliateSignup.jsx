@@ -46,6 +46,7 @@ export default function AffiliateSignup() {
     e.preventDefault();
     if (!validate()) return;
     setLoading(true);
+    try {
     const referralCode = generateCode(form.firstName, form.lastName);
     const created = await base44.entities.Affiliate.create({
       ...form,
@@ -67,6 +68,9 @@ export default function AffiliateSignup() {
 
     setAffiliate(created);
     setStep(2);
+    } catch (err) {
+      setErrors({ submit: "Failed to submit application. Please try again or call (865) 316-9625." });
+    }
     setLoading(false);
   };
 
@@ -157,6 +161,7 @@ export default function AffiliateSignup() {
                     <Textarea placeholder="How do you plan to promote EzPay America? (social media, blog, networking, etc.) *" rows={3} value={form.marketingStrategy} onChange={e => setForm({...form, marketingStrategy: e.target.value})} className={errors.marketingStrategy ? "border-red-500" : ""} />
                     {errors.marketingStrategy && <p className="text-red-500 text-xs mt-1">{errors.marketingStrategy}</p>}
                   </div>
+                  {errors.submit && <p className="text-red-500 text-sm text-center">{errors.submit}</p>}
                   <Button type="submit" disabled={loading} className="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white h-12 text-base font-bold">
                     {loading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Submitting...</> : "Apply Now — It's Free"}
                   </Button>

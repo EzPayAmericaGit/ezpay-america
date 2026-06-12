@@ -48,11 +48,15 @@ export default function AffiliateReferralPortal() {
     setCodeChecking(true);
     setCodeError("");
     setAffiliate(null);
-    const results = await base44.entities.Affiliate.filter({ referralCode: code, status: "approved" });
-    if (results.length > 0) {
-      setAffiliate(results[0]);
-    } else {
-      setCodeError("Referral code not found or not active.");
+    try {
+      const results = await base44.entities.Affiliate.filter({ referralCode: code, status: "approved" });
+      if (results.length > 0) {
+        setAffiliate(results[0]);
+      } else {
+        setCodeError("Referral code not found or not active.");
+      }
+    } catch (err) {
+      setCodeError("Unable to verify code. Please check your connection and try again.");
     }
     setCodeChecking(false);
   };

@@ -53,17 +53,25 @@ export default function AffiliateDashboard() {
 
   const fetchAffiliate = async (email) => {
     setLoading(true);
-    const results = await base44.entities.Affiliate.filter({ email });
-    if (results.length > 0) {
-      const aff = results[0];
-      setAffiliate(aff);
-      localStorage.setItem("affiliate_email", email);
-      const refs = await base44.entities.AffiliateReferral.filter({ affiliateId: aff.id });
-      setReferrals(refs);
-      const pays = await base44.entities.AffiliatePayout.filter({ affiliateId: aff.id });
-      setPayouts(pays);
-    } else {
-      setLoginError("No affiliate account found with that email. Please check your email or apply first.");
+    try {
+      const results = await base44.entities.Affiliate.filter({ email });
+      if (results.length > 0) {
+        const aff = results[0];
+        setAffiliate(aff);
+        localStorage.setItem("affiliate_email", email);
+        const [refs, pays] = await Promise.all([
+          base44.entities.AffiliateReferral.filter({ affiliateId: aff.id }),
+          base44.entities.AffiliatePayout.filter({ affiliateId: aff.id })
+        ]);
+        setReferrals(refs);
+        setPayouts(pays);
+      } else {
+        setLoginError("No affiliate account found with that email. Please check your email or apply first.");
+        localStorage.removeItem("affiliate_email");
+      }
+    } catch (err) {
+      console.error("Affiliate fetch error:", err);
+      setLoginError("Unable to connect. Please check your connection and try again.");
       localStorage.removeItem("affiliate_email");
     }
     setLoading(false);
