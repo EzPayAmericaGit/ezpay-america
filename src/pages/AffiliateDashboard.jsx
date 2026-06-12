@@ -4,12 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { DollarSign, Users, TrendingUp, Copy, CheckCircle2, Clock, ExternalLink, Link2, AlertCircle, Loader2, BarChart2, Code, ListChecks, Package, Tag, Zap } from "lucide-react";
+import { DollarSign, Users, TrendingUp, Copy, CheckCircle2, Clock, ExternalLink, Link2, AlertCircle, Loader2, BarChart2, Code, ListChecks, Package, Tag, Zap, FileText, Lock } from "lucide-react";
 import UTMLinkGenerator from "../components/affiliate/UTMLinkGenerator";
 import ReferralAnalytics from "../components/affiliate/ReferralAnalytics";
 import ReferralWidgetEmbed from "../components/affiliate/ReferralWidgetEmbed";
 import OnboardingChecklist from "../components/affiliate/OnboardingChecklist";
 import ResourceManager from "../components/affiliate/ResourceManager";
+import AffiliateInvoices from "../components/affiliate/AffiliateInvoices";
+import CommissionHoldTracker from "../components/affiliate/CommissionHoldTracker";
+import AffiliateCoupons from "../components/affiliate/AffiliateCoupons";
 import { motion } from "framer-motion";
 import SEOHead from "../components/SEOHead";
 import { Link } from "react-router-dom";
@@ -145,7 +148,7 @@ export default function AffiliateDashboard() {
     </div>
   );
 
-  const tabs = ["overview", "referrals", "analytics", "payouts", "utm-links", "resources", "embed", "leaderboard", "checklist", "settings"];
+  const tabs = ["overview", "referrals", "analytics", "payouts", "hold-tracker", "invoices", "coupons", "utm-links", "resources", "embed", "leaderboard", "checklist", "settings"];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -218,7 +221,10 @@ export default function AffiliateDashboard() {
               {t === "checklist" && <ListChecks className="w-3.5 h-3.5" />}
               {t === "resources" && <Package className="w-3.5 h-3.5" />}
               {t === "utm-links" && <Zap className="w-3.5 h-3.5" />}
-              {t === "embed" ? "Widget Embed" : t === "checklist" ? "Checklist" : t === "resources" ? "Resources" : t === "utm-links" ? "UTM Links" : t}
+              {t === "invoices" && <FileText className="w-3.5 h-3.5" />}
+              {t === "hold-tracker" && <Lock className="w-3.5 h-3.5" />}
+              {t === "coupons" && <Tag className="w-3.5 h-3.5" />}
+              {t === "embed" ? "Widget Embed" : t === "checklist" ? "Checklist" : t === "resources" ? "Resources" : t === "utm-links" ? "UTM Links" : t === "invoices" ? "Invoices" : t === "hold-tracker" ? "Hold Tracker" : t === "coupons" ? "Coupons" : t}
             </button>
           ))}
         </div>
@@ -501,6 +507,21 @@ export default function AffiliateDashboard() {
               </Link>
             </div>
           </div>
+        )}
+
+        {/* Invoices Tab */}
+        {activeTab === "invoices" && (
+          <AffiliateInvoices payouts={payouts} affiliate={affiliate} />
+        )}
+
+        {/* Hold Tracker Tab */}
+        {activeTab === "hold-tracker" && (
+          <CommissionHoldTracker referrals={referrals} />
+        )}
+
+        {/* Coupons Tab */}
+        {activeTab === "coupons" && (
+          <AffiliateCoupons affiliateId={affiliate.id} />
         )}
 
         {/* Settings Tab */}

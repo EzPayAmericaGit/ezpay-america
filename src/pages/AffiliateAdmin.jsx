@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { DollarSign, Users, TrendingUp, Search, CheckCircle2, Clock, RefreshCw, ExternalLink, Loader2, Eye, BarChart2, Send, ArrowUp, Mail, ShieldCheck, Trophy } from "lucide-react";
+import { DollarSign, Users, TrendingUp, Search, CheckCircle2, Clock, RefreshCw, ExternalLink, Loader2, Eye, BarChart2, Send, ArrowUp, Mail, ShieldCheck, Trophy, Webhook } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import AffiliateAnalytics from "../components/affiliate/AffiliateAnalytics";
@@ -23,6 +23,7 @@ import CouponManager from "../components/affiliate/CouponManager";
 import MerchantApplicationsAnalytics from "../components/affiliate/MerchantApplicationsAnalytics";
 import AffiliateMilestones from "../components/affiliate/AffiliateMilestones";
 import ReferralLinkGenerator from "../components/affiliate/ReferralLinkGenerator";
+import WebhookManager from "../components/affiliate/WebhookManager";
 
 const STATUS_BADGE = {
   pending: "bg-yellow-100 text-yellow-800",
@@ -295,7 +296,7 @@ export default function AffiliateAdmin() {
 
         {/* Tabs */}
         <div className="flex gap-1 bg-gray-200 rounded-xl p-1 mb-6 flex-wrap">
-          {["affiliates", "referrals", "payouts", "batch-payout", "analytics", "merchant-applications", "milestones", "link-generator", "programs", "coupons", "resources", "drip-campaigns", "email-templates", "tier-rules"].map(t => (
+          {["affiliates", "referrals", "payouts", "batch-payout", "analytics", "merchant-applications", "milestones", "link-generator", "programs", "coupons", "resources", "drip-campaigns", "email-templates", "tier-rules", "webhooks"].map(t => (
             <button key={t} onClick={() => setActiveTab(t)}
               className={`px-4 py-2 rounded-lg text-sm font-medium capitalize transition-all flex items-center gap-1.5 ${activeTab === t ? "bg-white shadow text-gray-900" : "text-gray-600 hover:text-gray-900"}`}>
               {t === "analytics" && <BarChart2 className="w-3.5 h-3.5" />}
@@ -303,6 +304,7 @@ export default function AffiliateAdmin() {
               {t === "email-templates" && <Mail className="w-3.5 h-3.5" />}
               {t === "tier-rules" && <ArrowUp className="w-3.5 h-3.5" />}
               {t === "drip-campaigns" && <Mail className="w-3.5 h-3.5" />}
+              {t === "webhooks" && <Webhook className="w-3.5 h-3.5" />}
               {t === "affiliates" ? `Affiliates (${affiliates.length})` :
                t === "referrals" ? `Referrals (${referrals.length})` :
                t === "payouts" ? `Payouts (${payouts.length})` :
@@ -315,7 +317,8 @@ export default function AffiliateAdmin() {
                t === "link-generator" ? "Link Generator" :
                t === "programs" ? "Programs" :
                t === "resources" ? "Resources" :
-               t === "coupons" ? "Coupons" : "Analytics"}
+               t === "coupons" ? "Coupons" :
+               t === "webhooks" ? "Webhooks" : "Analytics"}
             </button>
           ))}
         </div>
@@ -465,12 +468,25 @@ export default function AffiliateAdmin() {
                           </td>
                           <td className="py-3 text-xs text-gray-500">{new Date(r.created_date).toLocaleDateString()}</td>
                           <td className="py-3">
+                            <div className="flex gap-1 flex-wrap">
                             {r.status === "converted" && r.commissionStatus === "pending" && (
                               <Button size="sm" className="bg-green-500 hover:bg-green-600 text-white h-7 px-2 text-xs"
                                 onClick={() => updateReferralStatus(r.id, "converted", "approved")}>
-                                Approve Commission
+                                Approve
                               </Button>
                             )}
+                            {r.commissionStatus !== "cancelled" && r.commissionStatus !== "paid" && (
+                              <Button size="sm" variant="outline" className="h-7 px-2 text-xs text-red-600 border-red-200 hover:bg-red-50"
+                                onClick={async () => {
+                                  if (!confirm("Reverse this commission? This will cancel the commission and cannot be undone.")) return;
+                                  await updateReferralStatus(r.id, "rejected", "cancelled");
+                                  // Fire webhook
+                                  base44.functions.invoke("affiliateWebhook", { event: "referral.cancelled", data: { referralId: r.id, affiliateId: r.affiliateId, reason: "admin_reversal" } }).catch(() => {});
+                                }}>
+                                Reverse
+                              </Button>
+                            )}
+                          </div>
                           </td>
                         </tr>
                       );
@@ -579,6 +595,11 @@ export default function AffiliateAdmin() {
         {/* Drip Campaigns Tab */}
         {activeTab === "drip-campaigns" && (
           <DripCampaignManager affiliates={affiliates} />
+        )}
+
+        {/* Webhooks Tab */}
+        {activeTab === "webhooks" && (
+          <WebhookManager />
         )}
       </div>
 
