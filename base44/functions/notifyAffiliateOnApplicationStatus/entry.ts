@@ -1,4 +1,4 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.31';
 
 const STATUS_LABELS = {
   submitted: { label: 'Submitted', color: '#3b82f6' },
@@ -59,9 +59,6 @@ Deno.serve(async (req) => {
     const businessName = application.dbaName || application.legalBusinessName || 'the referred merchant';
     const oldStatusLabel = STATUS_LABELS[old_data?.status]?.label || old_data?.status || 'N/A';
 
-    const SENDGRID_API_KEY = Deno.env.get('SENDGRID_API_KEY');
-    const FROM_EMAIL = Deno.env.get('SENDGRID_FROM_EMAIL');
-
     const emailBody = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); padding: 40px 20px; text-align: center;">
@@ -117,25 +114,12 @@ Deno.serve(async (req) => {
       </div>
     `;
 
-    const sgRes = await fetch('https://api.sendgrid.com/v3/mail/send', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${SENDGRID_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        personalizations: [{ to: [{ email: affiliate.email }] }],
-        from: { email: FROM_EMAIL, name: 'EzPay America Affiliates' },
-        subject: `Referral Update: ${businessName} is now ${statusInfo.label} — EzPay America`,
-        content: [{ type: 'text/html', value: emailBody }],
-      }),
+    await base44.asServiceRole.integrations.Core.SendEmail({
+      to: affiliate.email,
+      subject: `Referral Update: ${businessName} is now ${statusInfo.label} — EzPay America`,
+      body: emailBody,
+      from_name: 'EzPay America Affiliates',
     });
-
-    if (!sgRes.ok) {
-      const err = await sgRes.text();
-      console.error('SendGrid error:', err);
-      return Response.json({ error: 'Failed to send email', detail: err }, { status: 500 });
-    }
 
     console.log(`Notified affiliate ${affiliate.email} of status change to ${newStatus} for application ${application.id}`);
     return Response.json({ success: true, affiliateEmail: affiliate.email, newStatus });
