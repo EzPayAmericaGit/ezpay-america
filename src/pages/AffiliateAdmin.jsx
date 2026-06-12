@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { DollarSign, Users, TrendingUp, Search, CheckCircle2, Clock, RefreshCw, ExternalLink, Loader2, Eye, BarChart2, Send, ArrowUp, Mail, ShieldCheck, Trophy, Webhook, Key, UserCog, AlertTriangle, Palette, FileText } from "lucide-react";
+import { DollarSign, Users, TrendingUp, Search, CheckCircle2, Clock, RefreshCw, ExternalLink, Loader2, Eye, BarChart2, Send, ArrowUp, Mail, ShieldCheck, Trophy, Webhook, Key, UserCog, AlertTriangle, Palette, FileText, Image } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import AffiliateAnalytics from "../components/affiliate/AffiliateAnalytics";
@@ -31,6 +31,7 @@ import TeamManager from "../components/affiliate/TeamManager";
 import RefundManager from "../components/affiliate/RefundManager";
 import BrandingManager from "../components/affiliate/BrandingManager";
 import ReportsManager from "../components/affiliate/ReportsManager";
+import BannerGenerator from "../components/affiliate/BannerGenerator";
 
 const STATUS_BADGE = {
   pending: "bg-yellow-100 text-yellow-800",
@@ -303,7 +304,7 @@ export default function AffiliateAdmin() {
 
         {/* Tabs */}
         <div className="flex gap-1 bg-gray-200 rounded-xl p-1 mb-6 flex-wrap">
-          {["leads", "affiliates", "referrals", "payouts", "batch-payout", "analytics", "reports", "merchant-applications", "milestones", "link-generator", "programs", "coupons", "resources", "drip-campaigns", "email-templates", "tier-rules", "refunds", "webhooks", "api-keys", "team", "branding"].map(t => (
+          {["leads", "affiliates", "referrals", "payouts", "batch-payout", "analytics", "reports", "merchant-applications", "milestones", "link-generator", "programs", "coupons", "resources", "drip-campaigns", "email-templates", "tier-rules", "refunds", "webhooks", "api-keys", "team", "branding", "banners"].map(t => (
             <button key={t} onClick={() => setActiveTab(t)}
               className={`px-4 py-2 rounded-lg text-sm font-medium capitalize transition-all flex items-center gap-1.5 ${activeTab === t ? "bg-white shadow text-gray-900" : "text-gray-600 hover:text-gray-900"}`}>
               {t === "analytics" && <BarChart2 className="w-3.5 h-3.5" />}
@@ -318,6 +319,7 @@ export default function AffiliateAdmin() {
               {t === "team" && <UserCog className="w-3.5 h-3.5" />}
               {t === "refunds" && <AlertTriangle className="w-3.5 h-3.5" />}
               {t === "branding" && <Palette className="w-3.5 h-3.5" />}
+              {t === "banners" && <Image className="w-3.5 h-3.5" />}
               {t === "affiliates" ? `Affiliates (${affiliates.length})` :
                t === "referrals" ? `Referrals (${referrals.length})` :
                t === "payouts" ? `Payouts (${payouts.length})` :
@@ -337,7 +339,8 @@ export default function AffiliateAdmin() {
                t === "team" ? "Team" :
                t === "refunds" ? "Refunds/Clawbacks" :
                t === "branding" ? "Branding" :
-               t === "reports" ? "Reports" : "Analytics"}
+               t === "reports" ? "Reports" :
+               t === "banners" ? "Banner Generator" : "Analytics"}
             </button>
           ))}
         </div>
@@ -654,6 +657,11 @@ export default function AffiliateAdmin() {
         {/* Branding Tab */}
         {activeTab === "branding" && (
           <BrandingManager />
+        )}
+
+        {/* Banner Generator Tab */}
+        {activeTab === "banners" && (
+          <BannerGenerator affiliates={affiliates} />
         )}
       </div>
 
