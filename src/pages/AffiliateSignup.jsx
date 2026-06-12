@@ -47,30 +47,18 @@ export default function AffiliateSignup() {
     if (!validate()) return;
     setLoading(true);
     try {
-    const referralCode = generateCode(form.firstName, form.lastName);
-    const created = await base44.entities.Affiliate.create({
-      ...form,
-      referralCode,
-      status: "pending",
-      commissionRate: 10,
-      totalEarned: 0, totalPaid: 0, totalReferrals: 0, totalConversions: 0, totalClicks: 0,
-      tier: "bronze"
-    });
-
-    // Notify admin
-    base44.functions.invoke("sendContactEmail", {
-      name: `${form.firstName} ${form.lastName}`,
-      email: form.email,
-      phone: form.phone,
-      message: `New Affiliate Application!\nCompany: ${form.company || "N/A"}\nWebsite: ${form.website || "N/A"}\nPayPal: ${form.paypalEmail}\nMarketing Strategy: ${form.marketingStrategy}\nReferral Code: ${referralCode}`,
-      service: "Affiliate Program Application"
-    }).catch(() => {});
-
-    setAffiliate(created);
-    setStep(2);
+      const referralCode = generateCode(form.firstName, form.lastName);
+      const res = await base44.functions.invoke("createAffiliateApplication", {
+        ...form,
+        referralCode,
+      });
+      const data = res.data;
+      if (data.error) throw new Error(data.error);
+      setAffiliate(data.affiliate);
+      setStep(2);
     } catch (err) {
       console.error("Affiliate signup error:", err);
-      alert("Unable to submit application. Please check your connection and try again.");
+      alert(err.message || "Unable to submit application. Please check your connection and try again.");
     }
     setLoading(false);
   };
