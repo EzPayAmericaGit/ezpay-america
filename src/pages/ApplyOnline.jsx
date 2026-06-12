@@ -236,6 +236,10 @@ export default function ApplyOnline() {
     setIsSubmitting(true);
 
     try {
+      // Strip sensitive fields before storing/sending
+      const { ownerSSN, owner2SSN, routingNumber, accountNumber, taxId, ...safeFormData } = formData;
+
+      // Store sensitive fields only in the entity (admin-only access), not in email
       await base44.entities.MerchantApplication.create({
         legalBusinessName: formData.legalBusinessName,
         dbaName: formData.dbaName,
@@ -246,12 +250,12 @@ export default function ApplyOnline() {
         driversLicenseUrl: formData.driversLicenseUrl || null,
         voidedCheckUrl: formData.voidedCheckUrl || null,
         additionalDocuments: formData.additionalDocuments || [],
-        applicationData: formData
+        applicationData: { ...safeFormData, ownerSSN, owner2SSN, routingNumber, accountNumber, taxId }
       });
 
-      // Send email notification (non-blocking)
+      // Send email notification with safe (non-sensitive) data only
       base44.functions.invoke('notifyApplicationSubmitted', {
-        applicationData: formData
+        applicationData: safeFormData
       }).catch(err => console.error('Email notification error:', err));
 
       setSubmitted(true);
