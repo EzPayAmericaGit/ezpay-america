@@ -78,6 +78,7 @@ export default function AffiliateReferralPortal() {
     e.preventDefault();
     if (!validate()) return;
     setLoading(true);
+    try {
 
     // Create the referral record
     await base44.entities.AffiliateReferral.create({
@@ -120,6 +121,10 @@ export default function AffiliateReferralPortal() {
     }).catch(() => {});
 
     setSubmitted(true);
+    } catch (err) {
+      console.error("Referral submit error:", err);
+      alert("Unable to submit referral. Please check your connection and try again.");
+    }
     setLoading(false);
   };
 
