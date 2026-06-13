@@ -683,6 +683,14 @@ export default function BannerGenerator({ affiliates = [] }) {
             </span>
           </div>
 
+          {/* Facebook / social warning */}
+          <div className="mt-2 bg-yellow-50 border border-yellow-200 rounded-lg px-4 py-3 text-xs text-yellow-800 flex items-start gap-2">
+            <span className="text-base leading-none mt-0.5">⚠️</span>
+            <span>
+              <strong>Posting on Facebook / Social Media?</strong> The PNG image alone has no tracking link — it's just a picture. To track your affiliate referrals, post your <strong>Referral Link</strong> in the Facebook post caption or comments alongside the image. The HTML snippet (for websites only) contains the embedded link, but Facebook ignores HTML.
+            </span>
+          </div>
+
           {/* Batch export info */}
           <div className="mt-2 bg-blue-50 border border-blue-100 rounded-lg px-4 py-3 text-xs text-blue-700 flex items-start gap-2">
             <Image className="w-3.5 h-3.5 mt-0.5 shrink-0" />
