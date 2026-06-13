@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { DollarSign, Users, TrendingUp, Search, CheckCircle2, Clock, RefreshCw, ExternalLink, Loader2, Eye, BarChart2, Send, ArrowUp, Mail, ShieldCheck, Trophy, Webhook, Key, UserCog, AlertTriangle, Palette, FileText, Image } from "lucide-react";
+import { DollarSign, Users, TrendingUp, Search, CheckCircle2, Clock, RefreshCw, ExternalLink, Loader2, Eye, BarChart2, Send, ArrowUp, Mail, ShieldCheck, Trophy, Webhook, Key, UserCog, AlertTriangle, Palette, FileText, Image, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import AffiliateAnalytics from "../components/affiliate/AffiliateAnalytics";
@@ -106,6 +106,13 @@ export default function AffiliateAdmin() {
     await base44.entities.Affiliate.update(id, { status });
     setAffiliates(prev => prev.map(a => a.id === id ? { ...a, status } : a));
     if (selectedAffiliate?.id === id) setSelectedAffiliate(prev => ({ ...prev, status }));
+  };
+
+  const deleteAffiliate = async (id) => {
+    if (!confirm("Permanently delete this affiliate? This cannot be undone.")) return;
+    await base44.entities.Affiliate.delete(id);
+    setAffiliates(prev => prev.filter(a => a.id !== id));
+    if (selectedAffiliate?.id === id) setDetailOpen(false);
   };
 
   // Recalculate tier & commission rate for all approved affiliates using DB-configured tiers
@@ -437,6 +444,9 @@ export default function AffiliateAdmin() {
                             {(a.status === "suspended" || a.status === "rejected") && (
                               <Button size="sm" className="bg-green-500 hover:bg-green-600 text-white h-7 px-2 text-xs" onClick={() => updateAffiliateStatus(a.id, "approved")}>Reinstate</Button>
                             )}
+                            <Button size="sm" variant="ghost" className="h-7 px-2 text-red-500 hover:text-red-700 hover:bg-red-50" onClick={() => deleteAffiliate(a.id)}>
+                              <Trash2 className="w-3 h-3" />
+                            </Button>
                           </div>
                         </td>
                       </tr>
@@ -708,6 +718,9 @@ export default function AffiliateAdmin() {
                     <DollarSign className="w-4 h-4 mr-2" />Send PayPal Payout
                   </Button>
                 )}
+                <Button variant="outline" className="border-red-300 text-red-600 hover:bg-red-50" onClick={() => deleteAffiliate(selectedAffiliate.id)}>
+                  <Trash2 className="w-4 h-4 mr-1" />Delete
+                </Button>
               </div>
             </div>
           )}
