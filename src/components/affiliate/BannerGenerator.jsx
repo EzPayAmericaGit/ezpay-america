@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Download, RefreshCw, Copy, Check, Image, Type, Palette, Layout, Sliders } from "lucide-react";
+import { Download, RefreshCw, Copy, Check, Image, Type, Palette, Layout, Sliders, Link, Save, CheckCircle2 } from "lucide-react";
 
 const BANNER_SIZES = [
   { label: "Leaderboard", width: 728, height: 90, desc: "728×90" },
@@ -120,6 +120,8 @@ export default function BannerGenerator({ affiliates = [] }) {
   const [selectedSize, setSelectedSize] = useState(BANNER_SIZES[0]);
   const [selectedTemplate, setSelectedTemplate] = useState(TEMPLATES[0]);
   const [copied, setCopied] = useState(false);
+  const [copiedHtml, setCopiedHtml] = useState(false);
+  const [savedLink, setSavedLink] = useState({ affiliateId: "", customUrl: "", saved: false });
   const [activePanel, setActivePanel] = useState("template");
 
   const [config, setConfig] = useState({
@@ -392,7 +394,31 @@ export default function BannerGenerator({ affiliates = [] }) {
     { id: "size", label: "Size", icon: Layout },
     { id: "text", label: "Text", icon: Type },
     { id: "style", label: "Style", icon: Sliders },
+    { id: "link", label: "Link", icon: Link },
   ];
+
+  const selectedAffiliate = affiliates.find(a => a.id === savedLink.affiliateId);
+  const affiliateUrl = savedLink.customUrl ||
+    (selectedAffiliate ? `https://ezpayamerica.com/AffiliateSignup?ref=${selectedAffiliate.referralCode}` : "https://ezpayamerica.com/AffiliateSignup");
+
+  const getHtmlSnippet = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return "";
+    const dataUrl = canvas.toDataURL("image/png");
+    return `<a href="${affiliateUrl}" target="_blank" rel="noopener noreferrer">\n  <img src="${dataUrl}" width="${selectedSize.width}" height="${selectedSize.height}" alt="${config.headline}" style="display:block;border:0;" />\n</a>`;
+  };
+
+  const copyHtml = () => {
+    navigator.clipboard.writeText(getHtmlSnippet()).then(() => {
+      setCopiedHtml(true);
+      setTimeout(() => setCopiedHtml(false), 2000);
+    });
+  };
+
+  const saveLink = () => {
+    setSavedLink(prev => ({ ...prev, saved: true }));
+    setTimeout(() => setSavedLink(prev => ({ ...prev, saved: false })), 2000);
+  };
 
   return (
     <div className="space-y-6">
@@ -404,6 +430,9 @@ export default function BannerGenerator({ affiliates = [] }) {
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={drawBanner}>
             <RefreshCw className="w-4 h-4 mr-1" />Refresh
+          </Button>
+          <Button variant="outline" size="sm" onClick={copyHtml}>
+            {copiedHtml ? <><Check className="w-4 h-4 mr-1 text-green-600" />HTML Copied!</> : <><Link className="w-4 h-4 mr-1" />Copy HTML</>}
           </Button>
           <Button variant="outline" size="sm" onClick={copyDataURL}>
             {copied ? <><Check className="w-4 h-4 mr-1 text-green-600" />Copied!</> : <><Copy className="w-4 h-4 mr-1" />Copy PNG</>}
@@ -498,6 +527,47 @@ export default function BannerGenerator({ affiliates = [] }) {
                 <label className="text-xs font-medium text-gray-600 block">Subtext Size: {config.subtextFontSize}px</label>
                 <input type="range" min="8" max="24" value={config.subtextFontSize} onChange={e => update("subtextFontSize", parseInt(e.target.value))}
                   className="w-full accent-amber-500" />
+              </div>
+            </div>
+          )}
+
+          {/* Link panel */}
+          {activePanel === "link" && (
+            <div className="space-y-4">
+              <div>
+                <label className="text-xs font-medium text-gray-600 mb-1 block">Assign to Affiliate</label>
+                <select
+                  value={savedLink.affiliateId}
+                  onChange={e => setSavedLink(prev => ({ ...prev, affiliateId: e.target.value, customUrl: "" }))}
+                  className="w-full border rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-amber-400">
+                  <option value="">— No affiliate (generic link) —</option>
+                  {affiliates.filter(a => a.status === "approved").map(a => (
+                    <option key={a.id} value={a.id}>{a.firstName} {a.lastName} ({a.referralCode})</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-600 mb-1 block">Custom Destination URL</label>
+                <Input
+                  placeholder="https://ezpayamerica.com/AffiliateSignup?ref=CODE"
+                  value={savedLink.customUrl}
+                  onChange={e => setSavedLink(prev => ({ ...prev, customUrl: e.target.value }))}
+                />
+                <p className="text-xs text-gray-400 mt-1">Overrides the auto-generated affiliate link.</p>
+              </div>
+              <div className="bg-gray-50 border rounded-lg p-3">
+                <p className="text-xs font-medium text-gray-600 mb-1">Active Link</p>
+                <p className="text-xs text-blue-600 break-all font-mono">{affiliateUrl}</p>
+              </div>
+              <Button className="w-full bg-amber-500 hover:bg-amber-600 text-white" size="sm" onClick={saveLink}>
+                {savedLink.saved ? <><CheckCircle2 className="w-4 h-4 mr-1" />Saved!</> : <><Save className="w-4 h-4 mr-1" />Save Link Settings</>}
+              </Button>
+              <div className="pt-2 border-t">
+                <p className="text-xs font-medium text-gray-600 mb-2">HTML Embed Code</p>
+                <p className="text-xs text-gray-500 mb-2">Copy this snippet to embed the banner with your link on any website.</p>
+                <Button variant="outline" size="sm" className="w-full" onClick={copyHtml}>
+                  {copiedHtml ? <><Check className="w-4 h-4 mr-1 text-green-600" />Copied HTML!</> : <><Copy className="w-4 h-4 mr-1" />Copy HTML Snippet</>}
+                </Button>
               </div>
             </div>
           )}
@@ -603,8 +673,18 @@ export default function BannerGenerator({ affiliates = [] }) {
             </CardContent>
           </Card>
 
+          {/* Active link display */}
+          <div className="mt-3 bg-amber-50 border border-amber-100 rounded-lg px-4 py-3 text-xs text-amber-800 flex items-start gap-2">
+            <Link className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+            <span className="flex-1">
+              <strong>Affiliate Link:</strong>{" "}
+              <span className="font-mono text-blue-700 break-all">{affiliateUrl}</span>
+              {selectedAffiliate && <span className="ml-2 text-amber-700">— {selectedAffiliate.firstName} {selectedAffiliate.lastName}</span>}
+            </span>
+          </div>
+
           {/* Batch export info */}
-          <div className="mt-3 bg-blue-50 border border-blue-100 rounded-lg px-4 py-3 text-xs text-blue-700 flex items-start gap-2">
+          <div className="mt-2 bg-blue-50 border border-blue-100 rounded-lg px-4 py-3 text-xs text-blue-700 flex items-start gap-2">
             <Image className="w-3.5 h-3.5 mt-0.5 shrink-0" />
             <span>
               <strong>Tip:</strong> Select each size and click <strong>Download PNG</strong> to export that size. The banner renders at full resolution regardless of preview zoom.
