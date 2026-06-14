@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 const CAPTIONS = {
   facebook: (url) =>
-    `💰 Did you know you can earn up to $300 commission just for referring business owners to EzPay America?\n\nIf you know any business owner who accepts credit cards, send them my way! EzPay America helps small businesses save money with zero-cost processing options, next-day funding, and real local support.\n\n👉 Have them sign up here (your referral is tracked automatically):\n${url}\n\n#EzPayAmerica #AffiliateMarketing #SmallBusiness #PaymentProcessing #EarnMoney`,
+    `💰 Did you know you can earn up to $300 commission just for referring business owners to EzPay America?\n\nIf you know any business owner who accepts credit cards, send them our way! EzPay America helps small businesses save money with zero-cost processing options, next-day funding, and real local support.\n\n👉 Have them sign up here (your referral is tracked automatically):\n${url}\n\n#EzPayAmerica #AffiliateMarketing #SmallBusiness #PaymentProcessing #EarnMoney`,
   instagram: (url) =>
     `💰 Earn up to $300 per referral!\n\nKnow a business owner who takes credit cards? Refer them to EzPay America and get paid when they sign up. Zero-cost processing, next-day funding, local support — they'll thank you for it. 🙌\n\nLink in bio 👆 or sign up here:\n${url}\n\n#EzPayAmerica #AffiliateMarketing #EarnFromHome #SmallBusiness #PaymentProcessing #SideHustle`,
   twitter: (url) =>
