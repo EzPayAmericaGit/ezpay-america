@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Download, RefreshCw, Copy, Check, Image, Type, Palette, Layout, Sliders, Link, Save, CheckCircle2 } from "lucide-react";
+import SocialPostKit from "./SocialPostKit";
 
 const BANNER_SIZES = [
   { label: "Leaderboard", width: 728, height: 90, desc: "728×90" },
@@ -683,13 +684,8 @@ export default function BannerGenerator({ affiliates = [] }) {
             </span>
           </div>
 
-          {/* Facebook / social warning */}
-          <div className="mt-2 bg-yellow-50 border border-yellow-200 rounded-lg px-4 py-3 text-xs text-yellow-800 flex items-start gap-2">
-            <span className="text-base leading-none mt-0.5">⚠️</span>
-            <span>
-              <strong>Posting on Facebook / Social Media?</strong> The PNG image alone has no tracking link — it's just a picture. To track your affiliate referrals, post your <strong>Referral Link</strong> in the Facebook post caption or comments alongside the image. The HTML snippet (for websites only) contains the embedded link, but Facebook ignores HTML.
-            </span>
-          </div>
+          {/* Social Media Post Kit */}
+          <SocialPostKit affiliateUrl={affiliateUrl} selectedAffiliate={selectedAffiliate} onDownload={downloadPNG} />
 
           {/* Batch export info */}
           <div className="mt-2 bg-blue-50 border border-blue-100 rounded-lg px-4 py-3 text-xs text-blue-700 flex items-start gap-2">
