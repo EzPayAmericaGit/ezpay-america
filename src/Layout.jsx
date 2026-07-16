@@ -225,12 +225,17 @@ export default function Layout({ children }) {
                 )
               ))}
 
-              <a href="tel:8653169625">
-                <Button className="bg-white hover:bg-gray-100 text-black border border-gray-300 shadow-lg text-xs lg:text-sm px-2 lg:px-4">
-                  <Phone className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
-                  (865) 316-9625
-                </Button>
-              </a>
+              <div className="flex flex-col items-center gap-1">
+                <a href="tel:8653169625">
+                  <Button className="bg-white hover:bg-gray-100 text-black border border-gray-300 shadow-lg text-xs lg:text-sm px-2 lg:px-4">
+                    <Phone className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
+                    (865) 316-9625
+                  </Button>
+                </a>
+                <span className="text-[10px] lg:text-[11px] text-gray-500 font-medium leading-none whitespace-nowrap">
+                  {new Date().toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" })}
+                </span>
+              </div>
               </nav>
 
             {/* Mobile Menu Button */}
