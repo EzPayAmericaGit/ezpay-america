@@ -8,7 +8,7 @@ export default function ApplyOnline() {
     if (!container) return;
     const script = document.createElement("script");
     script.src = "https://www.cognitoforms.com/f/seamless.js";
-    script.setAttribute("data-key", "D66W5DL470GvE4vhdJGV5g");
+    script.setAttribute("data-key", "6RMqTZmF685375nR6XRvTvQmBgx8FjWa");
     script.setAttribute("data-form", "1");
     container.appendChild(script);
     return () => { script.remove(); };
