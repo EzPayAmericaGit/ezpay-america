@@ -14,6 +14,11 @@ export default function ApplyOnline() {
     return () => { script.remove(); };
   }, []);
 
+  useEffect(() => {
+    const t = setTimeout(() => setLoaded(true), 3500);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <div className="min-h-screen bg-white">
       <SEOHead
@@ -46,9 +51,9 @@ export default function ApplyOnline() {
       <section className="py-16 bg-gradient-to-br from-gray-50 to-gray-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           {!loaded && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-500 bg-white rounded-2xl shadow-xl min-h-[400px]">
-              <Loader2 className="w-8 h-8 animate-spin text-amber-500 mb-3" />
-              <p className="text-sm font-medium">Loading application form…</p>
+            <div className="absolute top-2 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2 bg-white/90 px-4 py-2 rounded-full shadow text-gray-600 text-sm">
+              <Loader2 className="w-4 h-4 animate-spin text-amber-500" />
+              Loading application form…
             </div>
           )}
           <iframe
