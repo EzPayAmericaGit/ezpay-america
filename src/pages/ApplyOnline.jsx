@@ -14,11 +14,6 @@ export default function ApplyOnline() {
     return () => { script.remove(); };
   }, []);
 
-  useEffect(() => {
-    const t = setTimeout(() => setLoaded(true), 3500);
-    return () => clearTimeout(t);
-  }, []);
-
   return (
     <div className="min-h-screen bg-white">
       <SEOHead
@@ -50,21 +45,32 @@ export default function ApplyOnline() {
       {/* Cognito Form */}
       <section className="py-16 bg-gradient-to-br from-gray-50 to-gray-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          {!loaded && (
-            <div className="absolute top-2 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2 bg-white/90 px-4 py-2 rounded-full shadow text-gray-600 text-sm">
-              <Loader2 className="w-4 h-4 animate-spin text-amber-500" />
-              Loading application form…
-            </div>
-          )}
-          <iframe
-            src="https://www.cognitoforms.com/f/D66W5DL470GvE4vhdJGV5g/1"
-            style={{ border: 0, width: "100%", maxWidth: "800px", margin: "0 auto", display: "block" }}
-            height="3747"
-            scrolling="yes"
-            title="Online Merchant Application"
-            className="bg-white rounded-2xl shadow-xl"
-            onLoad={() => setLoaded(true)}
-          />
+          <div className="relative">
+            {!loaded && (
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white rounded-2xl shadow-xl py-20 px-6 text-center">
+                <Loader2 className="w-8 h-8 animate-spin text-amber-500 mb-4" />
+                <p className="text-gray-700 font-medium mb-1">Loading application form…</p>
+                <p className="text-gray-500 text-sm mb-5">If the form doesn't appear, open it directly:</p>
+                <a
+                  href="https://www.cognitoforms.com/f/D66W5DL470GvE4vhdJGV5g/1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold px-6 py-3 rounded-lg shadow"
+                >
+                  Open Application Form
+                </a>
+              </div>
+            )}
+            <iframe
+              src="https://www.cognitoforms.com/f/D66W5DL470GvE4vhdJGV5g/1"
+              style={{ border: 0, width: "100%", maxWidth: "800px", margin: "0 auto", display: "block" }}
+              height="3747"
+              scrolling="yes"
+              title="Online Merchant Application"
+              className="bg-white rounded-2xl shadow-xl"
+              onLoad={() => setLoaded(true)}
+            />
+          </div>
         </div>
       </section>
     </div>
