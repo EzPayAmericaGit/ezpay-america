@@ -53,9 +53,10 @@ export default function ApplyOnline() {
           )}
           <iframe
             src="https://www.cognitoforms.com/f/D66W5DL470GvE4vhdJGV5g/1"
-            allow="payment"
-            style={{ border: 0, width: "100%" }}
+            style={{ border: 0, width: "100%", maxWidth: "800px", margin: "0 auto", display: "block" }}
             height="3747"
+            scrolling="yes"
+            sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"
             title="Online Merchant Application"
             className="bg-white rounded-2xl shadow-xl"
             onLoad={() => setLoaded(true)}
