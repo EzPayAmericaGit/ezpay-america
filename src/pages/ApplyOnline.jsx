@@ -4,13 +4,10 @@ import { motion } from "framer-motion";
 
 export default function ApplyOnline() {
   useEffect(() => {
-    const container = document.getElementById("cognito-form-container");
-    if (!container) return;
     const script = document.createElement("script");
-    script.src = "https://www.cognitoforms.com/f/seamless.js";
-    script.setAttribute("data-key", "6RMqTZmF685375nR6XRvTvQmBgx8FjWa");
-    script.setAttribute("data-form", "1");
-    container.appendChild(script);
+    script.src = "https://www.cognitoforms.com/f/iframe.js";
+    script.async = true;
+    document.body.appendChild(script);
     return () => { script.remove(); };
   }, []);
 
@@ -45,7 +42,14 @@ export default function ApplyOnline() {
       {/* Cognito Form */}
       <section className="py-16 bg-gradient-to-br from-gray-50 to-gray-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div id="cognito-form-container" className="bg-white rounded-2xl shadow-xl p-6 md:p-10 min-h-[400px]" />
+          <iframe
+            src="https://www.cognitoforms.com/f/D66W5DL470GvE4vhdJGV5g/1"
+            allow="payment"
+            style={{ border: 0, width: "100%" }}
+            height="3747"
+            title="Online Merchant Application"
+            className="bg-white rounded-2xl shadow-xl"
+          />
         </div>
       </section>
     </div>
