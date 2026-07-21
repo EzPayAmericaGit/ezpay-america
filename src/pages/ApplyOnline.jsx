@@ -1,8 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import SEOHead from "../components/SEOHead";
 import { motion } from "framer-motion";
+import { Loader2 } from "lucide-react";
 
 export default function ApplyOnline() {
+  const [loaded, setLoaded] = useState(false);
+
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://www.cognitoforms.com/f/iframe.js";
@@ -41,7 +44,13 @@ export default function ApplyOnline() {
 
       {/* Cognito Form */}
       <section className="py-16 bg-gradient-to-br from-gray-50 to-gray-100">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          {!loaded && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-500 bg-white rounded-2xl shadow-xl min-h-[400px]">
+              <Loader2 className="w-8 h-8 animate-spin text-amber-500 mb-3" />
+              <p className="text-sm font-medium">Loading application form…</p>
+            </div>
+          )}
           <iframe
             src="https://www.cognitoforms.com/f/D66W5DL470GvE4vhdJGV5g/1"
             allow="payment"
@@ -49,6 +58,7 @@ export default function ApplyOnline() {
             height="3747"
             title="Online Merchant Application"
             className="bg-white rounded-2xl shadow-xl"
+            onLoad={() => setLoaded(true)}
           />
         </div>
       </section>
