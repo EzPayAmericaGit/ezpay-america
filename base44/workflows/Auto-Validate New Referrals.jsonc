@@ -1,0 +1,37 @@
+{
+  "name": "Auto-Validate New Referrals",
+  "description": "Automatically validates new referral records when created \u2014 checks email, phone, duplicate detection, and sends confirmation to the affiliate.",
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "entity",
+      "events": [
+        "create"
+      ],
+      "entity_name": "AffiliateReferral"
+    }
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "auto_validate_new_referrals",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "run_function": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "validateReferral",
+            "args": {}
+          },
+          "then": "end"
+        }
+      }
+    ]
+  },
+  "x-base44-migrated-from-automation": {
+    "legacy_payload_function": "validateReferral"
+  }
+}

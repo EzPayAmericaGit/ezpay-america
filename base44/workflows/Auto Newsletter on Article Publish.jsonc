@@ -1,0 +1,37 @@
+{
+  "name": "Auto Newsletter on Article Publish",
+  "description": "Automatically sends newsletter to all subscribers when a news article is published",
+  "trigger": {
+    "condition": "${ ((.trigger.changed_fields | index(\"published\") != null) and (.trigger.data.published == true)) }",
+    "config": {
+      "trigger_type": "entity",
+      "events": [
+        "update"
+      ],
+      "entity_name": "NewsArticle"
+    }
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "auto_newsletter_on_article_publish",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "run_function": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "autoSendNewsletterOnPublish",
+            "args": {}
+          },
+          "then": "end"
+        }
+      }
+    ]
+  },
+  "x-base44-migrated-from-automation": {
+    "legacy_payload_function": "autoSendNewsletterOnPublish"
+  }
+}
